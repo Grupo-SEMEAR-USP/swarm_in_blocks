@@ -2,7 +2,9 @@
 
 ## Pre-requisites
 1. Ubuntu 20.04
-2. ROS Noetic installed and with a configured workspace
+2. Python3
+3. Pip3
+5. ROS Noetic installed and with a configured workspace
 
 ## References
 This tutorial is based on https://clover.coex.tech/en/simulation_native.html
@@ -93,8 +95,10 @@ sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
 
 ```bash
 cd ~/catkin_ws
-catkin_make
+catkin_make -j$(nproc)
 ```
+> It will take ~20 to 30 min. If it take into an error, try running *catkin_make* without arguments.
+
 
 ### 10. Run gazebo simulation
 
@@ -102,3 +106,4 @@ catkin_make
 source ~/catkin_ws/devel/setup.bash
 roslaunch clover_simulation simulator.launch
 ```
+> Gazebo might run and you'll see Clover quadcopter inside a Aruco map.
