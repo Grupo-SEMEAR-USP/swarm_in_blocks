@@ -110,4 +110,5 @@ roslaunch clover_simulation simulator.launch
 ## Next steps
 
 > Usage and configuration of the simulation: https://clover.coex.tech/en/simulation_usage.html
+
 > Simple programming: https://clover.coex.tech/en/simple_offboard.html
