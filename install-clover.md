@@ -1,10 +1,7 @@
 # Tutorial: Installation of clover simulation on Gazebo
 
 ## Pre-requisites
-1. Ubuntu 20.04
-2. Python3
-3. Pip3
-5. ROS Noetic installed and with a configured workspace
+1. Ubuntu 20.04   2. Python 3   3. Pip 3   4. ROS Noetic installed and with a configured workspace
 
 ## References
 This tutorial is based on https://clover.coex.tech/en/simulation_native.html
