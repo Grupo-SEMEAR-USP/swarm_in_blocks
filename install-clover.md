@@ -61,7 +61,9 @@ ln -s ~/PX4-Autopilot/Tools/sitl_gazebo ~/catkin_ws/src/sitl_gazebo
 
 PX4 has it owns script for dependencies installation. By default it installs an ARM toolchain to compile PX4 scripts to the flight controller. But we can ignore it by passing the --no-nuttx argument.
 
-#### 6.1 Without ARM toolchain (only simulation):
+#### 6.1 Without ARM toolchain (only Gazebo simulation):
+ 
+ > Recommended with you doesn't have a Flight Controller.
 
 ```bash
 cd ~/catkin_ws/src/PX4-Autopilot/Tools/setup
