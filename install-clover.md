@@ -96,7 +96,7 @@ ln -s "$(catkin_find clover_simulation airframes)"/* ~/PX4-Autopilot/ROMFS/px4fm
 sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
 ```
 
-### 9. Install toml (It causes erros and don't have been provide on the installations guides) 
+### 9. Install toml (It causes erros and don't have been provided on the installations guides) 
 
 ```bash
 pip3 install toml
