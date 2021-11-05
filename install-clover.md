@@ -101,9 +101,9 @@ sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
 ```bash
 pip3 install toml
 ```
-Or
+Or, if your *python* commando refers to Python 3 
 ```bash
-pip3 install toml
+pip install toml
 ```
 ### 10. Build everything
 
