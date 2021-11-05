@@ -7,6 +7,12 @@
 This tutorial is based on https://clover.coex.tech/en/simulation_native.html
 
 ## Installation
+
+### 0. Update and Upgrade apt
+```bash
+sudo apt update 
+sudo apt upgrade
+```
 ### 1. Open ROS workspace
 
 > Assuming that ~/catkin_ws is your workspace
@@ -90,7 +96,16 @@ ln -s "$(catkin_find clover_simulation airframes)"/* ~/PX4-Autopilot/ROMFS/px4fm
 sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
 ```
 
-### 9. Build everything
+### 9. Install toml (It causes erros and don't have been provide on the installations guides) 
+
+```bash
+pip3 install toml
+```
+Or
+```bash
+pip3 install toml
+```
+### 10. Build everything
 
 ```bash
 cd ~/catkin_ws
@@ -99,7 +114,7 @@ catkin_make -j$(nproc)
 > It will take ~20 to 30 min. If it take into an error, try running *catkin_make* without arguments.
 
 
-### 10. Run gazebo simulation
+### 11. Run gazebo simulation
 
 ```bash
 source ~/catkin_ws/devel/setup.bash
