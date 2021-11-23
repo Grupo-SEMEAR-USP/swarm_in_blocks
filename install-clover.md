@@ -46,7 +46,7 @@ rosdep install --from-paths src --ignore-src -y
 sudo /usr/bin/python3 -m pip install -r ~/catkin_ws/src/clover/clover/requirements.txt
 ```
 
-> If any error occurs <span style="color:red">some *red* text</span>.
+> If any error occurs, the dependencies will not be installed.
 
 ### 4. Clone PX4 repository inside ros workspace
 ```bash
@@ -111,9 +111,9 @@ pip install toml
 
 ```bash
 cd ~/catkin_ws
-catkin_make -j$(nproc)
+catkin_make
 ```
-> It will take ~20 to 30 min. If it take into an error, try running *catkin_make* without arguments.
+> It will take ~20 to 30 min. 
 
 
 ### 11. Run gazebo simulation
