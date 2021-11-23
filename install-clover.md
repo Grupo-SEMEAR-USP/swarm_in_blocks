@@ -75,7 +75,8 @@ cd ~/catkin_ws/src/PX4-Autopilot/Tools/setup
 sudo ./ubuntu.sh --no-nuttx
 ```
 
-#### 6.2 With ARM toolchain (full installation):
+> Note: only run one o these
+#### OPTION B: With ARM toolchain (full installation):
 
 ```bash
 cd ~/catkin_ws/src/PX4-Autopilot/Tools/setup
