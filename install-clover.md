@@ -46,6 +46,8 @@ rosdep install --from-paths src --ignore-src -y
 sudo /usr/bin/python3 -m pip install -r ~/catkin_ws/src/clover/clover/requirements.txt
 ```
 
+> If any error occurs <span style="color:red">some *red* text</span>.
+
 ### 4. Clone PX4 repository inside ros workspace
 ```bash
 cd ~/catkin_ws/src
