@@ -76,7 +76,7 @@ sudo ./ubuntu.sh --no-nuttx
 ```
 
 > Note: only run one o these
-#### OPTION B: With ARM toolchain (full installation):
+#### OPTION B: With ARM toolchain (full installation, DONT RUN IF YOU DONT NEED ARM TOOLCHAIN):
 
 ```bash
 cd ~/catkin_ws/src/PX4-Autopilot/Tools/setup
