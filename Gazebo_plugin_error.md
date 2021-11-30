@@ -20,7 +20,8 @@ Coloque uma virgula na frente no argumento da linha 778. Ficando assim:
 storage_name.c_str(),                // storage name
 ```
 
-### Passo 6: Pule uma linha e coloque 1 como último argumento da função. Ficando assim então:
+### Passo 6:
+Pule uma linha e coloque 1 como último argumento da função. Ficando assim então:
 ```cpp
 storage_name.c_str(),                // storage name
         1
