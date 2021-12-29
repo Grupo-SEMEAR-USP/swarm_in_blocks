@@ -30,12 +30,12 @@
 
         <arg name="mav_id" default="0" />
         <arg name="est" default="ekf2" /> <!--PX4 estimator: lpe, ekf2 -->
-        <arg name="vehicle" default="clover0" /> <!--PX4 vehicle configuration: clover, clover_vpe -->
-        <arg name="main_camera" default="false" /> <!-- Simulated vision position estimation camera (optical flow, ArUco) -->
+        <arg name="vehicle" default="clover" /> <!--PX4 vehicle configuration: clover, clover_vpe -->
+        <arg name="main_camera" default="true" /> <!-- Simulated vision position estimation camera (optical flow, ArUco) -->
         <arg name="maintain_camera_rate" default="false" /> <!-- Slow simulation down to maintain camera rate -->
         <arg name="rangefinder" default="true" /> <!-- Simulated downward-facing rangefinder, vl53l1x-like -->
         <arg name="led" default="true" /> <!-- Simulated LED strip, ws281x-like -->
-        <arg name="gps" default="false" /> <!--Simulated GPS module -->
+        <arg name="gps" default="true" /> <!--Simulated GPS module -->
         <arg name="use_clover_physics" default="false" /> <!-- Use inertial parameters from CAD models -->
 
         <!-- PX4 instance -->
@@ -68,9 +68,9 @@
             <arg name="fcu_ip" value="127.0.0.1" />
             <arg name="gcs_bridge" value="" />
             <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="main_camera" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="aruco" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="optical_flow" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="optical_flow" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="led" default="false" if="$(eval type == 'jmavsim')" />
         </include>
 
@@ -85,7 +85,7 @@
         <arg name="maintain_camera_rate" default="false" /> <!-- Slow simulation down to maintain camera rate -->
         <arg name="rangefinder" default="true" /> <!-- Simulated downward-facing rangefinder, vl53l1x-like -->
         <arg name="led" default="true" /> <!-- Simulated LED strip, ws281x-like -->
-        <arg name="gps" default="false" /> <!--Simulated GPS module -->
+        <arg name="gps" default="true" /> <!--Simulated GPS module -->
         <arg name="use_clover_physics" default="false" /> <!-- Use inertial parameters from CAD models -->
 
         <!-- PX4 instance -->
@@ -118,9 +118,9 @@
             <arg name="fcu_ip" value="127.0.0.1" />
             <arg name="gcs_bridge" value="" />
             <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="main_camera" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="aruco" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="optical_flow" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="optical_flow" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="led" default="false" if="$(eval type == 'jmavsim')" />
         </include>
 
@@ -135,7 +135,7 @@
         <arg name="maintain_camera_rate" default="false" /> <!-- Slow simulation down to maintain camera rate -->
         <arg name="rangefinder" default="true" /> <!-- Simulated downward-facing rangefinder, vl53l1x-like -->
         <arg name="led" default="true" /> <!-- Simulated LED strip, ws281x-like -->
-        <arg name="gps" default="false" /> <!--Simulated GPS module -->
+        <arg name="gps" default="true" /> <!--Simulated GPS module -->
         <arg name="use_clover_physics" default="false" /> <!-- Use inertial parameters from CAD models -->
 
         <!-- PX4 instance -->
@@ -169,9 +169,9 @@
             <arg name="fcu_ip" value="127.0.0.1" />
             <arg name="gcs_bridge" value="" />
             <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="main_camera" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="aruco" default="false" if="$(eval type == 'jmavsim')" />
-            <arg name="optical_flow" default="false" if="$(eval type == 'jmavsim')" />
+            <arg name="optical_flow" default="true" if="$(eval type == 'jmavsim')" />
             <arg name="led" default="false" if="$(eval type == 'jmavsim')" />
         </include>
 
