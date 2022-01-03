@@ -2,6 +2,7 @@
 
     <arg name="type" default="gazebo" /> <!-- gazebo, jmavsim, none (only clover packages) -->
     <arg name="gui" default="true" /> <!-- Run Gazebo with GUI -->
+    <arg name="blocks" default="true"/>
     
     <!-- Gazebo instance -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval type == 'gazebo')">
