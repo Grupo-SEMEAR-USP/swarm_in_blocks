@@ -12,6 +12,9 @@
         <arg name="verbose" value="true" />
     </include>
 
+    <!-- Clover Blocks -->
+    <node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/>
+
     <group ns="clover0">
         
         <include file="$(find swarm_in_blocks)/launch/single_drone.launch">

@@ -57,6 +57,7 @@
         <arg name="simulator" value="true" />
         <arg name="fcu_conn" value="sitl" />
         <arg name="fcu_ip" value="127.0.0.1" />
+        <arg name="fcu_sys_id" value="$(eval 1 + arg('mav_id'))"/>
         <arg name="gcs_bridge" value="" />
         <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
         <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />
