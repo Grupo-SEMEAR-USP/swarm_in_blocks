@@ -1,0 +1,150 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="take_off" id="BI;g]%TS%}u@FZ5BLBb`" x="413" y="63">
+    <field name="WAIT">TRUE</field>
+    <value name="ALT">
+      <shadow type="math_number" id="=9DdjNs-O,[@P.?paPCL">
+        <field name="NUM">1</field>
+      </shadow>
+    </value>
+    <next>
+      <block type="set_effect" id="cL/%y/ol4;$KBF]xqMr^">
+        <field name="EFFECT">WIPE</field>
+        <value name="COLOR">
+          <shadow type="colour_picker" id="Yg4q4Iian#-v`T_Wd:B5">
+            <field name="COLOUR">#3333ff</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="navigate" id="#QvXEI?{{Lc@,6}ytZpo">
+            <field name="FRAME_ID">ARUCO_MAP</field>
+            <field name="WAIT">TRUE</field>
+            <value name="X">
+              <shadow type="math_number" id="_T?~L=OHUlSyU%7C[)nK">
+                <field name="NUM">3</field>
+              </shadow>
+            </value>
+            <value name="Y">
+              <shadow type="math_number" id="E|Xfq%Yk/_$fKHqz+fj=">
+                <field name="NUM">2</field>
+              </shadow>
+            </value>
+            <value name="LAT">
+              <shadow type="math_number" id="fcJ@92qWaUhdktF4cPq?">
+                <field name="NUM">47.397503</field>
+              </shadow>
+            </value>
+            <value name="LON">
+              <shadow type="math_number" id="~_L(`p)XRTd+t@]G]]oi">
+                <field name="NUM">8.544945</field>
+              </shadow>
+            </value>
+            <value name="Z">
+              <shadow type="math_number" id="8]+xsPzlEfGa1-eQzWu#">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="ID">
+              <shadow type="math_number" id="{lGtA$I/F_pH/]`OX-{/">
+                <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="SPEED">
+              <shadow type="math_number" id="iD4b2v|r/V.ki0,0%K/s">
+                <field name="NUM">0.5</field>
+              </shadow>
+            </value>
+            <next>
+              <block type="set_effect" id=":iCeifOzoO_No.u@;q!X">
+                <field name="EFFECT">FADE</field>
+                <value name="COLOR">
+                  <shadow type="colour_picker" id=".VC@^gsvn:Ry9Ymry.Nq">
+                    <field name="COLOUR">#ff0000</field>
+                  </shadow>
+                  <block type="colour_random" id="p#TM},V5{K0UJnhdwHcy"></block>
+                </value>
+                <next>
+                  <block type="text_print" id="hD?5*ov748[f4cn{4lG{">
+                    <value name="TEXT">
+                      <shadow type="text" id="o`^BIT|;S8TEvEWhf%-7">
+                        <field name="TEXT">abc</field>
+                      </shadow>
+                      <block type="rangefinder_distance" id="i}OGN99{vy5Uxg$R)H}M"></block>
+                    </value>
+                    <next>
+                      <block type="navigate" id="#niOgbG_-`YQ;.n-tn*(">
+                        <field name="FRAME_ID">ARUCO_MAP</field>
+                        <field name="WAIT">TRUE</field>
+                        <value name="X">
+                          <shadow type="math_number" id="ewa.*gP0sz~bWu-u*Pin">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="get_position" id="duV0@A4dU%K-MWzKfxP2">
+                            <field name="FIELD">X</field>
+                            <field name="FRAME_ID">ARUCO_MAP</field>
+                            <value name="ID">
+                              <shadow type="math_number" id="e/c+$[1[!nlUbI,eDiz(">
+                                <field name="NUM">0</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="Y">
+                          <shadow type="math_number" id="_SzZ1En*EZVBBNet7C_5">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="get_position" id="asb{B7(In`?hIOoLvpNe">
+                            <field name="FIELD">Y</field>
+                            <field name="FRAME_ID">ARUCO_MAP</field>
+                            <value name="ID">
+                              <shadow type="math_number" id="zU*E]3A`x?):n5nqpJz6">
+                                <field name="NUM">0</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="LAT">
+                          <shadow type="math_number" id="ty1uG(|/z1M;#Mb#F!u|">
+                            <field name="NUM">47.397503</field>
+                          </shadow>
+                        </value>
+                        <value name="LON">
+                          <shadow type="math_number" id="$pwPQFr[:fj4Q6dR+I^N">
+                            <field name="NUM">8.544945</field>
+                          </shadow>
+                        </value>
+                        <value name="Z">
+                          <shadow type="math_number" id="vQ@e7DU3L]A{Br#qrJ8{">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="text_prompt_ext" id="WpW8GJTA75Y;CrS~lQOj">
+                            <mutation type="NUMBER"></mutation>
+                            <field name="TYPE">NUMBER</field>
+                            <value name="TEXT">
+                              <shadow type="text" id="n(t1$)rkx@Rw%TZ@Fi5*">
+                                <field name="TEXT">Enter altitude</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ID">
+                          <shadow type="math_number" id="/@}}{^ei#k8@iigfE;,m">
+                            <field name="NUM">0</field>
+                          </shadow>
+                        </value>
+                        <value name="SPEED">
+                          <shadow type="math_number" id="5qbpTC##tE6KpVGX(Y@F">
+                            <field name="NUM">0.5</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
