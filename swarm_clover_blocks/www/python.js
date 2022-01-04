@@ -495,9 +495,27 @@ Blockly.Python.forms = function(block) {
 	// Id do bloco (não fica visível nos blocos)
 	let frameId = buildFrameId(block);
 	// outro parametro que sera setado no bloco
-	let speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
-	// define os parametros que serão retornados de acordo com as variaveis setadas aciam
-	// x e z sao fornecidos pelo bloco, y será nulo para essa translação 
-	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
-	return `navigate_wait(${params.join(', ')}),\n`;	
+	let speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);	// define os parametros que serão retornados de acordo com as variaveis setadas aciam	// x e z sao fornecidos pelo bloco, y será nulo para essa translação 	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];	return `navigate_wait(${params.join(', ')}),\n`;	
+	if (dropdown_forms == 'SQUARE'){
+		let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params2 = [`x=${value_x}`, `y=${value_x}`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params3 = [`x=0`, `y=${value_x}`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params4 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\nnavigate_wait(${params4.join(', ')}),\n`;	
+	}
+	if (dropdown_forms == 'TRIANGLE'){
+		let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+		let params2 = [`x=(${value_x}/2)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params3 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\n`;
+	}
+	if (dropdown_forms == 'HEXAG'){
+		let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+		let params2 = [`x=(5*${value_x}/4)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params3 = [`x=${value_x}`, `y=(${value_x})*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+		let params4 = [`x=0`, `y=(${value_x})*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params5 = [`x=(-${value_x}/4)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		let params6 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+		return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\nnavigate_wait(${params4.join(', ')}),\nnavigate_wait(${params5.join(', ')}),\nnavigate_wait(${params6.join(', ')}),\n`;
+	}
 }
