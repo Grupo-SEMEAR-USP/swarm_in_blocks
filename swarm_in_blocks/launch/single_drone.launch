@@ -34,7 +34,7 @@
         <env name="PX4_ESTIMATOR" value="$(arg est)" />
     </node>
 
-    <!-- Clover model -->
+    <!-- Clover on gazebo -->
     <include file="$(find swarm_in_blocks)/launch/spawn_drone.launch">
         <arg name="name" value="$(arg name)" />
         <arg name="x" value="$(arg x)" />
@@ -53,10 +53,11 @@
     </include>
 
     <!-- Clover services -->
-    <include file="$(find clover)/launch/clover.launch">
+    <include file="$(find swarm_in_blocks)/launch/clover.launch">
         <arg name="simulator" value="true" />
         <arg name="fcu_conn" value="sitl" />
         <arg name="fcu_ip" value="127.0.0.1" />
+        <arg name="fcu_sys_id" value="$(eval 1 + arg('mav_id'))"/>
         <arg name="gcs_bridge" value="" />
         <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
         <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />

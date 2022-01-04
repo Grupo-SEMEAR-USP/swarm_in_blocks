@@ -2,6 +2,7 @@
 
     <arg name="type" default="gazebo" /> <!-- gazebo, jmavsim, none (only clover packages) -->
     <arg name="gui" default="true" /> <!-- Run Gazebo with GUI -->
+    <arg name="blocks" default="true"/>
     
     <!-- Gazebo instance -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval type == 'gazebo')">
@@ -11,6 +12,9 @@
         <arg name="world_name" value="$(find clover_simulation)/resources/worlds/clover_aruco.world" />
         <arg name="verbose" value="true" />
     </include>
+
+    <!-- Clover Blocks -->
+    <node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/>
 
     <group ns="clover0">
         
@@ -34,6 +38,8 @@
 
     </group>
 
+    
+<!-- 
     <group ns="clover2">
 
         <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
@@ -44,5 +50,71 @@
         </include>
 
     </group>
+    
+    <group ns="clover3">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="3"/>
+            <arg name="x" value="1.0"/>
+            <arg name="y" value="1.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group>
+
+    <group ns="clover4">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="4"/>
+            <arg name="x" value="1.0"/>
+            <arg name="y" value="-1.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group>
+
+    <group ns="clover5">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="5"/>
+            <arg name="x" value="0.0"/>
+            <arg name="y" value="-1.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group>
+
+    <group ns="clover6">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="6"/>
+            <arg name="x" value="-1.0"/>
+            <arg name="y" value="0.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group>
+
+    <group ns="clover7">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="7"/>
+            <arg name="x" value="-1.0"/>
+            <arg name="y" value="1.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group>
+
+    <group ns="clover8">
+
+        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
+            <arg name="mav_id" value="8"/>
+            <arg name="x" value="-1.0"/>
+            <arg name="y" value="-1.0"/>
+            <arg name="launch_gazebo" default="false" /> 
+        </include>
+
+    </group> -->
     
 </launch>
