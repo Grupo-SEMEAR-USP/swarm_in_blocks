@@ -18,12 +18,22 @@
     <arg name="roll" default="0.0" />
     <arg name="pitch" default="0.0" />
     <arg name="yaw" default="-1.520796327" />
+    <arg name="fcu_ip" default="" />
+    <arg name="ip" default="0" />
+    <arg name="mavlink_udp_port" default="14560"/>
+    <arg name="mavlink_tcp_port" default="4560"/>
+    <arg name="gst_udp_port" default="5600"/>
+    <arg name="video_uri" default="5600"/>
+    <arg name="mavlink_cam_udp_port" default="14530"/>
+    <arg name="mavlink_id" default="1" />
+    <arg name="ID" default="1"/>
+    <arg name="type" default="gazebo"/>
 
     <arg name="est" default="ekf2" /> <!--PX4 estimator: lpe, ekf2 -->
     <arg name="vehicle" default="clover" /> <!--PX4 vehicle configuration: clover, clover_vpe -->
     <arg name="main_camera" default="true" /> <!-- Simulated vision position estimation camera (optical flow, ArUco) -->
     <arg name="maintain_camera_rate" default="false" /> <!-- Slow simulation down to maintain camera rate -->
-    <arg name="rangefinder" default="false" /> <!-- Simulated downward-facing rangefinder, vl53l1x-like -->
+    <arg name="rangefinder" default="true" /> <!-- Simulated downward-facing rangefinder, vl53l1x-like -->
     <arg name="led" default="true" /> <!-- Simulated LED strip, ws281x-like -->
     <arg name="gps" default="true" /> <!--Simulated GPS module -->
     <arg name="use_clover_physics" default="false" /> <!-- Use inertial parameters from CAD models -->
@@ -50,18 +60,29 @@
         <arg name="gps" value="$(arg gps)" />
         <arg name="use_clover_physics" value="$(arg use_clover_physics)" />
         <param name="use_sim_time" value="false" if="$(eval type == 'jmavsim')" />
+        <arg name="mavlink_udp_port" default="$(arg mavlink_udp_port)"/>
+        <arg name="mavlink_tcp_port" default="$(arg mavlink_tcp_port)"/>
+        <arg name="gst_udp_port" default="$(arg gst_udp_port)"/>
+        <arg name="video_uri" default="$(arg video_uri)"/>
+        <arg name="mavlink_cam_udp_port" default="$(arg mavlink_cam_udp_port"/>
+        <arg name="mavlink_id" value="$(arg mavlink_id)" />
+        <arg name="sdk_udp_port" value="1454$(arg mav_id)" />
+        <arg name="qgc_udp_port" value="1455$(arg mav_id)" />
     </include>
 
     <!-- Clover services -->
     <include file="$(find swarm_in_blocks)/launch/clover.launch">
         <arg name="simulator" value="true" />
         <arg name="fcu_conn" value="sitl" />
-        <arg name="fcu_ip" value="127.0.0.1" />
+        <arg name="fcu_ip" value="$(arg fcu_ip)" />
+        <arg name="fcu_sys_id" value="$(eval 1 + arg('mav_id'))"/>
         <arg name="gcs_bridge" value="" />
         <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />
-        <arg name="main_camera" default="true" if="$(eval type == 'jmavsim')" />
+        <arg name="main_camera" default="false" if="$(eval type == 'jmavsim')" />
         <arg name="aruco" default="false" if="$(eval type == 'jmavsim')" />
-        <arg name="optical_flow" default="true" if="$(eval type == 'jmavsim')" />
+        <arg name="optical_flow" default="false" if="$(eval type == 'jmavsim')" />
         <arg name="led" default="false" if="$(eval type == 'jmavsim')" />
+        <arg name="mav_id" value="$(arg mav_id)" />
+        <arg name="ip" value="$(arg ip)" />
     </include>
 </launch>

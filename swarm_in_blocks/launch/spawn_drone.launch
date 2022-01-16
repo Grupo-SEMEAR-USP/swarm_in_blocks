@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+    <arg name="mavlink_udp_port" default="14560"/>
+    <arg name="mavlink_tcp_port" default="4560"/>
+    <arg name="gst_udp_port" default="5600"/>
+    <arg name="video_uri" default="5600"/>
+    <arg name="mavlink_cam_udp_port" default="14530"/>
+    <arg name="mavlink_id" default="1" />
+    <arg name="ID" default="1"/>
+    <arg name="sdk_udp_port" default="14540" />
+    <arg name="qgc_udp_port" default="14550" />
     <!-- Toggleable model parameters -->
     <arg name="name" default="clover"/>
     <arg name="x" default="0.0"/>
@@ -25,13 +34,15 @@
                                 led:=$(arg led)
                                 gps:=$(arg gps)
                                 maintain_camera_rate:=$(arg maintain_camera_rate)
-                                use_clover_physics:=$(arg use_clover_physics)"/>
-    <param command="$(arg cmd)" name="drone_description"/>
+                                use_clover_physics:=$(arg use_clover_physics)
+                                namespace:=$(arg name)
+                                "/>
+    <param command="$(arg cmd)" name="drone_description$(arg ID)"/>
     
     <!-- Note: -package_to_model replaces all mentions of "package://" with "model://" in urdf URIs -->
     <node name="$(anon spawn)" output="screen" pkg="gazebo_ros" type="spawn_model" 
-        args="-urdf -param drone_description 
-                -model $(arg name) 
+        args="-urdf -param drone_description$(arg ID) 
+                -model $(arg name)  
                 -x $(arg x)
                 -y $(arg y)
                 -z $(arg z)

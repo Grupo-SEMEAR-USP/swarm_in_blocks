@@ -12,6 +12,8 @@
     <arg name="led" default="true"/>
     <arg name="blocks" default="true"/>
     <arg name="rc" default="false"/>
+    <arg name="mav_id" default="0" />
+    <arg name="ip" default="14580" />
 
     <arg name="simulator" default="false"/> <!-- flag that we are operating on a simulated drone -->
 
@@ -24,6 +26,8 @@
         <arg name="fcu_ip" value="$(arg fcu_ip)"/>
         <arg name="fcu_sys_id" value="$(arg fcu_sys_id)"/>
         <arg name="gcs_bridge" value="$(arg gcs_bridge)"/>
+        <arg name="mav_id" value="$(arg mav_id)" />
+        <arg name="ip" value="$(arg ip)" />
     </include>
 
     <!-- web video server -->
@@ -58,8 +62,6 @@
         <arg name="simulator" value="$(arg simulator)"/>
     </include>
 
-    <!-- rosbridge -->
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" if="$(eval rosbridge or rc)"/>
 
     <!-- tf2 republisher for web visualization -->
     <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" output="screen" if="$(arg rosbridge)"/>
@@ -75,9 +77,6 @@
     <include file="$(find clover)/launch/led.launch" if="$(arg led)">
         <arg name="simulator" value="$(arg simulator)"/>
     </include>
-
-    <!-- Clover Blocks -->
-    <node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/>
 
     <!-- rc backend -->
     <node name="rc" pkg="clover" type="rc" output="screen" if="$(arg rc)" clear_params="true">

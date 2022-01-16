@@ -2,6 +2,10 @@
 
     <arg name="type" default="gazebo" /> <!-- gazebo, jmavsim, none (only clover packages) -->
     <arg name="gui" default="true" /> <!-- Run Gazebo with GUI -->
+    <arg name="rosbridge" default="true"/>
+    
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" if="$(eval rosbridge or rc)"/>
     
     <!-- Gazebo instance -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval type == 'gazebo')">
@@ -13,23 +17,43 @@
     </include>
 
     <group ns="clover0">
-        
+        <arg name="ID" value="1"/>
         <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
             <arg name="mav_id" value="0"/>
             <arg name="x" value="0.0"/>
             <arg name="y" value="0.0"/>
             <arg name="launch_gazebo" default="false" /> 
+            <arg name="fcu_ip" value="127.0.0.1" />
+            <arg name="ip" value="14580" />
+            <arg name="mavlink_udp_port" value="14560"/>
+            <arg name="mavlink_tcp_port" value="4560"/>
+            <arg name="ID" value="$(arg ID)"/>
+            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
         </include>
+
+        
             
     </group>
 
-    <group ns="clover1">
 
+
+    <group ns="clover1">
+        <arg name="ID" value="2"/>
         <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
             <arg name="mav_id" value="1"/>
             <arg name="x" value="1.0"/>
             <arg name="y" value="0.0"/>
             <arg name="launch_gazebo" default="false" /> 
+            <arg name="fcu_ip" value="127.0.0.1" />
+            <arg name="ip" value="14581" />
+            <arg name="mavlink_udp_port" value="14561"/>
+            <arg name="mavlink_tcp_port" value="4561"/>
+            <arg name="ID" value="$(arg ID)"/>
+            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
         </include>
 
     </group>
