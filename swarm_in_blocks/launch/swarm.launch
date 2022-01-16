@@ -2,10 +2,14 @@
 
     <arg name="type" default="gazebo" /> <!-- gazebo, jmavsim, none (only clover packages) -->
     <arg name="gui" default="true" /> <!-- Run Gazebo with GUI -->
+<<<<<<< HEAD
     <arg name="rosbridge" default="true"/>
     
     <!-- rosbridge -->
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" if="$(eval rosbridge or rc)"/>
+=======
+    <arg name="blocks" default="true"/>
+>>>>>>> a3a9b33a54eee72fb8275766bee31b95f05cc11a
     
     <!-- Gazebo instance -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval type == 'gazebo')">
@@ -15,6 +19,9 @@
         <arg name="world_name" value="$(find clover_simulation)/resources/worlds/clover_aruco.world" />
         <arg name="verbose" value="true" />
     </include>
+
+    <!-- Clover Blocks -->
+    <node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/>
 
     <group ns="clover0">
         <arg name="ID" value="1"/>

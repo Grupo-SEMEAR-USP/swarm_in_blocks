@@ -74,7 +74,11 @@
     <include file="$(find swarm_in_blocks)/launch/clover.launch">
         <arg name="simulator" value="true" />
         <arg name="fcu_conn" value="sitl" />
+<<<<<<< HEAD
         <arg name="fcu_ip" value="$(arg fcu_ip)" />
+=======
+        <arg name="fcu_ip" value="127.0.0.1" />
+>>>>>>> a3a9b33a54eee72fb8275766bee31b95f05cc11a
         <arg name="fcu_sys_id" value="$(eval 1 + arg('mav_id'))"/>
         <arg name="gcs_bridge" value="" />
         <arg name="web_video_server" default="false" if="$(eval type == 'jmavsim')" />

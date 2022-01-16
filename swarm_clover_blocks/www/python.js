@@ -488,16 +488,41 @@ Blockly.Python.forms = function(block) {
 	rosDefinitions.navigateWait = true;
 	// define os parametros do bloco um a um
 	// liga o valor de z e x com os blocos espectivos Z (altura) e X (lado), esses valores erão setados no bloco
-	let value_z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_NONE);
-	let value_x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_NONE);
-	// será usado futuramente, pega a string dos formatos (SQAURE, TRIANGLE ...)
+	var value_z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_NONE);
+	var value_x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_NONE);
+	// pega a string dos formatos (SQAURE, TRIANGLE ...)
 	let dropdown_forms = block.getFieldValue('Forms');
 	// Id do bloco (não fica visível nos blocos)
 	let frameId = buildFrameId(block);
 	// outro parametro que sera setado no bloco
-	let speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
-	// define os parametros que serão retornados de acordo com as variaveis setadas aciam
-	// x e z sao fornecidos pelo bloco, y será nulo para essa translação 
+	let speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);	// define os parametros que serão retornados de acordo com as variaveis setadas aciam	// x e z sao fornecidos pelo bloco, y será nulo para essa translação 	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];	return `navigate_wait(${params.join(', ')}),\n`;	
+	// opção para os formatos, dependendo de cada um ele setará os parametros uma certa forma
+	// quadrado de 4 lados, com lado X
+	if (dropdown_forms == 'SQUARE'){
 	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
-	return `navigate_wait(${params.join(', ')}),\n`;	
+	let params2 = [`x=${value_x}`, `y=${value_x}`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params3 = [`x=0`, `y=${value_x}`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params4 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\nnavigate_wait(${params4.join(', ')}),\n`;	
+	}
+	// triangulo isóceles com base X 
+	if (dropdown_forms == 'TRIANGLE'){
+	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+	let params2 = [`x=(${value_x}/2)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params3 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\n`;
+	}
+	// hexagono isóceles regular de base X
+	if (dropdown_forms == 'HEXAG'){
+	let params = [`x=${value_x}`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+	let params2 = [`x=(5*${value_x}/4)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params3 = [`x=${value_x}`, `y=(${value_x})*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`]
+	let params4 = [`x=0`, `y=(${value_x})*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params5 = [`x=(-${value_x}/4)`, `y=(${value_x}/2)*math.sqrt(3)`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	let params6 = [`x=0`, `y=0`, `z=${value_z}`, `frame_id=${frameId}`, `speed=${speed}`];
+	return `navigate_wait(${params.join(', ')}),\nnavigate_wait(${params2.join(', ')}),\nnavigate_wait(${params3.join(', ')}),\nnavigate_wait(${params4.join(', ')}),\nnavigate_wait(${params5.join(', ')}),\nnavigate_wait(${params6.join(', ')}),\n`;
+	}
+	// obs: no return foi usado uma "gambiarra", vários navigate_wait são concatenados com ",\n" entre eles,
+	// dessa forma é possível montar uma lista de intruções para serem seguidas
 }
+
