@@ -46,4 +46,10 @@
     </node>
     <!-- spawn vehicle -->
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+
+    <!-- led strip -->
+    <include file="$(find clover)/launch/led.launch">
+        <arg name="simulator" value="true"/>
+    </include>
+    
 </launch>

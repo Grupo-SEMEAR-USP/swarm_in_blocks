@@ -8,8 +8,11 @@ project(swarm_in_blocks)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  rospy
-  std_msgs
+roscpp
+rospy
+std_msgs
+geometry_msgs
+mavros_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -101,13 +104,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
+
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES swarm_in_blocks
-#  CATKIN_DEPENDS rospy std_msgs
+#  LIBRARIES uav_control
+  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
-
 ###########
 ## Build ##
 ###########
@@ -203,3 +205,14 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+#add_executable(uav_control_node src/UAVSpiralMotion.cpp)
+add_executable(take_off src/takeoff.cpp)
+
+# add_dependencies(uav_control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(take_off
+  ${catkin_LIBRARIES}
+)
+
