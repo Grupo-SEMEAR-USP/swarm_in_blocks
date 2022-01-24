@@ -26,7 +26,7 @@
         </camera>
         <always_on>1</always_on>
         <update_rate>${rate}</update_rate>
-        <visualize>1</visualize>
+        <visualize>0</visualize>
         <plugin name="camera_plugin" filename="${ros_plugin_name}">
           <alwaysOn>true</alwaysOn>
           <imageTopicName>image_raw</imageTopicName>
