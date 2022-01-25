@@ -25,7 +25,7 @@ print(current_state)
 
 rospy.init_node("XABLAU_NO_TAKEOFF", anonymous=True)
 
-rospy.Subscriber("clover0/mavros/state",State, state_cb, queue_size=10)   
+rospy.Subscriber("clover0/mavros/state", State, state_cb, queue_size=10)   
 local_pos_pub = rospy.Publisher("clover0/mavros/setpoint_position/local", PoseStamped, queue_size=10)
 arming_client = rospy.ServiceProxy("clover0/mavros/cmd/arming", CommandBool)
 set_mode_client = rospy.ServiceProxy("clover0/mavros/setmode", SetMode)
@@ -56,5 +56,17 @@ arm_cmd.request.value = True
 last_request = time.time()
 first_request = time.time()
 
-while(not rospy.is_shutdown() and current_state.connected):
-    if 
+while(not rospy.is_shutdown()):
+    if (current_state.mode != "OFFBOARD" and (time.time() - last_request > 5)):
+        if(set_mode_client.call(offb_set_mode) and offb_set_mode.response.mode_sent):
+            ROS_INFO("Offboard enabled")
+        last_request = time.time()
+    elif (not current_state.armed and (time.time() - last_request > 5)):
+        if (arming_client.call(arm_cmd) and arm_cmd.response.success):
+            ROS_INFO("Vehicle armed")
+        last_request = time.time()
+    
+    local_pos_pub.publish(pose)        
+
+    rospy.spin()
+    rate.sleep()
