@@ -47,9 +47,32 @@
     <!-- spawn vehicle -->
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 
-    <!-- led strip -->
-    <include file="$(find clover)/launch/led.launch">
-        <arg name="simulator" value="true"/>
-    </include>
-    
+    <!-- high level led effects control, events notification with leds -->
+    <node pkg="clover" name="led_effect" type="led" clear_params="true" output="screen">
+        <param name="blink_rate" value="2"/>
+        <param name="fade_period" value="0.5"/>
+        <param name="rainbow_period" value="5"/>
+        <!-- events effects table -->
+        <rosparam param="notify">
+            startup: { r: 255, g: 255, b: 255 }
+            connected: { effect: rainbow }
+            disconnected: { effect: blink, r: 255, g: 50, b: 50 }
+            acro: { r: 245, g: 155, b: 0 }
+            stabilized: { r: 30, g: 180, b: 50 }
+            altctl: { r: 255, g: 255, b: 40 }
+            posctl: { r: 50, g: 100, b: 220 }
+            offboard: { r: 220, g: 20, b: 250 }
+            low_battery: { threshold: 3.6, effect: blink_fast, r: 255, g: 0, b: 0 }
+            error: { effect: flash, r: 255, g: 0, b: 0, ignore: [ "[lpe] vision position timeout" ]}
+        </rosparam>
+    </node>
+
+    <!-- simplified offboard control -->
+    <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
+        <param name="reference_frames/body" value="map"/>
+        <param name="reference_frames/base_link" value="map"/>
+        <param name="reference_frames/navigate_target" value="map"/>
+        <param name="reference_frames/main_camera_optical" value="map"/>
+    </node>
+
 </launch>

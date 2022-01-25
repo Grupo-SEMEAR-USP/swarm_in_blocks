@@ -96,7 +96,6 @@ int main(int argc, char **argv)
         
 
         if(ros::Time::now()- first_request > ros::Duration(30.0)){
-            ROS_INFO("INIT ORBIT");
 
             double t = (ros::Time::now() - first_request).toSec();
             x =  5*std::cos(w*t);
