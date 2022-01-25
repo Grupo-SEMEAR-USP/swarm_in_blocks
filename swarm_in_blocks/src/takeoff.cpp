@@ -63,7 +63,7 @@ int main(int argc, char **argv){
     ros::Time first_request = ros::Time::now();
 
     double w;
-    w = 2*3.1415/5;
+    w = 2.0*3.1415/5.0;
     
     double x, y;
 
