@@ -11,10 +11,7 @@ from mavros_msgs.srv import SetMode, CommandBool
 from geometry_msgs.msg import PoseStamped, TwistStamped, Vector3Stamped
 from mavros_msgs.msg import State, ExtendedState, PositionTarget
 from geographic_msgs.msg import GeoPoseStamped
-import math
 import time
-import numpy as np
-
 
 current_state = State()
 # current state recebe a mensagem de callback
@@ -59,11 +56,13 @@ first_request = time.time()
 while(not rospy.is_shutdown()):
     if (current_state.mode != "OFFBOARD" and (time.time() - last_request > 5)):
         if(set_mode_client.call(offb_set_mode) and offb_set_mode.response.mode_sent):
-            ROS_INFO("Offboard enabled")
+            rospy.loginfo("Offboard enabled")
+            #ROS_INFO("Offboard enabled")
         last_request = time.time()
     elif (not current_state.armed and (time.time() - last_request > 5)):
         if (arming_client.call(arm_cmd) and arm_cmd.response.success):
-            ROS_INFO("Vehicle armed")
+            rospy.loginfo("Vehicle armed")
+            #ROS_INFO("Vehicle armed")
         last_request = time.time()
     
     local_pos_pub.publish(pose)        
