@@ -14,11 +14,12 @@
 
 mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
+    
     current_state = *msg;
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
+
     ros::init(argc, argv, "offb_node");
     ros::NodeHandle nh;
 
@@ -62,7 +63,7 @@ int main(int argc, char **argv)
     ros::Time first_request = ros::Time::now();
 
     double w;
-    w = 2*3.1415/5;
+    w = 2.0*3.1415/5.0;
     
     double x, y;
 
