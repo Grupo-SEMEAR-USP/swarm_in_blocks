@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 '''
  * @file offb_node.py
  * @brief offboard example node, written with mavros version 0.14.2, px4 flight
