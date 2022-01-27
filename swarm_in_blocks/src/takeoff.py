@@ -9,10 +9,9 @@
 import rospy
 import mavros_msgs
 from mavros_msgs import srv
-from mavros_msgs.srv import SetMode, CommandBool, SetModeRequest, CommandBoolRequest
-from geometry_msgs.msg import PoseStamped, TwistStamped, Vector3Stamped
-from mavros_msgs.msg import State, ExtendedState, PositionTarget
-from geographic_msgs.msg import GeoPoseStamped
+from mavros_msgs.srv import SetMode, CommandBool, SetModeRequest
+from geometry_msgs.msg import PoseStamped
+from mavros_msgs.msg import State
 import time
 
 current_state = State()
@@ -31,7 +30,6 @@ rate = rospy.Rate(20)
 
 rospy.loginfo("Waiting connected")
 while(not rospy.is_shutdown() and current_state.connected):
-    
     rospy.spin()
     rate.sleep()
 rospy.loginfo("Connected")
@@ -53,10 +51,10 @@ last_request = time.time()
 first_request = time.time()
 
 rospy.loginfo("Changing mode to OFFBOARD")
-mode_sent = set_mode_client.call(SetModeRequest(custom_mode = "OFFBOARD"))
+mode_sent = set_mode_client.call(SetModeRequest(None,"OFFBOARD"))
 
 rospy.loginfo("Arming")
-sucess = arming_client.call(CommandBoolRequest(value=True))
+sucess = arming_client.call(True)
 
 while(not rospy.is_shutdown()):
     # if (current_state.mode != "OFFBOARD" and (time.time() - last_request > 5)):

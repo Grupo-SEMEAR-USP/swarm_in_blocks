@@ -1,140 +1,126 @@
+<?xml version="1.0"?>
+
 <launch>
+    <!-- MAVROS posix SITL environment launch script -->
+    <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->
+    <!-- vehicle model and world -->
+    <arg name="est" default="ekf2"/>
+    <arg name="vehicle" default="clover"/>
+    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
+    <!-- gazebo configs -->
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <arg name="paused" default="false"/>
 
-    <arg name="type" default="gazebo" /> <!-- gazebo, jmavsim, none (only clover packages) -->
-    <arg name="gui" default="true" /> <!-- Run Gazebo with GUI -->
-    <arg name="blocks" default="true"/>
-    
-    <!-- Gazebo instance -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval type == 'gazebo')">
-        <!-- Workaround for crashes in VMware -->
-        <env name="SVGA_VGPU10" value="0" />
-        <arg name="gui" value="$(arg gui)" />
-        <arg name="world_name" value="$(find clover_simulation)/resources/worlds/clover_aruco.world" />
-        <arg name="verbose" value="true" />
+     <!-- Update static directory -->
+    <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
+        <!-- <param name="default_package" value="clover"/> -->
+    </node>
+
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+    <!-- swarm clover blocks-->
+    <node pkg="swarm_clover_blocks" name="swarm_clover_blocks" type="clover_blocks"/>
+
+<!-- Clover Blocks -->
+<node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen"/>
+    <!-- Gazebo sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+        <arg name="paused" value="$(arg paused)"/>
     </include>
-
-    <!-- Clover Blocks -->
-    <node name="clover_blocks" pkg="swarm_clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/>
-
+    <!-- UAV0 -->
     <group ns="clover0">
-        <arg name="ID" value="1"/>
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="0"/>
-            <arg name="x" value="0.0"/>
-            <arg name="y" value="0.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-            <arg name="fcu_ip" value="127.0.0.1" />
-            <arg name="ip" value="14580" />
-            <arg name="mavlink_udp_port" value="14560"/>
-            <arg name="mavlink_tcp_port" value="4560"/>
-            <arg name="ID" value="$(arg ID)"/>
-            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
-            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
-            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
-        </include>
-
+        <!-- MAVROS and vehicle configs -->
+        <arg name="ID" value="0"/>
         
-            
-    </group>
-
-
-
-    <group ns="clover1">
-        <arg name="ID" value="2"/>
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="1"/>
-            <arg name="x" value="1.0"/>
-            <arg name="y" value="0.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-            <arg name="fcu_ip" value="127.0.0.1" />
-            <arg name="ip" value="14581" />
-            <arg name="mavlink_udp_port" value="14561"/>
-            <arg name="mavlink_tcp_port" value="4561"/>
+        <!-- PX4 SITL and vehicle spawn -->
+        <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+            <arg name="x" value="1"/>
+            <arg name="y" value="1"/>
+            <arg name="z" value="0.3"/>
+            <arg name="R" value="0"/>
+            <arg name="P" value="0"/>
+            <arg name="Y" value="0"/>
+            <arg name="vehicle" value="$(arg vehicle)"/>
+            <arg name="mavlink_tcp_port" value="456$(arg ID)"/>
             <arg name="ID" value="$(arg ID)"/>
-            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
-            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
-            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
         </include>
+        <!-- MAVROS -->
+        <arg name="fcu_url" default="udp://:1454$(arg ID)@localhost:1458$(arg ID)"/>
 
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
+    </group>
+   
+    <!-- UAV1 -->
+    <group ns="clover1">
+        
+        <arg name="ID" value="1"/>
+        
+        
+        <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+            <arg name="x" value="1"/>
+            <arg name="y" value="0"/>
+            <arg name="z" value="0.3"/>
+            <arg name="R" value="0"/>
+            <arg name="P" value="0"/>
+            <arg name="Y" value="0"/>
+            <arg name="vehicle" value="$(arg vehicle)"/>
+            <arg name="mavlink_tcp_port" value="456$(arg ID)"/>
+            <arg name="ID" value="$(arg ID)"/>
+        </include>
+        
+        <arg name="fcu_url" default="udp://:1454$(arg ID)@localhost:1458$(arg ID)"/>
+
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
     </group>
 
-    
-<!-- 
-    <group ns="clover2">
 
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="2"/>
-            <arg name="x" value="0.0"/>
-            <arg name="y" value="1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
+    <!-- UAV2 -->
+    <!-- <group ns="clover2">
+        
+        <arg name="ID" value="2"/>
+        
+        
+        <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+            <arg name="x" value="1"/>
+            <arg name="y" value="1"/>
+            <arg name="z" value="0.3"/>
+            <arg name="R" value="0"/>
+            <arg name="P" value="0"/>
+            <arg name="Y" value="0"/>
+            <arg name="vehicle" value="$(arg vehicle)"/>
+            <arg name="mavlink_tcp_port" value="456$(arg ID)"/>
+            <arg name="ID" value="$(arg ID)"/>
         </include>
+        
+        <arg name="fcu_url" default="udp://:1454$(arg ID)@localhost:1458$(arg ID)"/>
 
-    </group>
-    
-    <group ns="clover3">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="3"/>
-            <arg name="x" value="1.0"/>
-            <arg name="y" value="1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
         </include>
-
-    </group>
-
-    <group ns="clover4">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="4"/>
-            <arg name="x" value="1.0"/>
-            <arg name="y" value="-1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-        </include>
-
-    </group>
-
-    <group ns="clover5">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="5"/>
-            <arg name="x" value="0.0"/>
-            <arg name="y" value="-1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-        </include>
-
-    </group>
-
-    <group ns="clover6">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="6"/>
-            <arg name="x" value="-1.0"/>
-            <arg name="y" value="0.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-        </include>
-
-    </group>
-
-    <group ns="clover7">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="7"/>
-            <arg name="x" value="-1.0"/>
-            <arg name="y" value="1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-        </include>
-
-    </group>
-
-    <group ns="clover8">
-
-        <include file="$(find swarm_in_blocks)/launch/single_drone.launch">
-            <arg name="mav_id" value="8"/>
-            <arg name="x" value="-1.0"/>
-            <arg name="y" value="-1.0"/>
-            <arg name="launch_gazebo" default="false" /> 
-        </include>
-
     </group> -->
-    
 </launch>
+<!-- to add more UAVs (up to 10):
+Increase the id
+Change the name space
+Set the FCU to default="udp://:14540+id@localhost:14550+id"
+Set the malink_udp_port to 14560+id) -->
