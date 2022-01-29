@@ -9,7 +9,7 @@
   <xacro:arg name="use_clover_physics" default="false"/>
   <xacro:arg name="mavlink_tcp_port" default="4560"/>
 
-  <xacro:include filename="clover4_base.xacro" />
+  <xacro:include filename="clover4_base.xacro"/>
   <xacro:include filename="../sensors/rpi_cam.urdf.xacro"/>
   <xacro:include filename="../sensors/distance_sensor.urdf.xacro"/>
   <xacro:include filename="../leds/led_strip.xacro"/>

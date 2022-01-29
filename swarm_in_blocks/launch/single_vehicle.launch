@@ -15,64 +15,76 @@
     <arg name="ID" default="0"/>
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
-    <arg name="mavlink_udp_port" default="14560"/>
-    <arg name="mavlink_tcp_port" default="4560"/>
-    <arg name="gst_udp_port" default="5600"/>
-    <arg name="video_uri" default="5600"/>
-    <arg name="mavlink_cam_udp_port" default="14530"/>
-    <arg name="mavlink_id" value="$(eval 1 + arg('ID'))" />
-    <!-- PX4 configs -->
-    <arg name="interactive" default="true"/>
-    <!-- generate sdf vehicle model -->
-    <arg name="cmd" default="$(find xacro)/xacro 
-                                $(find swarm_clover_description)/urdf/clover$(arg ID)/clover4.xacro
-                                main_camera:=true
-                                rangefinder:=true
-                                led:=true
-                                gps:=true
-                                maintain_camera_rate:=false
-                                use_clover_physics:=false
-                                namespace:=clover
-                                "/>
-    <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
-    <!-- PX4 SITL -->
-    <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>
-    <arg     if="$(arg interactive)" name="px4_command_arg1" value="-d"/>
-    <!-- <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i $(arg ID) -w sitl_$(arg vehicle)_$(arg ID) $(arg px4_command_arg1)"> -->
-        <!-- PX4 instance -->
-    <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)" unless="$(eval type == 'none')">
-        <env name="PX4_SIM_MODEL" value="$(arg vehicle)"/>
-        <env name="PX4_ESTIMATOR" value="$(arg est)"/>
-    </node>
-    <!-- spawn vehicle -->
-    <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+    <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
+    <arg name="a" value="$(eval 14540 + arg('ID'))"/>
+    <arg name="b" value="$(eval 14580 + arg('ID'))"/>
+    <arg name="fcu_url" default="udp://:$(arg a)@localhost:$(arg b)"/>
 
-    <!-- high level led effects control, events notification with leds -->
-    <node pkg="clover" name="led_effect" type="led" clear_params="true" output="screen">
-        <param name="blink_rate" value="2"/>
-        <param name="fade_period" value="0.5"/>
-        <param name="rainbow_period" value="5"/>
-        <!-- events effects table -->
-        <rosparam param="notify">
-            startup: { r: 255, g: 255, b: 255 }
-            connected: { effect: rainbow }
-            disconnected: { effect: blink, r: 255, g: 50, b: 50 }
-            acro: { r: 245, g: 155, b: 0 }
-            stabilized: { r: 30, g: 180, b: 50 }
-            altctl: { r: 255, g: 255, b: 40 }
-            posctl: { r: 50, g: 100, b: 220 }
-            offboard: { r: 220, g: 20, b: 250 }
-            low_battery: { threshold: 3.6, effect: blink_fast, r: 255, g: 0, b: 0 }
-            error: { effect: flash, r: 255, g: 0, b: 0, ignore: [ "[lpe] vision position timeout" ]}
-        </rosparam>
-    </node>
+    <group ns="clover$(arg ID)">
+    
+        <!-- PX4 configs -->
+        <arg name="interactive" default="true"/>
 
-    <!-- simplified offboard control -->
-    <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
-        <param name="reference_frames/body" value="map"/>
-        <param name="reference_frames/base_link" value="map"/>
-        <param name="reference_frames/navigate_target" value="map"/>
-        <param name="reference_frames/main_camera_optical" value="map"/>
-    </node>
+        <!-- generate sdf vehicle model -->
+        <arg name="cmd" default="$(find xacro)/xacro 
+                                    $(find swarm_clover_description)/urdf/clover/clover4.xacro
+                                    main_camera:=true
+                                    rangefinder:=true
+                                    led:=true
+                                    gps:=true
+                                    maintain_camera_rate:=false
+                                    use_clover_physics:=false
+                                    namespace:=clover
+                                    mavlink_tcp_port:=$(arg mavlink_tcp_port)
+                                    "/>
+        <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
+        <!-- PX4 SITL -->
+        <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>
+        <arg     if="$(arg interactive)" name="px4_command_arg1" value="-d"/>
+        <!-- <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i $(arg ID) -w sitl_$(arg vehicle)_$(arg ID) $(arg px4_command_arg1)"> -->
+            <!-- PX4 instance -->
+        <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)" unless="$(eval type == 'none')">
+            <env name="PX4_SIM_MODEL" value="$(arg vehicle)"/>
+            <env name="PX4_ESTIMATOR" value="$(arg est)"/>
+        </node>
+        <!-- spawn vehicle -->
+        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 
+        <!-- MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
+
+        <!-- high level led effects control, events notification with leds -->
+        <node pkg="clover" name="led_effect" type="led" clear_params="true" output="screen">
+            <param name="blink_rate" value="2"/>
+            <param name="fade_period" value="0.5"/>
+            <param name="rainbow_period" value="5"/>
+            <!-- events effects table -->
+            <rosparam param="notify">
+                startup: { r: 255, g: 255, b: 255 }
+                connected: { effect: rainbow }
+                disconnected: { effect: blink, r: 255, g: 50, b: 50 }
+                acro: { r: 245, g: 155, b: 0 }
+                stabilized: { r: 30, g: 180, b: 50 }
+                altctl: { r: 255, g: 255, b: 40 }
+                posctl: { r: 50, g: 100, b: 220 }
+                offboard: { r: 220, g: 20, b: 250 }
+                low_battery: { threshold: 3.6, effect: blink_fast, r: 255, g: 0, b: 0 }
+                error: { effect: flash, r: 255, g: 0, b: 0, ignore: [ "[lpe] vision position timeout" ]}
+            </rosparam>
+        </node>
+
+        <!-- simplified offboard control -->
+        <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
+            <param name="reference_frames/body" value="map"/>
+            <param name="reference_frames/base_link" value="map"/>
+            <param name="reference_frames/navigate_target" value="map"/>
+            <param name="reference_frames/main_camera_optical" value="map"/>
+        </node>
+    
+    </group>
 </launch>
