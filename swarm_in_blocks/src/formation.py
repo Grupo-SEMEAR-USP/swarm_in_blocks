@@ -24,6 +24,9 @@ land1 = rospy.ServiceProxy("clover1/land", Trigger)
 land2 = rospy.ServiceProxy("clover2/land", Trigger)
 land3 = rospy.ServiceProxy("clover3/land", Trigger)
 
+# Number of clovers
+N = 4
+
 # Initial positions
 x_c0 = 0; y_c0 = 0
 x_c1 = 0; y_c1 = 1
@@ -36,15 +39,19 @@ def takeoff_all():
     nav1(x=0, y=0, z=1, auto_arm=True)
     nav2(x=0, y=0, z=1, auto_arm=True)
     nav3(x=0, y=0, z=1, auto_arm=True)
+    rospy.sleep(7)
     print("Done\n")
 
 def line(x0 = 0, y0 = 0, z0=1, L=1):
     print("Beginning line formation")
-    print("C0")
-    nav0(x = x0, y = y0, z = z0)
-    rospy.sleep(7)
-    print("C1")
-    nav1(x = (x0+L), y = (y0-y_c1), z = z0)
+    nav0(x = (x0+L), y = y0, z = z0)
+    rospy.sleep(5)
+    nav1(x = (x0+L/(N-2)), y = (y0-y_c1), z = z0)
+    rospy.sleep(5)
+    nav2(x = (x0+L/(N-1)), y = (y0-y_c2), z = z0)
+    rospy.sleep(5)
+    nav3(x = x0, y = (y0-y_c3), z = z0)
+    rospy.sleep(10)
     print("Line done\n")
 
 def square(x0=0, y0=0, z0=1, L=2):
@@ -60,18 +67,20 @@ def square(x0=0, y0=0, z0=1, L=2):
     #rospy.sleep(10)
     #print("C3")
     nav3(x=(x0+L), y=(y0-y_c3+L), z=z0)
+    rospy.sleep(10)
     print("Square done\n")
 
 def triangle(x0=0, y0=0, z0=1, L=1):
     print("Beginning triangle formation")
-    print("C0")
+    # print("C0")
     nav0(x=x0, y=y0, z=z0)
-    rospy.sleep(10)
-    print("C1")
+    # rospy.sleep(10)
+    # print("C1")
     nav1(x=(x0+L), y=(y0-y_c1), z=z0)
-    rospy.sleep(10)
-    print("C2")
+    # rospy.sleep(10)
+    # print("C2")
     nav2(x=(x0+L/2), y=(y0-y_c2+L), z=z0)
+    rospy.sleep(10)
     print("Triangle done\n")
 
 def init_pos():
@@ -80,6 +89,7 @@ def init_pos():
     nav1(x=0, y=0, z=1)
     nav2(x=0, y=0, z=1)
     nav3(x=0, y=0, z=1)
+    rospy.sleep(5)
     print("Done\n")
 
 def land_all():
@@ -88,6 +98,7 @@ def land_all():
     land1()
     land2()
     land3()
+    rospy.sleep(5)
     print("Done\n")
 
 def menu():
@@ -103,27 +114,39 @@ def menu():
 if __name__ == "__main__":
     while not rospy.is_shutdown():
         menu()
-        #key= input("press a key for action")
-        key=sys.stdin.read(1)
+        key= input("\n")
+        #key=sys.stdin.read(1)
         if (key == str('1')):
             takeoff_all()
-            rospy.sleep(5)
+            rospy.sleep(2)
         elif (key == str('2')):
-            line()
+            x0 = int(input("Insert initial x coordinate: "))
+            y0 = int(input("Insert initial y coordinate: "))
+            z0 = int(input("Insert the desired height: "))
+            L = int(input("Insert the desired length: "))
+            line(x0=x0, y0=y0, z0=z0, L=L)
             rospy.sleep(5)
         elif (key == str('3')):
-            triangle()
+            x0 = int(input("Insert initial x coordinate: "))
+            y0 = int(input("Insert initial y coordinate: "))
+            z0 = int(input("Insert the desired height: "))
+            L = int(input("Insert the desired side length: "))
+            triangle(x0=x0, y0=y0, z0=z0, L=L)
             rospy.sleep(5)
         elif (key == str('4')):
-            square(x0=2, y0=2, L=2)
+            x0 = int(input("Insert initial x coordinate: "))
+            y0 = int(input("Insert initial y coordinate: "))
+            z0 = int(input("Insert the desired height: "))
+            L = int(input("Insert the desired side length: "))
+            square(x0=x0, y0=y0, z0=z0, L=L)
             rospy.sleep(5)
         elif (key == str('0')):
             init_pos()
-            rospy.sleep(5)
-        elif (key == str('l')):
+            rospy.sleep(2)
+        elif (key == str('l') or key == str('L')):
             land_all()
-            rospy.sleep(5)
-        elif (key == str('e')):
+            rospy.sleep(2)
+        elif (key == str('e') or key == str('E')):
             break
 
     # line(x0=2, y0=4, L=2)
