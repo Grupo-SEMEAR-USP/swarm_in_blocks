@@ -20,7 +20,7 @@
     <arg name="b" value="$(eval 14580 + arg('ID'))"/>
     <arg name="fcu_url" default="udp://:$(arg a)@localhost:$(arg b)"/>
 
-    <group ns="clover$(arg ID)">
+
     
         <!-- PX4 configs -->
         <arg name="interactive" default="true"/>
@@ -28,7 +28,7 @@
         <!-- generate sdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find swarm_clover_description)/urdf/clover/clover4.xacro
-                                    main_camera:=true
+                                    main_camera:=false
                                     rangefinder:=true
                                     led:=true
                                     gps:=true
@@ -86,5 +86,4 @@
             <param name="reference_frames/main_camera_optical" value="map"/>
         </node>
     
-    </group>
 </launch>
