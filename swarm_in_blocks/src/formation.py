@@ -7,21 +7,22 @@ import sys
 import time
 import math
 
-#rospy.init_node("XABLAU_NO_TAKEOFF", anonymous=True)
+rospy.init_node("formation", anonymous=True)
 
-#rospy.Subscriber("clover0/mavros/state", State, state_cb, queue_size=10)   
-#local_pos_pub = rospy.Publisher("clover0/mavros/setpoint_position/local", PoseStamped, queue_size=10)
+# rospy.Subscriber("clover0/mavros/state", State, state_cb, queue_size=10)   
+# pub = rospy.Publisher("clover0/mavros/setpoint_position/local", PoseStamped, queue_size=10)
 # tel0 = rospy.ServiceProxy('clover0/get_telemetry', srv.GetTelemetry)
 # tel1 = rospy.ServiceProxy('clover1/get_telemetry', srv.GetTelemetry)
+
 nav0 = rospy.ServiceProxy("clover0/navigate", srv.Navigate)
 nav1 = rospy.ServiceProxy("clover1/navigate", srv.Navigate)
 nav2 = rospy.ServiceProxy("clover2/navigate", srv.Navigate)
 nav3 = rospy.ServiceProxy("clover3/navigate", srv.Navigate)
+
 land0 = rospy.ServiceProxy("clover0/land", Trigger)
 land1 = rospy.ServiceProxy("clover1/land", Trigger)
 land2 = rospy.ServiceProxy("clover2/land", Trigger)
 land3 = rospy.ServiceProxy("clover3/land", Trigger)
-#set_mode_client = rospy.ServiceProxy("clover0/mavros/set_mode", SetMode)
 
 # Initial positions
 x_c0 = 0; y_c0 = 0
@@ -91,34 +92,40 @@ def land_all():
 
 def menu():
     print("Press")
-    print("t - takeoff")
-    print("l - land")
-    print("s - square")
-    print("p - initial position")
+    print("1 - takeoff all")
+    print("2 - line formation")
+    print("3 - triangle formation")
+    print("4 - square formation")
+    print("0 - initial position")
+    print("L - land all")
+    print("E - exit")
 
 if __name__ == "__main__":
     while not rospy.is_shutdown():
         menu()
         #key= input("press a key for action")
         key=sys.stdin.read(1)
-        if (key == str('t')):
+        if (key == str('1')):
             takeoff_all()
+            rospy.sleep(5)
+        elif (key == str('2')):
+            line()
+            rospy.sleep(5)
+        elif (key == str('3')):
+            triangle()
+            rospy.sleep(5)
+        elif (key == str('4')):
+            square(x0=2, y0=2, L=2)
+            rospy.sleep(5)
+        elif (key == str('0')):
+            init_pos()
             rospy.sleep(5)
         elif (key == str('l')):
             land_all()
             rospy.sleep(5)
-        elif (key == str('s')):
-            square(x0=2, y0=2, L=2)
-            rospy.sleep(5)
-        elif (key == str('p')):
-            init_pos()
-            rospy.sleep(5)
         elif (key == str('e')):
             break
 
-    #line(x0=2, y0=4, L=2)
-    #takeoff()
-    # init_pos()
-    # rospy.sleep(15)
+    # line(x0=2, y0=4, L=2)
     # square(x0=2, y0=2, L=2)
-    #triangulo(x0=2, y0=2, L=2)
+    # triangle(x0=2, y0=2, L=2)
