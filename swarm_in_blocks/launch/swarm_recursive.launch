@@ -13,8 +13,8 @@
         
     
         <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
-            <arg name="x" value="$(arg drone)"/>
-            <arg name="y" value="0"/>
+            <arg name="x" value="0"/>
+            <arg name="y" value="$(arg drone)"/>
             <arg name="z" value="0.3"/>
             <arg name="R" value="0"/>
             <arg name="P" value="0"/>

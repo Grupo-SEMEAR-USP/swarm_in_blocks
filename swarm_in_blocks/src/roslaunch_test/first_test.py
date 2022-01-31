@@ -2,7 +2,7 @@ import roslaunch
 import rospy
 import time
 
-numero_drones = 11
+numero_drones = 3
 
 # INICIANDO NODES
 # package = "swarm_in_blocks"
