@@ -27,7 +27,6 @@ class Make_Clover():
 
    def state_cb(self, msg_cb):
       self.msg_cb = msg_cb
-     
 
    def nodes(self, name):
       self.name = name 
