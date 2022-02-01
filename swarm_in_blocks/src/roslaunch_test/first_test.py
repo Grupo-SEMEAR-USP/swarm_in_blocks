@@ -1,6 +1,7 @@
 import roslaunch 
 import rospy
 import time
+import os
 
 numero_drones = 3
 
@@ -20,6 +21,12 @@ numero_drones = 3
 
 # INCIANDO SERVIÇOS
 
+'''
+path relativo para o launch
+'''
+file = '/swarm_main.launch'
+path = os.getcwd().replace('/src/roslaunch_test', '') + '/launch' + file
+
 
 # sem in-line arguments
 def no_arg():
@@ -27,7 +34,7 @@ def no_arg():
     uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
     roslaunch.configure_logging(uuid)
 
-    launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/jose_carlosa13/catkin_ws/src/swarm_in_blocks/swarm_in_blocks/launch/swarm_main.launch"])
+    launch = roslaunch.parent.ROSLaunchParent(uuid, [path])
     launch.start()
     rospy.loginfo("started")
 
@@ -46,7 +53,7 @@ def with_arg(num):
     uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
     roslaunch.configure_logging(uuid)
 
-    cli_args = ["/home/jose_carlosa13/catkin_ws/src/swarm_in_blocks/swarm_in_blocks/launch/swarm_main.launch","num:="+ str(num)]
+    cli_args = [path,"num:="+ str(num)]
     roslaunch_args = cli_args[1:]
     roslaunch_file = [(roslaunch.rlutil.resolve_launch_arguments(cli_args)[0], roslaunch_args)]
 
