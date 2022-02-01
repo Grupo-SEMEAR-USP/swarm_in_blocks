@@ -2,30 +2,18 @@
 
 <launch>
     <arg name="num" default="0"/>
-    <arg name="ID" default="0"/>
-    <arg name="drone" default="0"/>
+    <arg name="ID" default="0"/> 
     
-    
-
-
-    <!-- UAV0 -->
-    <group ns="$(eval 'clover' + str(arg('drone')))">
+    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+        <arg name="x" value="0"/>
+        <arg name="y" value="$(arg ID)"/>
+        <arg name="z" value="0.3"/>
+        <arg name="R" value="0"/>
+        <arg name="P" value="0"/>
+        <arg name="Y" value="0"/>
+        <arg name="ID" value="$(arg ID)"/>
+    </include>
         
-    
-        <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
-            <arg name="x" value="0"/>
-            <arg name="y" value="$(arg drone)"/>
-            <arg name="z" value="0.3"/>
-            <arg name="R" value="0"/>
-            <arg name="P" value="0"/>
-            <arg name="Y" value="0"/>
-            <arg name="ID" value="$(arg ID)"/>
-            
-        </include>
-        
-    </group>
-
-
     <!-- chamar outros includes recursivamente -->
     
     <include file="$(find swarm_in_blocks)/launch/swarm_recursive.launch" if="$(eval arg('num') - 1 > 0)">
@@ -33,10 +21,6 @@
 
         <arg name="ID" value="$(eval arg('ID')+1)" unless="$(eval arg('ID') - 9 == 0)"/>
         <arg name="ID" value="$(eval arg('ID')+2)" if="$(eval arg('ID') - 9 == 0)"/>
-
-
-
-        <arg name="drone" value="$(eval arg('drone')+1)"/>
     </include>
 
     
@@ -49,5 +33,3 @@ Increase the id
 Change the name space
 Set the FCU to default="udp://:14540+id@localhost:14550+id"
 Set the malink_udp_port to 14560+id) -->
-
-
