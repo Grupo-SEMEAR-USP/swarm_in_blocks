@@ -9,11 +9,6 @@ import math
 
 rospy.init_node("formation", anonymous=True)
 
-# rospy.Subscriber("clover0/mavros/state", State, state_cb, queue_size=10)   
-# pub = rospy.Publisher("clover0/mavros/setpoint_position/local", PoseStamped, queue_size=10)
-# tel0 = rospy.ServiceProxy('clover0/get_telemetry', srv.GetTelemetry)
-# tel1 = rospy.ServiceProxy('clover1/get_telemetry', srv.GetTelemetry)
-
 nav0 = rospy.ServiceProxy("clover0/navigate", srv.Navigate)
 nav1 = rospy.ServiceProxy("clover1/navigate", srv.Navigate)
 nav2 = rospy.ServiceProxy("clover2/navigate", srv.Navigate)
@@ -28,30 +23,27 @@ land3 = rospy.ServiceProxy("clover3/land", Trigger)
 N = 4
 
 # Initial positions
-init_x = []
-init_y = []
-
-for i in range(N):
-    init_x = init_x + [0]
-    init_y = init_y + [i]
+x_c0 = 0; y_c0 = 0
+x_c1 = 0; y_c1 = 1
+x_c2 = 0; y_c2 = 2
+x_c3 = 0; y_c3 = 3
 
 def takeoff_all():
     print("All drones taking off")
-    for i in range(N):
-        nav = "nav" + str(i)
-        eval(nav)(z=1, auto_arm=True)
-        print("Clover {} taking off".format(i))
+    nav0(x=0, y=0, z=1, auto_arm=True)
+    nav1(x=0, y=0, z=1, auto_arm=True)
+    nav2(x=0, y=0, z=1, auto_arm=True)
+    nav3(x=0, y=0, z=1, auto_arm=True)
     rospy.sleep(7)
     print("Done\n")
 
 def line(x0 = 0, y0 = 0, z0=1, L=1):
-    fac = L/(N-1)
     print("Beginning line formation")
-    nav0(x = (x0+3*fac), y = y0, z = z0)
+    nav0(x = (x0+L), y = y0, z = z0)
     rospy.sleep(5)
-    nav1(x = (x0+2*fac), y = (y0-init_y[1]), z = z0)
+    nav1(x = (x0+L/(N-2)), y = (y0-init_y[1]), z = z0)
     rospy.sleep(5)
-    nav2(x = (x0+fac), y = (y0-init_y[2]), z = z0)
+    nav2(x = (x0+L/(N-1)), y = (y0-init_y[2]), z = z0)
     rospy.sleep(5)
     nav3(x = x0, y = (y0-init_y[3]), z = z0)
     rospy.sleep(10)
@@ -88,19 +80,19 @@ def triangle(x0=0, y0=0, z0=1, L=1):
 
 def init_pos():
     print("All drones returning to initial position")
-    for i in range(N):
-        nav = "nav" + str(i)
-        eval(nav)(x=0, y=0, z=1)
-        print("Clover {} returning to initial position".format(i))
+    nav0(x=0, y=0, z=1)
+    nav1(x=0, y=0, z=1)
+    nav2(x=0, y=0, z=1)
+    nav3(x=0, y=0, z=1)
     rospy.sleep(5)
     print("Done\n")
 
 def land_all():
     print("All drones landing")
-    for i in range(N):
-        land = "land" + str(i)
-        eval(land)()
-        print("Clover {} landing".format(i))
+    land0()
+    land1()
+    land2()
+    land3()
     rospy.sleep(5)
     print("Done\n")
 
