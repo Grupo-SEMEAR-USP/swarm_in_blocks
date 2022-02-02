@@ -85,8 +85,17 @@ def transformFormation(form_pts, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
     
     modelT = translation(tx, ty, tz)
 
-    # Firs
-    model = 
+    # Crate model matrix
+    # Rotate first!!! Next scale and finally translate
+    model = np.eye(4)
+    model = np.matmul(modelR, model)
+    model = np.matmul(modelS, model)
+    model = np.matmul(modelT, model)
+
+    # Apply model to form_points
+    form_pts = np.matmul(model, form_pts)
+    return form_pts
+
 
 
     
