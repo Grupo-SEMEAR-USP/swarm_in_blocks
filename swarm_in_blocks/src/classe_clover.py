@@ -13,7 +13,7 @@ from std_srvs.srv import Trigger
 
 class Make_Clover:
 
-   def _init_(self, name):
+   def _init_(self, name, id):
       self.name = name
       self.id = id
 
@@ -24,10 +24,8 @@ class Make_Clover:
 
    def state_cb(self, msg_cb):
       self.current_state = msg_cb
-     
 
    def configure(self):
-      rospy.init_node("class_clover_node", anonymous=True) 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.state_cb, queue_size=10)    
       self.local_pos_pub = rospy.Publisher(f"{self.name}/mavros/setpoint_position/local", PoseStamped, queue_size=10)
       self.arming_client = rospy.ServiceProxy(f"{self.name}/mavros/cmd/arming",  CommandBool)
