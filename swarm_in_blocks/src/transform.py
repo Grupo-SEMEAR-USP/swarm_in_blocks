@@ -73,7 +73,25 @@ def transformFormation(form_pts, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
 
     assert(form_pts.shape == (1,3), "Formation points with wrong format!")
 
+    modelS = scale(sx, sy, sz)
+
+    modelR = np.eye(4)
+    if anglex != 0:
+        modelR = np.matmul(rotationX(anglex), modelR)
+    if angley != 0:
+        modelR = np.matmul(rotationY(angley), modelR)
+    if anglez != 0:
+        modelR = np.matmul(rotationZ(anglez), modelR)
     
+    modelT = translation(tx, ty, tz)
+
+    model = 
+
+
+    
+
+
+
 
 
 
