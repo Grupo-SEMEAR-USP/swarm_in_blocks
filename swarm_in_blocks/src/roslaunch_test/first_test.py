@@ -3,7 +3,7 @@ import rospy
 import time
 import os
 
-numero_drones = 3
+numero_drones = 4
 
 # INICIANDO NODES
 # package = "swarm_in_blocks"
