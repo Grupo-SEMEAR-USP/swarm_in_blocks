@@ -1,13 +1,5 @@
 #!/usr/bin/python3
 
-'''
- * @file offb_node.py
- * @brief offboard example node, written with mavros version 0.14.2, px4 flight
- * stack and tested in Gazebo SITL
-'''
-
-from distutils.util import subst_vars
-from http import client
 import mavros
 import rospy
 import mavros_msgs
@@ -18,20 +10,21 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
-
+from swarm_in_blocks.src.classe_clover import Make_Clover 
 
 
 class Make_Clover:
 
-   def _init_(self):
+   def _init_(self, name):
+      self.name = name
+      self.id = id
       self.current_state = State()
 
    def state_cb(self, msg_cb):
-      self.msg_cb = msg_cb
       self.current_state = msg_cb
      
 
-   def nodes(self, name):
+   def nodes(self):
       self.name = name 
       rospy.init_node("class_clover_node", anonymous=True) 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.state_cb, queue_size=10)    
@@ -49,6 +42,8 @@ class Make_Clover:
 
 
 class Swarm_Clover(Make_Clover):
+   
+   
    def takeoff(self):
       rate = rospy.Rate(20)
       rospy.loginfo("Waiting connected")

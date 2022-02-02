@@ -43,19 +43,19 @@ def translateFormation(form_pts, tx, ty, tz):
     form_pts = np.matmul(model, form_pts)
     return form_pts
 
-def rotateFormation(form_pts, angleX, angleY, angleZ):
+def rotateFormation(form_pts, anglex, angley, anglez):
 
     assert(form_pts.shape == (1,3), "Formation points with wrong format!")
     
     model = np.eye(4)
 
     # Eq 1: model equals to rotz*roty*rotx
-    if angleX != 0:
-        model = np.matmul(rotationX(angleX), model)
-    if angleY != 0:
-        model = np.matmul(rotationY(angleY), model)
-    if angleZ != 0:
-        model = np.matmul(rotationZ(angleZ), model)
+    if anglex != 0:
+        model = np.matmul(rotationX(anglex), model)
+    if angley != 0:
+        model = np.matmul(rotationY(angley), model)
+    if anglez != 0:
+        model = np.matmul(rotationZ(anglez), model)
     
     # Eq 2: form_pts equals to model*form_pts
     form_pts = np.matmul(model, form_pts)
@@ -69,8 +69,11 @@ def scaleFormation(form_pts, sx, sy, sz):
     form_pts = np.matmul(model, form_pts)
     return form_pts
 
-def transformFormation(form_pts, sx, sy, sz, anglex, angleY, angleZ, tx, ty, tz):
+def transformFormation(form_pts, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
 
+    assert(form_pts.shape == (1,3), "Formation points with wrong format!")
+
+    
 
 
 
