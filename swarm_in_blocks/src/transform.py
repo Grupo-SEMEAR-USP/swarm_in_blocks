@@ -85,6 +85,7 @@ def transformFormation(form_pts, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
     
     modelT = translation(tx, ty, tz)
 
+    # Firs
     model = 
 
 
