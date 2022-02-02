@@ -10,7 +10,7 @@
           led_count: Number of LEDs in a strip
           use_plugin: Attach the controller plugin to LEDs
     -->
-    <xacro:macro name="led_strip" params="name parent radius:=0.08 bulb_radius:=0.005 led_count:=58 shift:=0 use_plugin:=false x:=0 y:=0 z:=0 roll:=0 pitch:=0 yaw:=0">
+    <xacro:macro name="led_strip" params="name parent radius:=0.08 bulb_radius:=0.005 led_count:=58 shift:=0 use_plugin:=true x:=0 y:=0 z:=0 roll:=0 pitch:=0 yaw:=0">
         <joint name="${name}_joint" type="fixed">
             <origin xyz="${x} ${y} ${z}"
                     rpy="${roll} ${pitch} ${yaw}"/>
