@@ -1,13 +1,5 @@
 #!/usr/bin/python3
 
-'''
- * @file offb_node.py
- * @brief offboard example node, written with mavros version 0.14.2, px4 flight
- * stack and tested in Gazebo SITL
-'''
-
-from distutils.util import subst_vars
-from http import client
 import mavros
 import rospy
 import mavros_msgs
@@ -19,20 +11,22 @@ import time
 from clover import srv
 from std_srvs.srv import Trigger
 
-
-
 class Make_Clover:
 
-   def _init_(self):
+   def _init_(self, name):
+      self.name = name
+      self.id = id
+
       self.current_state = State()
 
+      # Configure clover services and topics
+      self.configure()
+
    def state_cb(self, msg_cb):
-      self.msg_cb = msg_cb
       self.current_state = msg_cb
      
 
-   def nodes(self, name):
-      self.name = name 
+   def configure(self):
       rospy.init_node("class_clover_node", anonymous=True) 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.state_cb, queue_size=10)    
       self.local_pos_pub = rospy.Publisher(f"{self.name}/mavros/setpoint_position/local", PoseStamped, queue_size=10)
