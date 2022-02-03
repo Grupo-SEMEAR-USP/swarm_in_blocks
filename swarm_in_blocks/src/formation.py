@@ -35,7 +35,7 @@ land7 = rospy.ServiceProxy("clover7/land", Trigger)
 land8 = rospy.ServiceProxy("clover8/land", Trigger)
 
 # Number of clovers
-N = 9
+N = 5
 
 # Initial positions
 init_x = []
@@ -46,15 +46,19 @@ for i in range(N):
     init_y = init_y + [i]
 
 def takeoff_all():
+    coord = []
     print("All drones taking off")
     for i in range(N):
         nav = "nav" + str(i)
         eval(nav)(z=1, auto_arm=True)
         print("Clover {} taking off".format(i))
+        coord.append([init_x[i],init_y[i],1,1])
     rospy.sleep(7)
     print("Done\n")
+    return coord
 
 def line(z0=1, L=1):
+    coord = []
     f = L/(N-1)
     print("Beginning line formation")
     for i in range(N):
@@ -62,43 +66,55 @@ def line(z0=1, L=1):
         y0 = 0 - init_y[i]
         nav = "nav" + str(i)
         eval(nav)(x=(x0+f*(N-1-i)), y=y0, z=z0)
+        coord.append([round(x0+f*(N-1-i), 2),0,z0,1])
         rospy.sleep(2)
     rospy.sleep(5)
     print("Line done\n")
+    return coord
 
-def side_sq(xi, yi, z0, L):
-    q = 0
+def square_side(q, n, yi, f):
     j = 0
+    for i in range(q,n+q):
+        x0 = 0 - init_x[i]
+        y0 = 0 - init_y[i]
+        nav = "nav" + str(i)
+        eval(nav)(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
+        q = q+1
+        j = j+1
+        rospy.sleep(2)
+        if (q==N):
+            break
+    yi = yi + L/(n-1)
+    return(q)
+
+def square_full(z0=1, L=2):
+    coord = []
+    print("Beginning square formation")
+    yi = 0
     n = int(1 + N/4)
     f = L/(n-1)
+    q = square_side(q=0, n=n, yi=0, f=f)
     while (q<N):
-        for i in range(q,n+q):
-            x0 = 0 - init_x[i]
-            y0 = 0 - init_y[i]
-            nav = "nav" + str(i)
-            eval(nav)(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
-            q = q+1
-            j = j+1
-            rospy.sleep(2)
         yi = yi + L/(n-1)
-        j = 0
-
-def square(x0=0, y0=0, z0=1, L=2):
-    print("Beginning square formation")
-
-    #if (N%9==0):
-    side_sq(0,0,z0,L)
-        #side_sq(0,L,z0,L)
-
-
-
-    # nav0(x=x0, y=y0, z=z0)
-    # nav1(x=(x0+L), y=(y0-init_y[1]), z=z0)
-    # nav2(x=x0, y=(y0-init_y[2]+L), z=z0)
-    # nav3(x=(x0+L), y=(y0-init_y[3]+L), z=z0)
-
-    rospy.sleep(10)
+        q = square_side(q=q, n=n, yi=yi, f=f)
+    rospy.sleep(5)
     print("Square done\n")
+    return coord
+
+def square_empty(z0=1, L=2):
+    coord = []
+    print("Beginning square formation")
+    yi = 0
+    n = int(1 + N/4)
+    f = L/(n-1)
+    q = square_side(q=0, n=n, yi=0, f=f)
+    while (q<N-n):
+        yi = yi + L/(n-1)
+        q = square_side(q=q, n=2, yi=yi, f=L)
+    q = square_side(q=q, n=n, yi=L, f=f)
+    rospy.sleep(5)
+    print("Square done\n")
+    return coord
 
 def triangle(x0=0, y0=0, z0=1, L=1):
     print("Beginning triangle formation")
@@ -114,22 +130,28 @@ def triangle(x0=0, y0=0, z0=1, L=1):
     print("Triangle done\n")
 
 def init_pos():
+    coord = []
     print("All drones returning to initial position")
     for i in range(N):
         nav = "nav" + str(i)
         eval(nav)(x=0, y=0, z=1)
         print("Clover {} returning to initial position".format(i))
+        coord.append([init_x[i], init_y[i], 1, 1])
     rospy.sleep(5)
     print("Done\n")
+    return coord
 
 def land_all():
+    coord = []
     print("All drones landing")
     for i in range(N):
         land = "land" + str(i)
         eval(land)()
         print("Clover {} landing".format(i))
+        coord.append([init_x[i], init_y[i], 0, 1])
     rospy.sleep(5)
     print("Done\n")
+    return coord
 
 def menu():
     print("Press")
@@ -145,9 +167,9 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         menu()
         key= input("\n")
-        #key=sys.stdin.read(1)
         if (key == str('1')):
-            takeoff_all()
+            coord = takeoff_all()
+            print("Drones coordinates: {}\n".format(coord))
             rospy.sleep(2)
         elif (key == str('2')):
             if (N < 2):
@@ -155,7 +177,8 @@ if __name__ == "__main__":
             else:
                 z0 = int(input("Insert the desired height: "))
                 L = int(input("Insert the desired length: "))
-                line(z0=z0, L=L)
+                coord = line(z0=z0, L=L)
+                print("Drones coordinates: {}\n".format(coord))
                 rospy.sleep(5)
         elif (key == str('3')):
             if (N < 3):
@@ -171,17 +194,18 @@ if __name__ == "__main__":
             if (N < 4):
                 print("You need at least 4 clovers!\n")
             else:
-                x0 = int(input("Insert initial x coordinate: "))
-                y0 = int(input("Insert initial y coordinate: "))
                 z0 = int(input("Insert the desired height: "))
                 L = int(input("Insert the desired side length: "))
-                square(x0=x0, y0=y0, z0=z0, L=L)
+                square_full(z0=z0, L=L)
                 rospy.sleep(5)
         elif (key == str('0')):
-            init_pos()
+            coord = init_pos()
+            print("Drones coordinates: {}\n".format(coord))
             rospy.sleep(2)
         elif (key == str('l') or key == str('L')):
-            land_all()
+            coord = land_all()
+            print("Drones coordinates: {}\n".format(coord))
             rospy.sleep(5)
         elif (key == str('e') or key == str('E')):
             break
+
