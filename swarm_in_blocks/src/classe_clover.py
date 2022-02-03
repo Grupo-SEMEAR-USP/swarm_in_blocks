@@ -40,59 +40,31 @@ class Make_Clover:
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger) 
 
 
-class Swarm_Clover(Make_Clover):
-   
-   
-   def takeoff(self):
-      rate = rospy.Rate(20)
-      rospy.loginfo("Waiting connected")
+class Swarm_Clover:
 
-      while(not rospy.is_shutdown() and self.current_state.connected):
-         #rospy.spin()
-         rate.sleep()
-      rospy.loginfo("Connected")
+   def __init__(self, number_clover):
+       self.number_clover = number_clover
+       clover_object_list = []
+       for n in range(number_clover):
+          clover_object = Make_Clover()
+          clover_object_list.append(clover_object)
+      
+     
+       
 
-      pose = PoseStamped()
-      pose.pose.position.x = 0
-      pose.pose.position.y = 0
-      pose.pose.position.z = 2
 
-      rospy.loginfo("Publishing first pose")
-      for i in range(0,50):
-         self.local_pos_pub.publish(pose)
-         # rospy.spin()
-         rate.sleep()
-      rospy.loginfo("Published")
+   '''def takeoff(self, z):
+      print("Takeoff all clovers")
+      self.z = z
+      print("All drones taking off")
+      for i in range(self.number_clover):
+        nav = "nav" + str(i)
+        eval(nav)(z=1, auto_arm=True)
+        print("Clover {} taking off".format(i))
+      rospy.sleep(7)
+      print("Done\n")'''
 
-      last_request = time.time()
-      first_request = time.time()
+     
 
-      rospy.loginfo("Changing mode to OFFBOARD")
-      #mode_sent = SetModeRequest(None,"OFFBOARD")
-      mode_sent = self.set_mode_client.call(SetModeRequest(None,"OFFBOARD"))
-      #print("OFFBOARD FOI")
-      #print(mode_sent)
-      rospy.loginfo("Arming")
-      sucess = self.arming_client.call(True)
 
-      while(not rospy.is_shutdown()):
-         if (self.current_state.mode != "OFFBOARD" and (time.time() - last_request > 5)):
-               rospy.loginfo("Changing mode to OFFBOARD")
-               mode_sent = self.set_mode_client.call(SetModeRequest(None,"OFFBOARD"))
 
-               if(mode_sent):
-                  rospy.loginfo("Offboard enabled")
-               
-               last_request = time.time()
-         elif (not self.current_state.armed and (time.time() - last_request > 5)):
-               rospy.loginfo("Arming")
-               sucess = self.arming_client.call(True)
-               if(sucess):
-                  rospy.loginfo("Vehicle armed")
-         
-               last_request = time.time()
-         
-         self.local_pos_pub.publish(pose)        
-
-         #rospy.spin()
-         rate.sleep()
