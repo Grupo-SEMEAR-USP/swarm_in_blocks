@@ -4,16 +4,14 @@ import mavros
 import rospy
 import mavros_msgs
 from mavros_msgs import srv
-from mavros_msgs.srv import SetMode, CommandBool, SetModeRequest
-from geometry_msgs.msg import PoseStamped
 from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
 
-class Make_Clover:
+class SingleClover:
 
-   def _init_(self, name, id):
+   def __init__(self, name, id):
       self.name = name
       self.id = id
 
@@ -22,14 +20,11 @@ class Make_Clover:
       # Configure clover services and topics
       self.configure()
 
-   def state_cb(self, msg_cb):
+   def stateCb(self, msg_cb):
       self.current_state = msg_cb
 
    def configure(self):
-      self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.state_cb, queue_size=10)    
-      self.local_pos_pub = rospy.Publisher(f"{self.name}/mavros/setpoint_position/local", PoseStamped, queue_size=10)
-      self.arming_client = rospy.ServiceProxy(f"{self.name}/mavros/cmd/arming",  CommandBool)
-      self.set_mode_client = rospy.ServiceProxy(f"{self.name}/mavros/set_mode", SetMode)
+      self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)    
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
       self.navigate = rospy.ServiceProxy(f"{self.name}/navigate", srv.Navigate)
       self.navigate_global = rospy.ServiceProxy(f"{self.name}/navigate_global", srv.NavigateGlobal)
@@ -40,31 +35,28 @@ class Make_Clover:
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger) 
 
 
-class Swarm_Clover:
-
+class Swarm:
    def __init__(self, number_clover):
-       self.number_clover = number_clover
-       clover_object_list = []
-       for n in range(number_clover):
-          clover_object = Make_Clover()
-          clover_object_list.append(clover_object)
-      
-     
-       
+      rospy.init_node('swarm')
+      self.number_clover = number_clover
+      self.swarm = []
+      for index in range(number_clover):
+         clover_object = SingleClover(f"clover{index}", index)
+         self.swarm.append(clover_object)
+   
+   def takeOffAll(self):
 
+      for clover in self.swarm:
+         clover.navigate(x=0, y=0, z=1, auto_arm=True)
 
-   '''def takeoff(self, z):
-      print("Takeoff all clovers")
-      self.z = z
-      print("All drones taking off")
-      for i in range(self.number_clover):
-        nav = "nav" + str(i)
-        eval(nav)(z=1, auto_arm=True)
-        print("Clover {} taking off".format(i))
-      rospy.sleep(7)
-      print("Done\n")'''
+   def launchSwarm(self):
+      pass
 
-     
+if __name__ == "__main__":
+
+   swarm = Swarm(4)
+
+   swarm.takeOffAll()
 
 
 
