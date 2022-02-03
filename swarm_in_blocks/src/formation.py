@@ -23,6 +23,7 @@ nav5 = rospy.ServiceProxy("clover5/navigate", srv.Navigate)
 nav6 = rospy.ServiceProxy("clover6/navigate", srv.Navigate)
 nav7 = rospy.ServiceProxy("clover7/navigate", srv.Navigate)
 nav8 = rospy.ServiceProxy("clover8/navigate", srv.Navigate)
+nav9 = rospy.ServiceProxy("clover9/navigate", srv.Navigate)
 
 land0 = rospy.ServiceProxy("clover0/land", Trigger)
 land1 = rospy.ServiceProxy("clover1/land", Trigger)
@@ -33,9 +34,10 @@ land5 = rospy.ServiceProxy("clover5/land", Trigger)
 land6 = rospy.ServiceProxy("clover6/land", Trigger)
 land7 = rospy.ServiceProxy("clover7/land", Trigger)
 land8 = rospy.ServiceProxy("clover8/land", Trigger)
+land9 = rospy.ServiceProxy("clover9/land", Trigger)
 
 # Number of clovers
-N = 5
+N = 10
 
 # Initial positions
 init_x = []
@@ -72,8 +74,13 @@ def line(z0=1, L=1):
     print("Line done\n")
     return coord
 
-def square_side(q, n, yi, f):
+def square_side(q, n, yi, L):
     j = 0
+    if (n == 1):
+        f = L/2
+        j = -1
+    else:
+        f = L/(n-1)
     for i in range(q,n+q):
         x0 = 0 - init_x[i]
         y0 = 0 - init_y[i]
@@ -84,34 +91,47 @@ def square_side(q, n, yi, f):
         rospy.sleep(2)
         if (q==N):
             break
-    yi = yi + L/(n-1)
     return(q)
 
-def square_full(z0=1, L=2):
+def square(type="full", z0=1, L=2):
     coord = []
     print("Beginning square formation")
     yi = 0
     n = int(1 + N/4)
-    f = L/(n-1)
-    q = square_side(q=0, n=n, yi=0, f=f)
-    while (q<N):
-        yi = yi + L/(n-1)
-        q = square_side(q=q, n=n, yi=yi, f=f)
-    rospy.sleep(5)
-    print("Square done\n")
-    return coord
 
-def square_empty(z0=1, L=2):
-    coord = []
-    print("Beginning square formation")
-    yi = 0
-    n = int(1 + N/4)
-    f = L/(n-1)
-    q = square_side(q=0, n=n, yi=0, f=f)
-    while (q<N-n):
-        yi = yi + L/(n-1)
-        q = square_side(q=q, n=2, yi=yi, f=L)
-    q = square_side(q=q, n=n, yi=L, f=f)
+    if (type=="empty"):
+        if (N%4 == 0):
+            q = square_side(q=0, n=n, yi=0, L=L)
+            while (q<N-n):
+                yi = yi + L/(n-1)
+                q = square_side(q=q, n=2, yi=yi, L=L)
+            q = square_side(q=q, n=n, yi=L, L=L)
+        else:
+            q = square_side(q=0, n=n+1, yi=0, L=L)
+            if (N%4 > 1):
+                m = n+1
+            else:
+                m = n
+            while (q<N-n):
+                    yi = yi + L/(m-1)
+                    q = square_side(q=q, n=2, yi=yi, L=L)
+            if (N%4 < 3):
+                q = square_side(q=q, n=n, yi=L, L=L)
+            else:
+                q = square_side(q=q, n=n+1, yi=L, L=L)                
+
+    elif (type=="full"):
+        q = square_side(q=0, n=n, yi=0, L=L)
+        while (q<N):
+            if (math.sqrt(N) == int(math.sqrt(N))):
+                yi = yi + L/(n-1)
+                q = square_side(q=q, n=n, yi=yi, L=L)
+            else:
+                yi = yi + L/n
+                q = square_side(q=q, n=(N%4), yi=yi, L=L)
+                if (N-q == n):
+                    q = square_side(q=q, n=n, yi=L, L=L)
+
     rospy.sleep(5)
     print("Square done\n")
     return coord
@@ -194,9 +214,10 @@ if __name__ == "__main__":
             if (N < 4):
                 print("You need at least 4 clovers!\n")
             else:
+                type = input("Insert full or empty: ")
                 z0 = int(input("Insert the desired height: "))
                 L = int(input("Insert the desired side length: "))
-                square_full(z0=z0, L=L)
+                square(type=type, z0=z0, L=L)
                 rospy.sleep(5)
         elif (key == str('0')):
             coord = init_pos()
