@@ -43,8 +43,8 @@
         <pose>0.1 0 0 0 0 0</pose>
         <name>gps0</name>
       </include>
-      <joint name='gps_joint' type='fixed'>
-        <child>gps::link</child>
+      <joint name='gps0_joint' type='fixed'>
+        <child>gps0::link</child>
         <parent>base_link</parent>
       </joint>  
     </gazebo>
