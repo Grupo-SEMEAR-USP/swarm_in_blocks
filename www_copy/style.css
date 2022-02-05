@@ -13,7 +13,7 @@ h3{
 
 /* Header/Logo Title */
 .header {
-    padding: 20px;
+    padding: 30px;
     text-align: center;
     background: #1aa7c3;
     color: white;
@@ -41,7 +41,7 @@ h3{
 .content_imgs{
     margin: 10px 20;
     text-align: center;
-    padding:28px;
+    padding:8px;
 }
 
 .bottom{
