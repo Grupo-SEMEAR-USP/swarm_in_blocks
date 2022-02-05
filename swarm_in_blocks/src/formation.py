@@ -37,7 +37,7 @@ land8 = rospy.ServiceProxy("clover8/land", Trigger)
 land9 = rospy.ServiceProxy("clover9/land", Trigger)
 
 # Number of clovers
-N = 10
+N = 3
 
 # Initial positions
 init_x = []
