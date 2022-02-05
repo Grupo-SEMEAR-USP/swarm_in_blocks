@@ -130,7 +130,7 @@ else:
 
 #* copy assests folder
 src = os.getcwd() + '/assets/'
-dst = '/home/tommaselli/.ros/www/assets'
+dst = rospkg.get_ros_home() + '/www/assets'
 os.mkdir(dst)
 try:
     #if path already exists, remove it before copying with copytree()
