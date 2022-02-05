@@ -31,7 +31,6 @@ os.mkdir(www)
 packages = rospack.list()
 
 #* procura dos pacotes
-names = list()
 others = list()
 for name in packages:
     path = rospack.get_path(name)
@@ -39,7 +38,7 @@ for name in packages:
         rospy.loginfo('found www path for %s package', name)
         os.symlink(path + '/www', www + '/' + name)
         if name == 'clover' or name == 'clover_blocks' or name == 'swarm_clover_blocks':
-            names.append(name)
+            continue
         else:
             others.append(name)
 
