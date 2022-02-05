@@ -207,7 +207,7 @@ include_directories(
 # catkin_add_nosetests(test)
 
 #add_executable(uav_control_node src/UAVSpiralMotion.cpp)
-add_executable(take_off src/takeoff.cpp)
+add_executable(take_off src/tests/takeoff.cpp)
 
 # add_dependencies(uav_control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
