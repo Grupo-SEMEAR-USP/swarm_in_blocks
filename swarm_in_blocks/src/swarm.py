@@ -8,6 +8,8 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
+import math
+from math import sqrt
 
 class SingleClover:
 
@@ -86,6 +88,80 @@ class Swarm:
       rospy.sleep(5)
       print("Line done\n")
 
+   def square_side(self, q, n, yi, L):
+      j = 0
+      if (n == 1):
+         f = L/2
+         j = -1
+      else:
+         f = L/(n-1)
+      for clover in self.swarm[q:n+q]:
+         x0 = 0 - self.init_x[clover.id]
+         y0 = 0 - self.init_y[clover.id]
+         clover.navigate(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
+         q = q+1
+         j = j+1
+         rospy.sleep(2)
+         if (q==N):
+               break
+      return(q)
+
+   def square(self, type="full", z0=1, L=2):
+      coord = []
+      print("Beginning square formation")
+      yi = 0
+      n = int(1 + N/4)
+
+      if (type=="empty"):
+         if (N%4 == 0):
+            q = self.square_side(q=0, n=n, yi=0, L=L)
+            while (q<N-n):
+                  yi = yi + L/(n-1)
+                  q = self.square_side(q=q, n=2, yi=yi, L=L)
+            q = self.square_side(q=q, n=n, yi=L, L=L)
+         else:
+            q = self.square_side(q=0, n=n+1, yi=0, L=L)
+            if (N%4 > 1):
+                  m = n+1
+            else:
+                  m = n
+            while (q<N-n):
+                     yi = yi + L/(m-1)
+                     q = self.square_side(q=q, n=2, yi=yi, L=L)
+            if (N%4 < 3):
+                  q = self.square_side(q=q, n=n, yi=L, L=L)
+            else:
+                  q = self.square_side(q=q, n=n+1, yi=L, L=L)                
+
+      elif (type=="full"):
+         q = self.square_side(q=0, n=n, yi=0, L=L)
+         while (q<N):
+            if (sqrt(N) == int(sqrt(N))):
+                  yi = yi + L/(n-1)
+                  q = self.square_side(q=q, n=n, yi=yi, L=L)
+            else:
+                  yi = yi + L/n
+                  q = self.square_side(q=q, n=(N%4), yi=yi, L=L)
+                  if (N-q == n):
+                     q = self.square_side(q=q, n=n, yi=L, L=L)
+
+      rospy.sleep(5)
+      print("Square done\n")
+
+   def circle(self, xc=4, yc=4, z0=1, r=2):
+      coord = []
+      print("Beginning circle formation")
+      angle = 2*math.pi/N
+      for clover in self.swarm:
+         x0 = 0 - self.init_x[clover.id]
+         y0 = 0 - self.init_y[clover.id]
+         xi = r*math.cos(clover.id*angle)
+         yi = r*math.sin(clover.id*angle)
+         clover.navigate(x=x0+xc+xi, y=y0+yc+yi, z=z0)
+         coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
+      rospy.sleep(10)
+      print("Circle done\n")
+
 
    def formations(self,type):
       if (type == "line"):
@@ -111,13 +187,14 @@ def menu():
    print("2 - line formation")
    print("3 - triangle formation")
    print("4 - square formation")
+   print("O - circle formation")
    print("0 - initial position")
    print("L - land all")
    print("E - exit")
 
 if __name__ == "__main__":
 
-   swarm = Swarm(3)
+   swarm = Swarm(8)
    N = swarm.number_clover
 
    while not rospy.is_shutdown():
@@ -127,6 +204,7 @@ if __name__ == "__main__":
          coord = swarm.takeoff_all()
          print("Drones coordinates: {}\n".format(coord))
          rospy.sleep(2)
+
       elif (key == str('2')):
          if (N < 2):
                print("You need at least 2 clovers!\n")
@@ -135,6 +213,7 @@ if __name__ == "__main__":
                L = int(input("Insert the desired length: "))
                coord = swarm.line(z0=z0, L=L)
                print("Drones coordinates: {}\n".format(coord))
+
                rospy.sleep(5)
       # elif (key == str('3')):
       #    if (N < 3):
@@ -146,23 +225,32 @@ if __name__ == "__main__":
       #          L = int(input("Insert the desired side length: "))
       #          triangle(x0=x0, y0=y0, z0=z0, L=L)
       #          rospy.sleep(5)
-      # elif (key == str('4')):
-      #    if (N < 4):
-      #          print("You need at least 4 clovers!\n")
-      #    else:
-      #          type = input("Insert full or empty: ")
-      #          z0 = int(input("Insert the desired height: "))
-      #          L = int(input("Insert the desired side length: "))
-      #          square(type=type, z0=z0, L=L)
-      #          rospy.sleep(5)
+
+      elif (key == str('4')):
+         if (N < 4):
+               print("You need at least 4 clovers!\n")
+         else:
+               type = input("Insert full or empty: ")
+               z0 = int(input("Insert the desired height: "))
+               L = int(input("Insert the desired side length: "))
+               swarm.square(type=type, z0=z0, L=L)
+               rospy.sleep(5)
+
+      elif (key == str('o') or key == str('O')):
+         coord = swarm.circle(z0=1, r=2)
+         #print("Drones coordinates: {}\n".format(coord))
+         rospy.sleep(2)
+
       elif (key == str('0')):
          coord = swarm.initial_position()
          print("Drones coordinates: {}\n".format(coord))
          rospy.sleep(2)
+
       elif (key == str('l') or key == str('L')):
          coord = swarm.land_all()
          print("Drones coordinates: {}\n".format(coord))
          rospy.sleep(5)
+
       elif (key == str('e') or key == str('E')):
          break
 

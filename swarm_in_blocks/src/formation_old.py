@@ -23,10 +23,12 @@ land3 = rospy.ServiceProxy("clover3/land", Trigger)
 N = 4
 
 # Initial positions
-x_c0 = 0; y_c0 = 0
-x_c1 = 0; y_c1 = 1
-x_c2 = 0; y_c2 = 2
-x_c3 = 0; y_c3 = 3
+init_x = []
+init_y = []
+
+for i in range(N):
+    init_x = init_x + [0]
+    init_y = init_y + [i]
 
 def takeoff_all():
     print("All drones taking off")
