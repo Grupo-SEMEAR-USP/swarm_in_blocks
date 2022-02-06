@@ -27,7 +27,7 @@
     <group ns="clover$(arg ID)">
         <!-- generate sdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
-                                    $(find swarm_clover_description)/urdf/clover/clover4.xacro 
+                                    $(find clover_description)/urdf/clover/clover4.xacro 
                                     main_camera:=false
                                     rangefinder:=false
                                     led:=true 
