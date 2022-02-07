@@ -10,6 +10,8 @@ from clover import srv
 from std_srvs.srv import Trigger
 import math
 from math import sqrt
+import matplotlib.pyplot as plt
+import numpy as np
 
 class SingleClover:
 
@@ -52,11 +54,10 @@ class Swarm:
       
    
    def takeoff_all(self):
-      coord = []
       print("All drones taking off")
       for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
          clover.navigate(x=0, y=0, z=1, auto_arm=True)
-         coord.append([self.init_x[clover.id],self.init_y[clover.id],1,1])
       return coord
 
    def initial_position(self):
@@ -65,6 +66,7 @@ class Swarm:
       for clover in self.swarm:
          clover.navigate(x=0, y=0, z=1)
          coord.append([self.init_x[clover.id],self.init_y[clover.id],1,1])
+      plt.plot()
       return coord
 
    def land_all(self):
@@ -87,6 +89,7 @@ class Swarm:
          rospy.sleep(2)
       rospy.sleep(5)
       print("Line done\n")
+      return coord
 
    def square_side(self, q, n, yi, L):
       j = 0
@@ -148,7 +151,7 @@ class Swarm:
       rospy.sleep(5)
       print("Square done\n")
 
-   def circle(self, xc=4, yc=4, z0=1, r=2):
+   def circle(self, xc=0, yc=0, z0=1, r=2):
       coord = []
       print("Beginning circle formation")
       angle = 2*math.pi/N
@@ -159,8 +162,10 @@ class Swarm:
          yi = r*math.sin(clover.id*angle)
          clover.navigate(x=x0+xc+xi, y=y0+yc+yi, z=z0)
          coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
-      rospy.sleep(10)
+         rospy.sleep(5)
+      rospy.sleep(5)
       print("Circle done\n")
+      return coord
 
 
    def formations(self,type):
@@ -172,6 +177,9 @@ class Swarm:
 
       elif (type == "triangle"):
          self.triangle(x0=0, y0=0, z0=1, L=1)
+
+      elif (type == "circle"):
+         self.circle(z0=1, r=2)
       
       return 
 
@@ -194,7 +202,7 @@ def menu():
 
 if __name__ == "__main__":
 
-   swarm = Swarm(8)
+   swarm = Swarm(4)
    N = swarm.number_clover
 
    while not rospy.is_shutdown():
@@ -238,7 +246,7 @@ if __name__ == "__main__":
 
       elif (key == str('o') or key == str('O')):
          coord = swarm.circle(z0=1, r=2)
-         #print("Drones coordinates: {}\n".format(coord))
+         print("Drones coordinates: {}\n".format(coord))
          rospy.sleep(2)
 
       elif (key == str('0')):
