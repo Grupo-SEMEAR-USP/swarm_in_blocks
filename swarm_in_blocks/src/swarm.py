@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+from math import sqrt
+import string
+from numpy import median
+from tokenize import Double, Double3
 import mavros
 import rospy
 import mavros_msgs
@@ -9,7 +13,19 @@ import time
 from clover import srv
 from std_srvs.srv import Trigger
 
-class SingleClover:
+#Menu 
+def menu():
+   print("Press")
+   print("1 - takeoff all")
+   print("2 - line formation")
+   print("3 - triangle formation")
+   print("4 - square formation")
+   print("0 - initial position")
+   print("L - land all")
+   print("E - exit")
+
+class SingleClover: 
+#Create and call all servicers, subscribers and clover topics
 
    def __init__(self, name, id):
       self.name = name
@@ -42,11 +58,13 @@ class Swarm:
       self.swarm = []
       self.init_x = []
       self.init_y = []
+      self.id_clover = []
       for index in range(number_clover):
          clover_object = SingleClover(f"clover{index}", index)
          self.swarm.append(clover_object)
          self.init_x = self.init_x + [0]
          self.init_y = self.init_y + [index]
+         self.id_clover.append(index)
       
    
    def takeoff_all(self):
@@ -85,19 +103,80 @@ class Swarm:
          rospy.sleep(2)
       rospy.sleep(5)
       print("Line done\n")
+   
+   def triangle(self, x0 = 0, y0 = 0, z0 = 1):
+      coord = []
+      N = self.number_clover
+      L=1
 
+      for index in range(N):
+         if(index%3==0):
+            L+=1
+      if(N%3==0 and N>3):
+         L-=1
 
-   def formations(self,type):
-      if (type == "line"):
-         self.line(z0=1, L=1)
+      f = (sqrt(3)*L)/2
+      c1=0
+      c2=0
+      reta = sqrt(3)
+      boss_clover = int(median(self.id_clover))
+      print (boss_clover)
+      print("Beginning triangle formation")
+      for clover in self.swarm:
+         if(clover.id%2 != 0):
+            if(clover.id == int(median(self.id_clover))):
+               print("hello if 1") 
+               clover.navigate(x=x0+f, y = y0, z = z0)
+               
+            else:
+               c1 = 1/2
+               print("hello if 1.2") 
+               clover.navigate(x=x0 +reta*c1, y = y0, z = z0)
+            
+            if(clover.id==N-1):
+                     clover.navigate(x=x0,  y = y0 - self.init_y[N-boss_clover-1], z = z0+2)
+                     rospy.sleep(5)
+                     clover.navigate(x=x0,  y = y0 - self.init_y[N-boss_clover-1], z = z0)
+               
+
+         if(clover.id%2 == 0):
+            if(clover.id == 0):
+               print("hello if 2")  
+               clover.navigate(x=x0, y=y0, z=z0)
+               c2 += 1/2
+               
+            elif(L-reta*c2<f):
+               print("hello if 2.1") 
+               if(clover.id == int(median(self.id_clover))):
+                  print("hello if 2.2") 
+                  clover.navigate(x=x0+f, y = y0, z = z0)
+                 
+
+               else:
+                  print("hello if 2.3") 
+                  clover.navigate(x=x0 + L - reta*c2, y = y0 + self.init_y[N-clover.id-1], z = z0)
+                  c2 += 1/2
+
+                  if(N%2 == 0):
+                     N-=1 
+                  
+                  if(clover.id==N-1):
+                     clover.navigate(x=x0,  y = y0 + self.init_y[N-clover.id-1], z = z0)
+                     N+=1
+
+                  
+
+   # def formations(self,type):
+   #    if (type == "line"):
+   #       self.line(z0=1, L=1)
       
-      elif (type == "square"):
-         self.square(type="full", z0=1, L=2)
+   #    elif (type == "square"):
+   #       self.square(type="full", z0=1, L=2)
 
-      elif (type == "triangle"):
-         self.triangle(x0=0, y0=0, z0=1, L=1)
+   #    elif (type == "triangle"):
+   #       self.triangle(x0=0, y0=0, z0=1, L=1)
       
-      return 
+   #    return 
 
    
    
@@ -105,19 +184,11 @@ class Swarm:
    def launchSwarm(self):
       pass
 
-def menu():
-   print("Press")
-   print("1 - takeoff all")
-   print("2 - line formation")
-   print("3 - triangle formation")
-   print("4 - square formation")
-   print("0 - initial position")
-   print("L - land all")
-   print("E - exit")
+
 
 if __name__ == "__main__":
 
-   swarm = Swarm(3)
+   swarm = Swarm(6)
    N = swarm.number_clover
 
    while not rospy.is_shutdown():
@@ -127,6 +198,7 @@ if __name__ == "__main__":
          coord = swarm.takeoff_all()
          print("Drones coordinates: {}\n".format(coord))
          rospy.sleep(2)
+      
       elif (key == str('2')):
          if (N < 2):
                print("You need at least 2 clovers!\n")
@@ -136,16 +208,15 @@ if __name__ == "__main__":
                coord = swarm.line(z0=z0, L=L)
                print("Drones coordinates: {}\n".format(coord))
                rospy.sleep(5)
-      # elif (key == str('3')):
-      #    if (N < 3):
-      #          print("You need at least 3 clovers!\n")
-      #    else:
-      #          x0 = int(input("Insert initial x coordinate: "))
-      #          y0 = int(input("Insert initial y coordinate: "))
-      #          z0 = int(input("Insert the desired height: "))
-      #          L = int(input("Insert the desired side length: "))
-      #          triangle(x0=x0, y0=y0, z0=z0, L=L)
-      #          rospy.sleep(5)
+      elif (key == str('3')):
+         if (N < 3):
+               print("You need at least 3 clovers!\n")
+         else:
+               x0 = int(input("Insert initial x coordinate: "))
+               y0 = int(input("Insert initial y coordinate: "))
+               z0 = int(input("Insert the desired height: "))
+               swarm.triangle(x0=x0, y0=y0, z0=z0)
+               rospy.sleep(5)
       # elif (key == str('4')):
       #    if (N < 4):
       #          print("You need at least 4 clovers!\n")
