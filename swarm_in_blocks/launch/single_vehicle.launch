@@ -55,7 +55,15 @@
             <param name="target_component_id" value="1"/>
             <param name="gcs_quiet_mode" value="true"/>
             <param name="conn/timeout" value="8"/>
-    
+            
+            <param name="local_position/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="local_position/tf/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="global_position/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="global_position/tf/child_frame_id" value="base_link$(arg ID)"/>
+            <!-- <param name="setpoint_position/tf/child_frame_id" value="base_link$(arg ID)"/> -->
+            <!-- <param name="fake_gps/tf/child_frame_id" value="base_link$(arg ID)"/> -->
+            <!-- <param name="setpoint_position/tf/child_frame_id" value="base_link$(arg ID)"/> -->
+            
             <!-- basic params -->
             <rosparam command="load" file="$(find clover)/launch/mavros_config.yaml"/>
             <rosparam param="plugin_whitelist">
@@ -109,6 +117,10 @@
             <param name="reference_frames/base_link" value="map"/>
             <param name="reference_frames/navigate_target" value="map"/>
             <param name="reference_frames/main_camera_optical" value="map"/>
+
+            <param name="body_frame" value="body$(arg ID)"/>
+            <param name="target_frame" value="navigate_target$(arg ID)"/>
+            <param name="setpoint" value="setpoint$(arg ID)"/>
         </node>
 
     </group>
