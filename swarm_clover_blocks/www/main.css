@@ -18,6 +18,7 @@ body {
 
 #tools, #tabs {
 	background: #c8baba;
+	text-align: center;
 	border-bottom: 2px rgb(192, 192, 192) solid;
 	white-space: nowrap;
 }
