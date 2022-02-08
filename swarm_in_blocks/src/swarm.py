@@ -54,39 +54,50 @@ class Swarm:
       
    
    def takeoff_all(self):
+      coord = np.empty((0,4))
       print("All drones taking off")
       for clover in self.swarm:
          point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
          clover.navigate(x=0, y=0, z=1, auto_arm=True)
+         #coord.append([self.init_x[clover.id],self.init_y[clover.id],1,1])
+         coord = np.concatenate((coord,[point]))
+      plot_preview(coord)
       return coord
 
    def initial_position(self):
-      coord = []
+      coord = np.empty((0,4))
       print("All drones returning")
       for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
          clover.navigate(x=0, y=0, z=1)
-         coord.append([self.init_x[clover.id],self.init_y[clover.id],1,1])
-      plt.plot()
+         coord = np.concatenate((coord,[point]))
+      plot_preview(coord)
       return coord
 
    def land_all(self):
-      coord = []
+      coord = np.empty((0,4))
       for clover in self.swarm:
          clover.land()
-         coord.append([self.init_x[clover.id],self.init_y[clover.id],0,1])
+         point = [self.init_x[clover.id],self.init_y[clover.id],0,1]
+         coord = np.concatenate((coord,[point]))
+      plot_preview(coord)
       return coord
    
    def line(self, z0=1, L=1):
-      coord = []
+      coord = np.empty((0,4))
       N = self.number_clover
       f = L/(N-1)
       print("Beginning line formation")
       for clover in self.swarm:
          x0 = 0 - self.init_x[clover.id]
          y0 = 0 - self.init_y[clover.id]
-         clover.navigate(x=(x0+f*(N-1-clover.id)), y=y0, z=z0)
-         coord.append([round(x0+f*(N-1-clover.id), 2), 0, z0, 1])
+         point = [round(f*(N-1-clover.id),2), 0, z0, 1]
+         clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+         #clover.navigate(x=(x0+f*(N-1-clover.id)), y=y0, z=z0)
+         #coord.append([round(x0+f*(N-1-clover.id), 2), 0, z0, 1])
+         coord = np.concatenate((coord,[point]))
          rospy.sleep(2)
+      plot_preview(coord)
       rospy.sleep(5)
       print("Line done\n")
       return coord
@@ -151,8 +162,8 @@ class Swarm:
       rospy.sleep(5)
       print("Square done\n")
 
-   def circle(self, xc=0, yc=0, z0=1, r=2):
-      coord = []
+   def circle(self, xc=4, yc=4, z0=1, r=2):
+      coord = np.empty((0,4))
       print("Beginning circle formation")
       angle = 2*math.pi/N
       for clover in self.swarm:
@@ -160,9 +171,13 @@ class Swarm:
          y0 = 0 - self.init_y[clover.id]
          xi = r*math.cos(clover.id*angle)
          yi = r*math.sin(clover.id*angle)
-         clover.navigate(x=x0+xc+xi, y=y0+yc+yi, z=z0)
-         coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
+         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
+         clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+         # clover.navigate(x=x0+xc+xi, y=y0+yc+yi, z=z0)
+         # coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
+         coord = np.concatenate((coord,[point]))
          rospy.sleep(5)
+      plot_preview(coord)
       rospy.sleep(5)
       print("Circle done\n")
       return coord
@@ -183,11 +198,14 @@ class Swarm:
       
       return 
 
-   
-   
-   
    def launchSwarm(self):
       pass
+
+def plot_preview(coord):
+   plt.plot(coord[:,0],coord[:,1],'ro')
+   plt.axis([-1,11,-1,11])
+   plt.grid(True)
+   plt.show()
 
 def menu():
    print("Press")
@@ -210,7 +228,7 @@ if __name__ == "__main__":
       key= input("\n")
       if (key == str('1')):
          coord = swarm.takeoff_all()
-         print("Drones coordinates: {}\n".format(coord))
+         print("Drones coordinates: \n{}\n".format(coord))
          rospy.sleep(2)
 
       elif (key == str('2')):
@@ -220,7 +238,7 @@ if __name__ == "__main__":
                z0 = int(input("Insert the desired height: "))
                L = int(input("Insert the desired length: "))
                coord = swarm.line(z0=z0, L=L)
-               print("Drones coordinates: {}\n".format(coord))
+               print("Drones coordinates: \n{}\n".format(coord))
 
                rospy.sleep(5)
       # elif (key == str('3')):
@@ -246,17 +264,17 @@ if __name__ == "__main__":
 
       elif (key == str('o') or key == str('O')):
          coord = swarm.circle(z0=1, r=2)
-         print("Drones coordinates: {}\n".format(coord))
+         print("Drones coordinates: \n{}\n".format(coord))
          rospy.sleep(2)
 
       elif (key == str('0')):
          coord = swarm.initial_position()
-         print("Drones coordinates: {}\n".format(coord))
+         print("Drones coordinates: \n{}\n".format(coord))
          rospy.sleep(2)
 
       elif (key == str('l') or key == str('L')):
          coord = swarm.land_all()
-         print("Drones coordinates: {}\n".format(coord))
+         print("Drones coordinates: \n{}\n".format(coord))
          rospy.sleep(5)
 
       elif (key == str('e') or key == str('E')):
