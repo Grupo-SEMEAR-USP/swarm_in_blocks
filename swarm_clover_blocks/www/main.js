@@ -28,8 +28,8 @@ var workspace = Blockly.inject('blockly', {
 	toolbox: document.getElementById('toolbox'),
 	grid: {
 		spacing: 25,
-		length: 3,
-		colour: '#ccc',
+		length: 5,
+		colour: '#259c66',
 		snap: true
 	},
 	zoom: { controls: true, wheel: true },
