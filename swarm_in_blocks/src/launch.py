@@ -44,7 +44,7 @@ def spawnGazeboAndVehicles(num_of_clovers):
     gazebo = launchGazebo(uuid)
     parents.append(gazebo)
     
-    side_x = 8
+    side_x = 1
     # side_y = 5
     x = 0
     y = 0
@@ -74,7 +74,7 @@ def spawnGazeboAndVehicles(num_of_clovers):
 
 if __name__ == '__main__':
 
-    num_of_clovers = 3
+    num_of_clovers = 4
     spawnGazeboAndVehicles(num_of_clovers)
 
     
