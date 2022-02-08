@@ -16,11 +16,13 @@ import traceback
 import threading
 import re
 import uuid
+import webbrowser
 from std_msgs.msg import Bool, String
 from std_srvs.srv import Trigger
 from clover_blocks.msg import Prompt
 from clover_blocks.srv import Run, Load, Store
 
+webbrowser.open_new("localhost") #opens localhost automatically
 
 rospy.init_node('clover_blocks')
 

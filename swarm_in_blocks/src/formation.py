@@ -24,6 +24,7 @@ nav6 = rospy.ServiceProxy("clover6/navigate", srv.Navigate)
 nav7 = rospy.ServiceProxy("clover7/navigate", srv.Navigate)
 nav8 = rospy.ServiceProxy("clover8/navigate", srv.Navigate)
 nav9 = rospy.ServiceProxy("clover9/navigate", srv.Navigate)
+nav11 = rospy.ServiceProxy("clover11/navigate", srv.Navigate)
 
 land0 = rospy.ServiceProxy("clover0/land", Trigger)
 land1 = rospy.ServiceProxy("clover1/land", Trigger)
@@ -37,7 +38,7 @@ land8 = rospy.ServiceProxy("clover8/land", Trigger)
 land9 = rospy.ServiceProxy("clover9/land", Trigger)
 
 # Number of clovers
-N = 10
+N = 8
 
 # Initial positions
 init_x = []
@@ -51,6 +52,8 @@ def takeoff_all():
     coord = []
     print("All drones taking off")
     for i in range(N):
+        if (i==10):
+            i=11
         nav = "nav" + str(i)
         eval(nav)(z=1, auto_arm=True)
         print("Clover {} taking off".format(i))
@@ -82,8 +85,13 @@ def square_side(q, n, yi, L):
     else:
         f = L/(n-1)
     for i in range(q,n+q):
-        x0 = 0 - init_x[i]
-        y0 = 0 - init_y[i]
+        if (i==10):
+            i=11
+            x0 = 0 - init_x[10]
+            y0 = 0 - init_y[10]
+        else:
+            x0 = 0 - init_x[i]
+            y0 = 0 - init_y[i]
         nav = "nav" + str(i)
         eval(nav)(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
         q = q+1
@@ -149,10 +157,27 @@ def triangle(x0=0, y0=0, z0=1, L=1):
     rospy.sleep(10)
     print("Triangle done\n")
 
+def circle(xc=4, yc=4, z0=1, r=2):
+    coord = []
+    print("Beginning circle formation")
+    angle = 2*math.pi/N
+    for i in range(N):
+        x0 = 0 - init_x[i]
+        y0 = 0 - init_y[i]
+        xi = r*math.cos(i*angle)
+        yi = r*math.sin(i*angle)
+        nav = "nav" + str(i)
+        eval(nav)(x=x0+xc+xi, y=y0+yc+yi, z=z0)
+        coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
+    rospy.sleep(10)
+    print("Circle done\n")
+
 def init_pos():
     coord = []
     print("All drones returning to initial position")
     for i in range(N):
+        if (i==10):
+            i=11
         nav = "nav" + str(i)
         eval(nav)(x=0, y=0, z=1)
         print("Clover {} returning to initial position".format(i))
@@ -219,6 +244,10 @@ if __name__ == "__main__":
                 L = int(input("Insert the desired side length: "))
                 square(type=type, z0=z0, L=L)
                 rospy.sleep(5)
+        elif (key == str('o')):
+            coord = circle(z0=1, r=2)
+            print("Drones coordinates: {}\n".format(coord))
+            rospy.sleep(2)
         elif (key == str('0')):
             coord = init_pos()
             print("Drones coordinates: {}\n".format(coord))
