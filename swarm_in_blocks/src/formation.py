@@ -148,6 +148,7 @@ def square(self, type="full", z0=1, L=2):
     return coord
 
 
+#---Support Functions---
 
 def square_side(self, q, n, yi, z0, L, coord):
     j = 0
