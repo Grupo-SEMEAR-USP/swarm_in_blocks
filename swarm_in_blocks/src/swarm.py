@@ -52,20 +52,40 @@ class SingleClover:
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger) 
 
 class Swarm:
-   def __init__(self, number_clover):
+   def __init__(self, num_of_clovers):
       rospy.init_node('swarm')
-      self.number_clover = number_clover
+      self.num_of_clovers = num_of_clovers
       self.swarm = []
       self.init_x = []
       self.init_y = []
       self.id_clover = []
-      for index in range(number_clover):
+
+      # Create clover python objects
+      self.__createCloversObjects()
+
+      # Current formation name and coord in homogeneous line vector type 
+      # Ex of self.curr_form_coords: [[x0,y0,z0,1],[x1,y1,z1,1], [x2,y2,z2,1], ...]
+      self.curr_formation_name = ''
+      self.curr_formation_coords = []
+
+      # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
+      self.formation_list = []
+
+      # Leader id of the swarm
+      self.leader_id = None
+
+   # Create clover objects and append to clover object list
+   def __createCloversObjects(self):
+      for index in range(self.num_of_clovers):
          clover_object = SingleClover(f"clover{index}", index)
          self.swarm.append(clover_object)
          self.init_x = self.init_x + [0]
          self.init_y = self.init_y + [index]
          self.id_clover.append(index)
-      
+   
+   def launchGazeboAndClovers(self):
+      pass
+
    def takeoff_all(self):
       coord = formation.takeoff_all(self)
       return coord
@@ -86,6 +106,13 @@ class Swarm:
       coord = formation.square(self, type, z0, L)
       return coord
 
+   def setLeader(self, id):
+      
+      assert(type(id)==int, "Input 'id' must be an integer.")
+      self.leader_id = id
+   
+   def followLeader():
+      pass
 
    #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
    def square_side(self, q, n, yi, L, coord):
@@ -116,7 +143,7 @@ class Swarm:
       
    def triangle(self, x0 = 0, y0 = 0, z0 = 1):
       coord = np.empty((0,4))
-      N = self.number_clover
+      N = self.num_of_clovers
       L=2
 
       for index in range(N):
@@ -225,7 +252,7 @@ def plot_preview(coord):
 if __name__ == "__main__":
 
    swarm = Swarm(6)
-   N = swarm.number_clover
+   N = swarm.num_of_clovers
 
    while not rospy.is_shutdown():
       menu()
