@@ -13,19 +13,6 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-#rospy.init_node("formation", anonymous=True)
-
-# # Number of clovers
-# N = 
-
-# # Initial positions
-# init_x = []
-# init_y = []
-
-# for i in range(N):
-#     init_x = init_x + [0]
-#     init_y = init_y + [i]
-
 def plot_preview(coord):
     #start_form='False'
     plt.figure(figsize=(8, 8))
