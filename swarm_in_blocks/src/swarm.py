@@ -86,6 +86,7 @@ class Swarm:
    def launchGazeboAndClovers(self):
       pass
 
+   #Basic swarm operations
    def takeoff_all(self):
       coord = formation.takeoff_all(self)
       return coord
@@ -98,6 +99,7 @@ class Swarm:
       coord = formation.land(self)
       return coord
 
+   #Formations
    def line(self, z0, L):
       coord = formation.line(self, z0, L)
       return coord
@@ -106,16 +108,7 @@ class Swarm:
       coord = formation.square(self, type, z0, L)
       return coord
 
-   def setLeader(self, id):
-      
-      assert(type(id)==int, "Input 'id' must be an integer.")
-      self.leader_id = id
-   
-   def followLeader():
-      pass
-
-   #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
-   def square_side(self, q, n, yi, L, coord):
+   def square_side(self, q, n, yi, L, coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
       j = 0
       if (n == 1):
          f = L/2
@@ -135,7 +128,6 @@ class Swarm:
          if (q==N):
                break
       return(q, coord)
-
 
    def circle(self, xc, yc, z0, r):
       coord = formation.circle(self, xc, yc, z0, r)
@@ -228,6 +220,15 @@ class Swarm:
       print("Circle done\n")
       return coord
 
+   #Leader operations
+   def setLeader(self, id):
+      
+      assert type(id)==int, "Input 'id' must be an integer."
+      self.leader_id = id
+   
+   def followLeader():
+      pass
+
    # def formations(self,type):
    #    if (type == "line"):
    #       self.line(z0=1, L=1)
@@ -243,7 +244,7 @@ class Swarm:
    def launchSwarm(self):
       pass
 
-def plot_preview(coord):
+def plot_preview(coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
    plt.plot(coord[:,0],coord[:,1],'ro')
    plt.axis([-1,11,-1,11])
    plt.grid(True)
@@ -260,7 +261,7 @@ if __name__ == "__main__":
       if (key == str('1')):
          coord = swarm.takeoff_all()
          print("Drones coordinates: \n{}\n".format(coord))
-         rospy.sleep(2)
+         #rospy.sleep(2)
       elif (key == str('2')):
          if (N < 2):
                print("You need at least 2 clovers!\n")
@@ -289,7 +290,8 @@ if __name__ == "__main__":
                type = input("Insert full or empty: ")
                z0 = int(input("Insert the desired height: "))
                L = int(input("Insert the desired side length: "))
-               swarm.square(type=type, z0=z0, L=L)
+               coord = swarm.square(type=type, z0=z0, L=L)
+               print("Drones coordinates: \n{}\n".format(coord))
                rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
@@ -299,7 +301,7 @@ if __name__ == "__main__":
          z0 = int(input("Insert the desired height: "))
          coord = swarm.circle(xc=xc, yc=yc, z0=z0, r=r)
          print("Drones coordinates: \n{}\n".format(coord))
-         rospy.sleep(2)
+         #rospy.sleep(2)
 
       elif (key == str('0')):
          coord = swarm.initial_position()

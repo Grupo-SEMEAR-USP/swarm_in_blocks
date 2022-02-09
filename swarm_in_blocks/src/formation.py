@@ -10,34 +10,43 @@ from clover import srv
 from std_srvs.srv import Trigger
 import math
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 import numpy as np
 
 #rospy.init_node("formation", anonymous=True)
 
-# Number of clovers
-N = 6
+# # Number of clovers
+# N = 
 
-# Initial positions
-init_x = []
-init_y = []
+# # Initial positions
+# init_x = []
+# init_y = []
 
-for i in range(N):
-    init_x = init_x + [0]
-    init_y = init_y + [i]
+# for i in range(N):
+#     init_x = init_x + [0]
+#     init_y = init_y + [i]
 
 def plot_preview(coord):
-   plt.plot(coord[:,0],coord[:,1],'ro')
-   plt.axis([-1,11,-1,11])
-   plt.grid(True)
-   plt.show()
+    #start_form='False'
+    plt.figure(figsize=(8, 8))
+    plt.subplots_adjust(bottom = 0.2)
+    plt.plot(coord[:,0],coord[:,1],'ro')
+    plt.axis([-1,11,-1,11])
+    plt.grid(True)
+    plt.xticks(np.linspace(0,10,11))
+    plt.yticks(np.linspace(0,10,11))
+    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+    button = Button(posit,'Confirm')
+    #button.on_clicked(start_form='True')
+    plt.show(block=False)
+    #return start_form
       
 def takeoff_all(self):
     coord = np.empty((0,4))
     print("All drones taking off")
     for clover in self.swarm:
         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-        clover.navigate(x=0, y=0, z=1, auto_arm=True)
-        #coord.append([self.init_x[clover.id],self.init_y[clover.id],1,1])
+        #clover.navigate(x=0, y=0, z=1, auto_arm=True)
         coord = np.concatenate((coord,[point]))
     plot_preview(coord)
     return coord
@@ -65,16 +74,14 @@ def land_all(self):
 
 def line(self, z0=1, L=1):
     coord = np.empty((0,4))
-    N = self.number_clover
+    N = self.num_of_clovers
     f = L/(N-1)
     print("Beginning line formation")
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
         point = [round(f*(N-1-clover.id),2), 0, z0, 1]
-        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-        #clover.navigate(x=(x0+f*(N-1-clover.id)), y=y0, z=z0)
-        #coord.append([round(x0+f*(N-1-clover.id), 2), 0, z0, 1])
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         rospy.sleep(2)
     plot_preview(coord)
@@ -85,6 +92,7 @@ def line(self, z0=1, L=1):
 
 def circle(self, xc=4, yc=4, z0=1, r=2):
       coord = np.empty((0,4))
+      N = self.num_of_clovers
       print("Beginning circle formation")
       angle = 2*math.pi/N
       for clover in self.swarm:
@@ -93,9 +101,7 @@ def circle(self, xc=4, yc=4, z0=1, r=2):
          xi = r*math.cos(clover.id*angle)
          yi = r*math.sin(clover.id*angle)
          point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-         clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-         # clover.navigate(x=x0+xc+xi, y=y0+yc+yi, z=z0)
-         # coord.append([(x0+xc+xi), (y0+yc+yi), z0,1])
+         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
          coord = np.concatenate((coord,[point]))
          rospy.sleep(5)
       plot_preview(coord)
@@ -106,6 +112,7 @@ def circle(self, xc=4, yc=4, z0=1, r=2):
 
 def square(self, type="full", z0=1, L=2):
     coord = np.empty((0,4))
+    N = self.num_of_clovers
     print("Beginning square formation")
     yi = 0
     n = int(1 + N/4)
@@ -152,6 +159,7 @@ def square(self, type="full", z0=1, L=2):
 
 def square_side(self, q, n, yi, z0, L, coord):
     j = 0
+    N = self.num_of_clovers
     if (n == 1):
         f = L/2
         j = -1
@@ -161,11 +169,10 @@ def square_side(self, q, n, yi, z0, L, coord):
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
         point = [round(f*(n-1-j),2), yi, z0, 1]
-        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-        #clover.navigate(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         q += 1
-        j += j
+        j += 1
         rospy.sleep(2)
         if (q==N):
             break
