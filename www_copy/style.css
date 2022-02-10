@@ -67,6 +67,7 @@ h3{
 .button{
 	font-size: 20px;
 	background-color: rgb(0, 0, 0);
+    color: white;
 	padding: 0.45rem 1.05rem;
 	/* border-radius:0.5rem;  */
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
