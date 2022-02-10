@@ -8,6 +8,7 @@
 	<link rel="icon" href="data:,">
 	<link rel="stylesheet" href="highlight/styles/monokai-sublime.css">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
 	<script src="highlight/highlight.pack.js"></script> 
 	<script src="roslib.js"></script>
 	<script src="blockly/blockly_compressed.js"></script>
@@ -21,7 +22,7 @@
 
 <body data-tab="blocks">
 	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px">
-		<a href="http://www.semear.eesc.usp.br/wordpress/" style="text-align:left"  target=_blank; rel=noopener noreferrer>
+		<a href="http://www.semear.eesc.usp.br/wordpress/" style="text-align:left" target=_blank; rel=noopener noreferrer>
 			<img    src="./blockly/media/Swarm_in_Blocks.svg"
 					alt="Swarm in Blocks"
 					width="80"
@@ -29,10 +30,10 @@
 					title="Swarm in Blocks" 
 					style="margin-right: 20px;"
 			/></a>
-		<li style="text-align:center; margin: 10px 0;" class="selected" data-tab="blocks" class="w3-bar-item w3-margin-left">
+		<li style="text-align:center; margin: 10px 0;" class="selected" data-tab="blocks" class="w3-bar-item">
 			Blocks
 		</li>
-		<li style="text-align:center; margin: 10px 0;" data-tab="python" class="w3-bar-item w3-margin-left">
+		<li style="text-align:center; margin: 10px 0;" data-tab="python" class="w3-bar-item">
 			Python
 		</li>
 	</ul>
@@ -48,26 +49,18 @@
 			<optgroup label="User" data-type="user"></optgroup>
 			<optgroup label="Examples" data-type="example"></optgroup>
 		</select>
-		<button onclick="runProgram()" disabled id="run" disabled title="Run the program">Run</button>
-		<button onclick="stopProgram()" title="Stop the program">Stop</button>
-		<button onclick="land()" title="Stop the program and land">Land</button>
+		<button onclick="runProgram()" disabled id="run" disabled title="Run the program" style="margin-bottom: 0px; margin-right: 6px;margin-left: 26px;">
+			Run
+		</button>
+		<button onclick="stopProgram()" title="Stop the program" style="margin-bottom: 0px; margin-right: 6px;">
+			Stop
+		</button>
+		<button onclick="land()" title="Stop the program and land" style="margin-bottom: 0px">
+			Land
+		</button>
 	</div>
 
 	<div id="notifications"></div>
-
-	<!-- SideBar -->
-	<div class="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" style="display:none" id="mySidebar">
-		<button class="w3-bar-item w3-button w3-large"
-		onclick="w3_close()">Close &times;</button>
-			<a href="#" class="w3-bar-item w3-button">Link 1</a>
-			<a href="#" class="w3-bar-item w3-button">Link 2</a>
-			<a href="#" class="w3-bar-item w3-button">Link 3</a>
-	</div>
-	<div>
-		<button class="w3-button w3-white w3-xxlarge" onclick="w3_open()">&#9776;</button>
-		<div class="w3-container">
-		</div>
-	</div>
 
 	<div id="blockly" class="content"></div>
 	<pre id="python" class="content" contenteditable oncut="return false" onpaste="return false" onkeydown="if(!event.metaKey) return false" spellcheck="false"></pre>
@@ -526,15 +519,6 @@
 		<category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
 	</xml>
 
-<script>
-	function w3_open() {
-		document.getElementById("mySidebar").style.display = "block";
-	}
-	function w3_close() {
-		document.getElementById("mySidebar").style.display = "none";
-	}
-
-</script>
 
 </body>
 

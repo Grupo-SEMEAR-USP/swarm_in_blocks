@@ -11,12 +11,13 @@ body {
 		"tabs tools"
 		"content content";
 	grid-template-rows: min-content 1fr;
-	grid-template-columns: 1fr min-content ;
-	font-family: sans-serif;
+	grid-template-columns: 1fr min-content;
+	font-family: 'Poppins';
 	font-size: 16px;
 }
 
 #tools, #tabs {
+	font-family: 'Poppins';
 	background: #bac8c3;
 	border-bottom: 2px rgb(192, 192, 192) solid;
 	white-space: nowrap;
@@ -77,7 +78,24 @@ body {
 
 #tools button {
 	font-size: 20px;
-	margin-left: 10px;
+	background-color: rgb(224, 224, 224);
+	padding: 0.45rem 1.05rem;
+	/* border-radius:0.5rem;  */
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+	margin-bottom:2rem;
+	color:var(--dark-blue);
+	transition-duration: 0.4s;
+}
+
+#tools button:hover {
+	background-color: rgb(219, 217, 91);
+	color: white;
+}
+
+#tools button:active {
+	background-color: #3e8e41;
+	box-shadow: 0 5px #666;
+	transform: translateY(4px);
 }
 
 #tabs {
@@ -97,19 +115,21 @@ body {
 #tabs li {
 	background-color: rgb(224, 224, 224);
 	padding: 0.75rem 1.2rem;
-	border-radius:0.5rem;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 	margin-bottom:2rem;
 	color:var(--dark-blue);
+	transition-duration: 0.4s;
+
 }
 
 #tabs li:hover{
 	background-color: rgb(219, 217, 91);
+	color: white;
 }
 
 #tabs li.selected {
-	background-color: rgb(219, 91, 91);
-
+	background-color: rgb(154, 91, 212);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 #run {
