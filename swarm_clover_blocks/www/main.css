@@ -17,8 +17,7 @@ body {
 }
 
 #tools, #tabs {
-	background: #c8baba;
-	text-align: center;
+	background: #bac8c3;
 	border-bottom: 2px rgb(192, 192, 192) solid;
 	white-space: nowrap;
 }
@@ -95,8 +94,22 @@ body {
 	cursor: pointer;
 }
 
+#tabs li {
+	background-color: rgb(224, 224, 224);
+	padding: 0.75rem 1.2rem;
+	border-radius:0.5rem;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+	margin-bottom:2rem;
+	color:var(--dark-blue);
+}
+
+#tabs li:hover{
+	background-color: rgb(219, 217, 91);
+}
+
 #tabs li.selected {
-	background: white;
+	background-color: rgb(219, 91, 91);
+
 }
 
 #run {
