@@ -115,21 +115,16 @@ body {
 #tabs li {
 	background-color: rgb(224, 224, 224);
 	padding: 0.75rem 1.2rem;
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 	margin-bottom:2rem;
 	color:var(--dark-blue);
 	transition-duration: 0.4s;
 
 }
 
-#tabs li:hover{
-	background-color: rgb(219, 217, 91);
-	color: white;
-}
-
 #tabs li.selected {
 	background-color: rgb(154, 91, 212);
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 20px 0 rgba(0, 0, 0, 0.19);
+	border-bottom: 3px solid #00ff00;
 }
 
 #run {
