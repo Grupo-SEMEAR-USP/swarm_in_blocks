@@ -12,6 +12,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import formation
+import launch
 
 #Menu 
 def menu():
@@ -60,6 +61,8 @@ class Swarm:
       self.init_y = []
       self.id_clover = []
 
+      self.init_formation = []
+
       # Create clover python objects
       self.__createCloversObjects()
 
@@ -84,11 +87,15 @@ class Swarm:
          self.id_clover.append(index)
    
    def launchGazeboAndClovers(self):
-      pass
+      launch.spawnGazeboAndVehicles(self.num_of_clovers)
+
+   def applyFormation(self):
+      for idx, clover in enumerate(self.swarm):
+         clover.navigate(x=coord[idx][0],y=coord[idx][0],z=coord[idx][2])
 
    #Basic swarm operations
    def takeoff_all(self):
-      coord = formation.takeoff_all(self)
+      self.coord = formation.takeoff_all(self)
       return coord
 
    def initial_position(self):
