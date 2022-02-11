@@ -8,7 +8,6 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 import formation
@@ -107,12 +106,12 @@ class Swarm:
       return coord
 
    #Formations
-   def line(self, z0, L):
-      coord = formation.line(self, z0, L)
+   def line(self, N, L):
+      coord = formation.line(self, N, L)
       return coord
 
-   def square(self, type, z0, L):
-      coord = formation.square(self, type, z0, L)
+   def square(self, N, type, L):
+      coord = formation.square(self, N, type, L)
       return coord
 
    def square_side(self, q, n, yi, L, coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
@@ -136,8 +135,8 @@ class Swarm:
                break
       return(q, coord)
 
-   def circle(self, xc, yc, z0, r):
-      coord = formation.circle(self, xc, yc, z0, r)
+   def circle(self, N, xc, yc, r):
+      coord = formation.circle(self, N, xc, yc, r)
       return coord
       
    def triangle(self, x0 = 0, y0 = 0, z0 = 1):
@@ -151,14 +150,14 @@ class Swarm:
 
       #Verificação para que o L seja incrementado sempre após a adição de 3 drones
       if(index%3==0 and N>3):
-        f = (math.sqrt(3)(L-1))/2
+        f = (np.sqrt(3)(L-1))/2
 
       else:
-         f = (math.sqrt(3)*L)/2
+         f = (np.sqrt(3)*L)/2
       
       c1=0
       #c2=0
-      reta = math.sqrt(3)
+      reta = np.sqrt(3)
       boss_clover = int(np.median(self.id_clover))
       print (boss_clover)
       print("Beginning triangle formation")
@@ -227,6 +226,11 @@ class Swarm:
       print("Circle done\n")
       return coord
 
+   #3D Formations
+   def cube(self, N, L):
+      coord = formation.cube(self, N, L)
+      return coord
+
    #Leader operations
    def setLeader(self, id):
       
@@ -259,7 +263,7 @@ def plot_preview(coord): #Função temporária aqui, só apagar quando testes co
 
 if __name__ == "__main__":
 
-   swarm = Swarm(6)
+   swarm = Swarm(8)
    N = swarm.num_of_clovers
 
    while not rospy.is_shutdown():
@@ -273,12 +277,11 @@ if __name__ == "__main__":
          if (N < 2):
                print("You need at least 2 clovers!\n")
          else:
-               z0 = int(input("Insert the desired height: "))
                L = int(input("Insert the desired length: "))
-               coord = swarm.line(z0=z0, L=L)
+               coord = swarm.line(N=N, L=L)
                print("Drones coordinates: \n{}\n".format(coord))
+               #rospy.sleep(5)
 
-               rospy.sleep(5)
       elif (key == str('3')):
          if (N < 3):
                print("You need at least 3 clovers!\n")
@@ -295,18 +298,26 @@ if __name__ == "__main__":
                print("You need at least 4 clovers!\n")
          else:
                type = input("Insert full or empty: ")
-               z0 = int(input("Insert the desired height: "))
                L = int(input("Insert the desired side length: "))
-               coord = swarm.square(type=type, z0=z0, L=L)
+               coord = swarm.square(N=N, type=type, L=L)
                print("Drones coordinates: \n{}\n".format(coord))
-               rospy.sleep(5)
+               #rospy.sleep(5)
+
+      elif (key == str('5')):
+         if (N < 8):
+               print("You need at least 8 clovers!\n")
+         else:
+               #type = input("Insert full or empty: ")
+               L = int(input("Insert the desired side length: "))
+               coord = swarm.cube(N=N, L=L)
+               print("Drones coordinates: \n{}\n".format(coord))
+               #rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
          r = int(input("Insert the desired ratio: "))
          xc = int(input("Insert the center x coordinate: "))
          yc = int(input("Insert the center y coordinate: "))
-         z0 = int(input("Insert the desired height: "))
-         coord = swarm.circle(xc=xc, yc=yc, z0=z0, r=r)
+         coord = swarm.circle(N=N, xc=xc, yc=yc, r=r)
          print("Drones coordinates: \n{}\n".format(coord))
          #rospy.sleep(2)
 

@@ -74,7 +74,7 @@ def spawnGazeboAndVehicles(num_of_clovers):
 
 if __name__ == '__main__':
 
-    num_of_clovers = 6
+    num_of_clovers = 8
     spawnGazeboAndVehicles(num_of_clovers)
 
     
