@@ -115,91 +115,63 @@ class Swarm:
       return coord
       
    def triangle(self, x0 = 0, y0 = 0, z0 = 1):
+
       coord = np.empty((0,4))
       N = self.number_clover
       L=2
-
+      reta = math.sqrt(3)
       for index in range(N):
-         if(index%3==0 and N>3):
+         if((index-1)%3==0 and index>4):
             L+=1
 
-      #Verificação para que o L seja incrementado sempre após a adição de 3 drones
-      if(index%3==0 and N>3):
-        f = (math.sqrt(3)(L-1))/2
+      f = (math.sqrt(3)*L)/2
 
-      else:
-         f = (math.sqrt(3)*L)/2
-      
       c1=0
-      #c2=0
-      reta = math.sqrt(3)
       boss_clover = int(np.median(self.id_clover))
-      print (boss_clover)
-      print("Beginning triangle formation")
+      if(N==4):
+         boss_clover+=1
+
+      print(boss_clover)
+
       for clover in self.swarm:
-         
-         if(clover.id%2 != 0): 
-            #c1 += 1/2
-            if(clover.id == int(np.median(self.id_clover))):
-               print("hello if 1")
-               point = [round(f,2), 0, z0, 1]
-               clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-               #clover.navigate(x=x0+f, y = y0, z = z0)
-               
-            else:
-               print("hello if 1.2")
-               point = [round(reta*c1,2), 0, z0, 1]
-               clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-               #clover.navigate(x=x0 +reta*c1, y = y0, z = z0)
+        
+         if(clover.id<boss_clover):
             
-            if(clover.id==N-1):
-               point = [0, self.init_y[N-boss_clover-1], z0, 1]
-               clover.navigate(x=x0+point[0], y=y0-point[1], z=point[2]+2)
-               #clover.navigate(x=x0,  y = y0 - self.init_y[N-boss_clover-1], z = z0+2)
-               rospy.sleep(5)
-               #clover.navigate(x=x0,  y = y0 - self.init_y[N-boss_clover-1], z = z0)
-               clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-               
-   
-         if(clover.id%2 == 0):
-            c1 += 1/2
-            if(clover.id == 0):
-               print("hello if 2") 
-               point = [0, 0, z0, 1]
-               clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-               #clover.navigate(x=x0, y=y0, z=z0)
-               #c2 += 1/2
-               
-            else:
-               print("hello if 2.1")
-               #c2 += 1/2
-               if(clover.id == int(np.median(self.id_clover))):
-                  print("hello if 2.2")
-                  point = [f, 0, z0, 1]
-                  clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-                  #clover.navigate(x=x0+f, y = y0, z = z0)
-                 
-   
-               else:
-                  print("hello if 2.3")
-                  #c2 += 1/2
-                  point = [round(L-reta*c1,2), self.init_y[N-clover.id-1], z0, 1]
-                  clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-                  #clover.navigate(x=x0 + L - reta*c2, y = y0 + self.init_y[N-clover.id-1], z = z0)
-   
-                  if(N%2 == 0):
-                     N-=1
-                  
-                  if(clover.id==N-1):
-                     point = [0, self.init_y[N-clover.id-1], z0, 1]
-                     clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-                     #clover.navigate(x=x0,  y = y0 + self.init_y[N-clover.id-1], z = z0)
-                     N+=1
+            point = [round(reta*c1,2), 0, z0, 1]
+            clover.navigate(x=x0 + point[0], y = point[1], z = point[2])
+            c1+=1/2
+            
+
+         else:
+            if(clover.id==int(np.median(self.id_clover)) and N>3):
+               c1=0
+
+            if(N==4):
+               y0-=1
+            point = [round(f-reta*c1,2), 0, z0, 1]
+            clover.navigate(x=x0 + point[0], y = point[1], z = point[2])
+            c1+=1/2
+            
+            if(clover.id == N-1 and N%2==0):
+               if(N>4):
+                  clover.navigate(x=x0, y = y0, z=z0+1)
+                  y0 = y0 - self.init_y[clover.id]
+                  rospy.sleep(5)
+                  point = [x0, y0 + self.init_y[boss_clover], z0, 1]
+                  clover.navigate(x=point[0], y = point[1], z=point[2])
+               else: 
+                  clover.navigate(x=x0, y = 0, z=z0+1)
+                  rospy.sleep(5)
+                  clover.navigate(x=x0, y = y0, z=z0)
+
          coord = np.concatenate((coord,[point]))
       plot_preview(coord)
       rospy.sleep(2)
-      print("Circle done\n")
-      return coord
+      print("Triangle done\n")
+      return coord  
+
+
+
 
    # def formations(self,type):
    #    if (type == "line"):
@@ -224,7 +196,7 @@ def plot_preview(coord):
 
 if __name__ == "__main__":
 
-   swarm = Swarm(6)
+   swarm = Swarm(8)
    N = swarm.number_clover
 
    while not rospy.is_shutdown():
