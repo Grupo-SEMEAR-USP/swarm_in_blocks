@@ -18,8 +18,8 @@ body {
 
 #tools, #tabs {
 	font-family: 'Poppins';
-	background: #bac8c3;
-	border-bottom: 2px rgb(192, 192, 192) solid;
+	background: #25acb3;
+	border-bottom: 2px rgb(29, 137, 143) solid;
 	white-space: nowrap;
 }
 
@@ -125,7 +125,7 @@ body {
 }
 
 #tools button:hover {
-	background-color: rgb(219, 217, 91);
+	background-color: rgb(154, 91, 212);
 	color: white;
 }
 

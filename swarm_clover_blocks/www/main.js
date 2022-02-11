@@ -29,7 +29,7 @@ var workspace = Blockly.inject('blockly', {
 	grid: {
 		spacing: 25,
 		length: 5,
-		colour: '#259c66',
+		colour: '#25acb3',
 		snap: true
 	},
 	zoom: { controls: true, wheel: true },

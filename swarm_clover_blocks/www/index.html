@@ -51,10 +51,7 @@
 	</ul>
 
 	<div id="tools">
-		<span class="disconnected">
-			<div class="disconnected-light"></div>
-			<div class="disconnected-text">Disconnected</div>
-		</span>
+		<div class="disconnected">Disconnected</div>
 		<div class="backend-fail">Failed to contact with <code>clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
 		<div id="running">Running...</div>
 		<select id="program-name" title="Files are saved in <package_path>/programs/.">
@@ -125,7 +122,7 @@
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>				
 			</block> 
 		</category>
-		<category name="State" colour="#ff9a00">
+		<category name="State" colour="#bf7300">
 			<block type="get_position">
 				<field name="FRAME_ID">ARUCO_MAP</field>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
@@ -148,7 +145,7 @@
 			<block type="armed"></block>
 			<block type="voltage"></block>
 		</category>
-		<category name="LED" colour="#02d754">
+		<category name="LED" colour="#006f2b">
 			<block type="set_effect">
 				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
 			</block>
