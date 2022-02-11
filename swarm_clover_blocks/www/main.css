@@ -50,8 +50,45 @@ body {
 }
 
 .disconnected {
+	margin-right: 150px;
+	background-color: rgb(224, 224, 224);
+	padding: 0.45rem 1.05rem;
+	border-radius:0.5rem; 
+}
+
+.disconnected-text {
 	color: red;
-	margin-right: 20px;
+	display:inline;
+}
+
+.disconnected-light {
+	animation: blinker 0.6s linear infinite;
+	height: 7px;
+	width: 7px;
+	background-color: rgb(255, 0, 0);
+	border-radius: 50%;
+}
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+.blink-one {
+	animation: blinker-one 1s linear infinite;
+}
+@keyframes blinker-one {
+	0% {
+	opacity: 0;
+	}
+}
+.blink-two {
+	animation: blinker-two 1.4s linear infinite;
+}
+@keyframes blinker-two {
+	100% {
+	opacity: 0;
+	}
 }
 
 .connected .disconnected { display: none; }
