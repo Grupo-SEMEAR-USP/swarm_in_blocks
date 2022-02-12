@@ -60,7 +60,7 @@ def initial_position(self):
     print("All drones returning")
     for clover in self.swarm:
         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-        #clover.navigate(x=0, y=0, z=1)
+        clover.navigate(x=0, y=0, z=1)
         coord = np.concatenate((coord,[point]))
     plot_preview(coord)
     return coord
@@ -145,7 +145,7 @@ def square(self, N, type="full", L=2):
     elif (type=="full"):
         (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
         while (q<N):
-            if (np.sqrt(N) == int(np.sqrt(N)) or N%4==0):
+            if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
                 yi = yi + L/(n-1)
                 (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
             else:
@@ -165,7 +165,7 @@ def cube(self, N, L):
     print("Beginning cube formation")
     n = np.cbrt(N)
     z = 1
-    if (n == int(n)):
+    if (round(n,2) == int(n)):
         q = 0
         for i in range(0, int(n)):
             yi = 0
