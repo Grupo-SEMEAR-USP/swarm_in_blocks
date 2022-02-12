@@ -39,10 +39,13 @@ body {
 	outline: none;
 	background: transparent;
 	text-overflow: ellipsis;
+	text-align: center;
 }
 
-#program-name:focus {
-	background: white;
+#program-name:active {
+	background: transparent;
+	text-align: center;
+	animation: blinker 1s linear infinite;
 }
 
 .changed #program-name {
@@ -57,9 +60,11 @@ body {
 }
 
 .disconnected {
+	font-size: 16px;
 	color: red;
 	display:inline;
 	margin-right: 150px;
+	text-shadow: 1px 1px 1px rgba(104, 104, 104, 0.918);
 
 }
 
@@ -139,6 +144,27 @@ body {
 	color: white;
 }
 
+#tools button:active {
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	transform: translate3d(0, 0, 0);
+	perspective: 1000px;
+}
+
+@keyframes shake {
+	10%, 90% {
+	transform: translate3d(-1.5px, 0, 0);
+	}
+	20%, 80% {
+	transform: translate3d(2.5px, 0, 0);
+	}
+	30%, 50%, 70% {
+	transform: translate3d(-4.5px, 0, 0);
+	}
+	40%, 60% {
+	transform: translate3d(4.5px, 0, 0);
+	}
+}
+
 
 #tabs {
 	grid-area: tabs;
@@ -148,22 +174,19 @@ body {
 }
 
 #tabs li {
-	font-size: 18px;
+	font-size: 16px;
 	display: inline-block;
 	padding: 5px 10px;
 	cursor: pointer;
-}
-
-#tabs li {
 	background-color: rgb(224, 224, 224);
-	padding: 0.75rem 1.2rem;
+	padding: 0.65rem 1.1rem;
 	margin-bottom:2rem;
 	color:var(--dark-blue);
 	transition-duration: 0.4s;
-
 }
 
 #tabs li.selected {
+	color: white;
 	background-color: rgb(154, 91, 212);
 	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 20px 0 rgba(0, 0, 0, 0.19);
 	border-bottom: 3px solid #00ff00;
