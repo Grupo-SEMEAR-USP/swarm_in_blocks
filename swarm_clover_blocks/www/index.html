@@ -51,8 +51,9 @@
 	</ul>
 
 	<div id="tools">
-		<div class="disconnected">Disconnected</div>
-		<div class="backend-fail">Failed to contact with <code>clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
+		<div class="disconnected-light"></div>
+		<div class="disconnected"> Disconnected</div>
+		<div class="backend-fail">Failed to contact with <code>swarm_clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
 		<div id="running">Running...</div>
 		<select id="program-name" title="Files are saved in <package_path>/programs/.">
 				<option value="" disabled selected>&lt;Unsaved&gt;</option>
@@ -61,6 +62,9 @@
 			<optgroup label="User" data-type="user"></optgroup>
 			<optgroup label="Examples" data-type="example"></optgroup>
 		</select>
+		<button onclick="runProgram()" disabled id="run" disabled title="Launch" style="margin-bottom: 0px;">
+			Launch
+		</button>
 		<button onclick="runProgram()" disabled id="run" disabled title="Run the program" style="margin-bottom: 0px; margin-right: 6px;margin-left: 26px;">
 			Run
 		</button>

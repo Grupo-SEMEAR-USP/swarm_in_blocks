@@ -18,8 +18,8 @@ body {
 
 #tools, #tabs {
 	font-family: 'Poppins';
-	background: #25acb3;
-	border-bottom: 2px rgb(29, 137, 143) solid;
+	background: #c4c4c4;
+	border-bottom: 2px #a1a1a1 solid;
 	white-space: nowrap;
 }
 
@@ -49,22 +49,25 @@ body {
 	color: red;
 }
 
-.disconnected {
+.disconnected-box {
 	margin-right: 150px;
 	background-color: rgb(224, 224, 224);
 	padding: 0.45rem 1.05rem;
 	border-radius:0.5rem; 
 }
 
-.disconnected-text {
+.disconnected {
 	color: red;
 	display:inline;
+	margin-right: 150px;
+
 }
 
 .disconnected-light {
+	margin-right: 10px;
 	animation: blinker 0.6s linear infinite;
-	height: 7px;
-	width: 7px;
+	height: 8px;
+	width: 8px;
 	background-color: rgb(255, 0, 0);
 	border-radius: 50%;
 }
@@ -91,17 +94,19 @@ body {
 	}
 }
 
-.connected .disconnected { display: none; }
-
-.backend-fail {
-	margin-right: 20px;
-	display: none;
-}
-
 @keyframes blink {
 	0% { opacity: 1; }
 	50% { opacity: 0.5; }
 	100% { opacity: 1; }
+}
+
+.connected .disconnected .disconnected-light{ 
+	display: none;
+}
+
+.backend-fail {
+	margin-right: 20px;
+	display: none;
 }
 
 #running {
@@ -129,11 +134,6 @@ body {
 	color: white;
 }
 
-#tools button:active {
-	background-color: #3e8e41;
-	box-shadow: 0 5px #666;
-	transform: translateY(4px);
-}
 
 #tabs {
 	grid-area: tabs;

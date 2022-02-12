@@ -27,9 +27,9 @@ document.getElementById('tabs').addEventListener('click', function(e) {
 var workspace = Blockly.inject('blockly', {
 	toolbox: document.getElementById('toolbox'),
 	grid: {
-		spacing: 25,
-		length: 5,
-		colour: '#25acb3',
+		spacing: 30,
+		length: 4,
+		colour: '#ce9bff',
 		snap: true
 	},
 	zoom: { controls: true, wheel: true },
