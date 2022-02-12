@@ -100,7 +100,11 @@ body {
 	100% { opacity: 1; }
 }
 
-.connected .disconnected .disconnected-light{ 
+.connected .disconnected { 
+	display: none;
+}
+
+.connected .disconnected-light {
 	display: none;
 }
 
@@ -121,10 +125,11 @@ body {
 #tools button {
 	font-size: 20px;
 	background-color: rgb(224, 224, 224);
-	padding: 0.45rem 1.05rem;
-	/* border-radius:0.5rem;  */
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-	margin-bottom:2rem;
+	/* margin-bottom:2rem; */
 	color:var(--dark-blue);
 	transition-duration: 0.3s;
 }
