@@ -60,7 +60,7 @@ def initial_position(self):
     print("All drones returning")
     for clover in self.swarm:
         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-        #clover.navigate(x=0, y=0, z=1)
+        clover.navigate(x=0, y=0, z=1)
         coord = np.concatenate((coord,[point]))
     plot_preview(coord)
     return coord
@@ -95,23 +95,23 @@ def line(self, N, L=1):
 
 
 def circle(self, N, xc=4, yc=4, r=2):
-      coord = np.empty((0,4))
-      z0 = 1
-      print("Beginning circle formation")
-      angle = 2*np.pi/N
-      for clover in self.swarm:
-         x0 = 0 - self.init_x[clover.id]
-         y0 = 0 - self.init_y[clover.id]
-         xi = r*np.cos(clover.id*angle)
-         yi = r*np.sin(clover.id*angle)
-         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-         coord = np.concatenate((coord,[point]))
-         #rospy.sleep(5)
-      plot_preview(coord)
-      #rospy.sleep(5)
-      print("Circle done\n")
-      return coord
+    coord = np.empty((0,4))
+    z0 = 1
+    print("Beginning circle formation")
+    angle = 2*np.pi/N
+    for clover in self.swarm:
+        x0 = 0 - self.init_x[clover.id]
+        y0 = 0 - self.init_y[clover.id]
+        xi = r*np.cos(clover.id*angle)
+        yi = r*np.sin(clover.id*angle)
+        point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        coord = np.concatenate((coord,[point]))
+        #rospy.sleep(5)
+    plot_preview(coord)
+    #rospy.sleep(5)
+    print("Circle done\n")
+    return coord
 
 
 def square(self, N, type="full", L=2):
@@ -145,7 +145,7 @@ def square(self, N, type="full", L=2):
     elif (type=="full"):
         (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
         while (q<N):
-            if (np.sqrt(N) == int(np.sqrt(N)) or N%4==0):
+            if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
                 yi = yi + L/(n-1)
                 (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
             else:
@@ -165,15 +165,37 @@ def cube(self, N, L):
     print("Beginning cube formation")
     n = np.cbrt(N)
     z = 1
-    if (n == int(n)):
-        q = 0
-        for i in range(0, int(n)):
-            yi = 0
-            for i in range(0,int(n)):
-                (q, coord) = square_side(self, n**2, L, q, int(n), yi, z0=z, coord=coord)
-                yi = yi + L/(n-1)
-            z = z + L/(n-1)
+    while (round(n,2) != int(n)):
+        N +=1
+        n = np.cbrt(N)
+    q = 0
+    for i in range(0, int(n)):
+        yi = 0
+        for i in range(0,int(n)):
+            (q, coord) = square_side(self, n**2, L, q, int(n), yi, z0=z, coord=coord)
+            yi = yi + L/(n-1)
+        z = z + L/(n-1)
     plot_preview_3d(coord)
+    return coord
+
+def sphere(self, N, xc=4, yc=4, zc=4, r=2):
+    coord = np.empty((0,4))
+    print("Beginning circle formation")
+    theta = 2*np.pi/N
+    phi = 2*np.pi/N
+    for clover in self.swarm:
+        x0 = 0 - self.init_x[clover.id]
+        y0 = 0 - self.init_y[clover.id]
+        xi = r*np.cos(clover.id*theta)*np.sin(clover.id*phi)
+        yi = r*np.sin(clover.id*theta)*np.sin(clover.id*phi)
+        zi = r*np.cos(clover.id*phi)
+        point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        coord = np.concatenate((coord,[point]))
+        #rospy.sleep(5)
+    plot_preview_3d(coord)
+    #rospy.sleep(5)
+    print("Circle done\n")
     return coord
 
 #---Support Functions---
