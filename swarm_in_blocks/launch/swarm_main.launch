@@ -38,10 +38,10 @@
 
 
     <!-- Start calling with recursion -->
-    <!-- <include file="$(find swarm_in_blocks)/launch/swarm_recursive.launch">
+    <include file="$(find swarm_in_blocks)/launch/swarm_recursive.launch">
         <arg name="num" value="$(arg num)"/>
         <arg name="ID" value="0"/>
-    </include> -->
+    </include>
 
     
 </launch>

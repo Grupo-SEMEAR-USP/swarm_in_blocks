@@ -108,12 +108,10 @@ class Swarm:
 
    #Formations
    def line(self, N, L):
-      coord = formation.line(self, N, L)
-      return coord
+      self.coord = formation.line(N, L)
 
    def square(self, N, type, L):
-      coord = formation.square(self, N, type, L)
-      return coord
+      self.coord = formation.square(N, type, L)
 
    def square_side(self, q, n, yi, L, coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
       j = 0
@@ -137,8 +135,7 @@ class Swarm:
       return(q, coord)
 
    def circle(self, N, xc, yc, r):
-      coord = formation.circle(self, N, xc, yc, r)
-      return coord
+      self.coord = formation.circle(self, N, xc, yc, r)
       
    def triangle(self, x0 = 0, y0 = 0, z0 = 1):
 
@@ -198,13 +195,9 @@ class Swarm:
       print("Triangle done\n")
       return coord  
 
-
-
-
    #3D Formations
    def cube(self, N, L):
-      coord = formation.cube(self, N, L)
-      return coord
+      self.coord = formation.cube(N, L)
 
    #Leader operations
    def setLeader(self, id):
