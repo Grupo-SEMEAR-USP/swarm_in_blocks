@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
+pi = np.pi
+
 def plot_preview(coord):
     #start_form='False'
     plt.figure(figsize=(8, 8))
@@ -44,35 +46,7 @@ def plot_preview_3d(coord):
     #button.on_clicked(start_form='True')
     plt.show(block=False)
     #return start_form
-      
-def takeoff_all(self):
-    coord = np.empty((0,4))
-    print("All drones taking off")
-    for clover in self.swarm:
-        point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-        clover.navigate(x=0, y=0, z=1, auto_arm=True)
-        coord = np.concatenate((coord,[point]))
-    plot_preview(coord)
-    return coord
 
-def initial_position(self):
-    coord = np.empty((0,4))
-    print("All drones returning")
-    for clover in self.swarm:
-        point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-        clover.navigate(x=0, y=0, z=1)
-        coord = np.concatenate((coord,[point]))
-    plot_preview(coord)
-    return coord
-
-def land_all(self):
-    coord = np.empty((0,4))
-    for clover in self.swarm:
-        #clover.land()
-        point = [self.init_x[clover.id],self.init_y[clover.id],0,1]
-        coord = np.concatenate((coord,[point]))
-    plot_preview(coord)
-    return coord
 
 #---Formations---
 
@@ -98,7 +72,7 @@ def circle(self, N, xc=4, yc=4, r=2):
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning circle formation")
-    angle = 2*np.pi/N
+    angle = 2*pi/N
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
@@ -181,11 +155,12 @@ def cube(self, N, L):
 def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     coord = np.empty((0,4))
     print("Beginning circle formation")
-    theta = 2*np.pi/N
-    phi = 2*np.pi/N
+    theta = 2*pi/N
+    phi = 2*pi/N
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
+    for i in range(0,2*pi,pi/N):
         xi = r*np.cos(clover.id*theta)*np.sin(clover.id*phi)
         yi = r*np.sin(clover.id*theta)*np.sin(clover.id*phi)
         zi = r*np.cos(clover.id*phi)

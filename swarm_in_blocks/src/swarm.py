@@ -9,7 +9,7 @@ import time
 from clover import srv
 from std_srvs.srv import Trigger
 import matplotlib.pyplot as plt
-import math
+from matplotlib.widgets import Button
 import numpy as np
 import formation
 import launch
@@ -91,21 +91,73 @@ class Swarm:
    def launchGazeboAndClovers(self):
       launch.spawnGazeboAndVehicles(self.num_of_clovers)
 
-   def applyFormation(self):
+   def applyFormation(self, coord):
       for idx, clover in enumerate(self.swarm):
          clover.navigate(x=coord[idx][0],y=coord[idx][0],z=coord[idx][2])
 
+   #Preview formations
+   def plot_preview(self, coord):
+      #start_form='False'
+      plt.figure(figsize=(8, 8))
+      plt.subplots_adjust(bottom = 0.2)
+      plt.plot(coord[:,0],coord[:,1],'ro')
+      plt.axis([-1,11,-1,11])
+      plt.grid(True)
+      plt.xticks(np.linspace(0,10,11))
+      plt.yticks(np.linspace(0,10,11))
+      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+      button = Button(posit,'Confirm')
+      #button.on_clicked(start_form='True')
+      plt.show(block=False)
+      #return start_form
+
+   def plot_preview_3d(self, coord):
+      #start_form='False'
+      fig = plt.figure(figsize=(8, 8))
+      ax = fig.add_subplot(111,projection='3d')
+      plt.subplots_adjust(bottom = 0.2)
+      ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
+      #plt.axis([-1,11,-1,11])
+      plt.grid(True)
+      plt.xticks(np.linspace(0,10,11))
+      plt.yticks(np.linspace(0,10,11))
+      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+      button = Button(posit,'Confirm')
+      #button.on_clicked(start_form='True')
+      plt.show(block=False)
+      #return start_form
+
+   #def setFormation(self, formation):
+      
+
    #Basic swarm operations
    def takeoff_all(self):
-      coord = formation.takeoff_all(self)
+      coord = np.empty((0,4))
+      print("All drones taking off")
+      for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
+         clover.navigate(x=0, y=0, z=1, auto_arm=True)
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    def initial_position(self):
-      coord = formation.initial_position(self)
+      coord = np.empty((0,4))
+      print("All drones returning")
+      for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
+         clover.navigate(x=0, y=0, z=1)
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    def land_all(self):
-      coord = formation.land(self)
+      coord = np.empty((0,4))
+      for clover in self.swarm:
+         clover.land()
+         point = [self.init_x[clover.id],self.init_y[clover.id],0,1]
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    #Formations
@@ -178,9 +230,6 @@ class Swarm:
       print("Triangle done\n")
       return coord  
 
-
-
-
    #3D Formations
    def cube(self, N, L):
       coord = formation.cube(self, N, L)
@@ -199,30 +248,12 @@ class Swarm:
    def followLeader():
       pass
 
-   # def formations(self,type):
-   #    if (type == "line"):
-   #       self.line(z0=1, L=1)
-      
-   #    elif (type == "square"):
-   #       self.square(type="full", z0=1, L=2)
-
-   #    elif (type == "triangle"):
-   #       self.triangle(x0=0, y0=0, z0=1, L=1)
-      
-   #    return 
-
    def launchSwarm(self):
       pass
 
-def plot_preview(coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
-   plt.plot(coord[:,0],coord[:,1],'ro')
-   plt.axis([-1,11,-1,11])
-   plt.grid(True)
-   plt.show()
-
 if __name__ == "__main__":
 
-   swarm = Swarm(30)
+   swarm = Swarm(3)
    #swarm.launchGazeboAndClovers()
    N = swarm.num_of_clovers
 
