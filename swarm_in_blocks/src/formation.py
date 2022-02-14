@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from tkinter.simpledialog import SimpleDialog
 from matplotlib import projections
 import mavros
 import rospy
@@ -13,6 +14,16 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
+
+def array(N):
+    #Formação da matriz
+    matriz=[]
+    for i in range(N):
+        line=[]
+        for j in range(4):
+            line.append(0.0)
+        matriz.append(line)
+    return matriz
 
 def plot_preview(coord):
     #start_form='False'
@@ -158,6 +169,96 @@ def square(self, N, type="full", L=2):
     print("Square done\n")
     return coord
 
+def triangle_matriz(N):
+    triangle_side = array(N)
+    L=2
+    #Variáveis contadoras
+    if(N<5):
+        c1=1    #Primeira variável independente
+    else:
+        c1=1/2
+    c2=0        #Segunda variável independente
+    c3=1        #Parametro para base do triângulo 
+    p=1         #Parametro de subtração
+
+    id_list = []
+    reta = math.sqrt(3) #Coeficiente angular
+
+    #Laço que define as variáveis a partir do numero de drones
+    for index in range(N):
+        id_list.append(index)
+
+        if(index%3==0):
+            if(index>3):
+                L += 1
+                
+        if(index>7):
+            if(N%2!=0 or N%3==0):
+                c3 = 1/2
+
+        if((index+1)%3==0 and index>7):
+            p+=1
+
+    #######################################
+    id=int(np.median(id_list)) #Media dos ids
+    h = (math.sqrt(3)*L)/2     #Altura do triângulo 
+
+    #Verificações
+    if(N%2==0 and N%3!=0):
+        S=N-1
+
+    if(N%2!=0 and N>7):
+        S=N-p
+    if(N%3==0):
+        S=N-p
+    for c in range(0,4):
+        
+        for l in range(0,N):
+        #Define o x     
+            if(c==0): 
+                if(l<=id and reta*c1*l<=h):
+                    triangle_side[l][c]  = round(reta*c1*l,2)
+
+                else:
+                    triangle_side[l][c] = round(reta*c1*c2,2)
+                    c2+=1
+                
+                if(l>=S and S>2):
+                    triangle_side[l][c] = 0
+                    
+        #Define o y  
+            elif(c==1):
+                if(l<=id and reta*c1*l<=h):
+                    triangle_side[l][c] = c1*l
+                    c2=0
+                else:
+                    triangle_side[l][c] = L-c1*c2
+                    c2+=1
+
+                if(l>=S):
+                    triangle_side[l][c] = c3
+                    c3+=1
+            #Define o z  
+            elif(c==2):
+                triangle_side[l][c] = 1
+
+        #Define o quarto parametro
+            elif(c==3):
+                triangle_side[l][c] = 1
+
+    return triangle_side
+
+def triangle(self,N):
+    side = triangle_matriz(N)
+    z0=1
+    
+    for clover in self.swarm:
+        x0 = 0 - self.init_x[clover.id]
+        y0 = 0 - self.init_y[clover.id]
+        clover.navigate(x=x0+side[clover.id][0], y=y0+side[clover.id][1],z=side[clover.id][2])
+    print(side)
+    return side
+         
 
 #---3D Formations---
 def cube(self, N, L):
@@ -175,6 +276,62 @@ def cube(self, N, L):
             z = z + L/(n-1)
     plot_preview_3d(coord)
     return coord
+
+def piramide_matriz(N):
+    piramide_array = array(N)
+    for index in range(N):
+        if(index%3==0):
+            if(index>3):
+                L += 1
+
+    h = (math.sqrt(3)*L)/2
+    L1=L
+    cp=0
+    z=1
+    for c in range(0,4):
+        for l in range(0,N):
+            if(c==0):
+                if(l%3==0):
+                    L-=1/2
+                if((l-1)%3==0):
+                    piramide_array[l][c]=round(h,2)
+                else:
+                    piramide_array[l][c]=0
+                if(l==N-1):
+                    piramide_array[l][c]=round(h/2, 2)
+            
+            if(c==1):
+                if(l%3==0):
+                    L1 -= 1/2
+
+                if((l-2)%3==0):
+                    piramide_array[l][c]=L1
+
+                else:
+                    piramide_array[l][c]=cp
+                    cp+=1/2
+
+                if(l==N-1):
+                    piramide_array[l][c]=L/2
+
+            if(c==2):
+
+                piramide_array[l][c]=z
+
+                if((l-2)%3==0):
+                    z+=1
+            
+            if(c==3):
+                piramide_array[l][c]=1
+
+def piramide(self, N):
+        sides = piramide_matriz(N)
+        for clover in self.swarm:
+            x0 = 0 - self.init_x[clover.id]
+            y0 = 0 - self.init_y[clover.id]
+            clover.navigate(x=x0+sides[clover.id][0], y=y0+sides[clover.id][1],z=sides[clover.id][2])
+        print(sides)
+        return sides         
 
 #---Support Functions---
 
