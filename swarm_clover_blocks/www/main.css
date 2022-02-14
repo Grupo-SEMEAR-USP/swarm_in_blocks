@@ -18,8 +18,8 @@ body {
 
 #tools, #tabs {
 	font-family: 'Poppins';
-	background: #bac8c3;
-	border-bottom: 2px rgb(192, 192, 192) solid;
+	background: #c4c4c4;
+	border-bottom: 2px #a1a1a1 solid;
 	white-space: nowrap;
 }
 
@@ -32,39 +32,90 @@ body {
 }
 
 #program-name {
-	width: 150px;
+	width: 160px;
 	border: none;
 	font-size: 14px;
-	padding: 5px;
+	padding: 6px;
 	outline: none;
 	background: transparent;
 	text-overflow: ellipsis;
+	text-align: center;
 }
 
-#program-name:focus {
-	background: white;
+#program-name:active {
+	background: transparent;
+	text-align: center;
+	animation: blinker 1s linear infinite;
 }
 
 .changed #program-name {
 	color: red;
 }
 
-.disconnected {
-	color: red;
-	margin-right: 20px;
+.disconnected-box {
+	margin-right: 150px;
+	background-color: rgb(224, 224, 224);
+	padding: 0.45rem 1.05rem;
+	border-radius:0.5rem; 
 }
 
-.connected .disconnected { display: none; }
+.disconnected {
+	font-size: 16px;
+	color: red;
+	display:inline;
+	margin-right: 150px;
+	text-shadow: 1px 1px 1px rgba(104, 104, 104, 0.918);
 
-.backend-fail {
-	margin-right: 20px;
-	display: none;
+}
+
+.disconnected-light {
+	margin-right: 10px;
+	animation: blinker 0.6s linear infinite;
+	height: 8px;
+	width: 8px;
+	background-color: rgb(255, 0, 0);
+	border-radius: 50%;
+}
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+.blink-one {
+	animation: blinker-one 1s linear infinite;
+}
+@keyframes blinker-one {
+	0% {
+	opacity: 0;
+	}
+}
+.blink-two {
+	animation: blinker-two 1.4s linear infinite;
+}
+@keyframes blinker-two {
+	100% {
+	opacity: 0;
+	}
 }
 
 @keyframes blink {
 	0% { opacity: 1; }
 	50% { opacity: 0.5; }
 	100% { opacity: 1; }
+}
+
+.connected .disconnected { 
+	display: none;
+}
+
+.connected .disconnected-light {
+	display: none;
+}
+
+.backend-fail {
+	margin-right: 20px;
+	display: none;
 }
 
 #running {
@@ -79,24 +130,47 @@ body {
 #tools button {
 	font-size: 20px;
 	background-color: rgb(224, 224, 224);
-	padding: 0.45rem 1.05rem;
-	/* border-radius:0.5rem;  */
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-	margin-bottom:2rem;
+	/* margin-bottom:2rem; */
 	color:var(--dark-blue);
 	transition-duration: 0.3s;
 }
 
 #tools button:hover {
-	background-color: rgb(219, 217, 91);
+	background-color: rgb(154, 91, 212);
 	color: white;
 }
 
-#tools button:active {
-	background-color: #3e8e41;
-	box-shadow: 0 5px #666;
-	transform: translateY(4px);
+#tools button:disabled, button[disabled]{
+	border: 1px solid #999999;
+	background-color: #cccccc;
+	color: #666666;
 }
+
+#tools button:active {
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	transform: translate3d(0, 0, 0);
+	perspective: 1000px;
+}
+
+@keyframes shake {
+	10%, 90% {
+	transform: translate3d(-1.5px, 0, 0);
+	}
+	20%, 80% {
+	transform: translate3d(2.5px, 0, 0);
+	}
+	30%, 50%, 70% {
+	transform: translate3d(-4.5px, 0, 0);
+	}
+	40%, 60% {
+	transform: translate3d(4.5px, 0, 0);
+	}
+}
+
 
 #tabs {
 	grid-area: tabs;
@@ -106,22 +180,19 @@ body {
 }
 
 #tabs li {
-	font-size: 18px;
+	font-size: 16px;
 	display: inline-block;
 	padding: 5px 10px;
 	cursor: pointer;
-}
-
-#tabs li {
 	background-color: rgb(224, 224, 224);
-	padding: 0.75rem 1.2rem;
+	padding: 0.65rem 1.1rem;
 	margin-bottom:2rem;
 	color:var(--dark-blue);
 	transition-duration: 0.4s;
-
 }
 
 #tabs li.selected {
+	color: white;
 	background-color: rgb(154, 91, 212);
 	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 20px 0 rgba(0, 0, 0, 0.19);
 	border-bottom: 3px solid #00ff00;

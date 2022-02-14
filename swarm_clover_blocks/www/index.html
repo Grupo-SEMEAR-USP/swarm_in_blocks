@@ -51,24 +51,44 @@
 	</ul>
 
 	<div id="tools">
-		<div class="disconnected">Disconnected</div>
-		<div class="backend-fail">Failed to contact with <code>clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
+		<div class="disconnected-light"></div>
+		<div class="disconnected"> Disconnected</div>
+		<div class="backend-fail">Failed to contact with <code>swarm_clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
 		<div id="running">Running...</div>
 		<select id="program-name" title="Files are saved in <package_path>/programs/.">
 				<option value="" disabled selected>&lt;Unsaved&gt;</option>
-				<option value="@clear">Clear...</option>
-				<option style="font-style: italic;" value="@save">Save... (Ctrl+S)</option>
+				<option value="@clear">Clear</option>
+				<option style="font-style: italic;" value="@save">Save</option>
 			<optgroup label="User" data-type="user"></optgroup>
 			<optgroup label="Examples" data-type="example"></optgroup>
 		</select>
-		<button onclick="runProgram()" disabled id="run" disabled title="Run the program" style="margin-bottom: 0px; margin-right: 6px;margin-left: 26px;">
-			Run
+		<button onclick="Program()" title="Launch" style="margin-bottom: 0px;margin-right: 6px;margin-left: 26px;">
+			<img    src="./blockly/media/drone.png"
+					alt="Launch"
+					width="38"
+					height="38" 
+			/>
+		<button onclick="runProgram()" disabled id="run" disabled title="Run" style="margin-bottom: 0px; margin-right: 6px;">
+			<img    src="./blockly/media/play.png"
+					alt="Run"
+					width="23"
+					height="23" 
+			/>
 		</button>
-		<button onclick="stopProgram()" title="Stop the program" style="margin-bottom: 0px; margin-right: 6px;">
-			Stop
+		<button onclick="stopProgram()" title="Stop" style="margin-bottom: 0px; margin-right: 6px;">
+			<img    src="./blockly/media/pause.png"
+					alt="Stop"
+					width="30"
+					height="30" 
+			/>
+
 		</button>
-		<button onclick="land()" title="Stop the program and land" style="margin-bottom: 0px">
-			Land
+		<button onclick="land()" title="Stop and Land" style="margin-bottom: 0px;margin-right: 10px;">
+			<img    src="./blockly/media/ground.png"
+					alt="Land"
+					width="37"
+					height="37" 
+			/>
 		</button>
 	</div>
 
@@ -115,14 +135,14 @@
 			<block type="led_height">
 				<value name="if"><shadow type="math_number"><field name="NUM"></field></shadow></value>				
 			</block> 
-			<block type="formation">
+			<block type="forms">
 				<value name="Z"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>				
 			</block> 
 		</category>
-		<category name="State" colour="#ff9a00">
+		<category name="State" colour="#bf7300">
 			<block type="get_position">
 				<field name="FRAME_ID">ARUCO_MAP</field>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
@@ -145,7 +165,7 @@
 			<block type="armed"></block>
 			<block type="voltage"></block>
 		</category>
-		<category name="LED" colour="#02d754">
+		<category name="LED" colour="#006f2b">
 			<block type="set_effect">
 				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
 			</block>

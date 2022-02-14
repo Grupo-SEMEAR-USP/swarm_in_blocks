@@ -8,11 +8,11 @@
  * copies or substantial portions of the Software.
  */
 
-const COLOR_FLIGHT = 293;
-const COLOR_STATE = 36;
-const COLOR_LED = 143;
-const COLOR_GPIO = 200;
-const COLOR_SWARM = 310;
+const COLOR_FLIGHT = "#870b99";
+const COLOR_STATE = "#bf7300";
+const COLOR_LED = "#006f2b";
+const COLOR_GPIO = "#5b97cc";
+const COLOR_SWARM = "#cf0173";
 const DOCS_URL = 'https://clover.coex.tech/en/blocks.html';
 
 var frameIds = [["body", "BODY"], ["markers map", "ARUCO_MAP"], ["marker", "ARUCO"], ["last navigate target", "NAVIGATE_TARGET"], ["map", "MAP"]];
