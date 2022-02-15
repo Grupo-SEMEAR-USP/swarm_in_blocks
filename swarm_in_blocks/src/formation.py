@@ -142,7 +142,7 @@ def square(self, N, type="full", L=2):
     print("Square done\n")
     return coord
 
-def triangle_matriz(N):
+def triangle(self, N):
     triangle_side = array(N)
     L=2
     #Variáveis contadoras
@@ -153,14 +153,11 @@ def triangle_matriz(N):
     c2=0        #Segunda variável independente
     c3=1        #Parametro para base do triângulo 
     p=1         #Parametro de subtração
-
     id_list = []
     reta = np.sqrt(3) #Coeficiente angular
-
     #Laço que define as variáveis a partir do numero de drones
     for index in range(N):
         id_list.append(index)
-
         if(index%3==0):
             if(index>3):
                 L += 1
@@ -168,18 +165,14 @@ def triangle_matriz(N):
         if(index>7):
             if(N%2!=0 or N%3==0):
                 c3 = 1/2
-
         if((index+1)%3==0 and index>7):
             p+=1
-
     #######################################
     id=int(np.median(id_list)) #Media dos ids
     h = (np.sqrt(3)*L)/2     #Altura do triângulo 
-
     #Verificações
     if(N%2==0 and N%3!=0):
         S=N-1
-
     if(N%2!=0 and N>7):
         S=N-p
     if(N%3==0):
@@ -191,7 +184,6 @@ def triangle_matriz(N):
             if(c==0): 
                 if(l<=id and reta*c1*l<=h):
                     triangle_side[l][c]  = round(reta*c1*l,2)
-
                 else:
                     triangle_side[l][c] = round(reta*c1*c2,2)
                     c2+=1
@@ -207,30 +199,32 @@ def triangle_matriz(N):
                 else:
                     triangle_side[l][c] = L-c1*c2
                     c2+=1
-
                 if(l>=S):
                     triangle_side[l][c] = c3
                     c3+=1
             #Define o z  
             elif(c==2):
-                triangle_side[l][c] = 1
+                triangle_side[l][c] = 1.0
+
+                if(l>=S):
+                   triangle_side[l][c] = 3.0
 
         #Define o quarto parametro
             elif(c==3):
-                triangle_side[l][c] = 1
+                triangle_side[l][c] = 1.0
 
-    return triangle_side
-
-def triangle(self,N):
-    side = triangle_matriz(N)
-    z0=1
-    
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+side[clover.id][0], y=y0+side[clover.id][1],z=side[clover.id][2])
-    print(side)
-    return side
+        clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=triangle_side[clover.id][2])
+
+        if(clover.id>=S):
+            rospy.sleep(5)
+            clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=1)
+
+    #plot_preview(triangle_side)
+    print(triangle_side)
+    return triangle_side
          
 
 #---3D Formations---
@@ -274,6 +268,7 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     return coord
 
 def piramide(self, N):
+    L = 2
     piramide_array = array(N)
     for index in range(N):
         if(index%3==0):
