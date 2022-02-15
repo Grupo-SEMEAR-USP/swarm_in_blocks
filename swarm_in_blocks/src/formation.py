@@ -72,14 +72,13 @@ def line(self, N, L=1):
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(2)
-    #plot_preview(coord)
+    plot_preview(coord)
     #rospy.sleep(5)
-    print(coord)
     print("Line done\n")
     return coord
 
-def circle(self, N, r=2):
-    xc = 0; yc = 0
+def circle(self, N, L=2):
+    xc = yc = 0
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning circle formation")
@@ -87,8 +86,8 @@ def circle(self, N, r=2):
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        xi = r*np.cos(clover.id*angle)
-        yi = r*np.sin(clover.id*angle)
+        xi = L*np.cos(clover.id*angle)
+        yi = L*np.sin(clover.id*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
@@ -252,7 +251,8 @@ def cube(self, N, L):
     plot_preview_3d(coord)
     return coord
 
-def sphere(self, N, xc=4, yc=4, zc=4, r=2):
+def sphere(self, N, L=2):
+    xc = yc = zc = 0
     coord = np.empty((0,4))
     print("Beginning circle formation")
     theta = 2*pi/N
@@ -260,10 +260,10 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-    for i in range(0,2*pi,pi/N):
-        xi = r*np.cos(clover.id*theta)*np.sin(clover.id*phi)
-        yi = r*np.sin(clover.id*theta)*np.sin(clover.id*phi)
-        zi = r*np.cos(clover.id*phi)
+    for i in range(0, int(2*pi)):
+        xi = L*np.cos(clover.id*theta)*np.sin(clover.id*phi)
+        yi = L*np.sin(clover.id*theta)*np.sin(clover.id*phi)
+        zi = L*np.cos(clover.id*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
@@ -273,9 +273,9 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     print("Circle done\n")
     return coord
 
-def piramide(self, N):
+def pyramid(self, N):
     L = 2
-    piramide_array = array(N)
+    pyramid_array = array(N)
     for index in range(N):
         if(index%3==0):
             if(index>3):
@@ -291,49 +291,49 @@ def piramide(self, N):
                     
                     if((l-1)%3==0):
                         print(h)
-                        piramide_array[l][c]=h
+                        pyramid_array[l][c]=h
                         h-=1/2
                     else:
-                        piramide_array[l][c]=cp
+                        pyramid_array[l][c]=cp
 
                     if((l-2)%3==0):
                         cp+=1/2
                         
                     if(l==N-1):
-                        piramide_array[l][c]=round(h/2, 2)
+                        pyramid_array[l][c]=round(h/2, 2)
                         cp=0
                 if(c==1):
                     if(l%3==0 and l>0):
                         L1 -= 1/2
 
                     if((l-2)%3==0):
-                        piramide_array[l][c]=L1
+                        pyramid_array[l][c]=L1
                     elif((l-1)%3==0):
-                        piramide_array[l][c]=L1/2
+                        pyramid_array[l][c]=L1/2
                     else:
-                        piramide_array[l][c]=cp
+                        pyramid_array[l][c]=cp
                         cp+=1/2
 
                     if(l==N-1):
-                        piramide_array[l][c]=L/2
+                        pyramid_array[l][c]=L/2
 
                 if(c==2):
 
-                    piramide_array[l][c]=z
+                    pyramid_array[l][c]=z
 
                     if((l-2)%3==0):
                         z+=1
                 
                 if(c==3):
-                    piramide_array[l][c]=1
+                    pyramid_array[l][c]=1
 
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+piramide_array[clover.id][0], y=y0+piramide_array[clover.id][1],z=piramide_array[clover.id][2])
+        clover.navigate(x=x0+pyramid_array[clover.id][0], y=y0+pyramid_array[clover.id][1],z=pyramid_array[clover.id][2])
     
-    print(piramide_array)
-    return piramide_array         
+    print(pyramid_array)
+    return pyramid_array         
 
 #---Support Functions---
 

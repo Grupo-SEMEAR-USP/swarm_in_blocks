@@ -23,7 +23,7 @@ def menu():
    print("4 - square formation")
    print("5 - cube formation")
    print("6 - sphere formation")
-   print("7 - piramide formation")
+   print("7 - pyramid formation")
    print("O - circle formation")
    print("0 - initial position")
    print("L - land all")
@@ -160,37 +160,26 @@ class Swarm:
       return coord
 
    #Formations
-   #def setFormation(self, formation, N, L, type, r, xc, yc):
-   def line(self, N, L):
-      coord = formation.line(self, N, L)
+   def setFormation2D(self, shape, N, L):
+      if (shape=='line'):
+         coord = formation.line(self, N, L)
+      elif (shape=='full_square'):
+         coord = formation.full_square(self, N, L)
+      elif (shape=='empty_square'):
+         coord = formation.empty_square(self, N, L)
+      elif (shape=='circle'):
+         coord = formation.circle(self, N, L)
+      elif (shape=='triangle'):
+         coord = formation.triangle(self, N)
       return coord
 
-   def full_square(self, N, L):
-      coord = formation.full_square(self, N, L)
-      return coord
-
-   def empty_square(self, N, L):
-      coord = formation.empty_square(self, N, L)
-      return coord
-
-   def circle(self, N, r):
-      coord = formation.circle(self, N, r)
-      return coord
-      
-   def triangle(self, N):
-      coord = formation.triangle(self, N)
-      return coord
-      
-   def cube(self, N, L):
-      coord = formation.cube(self, N, L)
-      return coord
-
-   def sphere(self, N, xc=4, yc=4, zc=4, r=2):
-      coord = formation.sphere(self, N, xc, yc, zc, r)
-      return coord
-
-   def piramide(self):
-      coord = formation.piramide(self, N)
+   def setFormation3D(self, shape, N, L):
+      if (shape=='cube'):
+         coord = formation.cube(self, N, L)
+      elif (shape=='sphere'):
+         coord = formation.sphere(self, N, L)
+      elif (shape=='pyramid'):
+         coord = formation.pyramid(self, N)
       return coord
 
    #Leader operations
@@ -206,7 +195,7 @@ class Swarm:
       pass
 
 if __name__ == "__main__":
-   swarm = Swarm(6)
+   swarm = Swarm(10)
    N = swarm.num_of_clovers
 
 
@@ -217,12 +206,13 @@ if __name__ == "__main__":
          coord = swarm.takeoff_all()
          print("Drones coordinates: \n{}\n".format(coord))
          #rospy.sleep(2)
+
       elif (key == str('2')):
          if (N < 2):
             print("You need at least 2 clovers!\n")
          else:
             L = int(input("Insert the desired length: "))
-            coord = swarm.line(N=N, L=L)
+            coord = swarm.setFormation2D('line', N, L)
             print("Drones coordinates: \n{}\n".format(coord))
             #rospy.sleep(5)
 
@@ -231,8 +221,8 @@ if __name__ == "__main__":
             print("You need at least 3 clovers!\n")
          else:
                # L = int(input("Insert the desired side length: "))
-               matriz = swarm.triangle(N=N)
-               print("\n", matriz)
+               coord = swarm.setFormation2D('triangle', N, L)
+               print("Drones coordinates: \n{}\n".format(coord))
                #rospy.sleep(5)
 
       elif (key == str('4f') or key == str('4F')):
@@ -240,7 +230,7 @@ if __name__ == "__main__":
             print("You need at least 4 clovers!\n")
          else:
             L = int(input("Insert the desired side length: "))
-            coord = swarm.full_square(N=N, L=L)
+            coord = swarm.setFormation2D('full_square', N, L)
             print("Drones coordinates: \n{}\n".format(coord))
             #rospy.sleep(5)
 
@@ -249,9 +239,15 @@ if __name__ == "__main__":
             print("You need at least 4 clovers!\n")
          else:
             L = int(input("Insert the desired side length: "))
-            coord = swarm.empty_square(N=N, L=L)
+            coord = swarm.setFormation2D('empty_square', N, L)
             print("Drones coordinates: \n{}\n".format(coord))
             #rospy.sleep(5)
+
+      elif (key == str('o') or key == str('O')):
+         L = int(input("Insert the desired ratio: "))
+         coord = swarm.setFormation2D('circle', N, L)
+         print("Drones coordinates: \n{}\n".format(coord))
+         #rospy.sleep(2)
 
       elif (key == str('5')):
          if (N < 8):
@@ -259,12 +255,13 @@ if __name__ == "__main__":
          else:
                #type = input("Insert full or empty: ")
                L = int(input("Insert the desired side length: "))
-               coord = swarm.cube(N=N, L=L)
+               coord = swarm.setFormation3D('cube', N, L)
                print("Drones coordinates: \n{}\n".format(coord))
                #rospy.sleep(5)
 
       elif (key == str('6')):
-         coord = swarm.sphere(N=N)
+         L = int(input("Insert the desired ratio: "))
+         coord = swarm.setFormation3D('sphere', N, L)
          print("Drones coordinates: \n{}\n".format(coord))
          #rospy.sleep(5)
 
@@ -273,14 +270,9 @@ if __name__ == "__main__":
                print("You need at least 3 clovers!\n")
          else:
                # L = int(input("Insert the desired side length: "))
-               swarm.piramide(N=N)
+               coord = swarm.setFormation3D('pyramid', N)
+               print("Drones coordinates: \n{}\n".format(coord))
                rospy.sleep(5)
-
-      elif (key == str('o') or key == str('O')):
-         r = int(input("Insert the desired ratio: "))
-         coord = swarm.circle(N=N, r=r)
-         print("Drones coordinates: \n{}\n".format(coord))
-         #rospy.sleep(2)
 
       elif (key == str('0')):
          coord = swarm.initial_position()
