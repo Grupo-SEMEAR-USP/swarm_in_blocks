@@ -74,11 +74,12 @@ def line(self, N, L=1):
         #rospy.sleep(2)
     #plot_preview(coord)
     #rospy.sleep(5)
+    print(coord)
     print("Line done\n")
     return coord
 
-
-def circle(self, N, xc=4, yc=4, r=2):
+def circle(self, N, r=2):
+    xc = 0; yc = 0
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning circle formation")
@@ -89,7 +90,7 @@ def circle(self, N, xc=4, yc=4, r=2):
         xi = r*np.cos(clover.id*angle)
         yi = r*np.sin(clover.id*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(5)
     plot_preview(coord)
@@ -97,46 +98,52 @@ def circle(self, N, xc=4, yc=4, r=2):
     print("Circle done\n")
     return coord
 
-
-def square(self, N, type="full", L=2):
+def full_square(self, N, L=2):
     coord = np.empty((0,4))
     z0 = 1
-    print("Beginning square formation")
+    print("Beginning full square formation")
+    yi = 0
+    n = int(1 + N/4)             
+    (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+    while (q<N):
+        if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
+            yi = yi + L/(n-1)
+            (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
+        else:
+            yi = yi + L/n
+            (q, coord) = square_side(self, N, L, q=q, n=(N%4), yi=yi, coord=coord)
+            if (N-q == n):
+                (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+    plot_preview(coord)
+    #rospy.sleep(5)
+    print("Square done\n")
+    return coord
+
+def empty_square(self, N, L=2):
+    coord = np.empty((0,4))
+    z0 = 1
+    print("Beginning empty square formation")
     yi = 0
     n = int(1 + N/4)
-
-    if (type=="empty"):
-        if (N%4 == 0):
-            (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
-            while (q<N-n):
-                yi = yi + L/(n-1)
-                (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+    if (N%4 == 0):
+        (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+        while (q<N-n):
+            yi = yi + L/(n-1)
+            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+        (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+    else:
+        (q, coord) = square_side(self, N, L, q=0, n=n+1, yi=0, coord=coord)
+        if (N%4 > 1):
+            m = n+1
+        else:
+            m = n
+        while (q<N-n):
+            yi = yi + L/(m-1)
+            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+        if (N%4 < 3):
             (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
         else:
-            (q, coord) = square_side(self, N, L, q=0, n=n+1, yi=0, coord=coord)
-            if (N%4 > 1):
-                m = n+1
-            else:
-                m = n
-            while (q<N-n):
-                yi = yi + L/(m-1)
-                (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
-            if (N%4 < 3):
-                (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
-            else:
-                (q, coord) = square_side(self, N, L, q=q, n=n+1, yi=L, coord=coord)                
-
-    elif (type=="full"):
-        (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
-        while (q<N):
-            if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
-                yi = yi + L/(n-1)
-                (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
-            else:
-                yi = yi + L/n
-                (q, coord) = square_side(self, N, L, q=q, n=(N%4), yi=yi, coord=coord)
-                if (N-q == n):
-                    (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+            (q, coord) = square_side(self, N, L, q=q, n=n+1, yi=L, coord=coord)
     plot_preview(coord)
     #rospy.sleep(5)
     print("Square done\n")
@@ -178,7 +185,6 @@ def triangle(self, N):
     if(N%3==0):
         S=N-p
     for c in range(0,4):
-        
         for l in range(0,N):
         #Define o x     
             if(c==0): 
@@ -216,14 +222,14 @@ def triangle(self, N):
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=triangle_side[clover.id][2])
+        #clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=triangle_side[clover.id][2])
 
-        if(clover.id>=S):
-            rospy.sleep(5)
-            clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=1)
+        #if(clover.id>=S):
+            #rospy.sleep(5)
+            #clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=1)
 
-    #plot_preview(triangle_side)
-    print(triangle_side)
+    plot_preview(triangle_side)
+    #print(triangle_side)
     return triangle_side
          
 
