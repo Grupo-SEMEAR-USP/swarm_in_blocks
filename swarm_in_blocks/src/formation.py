@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-pi = np.pi
+pi = int(np.pi)
 
 def array(N):
     #Formação da matriz
@@ -82,7 +82,6 @@ def line(self, N, L=1):
 def circle(self, N, xc=4, yc=4, r=2):
     coord = np.empty((0,4))
     z0 = 1
-    pi=3,14
     print("Beginning circle formation")
     angle = 2*pi/N
     for clover in self.swarm:
@@ -91,7 +90,7 @@ def circle(self, N, xc=4, yc=4, r=2):
         xi = r*np.cos(clover.id*angle)
         yi = r*np.sin(clover.id*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(5)
     plot_preview(coord)
