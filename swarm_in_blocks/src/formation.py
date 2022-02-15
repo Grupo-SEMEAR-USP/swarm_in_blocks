@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
+pi = int(np.pi)
+
 def array(N):
     #Formação da matriz
     matriz=[]
@@ -80,7 +82,6 @@ def line(self, N, L=1):
 def circle(self, N, xc=4, yc=4, r=2):
     coord = np.empty((0,4))
     z0 = 1
-    pi=3,14
     print("Beginning circle formation")
     angle = 2*pi/N
     for clover in self.swarm:
@@ -89,7 +90,7 @@ def circle(self, N, xc=4, yc=4, r=2):
         xi = r*np.cos(clover.id*angle)
         yi = r*np.sin(clover.id*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(5)
     plot_preview(coord)
@@ -250,6 +251,27 @@ def cube(self, N, L):
             yi = yi + L/(n-1)
         z = z + L/(n-1)
     plot_preview_3d(coord)
+    return coord
+
+def sphere(self, N, xc=4, yc=4, zc=4, r=2):
+    coord = np.empty((0,4))
+    print("Beginning circle formation")
+    theta = 2*pi/N
+    phi = 2*pi/N
+    for clover in self.swarm:
+        x0 = 0 - self.init_x[clover.id]
+        y0 = 0 - self.init_y[clover.id]
+    for i in range(0,2*pi,pi/N):
+        xi = r*np.cos(clover.id*theta)*np.sin(clover.id*phi)
+        yi = r*np.sin(clover.id*theta)*np.sin(clover.id*phi)
+        zi = r*np.cos(clover.id*phi)
+        point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        coord = np.concatenate((coord,[point]))
+        #rospy.sleep(5)
+    plot_preview_3d(coord)
+    #rospy.sleep(5)
+    print("Circle done\n")
     return coord
 
 def piramide_matriz(N):
