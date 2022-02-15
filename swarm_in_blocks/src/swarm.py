@@ -21,9 +21,9 @@ def menu():
    print("2 - line formation")
    print("3 - triangle formation")
    print("4 - square formation")
-   print("5 - piramide formation")
    print("5 - cube formation")
    print("6 - sphere formation")
+   print("7 - piramide formation")
    print("O - circle formation")
    print("0 - initial position")
    print("L - land all")
@@ -132,13 +132,12 @@ class Swarm:
       
 
    #Basic swarm operations
-   def takeoff_all(self, h=1):
-      #coord = self.takeoff_all(self, h=1)
+   def takeoff_all(self):
       coord = np.empty((0,4))
       print("All drones taking off")
       for clover in self.swarm:
-         point = [self.init_x[clover.id],self.init_y[clover.id],h,1]
-         clover.navigate(x=0, y=0, z=h, auto_arm=True)
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
+         clover.navigate(x=0, y=0, z=1, auto_arm=True)
          coord = np.concatenate((coord,[point]))
       self.plot_preview(coord)
       return coord
@@ -170,27 +169,6 @@ class Swarm:
    def square(self, N, type, L):
       coord = formation.square(self, N, type, L)
       return coord
-
-   def square_side(self, q, n, yi, L, coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
-      j = 0
-      if (n == 1):
-         f = L/2
-         j = -1
-      else:
-         f = L/(n-1)
-      for clover in self.swarm[q:n+q]:
-         x0 = 0 - self.init_x[clover.id]
-         y0 = 0 - self.init_y[clover.id]
-         point = [round(f*(n-1-j),2), 0, 1, 1]
-         clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
-         #clover.navigate(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
-         coord = np.concatenate((coord,[point]))
-         q = q+1
-         j = j+1
-         rospy.sleep(2)
-         if (q==N):
-               break
-      return(q, coord)
 
    def circle(self, N, xc, yc, r):
       coord = formation.circle(self, N, xc, yc, r)
@@ -263,6 +241,21 @@ if __name__ == "__main__":
             #rospy.sleep(5)
 
       elif (key == str('5')):
+         if (N < 8):
+               print("You need at least 8 clovers!\n")
+         else:
+               #type = input("Insert full or empty: ")
+               L = int(input("Insert the desired side length: "))
+               coord = swarm.cube(N=N, L=L)
+               print("Drones coordinates: \n{}\n".format(coord))
+               #rospy.sleep(5)
+
+      elif (key == str('6')):
+         coord = swarm.sphere(N=N)
+         print("Drones coordinates: \n{}\n".format(coord))
+         #rospy.sleep(5)
+
+      elif (key == str('7')):
          if (N < 3):
                print("You need at least 3 clovers!\n")
          else:
@@ -272,28 +265,6 @@ if __name__ == "__main__":
                # L = int(input("Insert the desired side length: "))
                swarm.piramide()
                rospy.sleep(5)
-
-         # if (N < 8):
-         #       print("You need at least 8 clovers!\n")
-         # else:
-         #       #type = input("Insert full or empty: ")
-         #       L = int(input("Insert the desired side length: "))
-         #       coord = swarm.cube(N=N, L=L)
-         #       print("Drones coordinates: \n{}\n".format(coord))
-         #       #rospy.sleep(5)
-         if (N < 8):
-            print("You need at least 8 clovers!\n")
-         else:
-            #type = input("Insert full or empty: ")
-            L = int(input("Insert the desired side length: "))
-            coord = swarm.cube(N=N, L=L)
-            print("Drones coordinates: \n{}\n".format(coord))
-            #rospy.sleep(5)
-
-      elif (key == str('6')):
-         coord = swarm.sphere(N=N)
-         print("Drones coordinates: \n{}\n".format(coord))
-         #rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
          r = int(input("Insert the desired ratio: "))
