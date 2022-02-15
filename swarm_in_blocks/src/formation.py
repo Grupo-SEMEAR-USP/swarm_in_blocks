@@ -278,7 +278,7 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     print("Circle done\n")
     return coord
 
-def piramide_matriz(N):
+def piramide(self, N):
     piramide_array = array(N)
     for index in range(N):
         if(index%3==0):
@@ -292,12 +292,11 @@ def piramide_matriz(N):
     for c in range(0,4):
         for l in range(0,N):
                 if(c==0):
-                    if(l%3==0):
-                        L-=1/2
-
+                    
                     if((l-1)%3==0):
-                        piramide_array[l][c]=round(h,2)
-
+                        print(h)
+                        piramide_array[l][c]=h
+                        h-=1/2
                     else:
                         piramide_array[l][c]=cp
 
@@ -307,17 +306,14 @@ def piramide_matriz(N):
                     if(l==N-1):
                         piramide_array[l][c]=round(h/2, 2)
                         cp=0
-
                 if(c==1):
                     if(l%3==0 and l>0):
                         L1 -= 1/2
 
                     if((l-2)%3==0):
                         piramide_array[l][c]=L1
-
                     elif((l-1)%3==0):
                         piramide_array[l][c]=L1/2
-
                     else:
                         piramide_array[l][c]=cp
                         cp+=1/2
@@ -326,6 +322,7 @@ def piramide_matriz(N):
                         piramide_array[l][c]=L/2
 
                 if(c==2):
+
                     piramide_array[l][c]=z
 
                     if((l-2)%3==0):
@@ -334,14 +331,13 @@ def piramide_matriz(N):
                 if(c==3):
                     piramide_array[l][c]=1
 
-def piramide(self, N):
-        sides = piramide_matriz(N)
-        for clover in self.swarm:
-            x0 = 0 - self.init_x[clover.id]
-            y0 = 0 - self.init_y[clover.id]
-            clover.navigate(x=x0+sides[clover.id][0], y=y0+sides[clover.id][1],z=sides[clover.id][2])
-        print(sides)
-        return sides         
+    for clover in self.swarm:
+        x0 = 0 - self.init_x[clover.id]
+        y0 = 0 - self.init_y[clover.id]
+        clover.navigate(x=x0+piramide_array[clover.id][0], y=y0+piramide_array[clover.id][1],z=piramide_array[clover.id][2])
+    
+    print(piramide_array)
+    return piramide_array         
 
 #---Support Functions---
 
