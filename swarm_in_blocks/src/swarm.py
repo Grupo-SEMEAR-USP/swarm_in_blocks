@@ -132,13 +132,13 @@ class Swarm:
       
 
    #Basic swarm operations
-   def takeoff_all(self):
-      coord = formation.takeoff_all(self)
+   def takeoff_all(self, h=1):
+      #coord = self.takeoff_all(self, h=1)
       coord = np.empty((0,4))
       print("All drones taking off")
       for clover in self.swarm:
-         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
-         clover.navigate(x=0, y=0, z=1, auto_arm=True)
+         point = [self.init_x[clover.id],self.init_y[clover.id],h,1]
+         clover.navigate(x=0, y=0, z=h, auto_arm=True)
          coord = np.concatenate((coord,[point]))
       self.plot_preview(coord)
       return coord
@@ -198,6 +198,7 @@ class Swarm:
       
 
    def triangle(self):
+      #self.takeoff_all(2)
       coord = formation.triangle(self, self.num_of_clovers)
       return coord
       
@@ -230,7 +231,8 @@ if __name__ == "__main__":
       menu()
       key= input("\n")
       if (key == str('1')):
-         coord = swarm.takeoff_all()
+         H = int(input("Insert the desired height: "))
+         coord = swarm.takeoff_all(h=H)
          print("Drones coordinates: \n{}\n".format(coord))
          #rospy.sleep(2)
       elif (key == str('2')):
@@ -246,11 +248,8 @@ if __name__ == "__main__":
          if (N < 3):
             print("You need at least 3 clovers!\n")
          else:
-               #N = int(input("Number of drones "))
-               # y0 = int(input("Insert initial y coordinate: "))
-               # z0 = int(input("Insert the desired height: "))
-               # L = int(input("Insert the desired side length: "))
                swarm.triangle()
+               print("Drones coordinates: \n{}\n".format(coord))
                rospy.sleep(5)
 
       elif (key == str('4')):
