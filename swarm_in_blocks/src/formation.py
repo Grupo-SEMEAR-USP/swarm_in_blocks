@@ -10,13 +10,11 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
-import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-pi = int(np.pi)
-
+pi = np.pi
 
 def array(N):
     #Formação da matriz
@@ -74,7 +72,7 @@ def line(self, N, L=1):
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(2)
-    plot_preview(coord)
+    #plot_preview(coord)
     #rospy.sleep(5)
     print("Line done\n")
     return coord
@@ -144,7 +142,7 @@ def square(self, N, type="full", L=2):
     print("Square done\n")
     return coord
 
-def triangle(self, N):
+def triangle_matriz(N):
     triangle_side = array(N)
     L=2
     #Variáveis contadoras
@@ -157,7 +155,7 @@ def triangle(self, N):
     p=1         #Parametro de subtração
 
     id_list = []
-    reta = math.sqrt(3) #Coeficiente angular
+    reta = np.sqrt(3) #Coeficiente angular
 
     #Laço que define as variáveis a partir do numero de drones
     for index in range(N):
@@ -176,7 +174,7 @@ def triangle(self, N):
 
     #######################################
     id=int(np.median(id_list)) #Media dos ids
-    h = (math.sqrt(3)*L)/2     #Altura do triângulo 
+    h = (np.sqrt(3)*L)/2     #Altura do triângulo 
 
     #Verificações
     if(N%2==0 and N%3!=0):
@@ -215,27 +213,24 @@ def triangle(self, N):
                     c3+=1
             #Define o z  
             elif(c==2):
-                triangle_side[l][c] = 1.0
-
-                if(l>=S):
-                   triangle_side[l][c] = 3.0
+                triangle_side[l][c] = 1
 
         #Define o quarto parametro
             elif(c==3):
-                triangle_side[l][c] = 1.0
+                triangle_side[l][c] = 1
 
+    return triangle_side
+
+def triangle(self,N):
+    side = triangle_matriz(N)
+    z0=1
+    
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=triangle_side[clover.id][2])
-        
-        if(clover.id>=S):
-            rospy.sleep(5)
-            clover.navigate(x=x0+triangle_side[clover.id][0], y=y0+triangle_side[clover.id][1],z=1)
-    
-    #plot_preview(triangle_side)
-    print(triangle_side)
-    return triangle_side
+        clover.navigate(x=x0+side[clover.id][0], y=y0+side[clover.id][1],z=side[clover.id][2])
+    print(side)
+    return side
          
 
 #---3D Formations---
@@ -285,7 +280,7 @@ def piramide(self, N):
             if(index>3):
                 L += 1
 
-    h = (math.sqrt(3)*L)/2
+    h = (np.sqrt(3)*L)/2
     L1=L
     cp=0
     z=1

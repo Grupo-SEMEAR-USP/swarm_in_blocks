@@ -128,7 +128,8 @@ class Swarm:
       plt.show(block=False)
       #return start_form
 
-   #def setFormation(self, formation):
+   #def setFormation(self, formation, N, L, type, r, xc, yc):
+
       
 
    #Basic swarm operations
@@ -174,15 +175,16 @@ class Swarm:
       coord = formation.circle(self, N, xc, yc, r)
       return coord
       
-
    def triangle(self):
-      #self.takeoff_all(2)
       coord = formation.triangle(self, self.num_of_clovers)
       return coord
       
-
    def cube(self, N, L):
       coord = formation.cube(self, N, L)
+      return coord
+
+   def sphere(self, N, xc=4, yc=4, zc=4, r=2):
+      coord = formation.sphere(self, N, xc, yc, zc, r)
       return coord
 
    def piramide(self):
@@ -205,12 +207,12 @@ if __name__ == "__main__":
    swarm = Swarm(6)
    N = swarm.num_of_clovers
 
+
    while not rospy.is_shutdown():
       menu()
       key= input("\n")
       if (key == str('1')):
-         H = int(input("Insert the desired height: "))
-         coord = swarm.takeoff_all(h=H)
+         coord = swarm.takeoff_all()
          print("Drones coordinates: \n{}\n".format(coord))
          #rospy.sleep(2)
       elif (key == str('2')):
@@ -226,8 +228,12 @@ if __name__ == "__main__":
          if (N < 3):
             print("You need at least 3 clovers!\n")
          else:
-               swarm.triangle()
-               print("Drones coordinates: \n{}\n".format(coord))
+               #N = int(input("Number of drones "))
+               # y0 = int(input("Insert initial y coordinate: "))
+               # z0 = int(input("Insert the desired height: "))
+               # L = int(input("Insert the desired side length: "))
+               matriz = swarm.triangle()
+               print("\n", matriz)
                rospy.sleep(5)
 
       elif (key == str('4')):
