@@ -32,10 +32,10 @@ body {
 }
 
 #program-name {
-	width: 150px;
+	width: 160px;
 	border: none;
 	font-size: 14px;
-	padding: 5px;
+	padding: 6px;
 	outline: none;
 	background: transparent;
 	text-overflow: ellipsis;
@@ -142,6 +142,12 @@ body {
 #tools button:hover {
 	background-color: rgb(154, 91, 212);
 	color: white;
+}
+
+#tools button:disabled, button[disabled]{
+	border: 1px solid #999999;
+	background-color: #cccccc;
+	color: #666666;
 }
 
 #tools button:active {

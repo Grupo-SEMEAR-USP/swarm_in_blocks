@@ -9,7 +9,7 @@ import time
 from clover import srv
 from std_srvs.srv import Trigger
 import matplotlib.pyplot as plt
-import math
+from matplotlib.widgets import Button
 import numpy as np
 import formation
 import launch
@@ -21,6 +21,7 @@ def menu():
    print("2 - line formation")
    print("3 - triangle formation")
    print("4 - square formation")
+   print("5 - piramide formation")
    print("5 - cube formation")
    print("6 - sphere formation")
    print("O - circle formation")
@@ -86,26 +87,79 @@ class Swarm:
          self.swarm.append(clover_object)
          self.init_x = self.init_x + [0]
          self.init_y = self.init_y + [index]
-         self.id_clover.append(index)
+         
    
    def launchGazeboAndClovers(self):
       launch.spawnGazeboAndVehicles(self.num_of_clovers)
 
-   def applyFormation(self):
+   def applyFormation(self, coord):
       for idx, clover in enumerate(self.swarm):
          clover.navigate(x=coord[idx][0],y=coord[idx][0],z=coord[idx][2])
+
+   #Preview formations
+   def plot_preview(self, coord):
+      #start_form='False'
+      plt.figure(figsize=(8, 8))
+      plt.subplots_adjust(bottom = 0.2)
+      plt.plot(coord[:,0],coord[:,1],'ro')
+      plt.axis([-1,11,-1,11])
+      plt.grid(True)
+      plt.xticks(np.linspace(0,10,11))
+      plt.yticks(np.linspace(0,10,11))
+      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+      button = Button(posit,'Confirm')
+      #button.on_clicked(start_form='True')
+      plt.show(block=False)
+      #return start_form
+
+   def plot_preview_3d(self, coord):
+      #start_form='False'
+      fig = plt.figure(figsize=(8, 8))
+      ax = fig.add_subplot(111,projection='3d')
+      plt.subplots_adjust(bottom = 0.2)
+      ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
+      #plt.axis([-1,11,-1,11])
+      plt.grid(True)
+      plt.xticks(np.linspace(0,10,11))
+      plt.yticks(np.linspace(0,10,11))
+      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+      button = Button(posit,'Confirm')
+      #button.on_clicked(start_form='True')
+      plt.show(block=False)
+      #return start_form
+
+   #def setFormation(self, formation):
+      
 
    #Basic swarm operations
    def takeoff_all(self):
       coord = formation.takeoff_all(self)
+      coord = np.empty((0,4))
+      print("All drones taking off")
+      for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
+         clover.navigate(x=0, y=0, z=1, auto_arm=True)
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    def initial_position(self):
-      coord = formation.initial_position(self)
+      coord = np.empty((0,4))
+      print("All drones returning")
+      for clover in self.swarm:
+         point = [self.init_x[clover.id],self.init_y[clover.id],1,1]
+         clover.navigate(x=0, y=0, z=1)
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    def land_all(self):
-      coord = formation.land(self)
+      coord = np.empty((0,4))
+      for clover in self.swarm:
+         clover.land()
+         point = [self.init_x[clover.id],self.init_y[clover.id],0,1]
+         coord = np.concatenate((coord,[point]))
+      self.plot_preview(coord)
       return coord
 
    #Formations
@@ -115,9 +169,31 @@ class Swarm:
    def square(self, N, type, L):
       self.coord = formation.square(N, type, L)
 
+   def square_side(self, q, n, yi, L, coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
+      j = 0
+      if (n == 1):
+         f = L/2
+         j = -1
+      else:
+         f = L/(n-1)
+      for clover in self.swarm[q:n+q]:
+         x0 = 0 - self.init_x[clover.id]
+         y0 = 0 - self.init_y[clover.id]
+         point = [round(f*(n-1-j),2), 0, 1, 1]
+         clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+         #clover.navigate(x=(x0+f*(n-1-j)), y=y0+yi, z=z0)
+         coord = np.concatenate((coord,[point]))
+         q = q+1
+         j = j+1
+         rospy.sleep(2)
+         if (q==N):
+               break
+      return(q, coord)
+
    def circle(self, N, xc, yc, r):
       self.coord = formation.circle(self, N, xc, yc, r)
       
+<<<<<<< HEAD
    def triangle(self, x0 = 0, y0 = 0, z0 = 1):
 
       coord = np.empty((0,4))
@@ -176,11 +252,19 @@ class Swarm:
       return coord  
 
    #3D Formations
+=======
+
+   def triangle(self):
+      coord = formation.triangle(self, self.num_of_clovers)
+      return coord
+      
+
+>>>>>>> 6b08a0924caed34a69fbc1984c4803d87852b271
    def cube(self, N, L):
       self.coord = formation.cube(N, L)
 
-   def sphere(self, N, xc=4, yc=4, zc=4, r=2):
-      coord = formation.sphere(self, N, xc, yc, zc, r)
+   def piramide(self):
+      coord = formation.piramide(self, self.num_of_clovers)
       return coord
 
    #Leader operations
@@ -192,31 +276,11 @@ class Swarm:
    def followLeader():
       pass
 
-   # def formations(self,type):
-   #    if (type == "line"):
-   #       self.line(z0=1, L=1)
-      
-   #    elif (type == "square"):
-   #       self.square(type="full", z0=1, L=2)
-
-   #    elif (type == "triangle"):
-   #       self.triangle(x0=0, y0=0, z0=1, L=1)
-      
-   #    return 
-
    def launchSwarm(self):
       pass
 
-def plot_preview(coord): #Função temporária aqui, só apagar quando testes com a triangle estiverem oks
-   plt.plot(coord[:,0],coord[:,1],'ro')
-   plt.axis([-1,11,-1,11])
-   plt.grid(True)
-   plt.show()
-
 if __name__ == "__main__":
-
-   swarm = Swarm(30)
-   #swarm.launchGazeboAndClovers()
+   swarm = Swarm(6)
    N = swarm.num_of_clovers
 
    while not rospy.is_shutdown():
@@ -239,12 +303,12 @@ if __name__ == "__main__":
          if (N < 3):
             print("You need at least 3 clovers!\n")
          else:
-            # x0 = int(input("Insert initial x coordinate: "))
-            # y0 = int(input("Insert initial y coordinate: "))
-            # z0 = int(input("Insert the desired height: "))
-            # L = int(input("Insert the desired side length: "))
-            swarm.triangle()
-            rospy.sleep(5)
+               #N = int(input("Number of drones "))
+               # y0 = int(input("Insert initial y coordinate: "))
+               # z0 = int(input("Insert the desired height: "))
+               # L = int(input("Insert the desired side length: "))
+               swarm.triangle()
+               rospy.sleep(5)
 
       elif (key == str('4')):
          if (N < 4):
@@ -257,6 +321,24 @@ if __name__ == "__main__":
             #rospy.sleep(5)
 
       elif (key == str('5')):
+         if (N < 3):
+               print("You need at least 3 clovers!\n")
+         else:
+               # x0 = int(input("Insert initial x coordinate: "))
+               # y0 = int(input("Insert initial y coordinate: "))
+               # z0 = int(input("Insert the desired height: "))
+               # L = int(input("Insert the desired side length: "))
+               swarm.piramide()
+               rospy.sleep(5)
+
+         # if (N < 8):
+         #       print("You need at least 8 clovers!\n")
+         # else:
+         #       #type = input("Insert full or empty: ")
+         #       L = int(input("Insert the desired side length: "))
+         #       coord = swarm.cube(N=N, L=L)
+         #       print("Drones coordinates: \n{}\n".format(coord))
+         #       #rospy.sleep(5)
          if (N < 8):
             print("You need at least 8 clovers!\n")
          else:
