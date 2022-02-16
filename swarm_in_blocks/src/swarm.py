@@ -170,7 +170,7 @@ class Swarm:
       elif (shape=='circle'):
          coord = formation.circle(self, N, L)
       elif (shape=='triangle'):
-         coord = formation.triangle(self, N)
+         coord = formation.triangle(self, N, L)
       return coord
 
    def setFormation3D(self, shape, N, L):
@@ -179,7 +179,7 @@ class Swarm:
       elif (shape=='sphere'):
          coord = formation.sphere(self, N, L)
       elif (shape=='pyramid'):
-         coord = formation.pyramid(self, N)
+         coord = formation.pyramid(self, N, L)
       return coord
 
    #Leader operations
@@ -195,7 +195,7 @@ class Swarm:
       pass
 
 if __name__ == "__main__":
-   swarm = Swarm(10)
+   swarm = Swarm(7)
    N = swarm.num_of_clovers
 
 
@@ -220,7 +220,7 @@ if __name__ == "__main__":
          if (N < 3):
             print("You need at least 3 clovers!\n")
          else:
-               # L = int(input("Insert the desired side length: "))
+               L = int(input("Insert the desired side length: "))
                coord = swarm.setFormation2D('triangle', N, L)
                print("Drones coordinates: \n{}\n".format(coord))
                #rospy.sleep(5)
@@ -269,8 +269,8 @@ if __name__ == "__main__":
          if (N < 3):
                print("You need at least 3 clovers!\n")
          else:
-               # L = int(input("Insert the desired side length: "))
-               coord = swarm.setFormation3D('pyramid', N)
+               L = int(input("Insert the desired side length: "))
+               coord = swarm.setFormation3D('pyramid', N, L)
                print("Drones coordinates: \n{}\n".format(coord))
                rospy.sleep(5)
 

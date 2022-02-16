@@ -148,18 +148,17 @@ def empty_square(self, N, L=2):
     print("Square done\n")
     return coord
 
-def triangle(self, N):
-    triangle_side = array(N)
-    L=2
-
+def triangle(self, N, L=2):
+    coord = np.empty((0,4))
+    Ld = 2
+    N=self.num_of_clovers
     #Variáveis contadoras
     if(N<5):
         c1=1                #variável independente
     else:
         c1=1/2
     cx=0                    #variável contadora para o x
-    cy=0                    #variável contadora para o y
-    c3=1                    #Parametro para base do triângulo 
+    cy=0                    #variável contadora para o y 
     p=1                     #Parametro de subtração
     id_list = []
     reta = np.sqrt(3)       #Coeficiente angular
@@ -169,25 +168,33 @@ def triangle(self, N):
         id_list.append(index)
         if(index%3==0):
             if(index>3):
-                L += 1
-                
-        if(index>7):
-            if(N%2!=0 or N%3==0):
-                c3 = 1/2
+                Ld += 1            
+
         if((index+1)%3==0 and index>7):
             p+=1
-    #######################################
+    
+    if(Ld>L):
+        print("Side size is not enough")
+        print(f"New Side = {Ld}")
+        L=Ld
+
+    
+    c3=L/2                     #Parametro para base do triângulo
     id=int(np.median(id_list)) #Mediana dos ids
     h = (np.sqrt(3)*L)/2       #Altura do triângulo 
+    
     #Verificações
     if(N%2==0 and N%3!=0):
         S=N-1
-    if(N%2!=0 and N>7):
+    elif(N%2!=0 and N>7):
         S=N-p
-    if(N%3==0 and N>3):
+    elif(N%3==0 and N>3):
         S=N-p
     else:
         S=N
+    if(N>7):
+        if(N%2!=0 or N%3==0):
+            c3 = L/(p+1)
 
     for l in range(0,N):
         for c in range(0,4):  
@@ -277,67 +284,71 @@ def sphere(self, N, L=2):
     print("Circle done\n")
     return coord
 
-def pyramid(self, N):
-    L = 2
-    pyramid_array = array(N)
+def pyramid(self, N, L):
+    coord = np.empty((0,4))
+    N=self.num_of_clovers
+    Ld=2
+    
     for index in range(N):
         if(index%3==0):
             if(index>3):
-                L += 1
-
-    h = (np.sqrt(3)*L)/2
+                Ld += 1
+    if(Ld>L):
+        print("Side size is not enough")
+        print(f"New Side = {Ld}")
+        L=Ld    
+    h = round(((np.sqrt(3)*L)/2),2)
     L1=L
-    cp=0
+    cpx=0
+    cpy=0
     z=1
-    for c in range(0,4):
-        for l in range(0,N):
+    for l in range(0,N):
+        for c in range(0,4): 
+            #Define o x
                 if(c==0):
-                    
                     if((l-1)%3==0):
-                        print(h)
-                        pyramid_array[l][c]=h
+                        x=h
                         h-=1/2
                     else:
-                        pyramid_array[l][c]=cp
+                        x=cpx
 
                     if((l-2)%3==0):
-                        cp+=1/2
+                        cpx+=1/2
                         
                     if(l==N-1):
-                        pyramid_array[l][c]=round(h/2, 2)
-                        cp=0
+                        x=round(h/2, 2)
+                        
+            #Define o y
                 if(c==1):
                     if(l%3==0 and l>0):
                         L1 -= 1/2
 
                     if((l-2)%3==0):
-                        pyramid_array[l][c]=L1
+                        y=L1
                     elif((l-1)%3==0):
-                        pyramid_array[l][c]=L1/2
+                        y=L1/2
                     else:
-                        pyramid_array[l][c]=cp
-                        cp+=1/2
+                        y=cpy
+                        cpy+=1/2
 
                     if(l==N-1):
-                        pyramid_array[l][c]=L/2
-
+                        y=L/2
+            
+            #Define o z
                 if(c==2):
-
-                    pyramid_array[l][c]=z
-
                     if((l-2)%3==0):
                         z+=1
-                
-                if(c==3):
-                    pyramid_array[l][c]=1
+            
+        point=[x,y,z,1]
+        coord = np.concatenate((coord,[point]))      
 
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+pyramid_array[clover.id][0], y=y0+pyramid_array[clover.id][1],z=pyramid_array[clover.id][2])
+    # for clover in self.swarm:
+    #     x0 = 0 - self.init_x[clover.id]
+    #     y0 = 0 - self.init_y[clover.id]
+    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
     
-    print(pyramid_array)
-    return pyramid_array         
+    print(coord)
+    return coord         
 
 #---Support Functions---
 
