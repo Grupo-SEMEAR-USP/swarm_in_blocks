@@ -1,16 +1,25 @@
 #!/usr/bin/python3
 
-import mavros
+# ROS modedules
 import rospy
-import mavros_msgs
 from mavros_msgs import srv
 from mavros_msgs.msg import State
-import time
+
+# Clover services
 from clover import srv
 from std_srvs.srv import Trigger
+
+# Other tools
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
+from multiprocessing import Process, Pool
+import time
+import sys
+import os
+import logging
+
+# Local modules
 import formation
 import launch
 
@@ -45,18 +54,37 @@ class SingleClover:
       self.current_state = msg_cb
 
    def configure(self):
-      self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)   
+
+      logging.info("Waiting clover services...")
+
+      self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)
+      
+      rospy.wait_for_service(f"{self.name}/get_telemetry")   
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
+      
+      rospy.wait_for_service(f"{self.name}/navigate")
       self.navigate = rospy.ServiceProxy(f"{self.name}/navigate", srv.Navigate)
+      
+      rospy.wait_for_service(f"{self.name}/navigate_global")
       self.navigate_global = rospy.ServiceProxy(f"{self.name}/navigate_global", srv.NavigateGlobal)
+      
+      rospy.wait_for_service(f"{self.name}/set_position")
       self.set_position = rospy.ServiceProxy(f"{self.name}/set_position", srv.SetPosition)
+      
+      rospy.wait_for_service(f"{self.name}/set_velocity")
       self.set_velocity = rospy.ServiceProxy(f"{self.name}/set_velocity", srv.SetVelocity)
+      
+      rospy.wait_for_service(f"{self.name}/set_attitude")
       self.set_attitude = rospy.ServiceProxy(f"{self.name}/set_attitude", srv.SetAttitude)
+      
+      rospy.wait_for_service(f"{self.name}/set_rates")
       self.set_rates = rospy.ServiceProxy(f"{self.name}/set_rates", srv.SetRates)
+      
+      rospy.wait_for_service(f"{self.name}/land")
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger) 
 
 class Swarm:
-   def __init__(self, num_of_clovers):
+   def __init__(self, num_of_clovers, launch=True):
       rospy.init_node('swarm')
       self.num_of_clovers = num_of_clovers
       self.swarm = []
@@ -65,6 +93,8 @@ class Swarm:
       self.id_clover = []
 
       self.init_formation = []
+
+      self.launchGazeboAndClovers()
 
       # Create clover python objects
       self.__createCloversObjects()
@@ -90,7 +120,13 @@ class Swarm:
          
    
    def launchGazeboAndClovers(self):
-      launch.spawnGazeboAndVehicles(self.num_of_clovers)
+
+      Process(target=launch.spawnGazeboAndVehicles, args=(self.num_of_clovers,)).start()
+      time.sleep(45)
+
+      # p = Pool(None,initializer=mute)
+      # p.map(launch.spawnGazeboAndVehicles, (self.num_of_clovers,))
+      
 
    def applyFormation(self, coord):
       for idx, clover in enumerate(self.swarm):
@@ -171,73 +207,10 @@ class Swarm:
    def circle(self, N, xc, yc, r):
       self.coord = formation.circle(self, N, xc, yc, r)
       
-<<<<<<< HEAD
-   def triangle(self, x0 = 0, y0 = 0, z0 = 1):
-
-      coord = np.empty((0,4))
-      N = self.num_of_clovers
-      L=2
-      reta = np.sqrt(3)
-      for index in range(N):
-         if((index-1)%3==0 and index>4):
-            L+=1
-
-      f = (np.sqrt(3)*L)/2
-
-      c1=0
-
-      boss_clover = int(np.median(self.id_clover))
-      if(N==4):
-         boss_clover+=1
-
-      print(boss_clover)
-
-      for clover in self.swarm:
-        
-         if(clover.id<boss_clover):
-            
-            point = [round(reta*c1,2), 0, z0, 1]
-            clover.navigate(x=x0+point[0], y=point[1], z=point[2])
-            c1+=1/2
-            
-
-         else:
-            if(clover.id==int(np.median(self.id_clover)) and N>3):
-               c1=0
-
-            if(N==4):
-               y0-=1
-            point = [round(f-reta*c1,2), 0, z0, 1]
-            clover.navigate(x=x0+point[0], y=point[1], z=point[2])
-            c1+=1/2
-            
-            if(clover.id == N-1 and N%2==0):
-               if(N>4):
-                  clover.navigate(x=x0, y = y0, z=z0+1)
-                  y0 = y0 - self.init_y[clover.id]
-                  rospy.sleep(5)
-                  point = [x0, y0 + self.init_y[boss_clover], z0, 1]
-                  clover.navigate(x=point[0], y = point[1], z=point[2])
-               else: 
-                  clover.navigate(x=x0, y = 0, z=z0+1)
-                  rospy.sleep(5)
-                  clover.navigate(x=x0, y = y0, z=z0)
-
-         coord = np.concatenate((coord,[point]))
-      plot_preview(coord)
-      rospy.sleep(2)
-      print("Triangle done\n")
-      return coord  
-
-   #3D Formations
-=======
-
    def triangle(self):
       coord = formation.triangle(self, self.num_of_clovers)
       return coord
-      
-
->>>>>>> 6b08a0924caed34a69fbc1984c4803d87852b271
+         
    def cube(self, N, L):
       self.coord = formation.cube(N, L)
 
@@ -252,9 +225,6 @@ class Swarm:
       self.leader_id = id
    
    def followLeader():
-      pass
-
-   def launchSwarm(self):
       pass
 
 if __name__ == "__main__":
