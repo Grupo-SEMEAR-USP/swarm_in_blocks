@@ -142,25 +142,25 @@ def square(self, N, type="full", L=2):
     print("Square done\n")
     return coord
 
-def triangle_matriz(N):
-    triangle_side = array(N)
+def triangle(self, N):
+    coord = np.empty((0,4)) 
     L=2
+
     #Variáveis contadoras
     if(N<5):
-        c1=1    #Primeira variável independente
+        c1=1                #variável independente
     else:
         c1=1/2
-    c2=0        #Segunda variável independente
-    c3=1        #Parametro para base do triângulo 
-    p=1         #Parametro de subtração
-
+    cx=0                    #variável contadora para o x
+    cy=0                    #variável contadora para o y
+    c3=1                    #Parametro para base do triângulo 
+    p=1                     #Parametro de subtração
     id_list = []
-    reta = np.sqrt(3) #Coeficiente angular
+    reta = np.sqrt(3)       #Coeficiente angular
 
     #Laço que define as variáveis a partir do numero de drones
     for index in range(N):
         id_list.append(index)
-
         if(index%3==0):
             if(index>3):
                 L += 1
@@ -168,70 +168,67 @@ def triangle_matriz(N):
         if(index>7):
             if(N%2!=0 or N%3==0):
                 c3 = 1/2
-
         if((index+1)%3==0 and index>7):
             p+=1
-
     #######################################
-    id=int(np.median(id_list)) #Media dos ids
-    h = (np.sqrt(3)*L)/2     #Altura do triângulo 
-
+    id=int(np.median(id_list)) #Mediana dos ids
+    h = (np.sqrt(3)*L)/2       #Altura do triângulo 
     #Verificações
     if(N%2==0 and N%3!=0):
         S=N-1
-
     if(N%2!=0 and N>7):
         S=N-p
-    if(N%3==0):
+    if(N%3==0 and N>3):
         S=N-p
-    for c in range(0,4):
-        
-        for l in range(0,N):
+    else:
+        S=N
+
+    for l in range(0,N):
+        for c in range(0,4):  
         #Define o x     
             if(c==0): 
                 if(l<=id and reta*c1*l<=h):
-                    triangle_side[l][c]  = round(reta*c1*l,2)
-
+                    x=round(reta*c1*l,2)
                 else:
-                    triangle_side[l][c] = round(reta*c1*c2,2)
-                    c2+=1
+                    x=round(reta*c1*cx,2)
+                    cx+=1
                 
                 if(l>=S and S>2):
-                    triangle_side[l][c] = 0
+                        x=0
                     
         #Define o y  
             elif(c==1):
                 if(l<=id and reta*c1*l<=h):
-                    triangle_side[l][c] = c1*l
-                    c2=0
+                    y=c1*l
+                    cy=0
                 else:
-                    triangle_side[l][c] = L-c1*c2
-                    c2+=1
-
+                    y=L-c1*cy
+                    cy+=1
                 if(l>=S):
-                    triangle_side[l][c] = c3
+                    y=c3
                     c3+=1
-            #Define o z  
+        #Define o z  
             elif(c==2):
-                triangle_side[l][c] = 1
+                z=1.0
+                if(l>=S and S!=N):
+                    z = 3.0
 
         #Define o quarto parametro
-            elif(c==3):
-                triangle_side[l][c] = 1
+        point=[x,y,z,1]
+        coord = np.concatenate((coord,[point]))
 
-    return triangle_side
+    # for clover in self.swarm:
+    #     x0 = 0 - self.init_x[clover.id]
+    #     y0 = 0 - self.init_y[clover.id]
+    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
 
-def triangle(self,N):
-    side = triangle_matriz(N)
-    z0=1
-    
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+side[clover.id][0], y=y0+side[clover.id][1],z=side[clover.id][2])
-    print(side)
-    return side
-         
+    #     if(clover.id>=S):
+    #         rospy.sleep(5)
+    #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
+
+    plot_preview(coord)
+    print(coord)
+    return coord
 
 #---3D Formations---
 def cube(self, N, L):
@@ -275,6 +272,7 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
 
 def piramide(self, N):
     piramide_array = array(N)
+    L=2
     for index in range(N):
         if(index%3==0):
             if(index>3):
