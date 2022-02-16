@@ -10,12 +10,11 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
-import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-pi = int(np.pi)
+pi = np.pi
 
 def array(N):
     #Formação da matriz
@@ -58,7 +57,6 @@ def plot_preview_3d(coord):
     plt.show(block=False)
     #return start_form
 
-
 #---Formations---
 
 def line(self, N, L=1):
@@ -78,8 +76,8 @@ def line(self, N, L=1):
     print("Line done\n")
     return coord
 
-
-def circle(self, N, xc=4, yc=4, r=2):
+def circle(self, N, L=2):
+    xc = yc = 0
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning circle formation")
@@ -87,10 +85,10 @@ def circle(self, N, xc=4, yc=4, r=2):
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-        xi = r*np.cos(clover.id*angle)
-        yi = r*np.sin(clover.id*angle)
+        xi = L*np.cos(clover.id*angle)
+        yi = L*np.sin(clover.id*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         #rospy.sleep(5)
     plot_preview(coord)
@@ -98,141 +96,152 @@ def circle(self, N, xc=4, yc=4, r=2):
     print("Circle done\n")
     return coord
 
-
-def square(self, N, type="full", L=2):
+def full_square(self, N, L=2):
     coord = np.empty((0,4))
     z0 = 1
-    print("Beginning square formation")
+    print("Beginning full square formation")
     yi = 0
-    n = int(1 + N/4)
-
-    if (type=="empty"):
-        if (N%4 == 0):
-            (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
-            while (q<N-n):
-                yi = yi + L/(n-1)
-                (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
-            (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+    n = int(1 + N/4)             
+    (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+    while (q<N):
+        if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
+            yi = yi + L/(n-1)
+            (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
         else:
-            (q, coord) = square_side(self, N, L, q=0, n=n+1, yi=0, coord=coord)
-            if (N%4 > 1):
-                m = n+1
-            else:
-                m = n
-            while (q<N-n):
-                yi = yi + L/(m-1)
-                (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
-            if (N%4 < 3):
+            yi = yi + L/n
+            (q, coord) = square_side(self, N, L, q=q, n=(N%4), yi=yi, coord=coord)
+            if (N-q == n):
                 (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
-            else:
-                (q, coord) = square_side(self, N, L, q=q, n=n+1, yi=L, coord=coord)                
-
-    elif (type=="full"):
-        (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
-        while (q<N):
-            if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
-                yi = yi + L/(n-1)
-                (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
-            else:
-                yi = yi + L/n
-                (q, coord) = square_side(self, N, L, q=q, n=(N%4), yi=yi, coord=coord)
-                if (N-q == n):
-                    (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
     plot_preview(coord)
     #rospy.sleep(5)
     print("Square done\n")
     return coord
 
-def triangle_matriz(N):
-    triangle_side = array(N)
-    L=2
+
+def empty_square(self, N, L=2):
+    coord = np.empty((0,4))
+    z0 = 1
+    print("Beginning empty square formation")
+    yi = 0
+    n = int(1 + N/4)
+    if (N%4 == 0):
+        (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+        while (q<N-n):
+            yi = yi + L/(n-1)
+            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+        (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+    else:
+        (q, coord) = square_side(self, N, L, q=0, n=n+1, yi=0, coord=coord)
+        if (N%4 > 1):
+            m = n+1
+        else:
+            m = n
+        while (q<N-n):
+            yi = yi + L/(m-1)
+            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+        if (N%4 < 3):
+            (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+        else:
+            (q, coord) = square_side(self, N, L, q=q, n=n+1, yi=L, coord=coord)
+    plot_preview(coord)
+    #rospy.sleep(5)
+    print("Square done\n")
+    return coord
+
+def triangle(self, N, L=2):
+    coord = np.empty((0,4))
+    Ld = 2
+    N=self.num_of_clovers
     #Variáveis contadoras
     if(N<5):
-        c1=1    #Primeira variável independente
+        c1=1                #variável independente
     else:
         c1=1/2
-    c2=0        #Segunda variável independente
-    c3=1        #Parametro para base do triângulo 
-    p=1         #Parametro de subtração
-
+    cx=0                    #variável contadora para o x
+    cy=0                    #variável contadora para o y 
+    p=1                     #Parametro de subtração
     id_list = []
-    reta = math.sqrt(3) #Coeficiente angular
+    reta = np.sqrt(3)       #Coeficiente angular
 
     #Laço que define as variáveis a partir do numero de drones
     for index in range(N):
         id_list.append(index)
-
         if(index%3==0):
             if(index>3):
-                L += 1
-                
-        if(index>7):
-            if(N%2!=0 or N%3==0):
-                c3 = 1/2
+                Ld += 1            
 
         if((index+1)%3==0 and index>7):
             p+=1
+    
+    if(Ld>L):
+        print("Side size is not enough")
+        print(f"New Side = {Ld}")
+        L=Ld
 
-    #######################################
-    id=int(np.median(id_list)) #Media dos ids
-    h = (math.sqrt(3)*L)/2     #Altura do triângulo 
-
+    
+    c3=L/2                     #Parametro para base do triângulo
+    id=int(np.median(id_list)) #Mediana dos ids
+    h = (np.sqrt(3)*L)/2       #Altura do triângulo 
+    
     #Verificações
     if(N%2==0 and N%3!=0):
         S=N-1
+    elif(N%2!=0 and N>7):
+        S=N-p
+    elif(N%3==0 and N>3):
+        S=N-p
+    else:
+        S=N
+    if(N>7):
+        if(N%2!=0 or N%3==0):
+            c3 = L/(p+1)
 
-    if(N%2!=0 and N>7):
-        S=N-p
-    if(N%3==0):
-        S=N-p
-    for c in range(0,4):
-        
-        for l in range(0,N):
+    for l in range(0,N):
+        for c in range(0,4):  
         #Define o x     
             if(c==0): 
                 if(l<=id and reta*c1*l<=h):
-                    triangle_side[l][c]  = round(reta*c1*l,2)
-
+                    x=round(reta*c1*l,2)
                 else:
-                    triangle_side[l][c] = round(reta*c1*c2,2)
-                    c2+=1
+                    x=round(reta*c1*cx,2)
+                    cx+=1
                 
                 if(l>=S and S>2):
-                    triangle_side[l][c] = 0
+                        x=0
                     
         #Define o y  
             elif(c==1):
                 if(l<=id and reta*c1*l<=h):
-                    triangle_side[l][c] = c1*l
-                    c2=0
+                    y=c1*l
+                    cy=0
                 else:
-                    triangle_side[l][c] = L-c1*c2
-                    c2+=1
-
+                    y=L-c1*cy
+                    cy+=1
                 if(l>=S):
-                    triangle_side[l][c] = c3
+                    y=c3
                     c3+=1
-            #Define o z  
+        #Define o z  
             elif(c==2):
-                triangle_side[l][c] = 1
+                z=1.0
+                if(l>=S and S!=N):
+                    z = 3.0
 
         #Define o quarto parametro
-            elif(c==3):
-                triangle_side[l][c] = 1
+        point=[x,y,z,1]
+        coord = np.concatenate((coord,[point]))
 
-    return triangle_side
+    # for clover in self.swarm:
+    #     x0 = 0 - self.init_x[clover.id]
+    #     y0 = 0 - self.init_y[clover.id]
+    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
 
-def triangle(self,N):
-    side = triangle_matriz(N)
-    z0=1
-    
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        clover.navigate(x=x0+side[clover.id][0], y=y0+side[clover.id][1],z=side[clover.id][2])
-    print(side)
-    return side
-         
+    #     if(clover.id>=S):
+    #         rospy.sleep(5)
+    #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
+
+    plot_preview(coord)
+    print(coord)
+    return coord
 
 #---3D Formations---
 def cube(self, N, L):
@@ -253,7 +262,8 @@ def cube(self, N, L):
     plot_preview_3d(coord)
     return coord
 
-def sphere(self, N, xc=4, yc=4, zc=4, r=2):
+def sphere(self, N, L=2):
+    xc = yc = zc = 0
     coord = np.empty((0,4))
     print("Beginning circle formation")
     theta = 2*pi/N
@@ -261,10 +271,10 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     for clover in self.swarm:
         x0 = 0 - self.init_x[clover.id]
         y0 = 0 - self.init_y[clover.id]
-    for i in range(0,2*pi,pi/N):
-        xi = r*np.cos(clover.id*theta)*np.sin(clover.id*phi)
-        yi = r*np.sin(clover.id*theta)*np.sin(clover.id*phi)
-        zi = r*np.cos(clover.id*phi)
+    for i in range(0, int(2*pi)):
+        xi = L*np.cos(clover.id*theta)*np.sin(clover.id*phi)
+        yi = L*np.sin(clover.id*theta)*np.sin(clover.id*phi)
+        zi = L*np.cos(clover.id*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
@@ -274,61 +284,71 @@ def sphere(self, N, xc=4, yc=4, zc=4, r=2):
     print("Circle done\n")
     return coord
 
-def piramide_matriz(N):
-    piramide_array = array(N)
+def pyramid(self, N, L):
+    coord = np.empty((0,4))
+    N=self.num_of_clovers
+    Ld=2
+    
     for index in range(N):
         if(index%3==0):
             if(index>3):
-                L += 1
-
-    h = (math.sqrt(3)*L)/2
+                Ld += 1
+    if(Ld>L):
+        print("Side size is not enough")
+        print(f"New Side = {Ld}")
+        L=Ld    
+    h = round(((np.sqrt(3)*L)/2),2)
     L1=L
-    cp=0
+    cpx=0
+    cpy=0
     z=1
-    for c in range(0,4):
-        for l in range(0,N):
-            if(c==0):
-                if(l%3==0):
-                    L-=1/2
-                if((l-1)%3==0):
-                    piramide_array[l][c]=round(h,2)
-                else:
-                    piramide_array[l][c]=0
-                if(l==N-1):
-                    piramide_array[l][c]=round(h/2, 2)
+    for l in range(0,N):
+        for c in range(0,4): 
+            #Define o x
+                if(c==0):
+                    if((l-1)%3==0):
+                        x=h
+                        h-=1/2
+                    else:
+                        x=cpx
+
+                    if((l-2)%3==0):
+                        cpx+=1/2
+                        
+                    if(l==N-1):
+                        x=round(h/2, 2)
+                        
+            #Define o y
+                if(c==1):
+                    if(l%3==0 and l>0):
+                        L1 -= 1/2
+
+                    if((l-2)%3==0):
+                        y=L1
+                    elif((l-1)%3==0):
+                        y=L1/2
+                    else:
+                        y=cpy
+                        cpy+=1/2
+
+                    if(l==N-1):
+                        y=L/2
             
-            if(c==1):
-                if(l%3==0):
-                    L1 -= 1/2
-
-                if((l-2)%3==0):
-                    piramide_array[l][c]=L1
-
-                else:
-                    piramide_array[l][c]=cp
-                    cp+=1/2
-
-                if(l==N-1):
-                    piramide_array[l][c]=L/2
-
-            if(c==2):
-
-                piramide_array[l][c]=z
-
-                if((l-2)%3==0):
-                    z+=1
+            #Define o z
+                if(c==2):
+                    if((l-2)%3==0):
+                        z+=1
             
-            if(c==3):
-                piramide_array[l][c]=1
+        point=[x,y,z,1]
+        coord = np.concatenate((coord,[point]))      
 
-def piramide(self, N):
-        sides = piramide_matriz(N)
-        for clover in self.swarm:
-            x0 = 0 - self.init_x[clover.id]
-            y0 = 0 - self.init_y[clover.id]
-            clover.navigate(x=x0+sides[clover.id][0], y=y0+sides[clover.id][1],z=sides[clover.id][2])
-        print(sides)
-        return sides         
+    # for clover in self.swarm:
+    #     x0 = 0 - self.init_x[clover.id]
+    #     y0 = 0 - self.init_y[clover.id]
+    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
+    
+    print(coord)
+    return coord         
 
 #---Support Functions---
 

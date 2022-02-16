@@ -102,22 +102,27 @@ while(op!=3):
                 if(index>3):
                     L += 1
 
-        h = (math.sqrt(3)*L)/2
+        h = round((math.sqrt(3)*L)/2, 2)
         L1=L
         cp=0
         z=1
         for c in range(0,4):
             for l in range(0,N):
                 if(c==0):
-                    if(l%3==0):
-                        L-=1/2
+                    
                     if((l-1)%3==0):
-                        matriz[l][c]=round(h,2)
+                        print(h)
+                        matriz[l][c]=h
+                        h-=1/2
                     else:
-                        matriz[l][c]=0
+                        matriz[l][c]=cp
+
+                    if((l-2)%3==0):
+                        cp+=1/2
+                        
                     if(l==N-1):
                         matriz[l][c]=round(h/2, 2)
-                
+                        cp=0
                 if(c==1):
                     if(l%3==0 and l>0):
                         L1 -= 1/2

@@ -3,16 +3,18 @@
     <!-- Posix SITL environment launch script -->
     <!-- launchs PX4 SITL and spawns vehicle -->
     <!-- vehicle pose -->
+    <arg name="ID" default="0"/>
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
     <arg name="z" default="0.3"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>
     <arg name="Y" default="0"/>
+
+    <arg name="output" default="log"/>
     <!-- vehicle model and config -->
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="clover"/>
-    <arg name="ID" default="0"/>
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
     <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
@@ -25,7 +27,7 @@
 
     <!-- UAV0 -->
     <group ns="clover$(arg ID)">
-        <!-- generate sdf vehicle model -->
+        <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
                                     main_camera:=false
@@ -35,21 +37,22 @@
                                     maintain_camera_rate:=false
                                     use_clover_physics:=false 
                                     mavlink_tcp_port:=$(arg mavlink_tcp_port)"/>
+                                    
         <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
         <!-- PX4 SITL -->
         <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>
         <arg     if="$(arg interactive)" name="px4_command_arg1" value="-d"/>
         <!-- <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i $(arg ID) -w sitl_$(arg vehicle)_$(arg ID) $(arg px4_command_arg1)"> -->
             <!-- PX4 instance -->
-        <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)" unless="$(eval type == 'none')">
+        <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="$(arg output)" args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)">
             <env name="PX4_SIM_MODEL" value="$(arg vehicle)"/>
             <env name="PX4_ESTIMATOR" value="$(arg est)"/>
         </node>
         <!-- spawn vehicle -->
-        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="$(arg output)" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 
         <!-- MAVROS -->
-        <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="screen">
+        <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="$(arg output)">
             <param name="fcu_url" value="$(arg fcu_url)"/>
             <param name="target_system_id" value="$(eval 1 + arg('ID'))"/>
             <param name="target_component_id" value="1"/>
