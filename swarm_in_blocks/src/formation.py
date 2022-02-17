@@ -117,7 +117,6 @@ def full_square(self, N, L=2):
     print("Square done\n")
     return coord
 
-
 def empty_square(self, N, L=2):
     coord = np.empty((0,4))
     z0 = 1
@@ -240,7 +239,6 @@ def triangle(self, N, L=2):
     #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
 
     plot_preview(coord)
-    print(coord)
     return coord
 
 #---3D Formations---
@@ -346,8 +344,7 @@ def pyramid(self, N, L):
     #     x0 = 0 - self.init_x[clover.id]
     #     y0 = 0 - self.init_y[clover.id]
     #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
-    
-    print(coord)
+    plot_preview_3d(coord)
     return coord         
 
 #---Support Functions---
@@ -372,7 +369,3 @@ def square_side(self, N, L, q, n, yi, coord, z0=1):
             break
     return(q, coord)
 
-
-# if __name__ == "__main__":
-#     while not rospy.is_shutdown():
-#         break
