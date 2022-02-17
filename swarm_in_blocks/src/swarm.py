@@ -22,6 +22,7 @@ import logging
 # Local modules
 import formation
 import launch
+import transform
 
 #Menu 
 def menu():
@@ -130,11 +131,12 @@ class Swarm:
 
    def applyFormation(self, coord):
       for idx, clover in enumerate(self.swarm):
-         clover.navigate(x=coord[idx][0],y=coord[idx][0],z=coord[idx][2])
+         x0 = 0 - self.init_x[clover.id]
+         y0 = 0 - self.init_y[clover.id]
+         clover.navigate(x=x0+coord[idx][0],y=y0+coord[idx][1],z=coord[idx][2])
 
    #Preview formations
    def plot_preview(self, coord):
-      #start_form='False'
       plt.figure(figsize=(8, 8))
       plt.subplots_adjust(bottom = 0.2)
       plt.plot(coord[:,0],coord[:,1],'ro')
@@ -144,7 +146,7 @@ class Swarm:
       plt.yticks(np.linspace(0,10,11))
       posit = plt.axes([0.4, 0.1, 0.2, 0.05])
       button = Button(posit,'Confirm')
-      #button.on_clicked(start_form='True')
+      #button.on_clicked(swarm.applyFormation)
       plt.show(block=False)
       #return start_form
 
@@ -218,6 +220,22 @@ class Swarm:
          coord = formation.pyramid(self, N, L)
       return coord
 
+   def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
+      new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
+      return new_coord
+
+   def scaleFormation(self, coord, sx, sy, sz):
+      new_coord = transform.scaleFormation(coord, sx, sy, sz)
+      return new_coord
+
+   def translateFormation(self, coord, tx, ty, tz):
+      new_coord = transform.translateFormation(coord, tx, ty, tz)
+      return new_coord
+
+   def rotateFormation(self, coord, anglex, angley, anglez):
+      new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
+      return new_coord
+
    #Leader operations
    def setLeader(self, id):
       
@@ -228,8 +246,10 @@ class Swarm:
       pass
 
 if __name__ == "__main__":
-   swarm = Swarm(7)
+   swarm = Swarm(2)
    N = swarm.num_of_clovers
+   #init_form = swarm.setInitialPosition()
+   #swarm.launchGazeboAndClovers(init_form)
 
 
    while not rospy.is_shutdown():
@@ -316,6 +336,39 @@ if __name__ == "__main__":
          coord = swarm.land_all()
          print("Drones coordinates: \n{}\n".format(coord))
          rospy.sleep(5)
+
+      elif (key == str('ms')):
+         sx = int(input("Insert the x scale: "))
+         sy = int(input("Insert the y scale: "))
+         sz = int(input("Insert the z scale: "))
+         coord = swarm.scaleFormation(coord, sx, sy, sz)
+         swarm.plot_preview(coord)
+      
+      elif (key == str('mr')):
+         anglex = float(input("Insert the x angle: "))
+         angley = float(input("Insert the y angle: "))
+         anglez = float(input("Insert the z angle: "))
+         coord = swarm.rotateFormation(coord, anglex, angley, anglez)
+         #swarm.plot_preview(coord)
+
+      elif (key == str('mt')):
+         tx = int(input("Insert the x translation: "))
+         ty = int(input("Insert the y translation: "))
+         tz = int(input("Insert the z translation: "))
+         coord = swarm.translateFormation(coord, tx, ty, tz)
+         swarm.plot_preview(coord)
+
+      elif (key == str('abraba')):
+         ang=0
+         while(ang < 4*np.pi):
+            coord = swarm.rotateFormation(coord, 0, 0, ang)
+            rospy.sleep(2)
+            swarm.applyFormation(coord)
+            ang += 0.2
+            rospy.sleep(3)
+
+      elif (key == str('ap')):
+         swarm.applyFormation(coord)
 
       elif (key == str('e') or key == str('E')):
          break
