@@ -277,13 +277,8 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-<<<<<<< HEAD
    swarm = Swarm(4)
    swarm.startSimulation(already_launched=False)
-=======
-   swarm = Swarm(2)
-   #swarm.startSimulation()
->>>>>>> c0ae926565052164d726ed9ae419993a9b08f576
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
    #swarm.launchGazeboAndClovers(init_form)
