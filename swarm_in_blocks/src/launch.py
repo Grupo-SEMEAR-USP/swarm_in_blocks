@@ -1,81 +1,90 @@
 #!/usr/bin/python3
 
-
-import roslaunch
 import rospy
+import time
+from multiprocessing import Process
+import subprocess
+import signal
 
-def launchGazebo(uuid):
-    cli_args = ["swarm_in_blocks", "gazebo.launch"]
-    path = roslaunch.rlutil.resolve_launch_arguments(cli_args)[0]
-    parent = roslaunch.parent.ROSLaunchParent(uuid, [path])
-    parent.start()
-    rospy.loginfo("started")
-
-    rospy.sleep(1)
-
-    return parent
-
-def launchSingleVehicle(uuid, id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0):
+def startRoscore(verbose=False):
     
-    cli_args = ["swarm_in_blocks", "single_vehicle.launch",
-                "ID:=" + str(id),
-                "x:=" + str(x),
-                "y:=" + str(y),
-                "z:=" + str(z),
-                "R:=" + str(roll),
-                "P:=" + str(pitch),
-                "Y:=" + str(yaw)]
+    cmd = 'roscore'
 
-    roslaunch_args = cli_args[2:]
-    roslaunch_file = [(roslaunch.rlutil.resolve_launch_arguments(cli_args)[0], roslaunch_args)]
-
-    parent = roslaunch.parent.ROSLaunchParent(uuid, roslaunch_file)
-
-    parent.start()
-    rospy.loginfo("started")
-    return parent
-
-def spawnGazeboAndVehicles(num_of_clovers):
-
-    uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-    roslaunch.configure_logging(uuid)
-
-    parents = []
-    gazebo = launchGazebo(uuid)
-    parents.append(gazebo)
-    
-    side_x = 1
-    # side_y = 5
-    x = 0
-    y = 0
-    for i in range(num_of_clovers):
-        if i >= 10:
-            i = i+1
-        if x >= side_x:
-            x = 0
-            y += 1
-
-        parent = launchSingleVehicle(uuid, i, x=x, y=y)
-        parents.append(parent)
-        x+=1
-    
-    rospy.sleep(1)
     try:
-        for parent in parents:
-            parent.spin()
-        
+        p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL)
+        returncode = p.wait()
     finally:
-        # After Ctrl+C, stop all nodes from running
-        rospy.loginfo("Killing vehicles launches")
-        for parent in parents:
-            parent.shutdown()
+        if p.poll() is None:
+            print("Entrered if")
+            print(p.poll())
+            p.terminate()
+        p.terminate()
+
+def launchGazebo(verbose=False):
+    
+    cmd = ['roslaunch', 'swarm_in_blocks', 'gazebo.launch']
+
+    try:
+        p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL)
+        returncode = p.wait()
+    finally:
+        if p.poll() is None:
+            p.terminate()
+        p.terminate()
+
+def launchSingleVehicle(id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0):
+    
+    cmd = ['roslaunch','--wait', 'swarm_in_blocks', 'single_vehicle.launch',
+            f'ID:={id}', f'x:={x}', f'y:={y}', f'z:={z}',
+            f'R:={roll}', f'P:={pitch}', f'Y:={yaw}']
+
+    try:
+        p = subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE)
+        returncode = p.wait()
+    finally:
+        if p.poll() is None:
+            p.terminate()
+        p.terminate()
+
+def spawnGazeboAndVehicles(num_of_clovers, init_formation_coords):
+
+    processes = []
+    p = Process(target=startRoscore)
+    p.start()
+    processes.append(p)
+    time.sleep(3)
+    
+    p = Process(target=launchGazebo)
+    p.start()
+    processes.append(p)
+
+    for idx in range(num_of_clovers):
+        id = idx
+        x = init_formation_coords[id][0]
+        y = init_formation_coords[id][1]
+        p = Process(target=launchSingleVehicle, args=(id, x, y))
+        p.start()
+        processes.append(p)
+    
+    time.sleep(5*num_of_clovers)
+    
+    def handler(signal_received, frame):
+        for p in processes:
+            p.terminate()
+        for p in processes:
+            while p.is_alive():
+                continue
+        exit()
+
+    signal.signal(signal.SIGINT, handler)
+    rospy.loginfo("Simulation architeture done")
 
 
 
 if __name__ == '__main__':
 
-    num_of_clovers = 6
-    spawnGazeboAndVehicles(num_of_clovers)
+    num_of_clovers = 2
+    spawnGazeboAndVehicles(num_of_clovers,[[0,0,0.3,1],[0,1,0.3,1]])
 
     
 

@@ -16,142 +16,85 @@ import numpy as np
 
 pi = np.pi
 
-def array(N):
-    #Formação da matriz
-    matriz=[]
-    for i in range(N):
-        line=[]
-        for j in range(4):
-            line.append(0.0)
-        matriz.append(line)
-    return matriz
-
-def plot_preview(coord):
-    #start_form='False'
-    plt.figure(figsize=(8, 8))
-    plt.subplots_adjust(bottom = 0.2)
-    plt.plot(coord[:,0],coord[:,1],'ro')
-    plt.axis([-1,11,-1,11])
-    plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
-    plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
-
-def plot_preview_3d(coord):
-    #start_form='False'
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111,projection='3d')
-    plt.subplots_adjust(bottom = 0.2)
-    ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
-    #plt.axis([-1,11,-1,11])
-    plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
-    plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
-
 #---Formations---
 
-def line(self, N, L=1):
+def line(N, L=1):
     coord = np.empty((0,4))
     z0 = 1
     f = L/(N-1)
     print("Beginning line formation")
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        point = [round(f*(N-1-clover.id),2), 0, z0, 1]
+    for idx in range(N):
+        point = [round(f*(N-1-idx),2), 0, z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(2)
-    plot_preview(coord)
-    #rospy.sleep(5)
     print("Line done\n")
     return coord
 
-def circle(self, N, L=2):
+def circle(N, L=2):
     xc = yc = 0
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning circle formation")
     angle = 2*pi/N
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        xi = L*np.cos(clover.id*angle)
-        yi = L*np.sin(clover.id*angle)
+    for idx in range(N):
+        xi = L*np.cos(idx*angle)
+        yi = L*np.sin(idx*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(5)
-    plot_preview(coord)
-    #rospy.sleep(5)
     print("Circle done\n")
     return coord
 
-def full_square(self, N, L=2):
+def full_square(N, L=2):
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning full square formation")
     yi = 0
     n = int(1 + N/4)             
-    (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+    (q, coord) = square_side(N, L, q=0, n=n, yi=0, coord=coord)
     while (q<N):
         if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
             yi = yi + L/(n-1)
-            (q, coord) = square_side(self, N, L, q=q, n=n, yi=yi, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
         else:
             yi = yi + L/n
-            (q, coord) = square_side(self, N, L, q=q, n=(N%4), yi=yi, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=(N%4), yi=yi, coord=coord)
             if (N-q == n):
-                (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
-    plot_preview(coord)
-    #rospy.sleep(5)
+                (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
     print("Square done\n")
     return coord
 
-
-def empty_square(self, N, L=2):
+def empty_square(N, L=2):
     coord = np.empty((0,4))
     z0 = 1
     print("Beginning empty square formation")
     yi = 0
     n = int(1 + N/4)
     if (N%4 == 0):
-        (q, coord) = square_side(self, N, L, q=0, n=n, yi=0, coord=coord)
+        (q, coord) = square_side(N, L, q=0, n=n, yi=0, coord=coord)
         while (q<N-n):
             yi = yi + L/(n-1)
-            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
-        (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=2, yi=yi, coord=coord)
+        (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
     else:
-        (q, coord) = square_side(self, N, L, q=0, n=n+1, yi=0, coord=coord)
+        (q, coord) = square_side(N, L, q=0, n=n+1, yi=0, coord=coord)
         if (N%4 > 1):
             m = n+1
         else:
             m = n
         while (q<N-n):
             yi = yi + L/(m-1)
-            (q, coord) = square_side(self, N, L, q=q, n=2, yi=yi, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=2, yi=yi, coord=coord)
         if (N%4 < 3):
-            (q, coord) = square_side(self, N, L, q=q, n=n, yi=L, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
         else:
-            (q, coord) = square_side(self, N, L, q=q, n=n+1, yi=L, coord=coord)
-    plot_preview(coord)
-    #rospy.sleep(5)
+            (q, coord) = square_side(N, L, q=q, n=n+1, yi=L, coord=coord)
     print("Square done\n")
     return coord
 
-def triangle(self, N, L=2):
+def triangle(N, L=2):
     coord = np.empty((0,4))
     Ld = 2
-    N=self.num_of_clovers
     #Variáveis contadoras
     if(N<5):
         c1=1                #variável independente
@@ -238,13 +181,10 @@ def triangle(self, N, L=2):
     #     if(clover.id>=S):
     #         rospy.sleep(5)
     #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
-
-    plot_preview(coord)
-    print(coord)
     return coord
 
 #---3D Formations---
-def cube(self, N, L):
+def cube(N, L):
     coord = np.empty((0,4))
     print("Beginning cube formation")
     n = np.cbrt(N)
@@ -256,37 +196,29 @@ def cube(self, N, L):
     for i in range(0, int(n)):
         yi = 0
         for i in range(0,int(n)):
-            (q, coord) = square_side(self, n**2, L, q, int(n), yi, z0=z, coord=coord)
+            (q, coord) = square_side(n**2, L, q, int(n), yi, z0=z, coord=coord)
             yi = yi + L/(n-1)
         z = z + L/(n-1)
-    plot_preview_3d(coord)
     return coord
 
-def sphere(self, N, L=2):
+def sphere(N, L=2):
     xc = yc = zc = 0
     coord = np.empty((0,4))
     print("Beginning circle formation")
     theta = 2*pi/N
     phi = 2*pi/N
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
     for i in range(0, int(2*pi)):
-        xi = L*np.cos(clover.id*theta)*np.sin(clover.id*phi)
-        yi = L*np.sin(clover.id*theta)*np.sin(clover.id*phi)
-        zi = L*np.cos(clover.id*phi)
+        xi = L*np.cos(i*theta)*np.sin(i*phi)
+        yi = L*np.sin(i*theta)*np.sin(i*phi)
+        zi = L*np.cos(i*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(5)
-    plot_preview_3d(coord)
-    #rospy.sleep(5)
     print("Circle done\n")
     return coord
 
-def pyramid(self, N, L):
+def pyramid(N, L):
     coord = np.empty((0,4))
-    N=self.num_of_clovers
     Ld=2
     
     for index in range(N):
@@ -346,33 +278,24 @@ def pyramid(self, N, L):
     #     x0 = 0 - self.init_x[clover.id]
     #     y0 = 0 - self.init_y[clover.id]
     #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
-    
-    print(coord)
     return coord         
 
 #---Support Functions---
 
-def square_side(self, N, L, q, n, yi, coord, z0=1):
+def square_side(N, L, q, n, yi, coord, z0=1):
     j = 0
     if (n == 1):
         f = L/2
         j = -1
     else:
         f = L/(n-1)
-    for clover in self.swarm[q:n+q]:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
+    for idx in range(q,n+q):
         point = [round(f*(n-1-j),2), yi, z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         q += 1
         j += 1
-        #rospy.sleep(2)
         if (q==N):
             break
     return(q, coord)
 
-
-# if __name__ == "__main__":
-#     while not rospy.is_shutdown():
-#         break
