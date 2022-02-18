@@ -29,6 +29,7 @@ class Roscore(object):
         Roscore.__initialized = True
     def run(self):
         try:
+            sys.stdout = open('/dev/null', 'w')
             self.roscore_process = subprocess.Popen(['roscore'])
             self.roscore_pid = self.roscore_process.pid  # pid of the roscore process (which has child processes)
         except OSError as e:
