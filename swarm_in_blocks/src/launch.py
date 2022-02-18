@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import rospy
-import os
 import time
 from multiprocessing import Process
 import subprocess
@@ -33,7 +32,7 @@ def launchGazebo(verbose=False):
             p.terminate()
         p.terminate()
 
-def launchSingleVehicle(id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0, verbose=False):
+def launchSingleVehicle(id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0):
     
     cmd = ['roslaunch','--wait', 'swarm_in_blocks', 'single_vehicle.launch',
             f'ID:={id}', f'x:={x}', f'y:={y}', f'z:={z}',
@@ -79,11 +78,15 @@ def spawnGazeboAndVehicles(num_of_clovers, init_formation_coords):
 
     signal.signal(signal.SIGINT, handler)
     rospy.loginfo("Simulation architeture done")
-    
+
+
+
 if __name__ == '__main__':
 
     num_of_clovers = 2
     spawnGazeboAndVehicles(num_of_clovers,[[0,0,0.3,1],[0,1,0.3,1]])
 
+    
 
+    
 

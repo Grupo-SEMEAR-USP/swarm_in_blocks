@@ -25,6 +25,7 @@ def line(N, L=1):
     print("Beginning line formation")
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
+        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Line done\n")
     return coord
@@ -183,7 +184,7 @@ def triangle(N, L=2):
     return coord
 
 #---3D Formations---
-def cube(self, N, L):
+def cube(N, L):
     coord = np.empty((0,4))
     print("Beginning cube formation")
     n = np.cbrt(N)
@@ -195,7 +196,7 @@ def cube(self, N, L):
     for i in range(0, int(n)):
         yi = 0
         for i in range(0,int(n)):
-            (q, coord) = square_side(self, n**2, L, q, int(n), yi, z0=z, coord=coord)
+            (q, coord) = square_side(n**2, L, q, int(n), yi, z0=z, coord=coord)
             yi = yi + L/(n-1)
         z = z + L/(n-1)
     return coord
@@ -216,9 +217,8 @@ def sphere(N, L=2):
     print("Circle done\n")
     return coord
 
-def pyramid(self, N, L):
+def pyramid(N, L):
     coord = np.empty((0,4))
-    N=self.num_of_clovers
     Ld=2
     
     for index in range(N):
