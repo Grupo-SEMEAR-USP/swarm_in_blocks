@@ -12,6 +12,14 @@ import * as ros from './ros.js';
 import './blocks.js';
 import {generateCode, generateUserCode} from './python.js';
 
+//Switch Theme Changer
+const $html = document.querySelector('html')
+const $checkbox = document.querySelector('#switch')
+
+$checkbox.addEventListener('change', function(){
+	$html.classList.toggle('dark-mode')
+})
+
 // Tabs
 document.getElementById('tabs').addEventListener('click', function(e) {
 	var tab = e.target.getAttribute('data-tab');
