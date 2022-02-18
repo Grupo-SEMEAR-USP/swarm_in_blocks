@@ -16,37 +16,6 @@ import numpy as np
 
 pi = np.pi
 
-def plot_preview(coord):
-    #start_form='False'
-    plt.figure(figsize=(8, 8))
-    plt.subplots_adjust(bottom = 0.2)
-    plt.plot(coord[:,0],coord[:,1],'ro')
-    plt.axis([-1,11,-1,11])
-    plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
-    plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
-
-def plot_preview_3d(coord):
-    #start_form='False'
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111,projection='3d')
-    plt.subplots_adjust(bottom = 0.2)
-    ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
-    #plt.axis([-1,11,-1,11])
-    plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
-    plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
-
 #---Formations---
 
 def line(N, L=1):
@@ -57,7 +26,6 @@ def line(N, L=1):
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
         coord = np.concatenate((coord,[point]))
-    # plot_preview(coord)
     print("Line done\n")
     return coord
 
@@ -73,9 +41,6 @@ def circle(N, L=2):
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(5)
-    # plot_preview(coord)
-    #rospy.sleep(5)
     print("Circle done\n")
     return coord
 
@@ -95,8 +60,6 @@ def full_square(N, L=2):
             (q, coord) = square_side(N, L, q=q, n=(N%4), yi=yi, coord=coord)
             if (N-q == n):
                 (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
-    # plot_preview(coord)
-    #rospy.sleep(5)
     print("Square done\n")
     return coord
 
@@ -125,8 +88,6 @@ def empty_square(N, L=2):
             (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
         else:
             (q, coord) = square_side(N, L, q=q, n=n+1, yi=L, coord=coord)
-    # plot_preview(coord)
-    #rospy.sleep(5)
     print("Square done\n")
     return coord
 
@@ -219,8 +180,6 @@ def triangle(N, L=2):
     #     if(clover.id>=S):
     #         rospy.sleep(5)
     #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
-
-    # plot_preview(coord)
     return coord
 
 #---3D Formations---
@@ -239,7 +198,6 @@ def cube(self, N, L):
             (q, coord) = square_side(self, n**2, L, q, int(n), yi, z0=z, coord=coord)
             yi = yi + L/(n-1)
         z = z + L/(n-1)
-    # plot_preview_3d(coord)
     return coord
 
 def sphere(N, L=2):
@@ -249,15 +207,12 @@ def sphere(N, L=2):
     theta = 2*pi/N
     phi = 2*pi/N
     for i in range(0, int(2*pi)):
-        xi = L*np.cos(clover.id*theta)*np.sin(clover.id*phi)
-        yi = L*np.sin(clover.id*theta)*np.sin(clover.id*phi)
-        zi = L*np.cos(clover.id*phi)
+        xi = L*np.cos(i*theta)*np.sin(i*phi)
+        yi = L*np.sin(i*theta)*np.sin(i*phi)
+        zi = L*np.cos(i*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(5)
-    # plot_preview_3d(coord)
-    #rospy.sleep(5)
     print("Circle done\n")
     return coord
 
@@ -323,7 +278,6 @@ def pyramid(self, N, L):
     #     x0 = 0 - self.init_x[clover.id]
     #     y0 = 0 - self.init_y[clover.id]
     #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
-    # plot_preview_3d(coord)
     return coord         
 
 #---Support Functions---
@@ -341,7 +295,6 @@ def square_side(N, L, q, n, yi, coord, z0=1):
         coord = np.concatenate((coord,[point]))
         q += 1
         j += 1
-        #rospy.sleep(2)
         if (q==N):
             break
     return(q, coord)
