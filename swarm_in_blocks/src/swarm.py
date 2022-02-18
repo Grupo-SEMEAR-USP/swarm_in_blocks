@@ -25,21 +25,6 @@ import roscore
 import launch
 import transform
 
-#Menu 
-def menu():
-   print("Press")
-   print("1 - takeoff all")
-   print("2 - line formation")
-   print("3 - triangle formation")
-   print("4 - square formation")
-   print("5 - cube formation")
-   print("6 - sphere formation")
-   print("7 - pyramid formation")
-   print("O - circle formation")
-   print("0 - initial position")
-   print("L - land all")
-   print("E - exit")
-
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
 
@@ -88,13 +73,13 @@ class SingleClover:
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
-      self.navigate(self, x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id=frame_id, auto_arm=auto_arm)
+      self.navigate(x=x, y=y, z=z, yaw=yaw, speed=speed, frame_id=frame_id, auto_arm=auto_arm)
 
       while not rospy.is_shutdown():
          telem = self.get_telemetry(frame_id='navigate_target' + str(self.id))
          if np.sqrt(telem.x ** 2 + telem.y ** 2 + telem.z ** 2) < tolerance:
                break
-         rospy.sleep(0.2)
+         # rospy.sleep(0.2)
 
 class Swarm:
    def __init__(self, num_of_clovers):
@@ -106,25 +91,29 @@ class Swarm:
 
       # Coordinates from the center of the formation
       self.form_pose = [0,0,0,0,0,0]
-
-      # Initial formation. By default on square formation with L = N//2 + 1.
-      # (Ex: N=5 -> L=3)
-      self.init_formation_coords = self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers//2+1)
-
+      
       # Current formation name and coord in homogeneous line vector type 
-      # Ex of self.curr_form_coords: [[x0,y0,z0,1],[x1,y1,z1,1], [x2,y2,z2,1], ...]
+      # (Ex: [[x0,y0,z0,1],[x1,y1,z1,1], [x2,y2,z2,1], ...])
       self.curr_formation_name = ''
       self.curr_formation_coords = []
+      
+      # Initial formation. By default on square formation with L = N//2 + 1.
+      # (Ex: N=5 -> L=3)
+      self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers)
+      self.init_formation_coords = self.des_formation_coord
+
+      # Desired formation
+      self.des_formation_coord = []
 
       # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
       self.formation_list = []
 
       # Leader id of the swarm
       self.leader_id = None
-
+   
    def __launchGazeboAndClovers(self):
-      Process(target=launch.spawnGazeboAndVehicles, args=(self.num_of_clovers,)).start()
-      time.sleep(2*self.num_of_clovers)
+      launch.spawnGazeboAndVehicles(self.num_of_clovers, self.init_formation_coords)
+      time.sleep(5*self.num_of_clovers)
    
    # Create clover objects and append to clover object list
    def __createCloversObjects(self):
@@ -132,37 +121,19 @@ class Swarm:
          clover_object = SingleClover(f"clover{index}", index)
          clover_object.init_coord = self.init_formation_coords[index]
          self.swarm.append(clover_object)
-         
-   
-   def __startRoscore(self):
-      # Start roscore
-      print("asqddq")
-      core = roscore.Roscore()
-      core.run()
-      time.sleep(5)
 
 
    def setInitialFormation(self, formation_str, L):
-      self.init_formation_coords = self.setFormation2D(formation_str, self.num_of_clovers, L)
+      self.setFormation2D(formation_str, self.num_of_clovers, L)
+      self.init_formation_coords = self.des_formation_coord
 
    def startPlanning(self):
       pass
 
    def startSimulation(self):
-      
-      old_stdout = sys.stdout
-      old_stderr = sys.stderr
-      sys.stdout = open('/dev/null', 'w')
-      sys.stderr = open('/dev/null', 'w')
-      
-      # Start roscore
-      self.__startRoscore()
 
       # Launch Gazebo and clover. Wait some time to all get
       self.__launchGazeboAndClovers()
-
-      sys.stdout = old_stdout
-      sys.stderr = old_stderr
 
       # Create clover python objects
       rospy.init_node('swarm')
@@ -171,11 +142,13 @@ class Swarm:
    def startNavigation(self):
       pass   
 
-   def applyFormation(self, coord):
+   def applyFormation(self):
+      coord = self.des_formation_coord
       for idx, clover in enumerate(self.swarm):
          x0 = 0 - clover.init_coord[0]
          y0 = 0 - clover.init_coord[1]
-         clover.navigateWait(x=x0+coord[idx][0],y=y0+coord[idx][1],z=coord[idx][2])
+         clover.navigate(x=x0+coord[idx][0],y=y0+coord[idx][1],z=coord[idx][2])
+      self.curr_formation_coords = coord
 
    #Preview formations
    def plot_preview(self, coord):
@@ -206,14 +179,14 @@ class Swarm:
       plt.show(block=False)
 
    #Basic swarm operations
-   def takeoff_all(self, z0):
+   def takeoff_all(self, z0=1):
       coord = np.empty((0,4))
       print("All drones taking off")
       for clover in self.swarm:
          point = [clover.init_coord[0], clover.init_coord[1], z0, 1]
-         clover.navigateWait(x=0, y=0, z=z0, auto_arm=True)
+         clover.navigate(x=0, y=0, z=z0, frame_id='map', auto_arm=True)
          coord = np.concatenate((coord,[point]))
-      self.plot_preview(coord)
+      # self.plot_preview(coord)
       self.curr_formation_coords = coord
 
    def return_to_home(self):
@@ -228,6 +201,7 @@ class Swarm:
 
    def land_all(self):
       coord = np.empty((0,4))
+      print("All drones landing")
       for clover in self.swarm:
          clover.land()
          point = [clover.init_coord[0], clover.init_coord[1],0,1]
@@ -238,28 +212,30 @@ class Swarm:
    #Formations
    def setFormation2D(self, shape, N, L):
       if (shape=='line'):
-         coord = formation.line(self, N, L)
+         coord = formation.line(N, L)
       elif (shape=='full_square'):
-         coord = formation.full_square(self, N, L)
+         coord = formation.full_square(N, L)
       elif (shape=='empty_square'):
-         coord = formation.empty_square(self, N, L)
+         coord = formation.empty_square(N, L)
       elif (shape=='circle'):
-         coord = formation.circle(self, N, L)
+         coord = formation.circle(N, L)
       elif (shape=='triangle'):
-         coord = formation.triangle(self, N, L)
+         coord = formation.triangle(N, L)
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
-      self.curr_formation_coords = coord
+      self.des_formation_coord = coord
 
    def setFormation3D(self, shape, N, L):
       shape = shape.lower()
       if (shape=='cube'):
-         coord = formation.cube(self, N, L)
+         coord = formation.cube(N, L)
       elif (shape=='sphere'):
-         coord = formation.sphere(self, N, L)
+         coord = formation.sphere(N, L)
       elif (shape=='pyramid'):
-         coord = formation.pyramid(self, N, L)
-      self.curr_formation_coords = coord
+         coord = formation.pyramid(N, L)
+      else:
+         raise Exception('Formation input doesn\'t match any built-in formations')
+      self.des_formation_coord = coord
 
    def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
@@ -286,6 +262,21 @@ class Swarm:
       pass
 
 if __name__ == "__main__":
+   #Menu 
+   def menu():
+      print("Press")
+      print("1 - takeoff all")
+      print("2 - line formation")
+      print("3 - triangle formation")
+      print("4 - square formation")
+      print("5 - cube formation")
+      print("6 - sphere formation")
+      print("7 - pyramid formation")
+      print("O - circle formation")
+      print("0 - initial position")
+      print("L - land all")
+      print("E - exit")
+
    swarm = Swarm(2)
    swarm.startSimulation()
    N = swarm.num_of_clovers

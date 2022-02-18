@@ -1,17 +1,12 @@
-import sys
-import subprocess
-import os
-from multiprocessing import Process
+from swarm import Swarm
 
-def test():
-    os.system('roslaunch swarm_in_blocks swarm.launch 1>/dev/null')
-
-# subprocess.run('roslaunch swarm_in_blocks swarm.launch', stdout = open('/dev/null', 'w'))
-
-# Process(target=test).start()
-
-subprocess.Popen(['roslaunch','swarm_in_blocks','swarm.launch'], stdout=open('/dev/null', 'w'))
-
+swarm = Swarm(2)
+swarm.startSimulation()
+swarm.takeoff_all()
+# input()
+# swarm.setFormation2D('full_square',2,1)
+# swarm.applyFormation()
+# swarm.land_all()
 while True:
-    print("aaaa")
+    pass
     
