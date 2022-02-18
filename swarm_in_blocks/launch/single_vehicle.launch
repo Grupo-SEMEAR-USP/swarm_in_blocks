@@ -11,7 +11,8 @@
     <arg name="P" default="0"/>
     <arg name="Y" default="0"/>
 
-    <arg name="output" default="log"/>
+    <arg name="output" default="screen"/>
+
     <!-- vehicle model and config -->
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="clover"/>
@@ -23,7 +24,7 @@
     <arg name="fcu_url" default="udp://:$(arg a)@localhost:$(arg b)"/>
     
     <!-- PX4 configs -->
-    <arg name="interactive" default="true"/>
+    <arg name="interactive" default="false"/>
 
     <!-- UAV0 -->
     <group ns="clover$(arg ID)">

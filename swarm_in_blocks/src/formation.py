@@ -68,8 +68,8 @@ def circle(N, L=2):
     print("Beginning circle formation")
     angle = 2*pi/N
     for idx in range(N):
-        xi = L*np.cos(clover.id*angle)
-        yi = L*np.sin(clover.id*angle)
+        xi = L*np.cos(idx*angle)
+        yi = L*np.sin(idx*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
         #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
@@ -242,7 +242,7 @@ def cube(self, N, L):
     # plot_preview_3d(coord)
     return coord
 
-def sphere( N, L=2):
+def sphere(N, L=2):
     xc = yc = zc = 0
     coord = np.empty((0,4))
     print("Beginning circle formation")

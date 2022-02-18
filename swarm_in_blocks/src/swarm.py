@@ -21,7 +21,6 @@ import logging
 
 # Local modules
 import formation
-import roscore
 import launch
 import transform
 
@@ -130,10 +129,11 @@ class Swarm:
    def startPlanning(self):
       pass
 
-   def startSimulation(self):
+   def startSimulation(self, already_launched=True):
 
       # Launch Gazebo and clover. Wait some time to all get
-      self.__launchGazeboAndClovers()
+      if not already_launched:
+         self.__launchGazeboAndClovers()
 
       # Create clover python objects
       rospy.init_node('swarm')
@@ -277,8 +277,8 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-   swarm = Swarm(2)
-   swarm.startSimulation()
+   swarm = Swarm(4)
+   swarm.startSimulation(already_launched=False)
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
    #swarm.launchGazeboAndClovers(init_form)
@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
    while not rospy.is_shutdown():
       menu()
-      key= input("\n")
+      key = input()
       if (key == str('1')):
          coord = swarm.takeoff_all()
          print("Drones coordinates: \n{}\n".format(coord))

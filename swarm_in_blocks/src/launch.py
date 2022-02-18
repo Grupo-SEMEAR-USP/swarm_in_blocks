@@ -4,48 +4,80 @@ import rospy
 import os
 import time
 from multiprocessing import Process
+import subprocess
+import signal
 
 def startRoscore(verbose=False):
     
     cmd = 'roscore'
-    
-    if not verbose:
-        cmd = cmd + ' 1>/dev/null'
-    
-    os.system(cmd)
+
+    try:
+        p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL)
+        returncode = p.wait()
+    finally:
+        if p.poll() is None:
+            print("Entrered if")
+            print(p.poll())
+            p.terminate()
+        p.terminate()
 
 def launchGazebo(verbose=False):
     
-    cmd = 'roslaunch swarm_in_blocks gazebo.launch'
+    cmd = ['roslaunch', 'swarm_in_blocks', 'gazebo.launch']
 
-    if not verbose:
-        cmd = cmd + ' 1>/dev/null'
-    
-    os.system(cmd)
-    rospy.loginfo("Gazebo simulator started.")
+    try:
+        p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL)
+        returncode = p.wait()
+    finally:
+        if p.poll() is None:
+            p.terminate()
+        p.terminate()
 
 def launchSingleVehicle(id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0, verbose=False):
     
-    cmd = f'roslaunch --wait swarm_in_blocks single_vehicle.launch ID:={id} x:={x} y:={y} z:={z} R:={roll} P:={pitch} Y:={yaw}'
+    cmd = ['roslaunch','--wait', 'swarm_in_blocks', 'single_vehicle.launch',
+            f'ID:={id}', f'x:={x}', f'y:={y}', f'z:={z}',
+            f'R:={roll}', f'P:={pitch}', f'Y:={yaw}']
 
-    if not verbose:
-        cmd = cmd + ' 1>/dev/null'
-
-    os.system(cmd)
-    rospy.loginfo(f"Clover {id} launched.")
+    try:
+        p = subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+        returncode = p.wait()
+    finally:
+        if p.poll() is None:
+            p.terminate()
+        p.terminate()
 
 def spawnGazeboAndVehicles(num_of_clovers, init_formation_coords):
 
-    Process(target=startRoscore).start()
+    processes = []
+    p = Process(target=startRoscore)
+    p.start()
+    processes.append(p)
     time.sleep(3)
     
-    Process(target=launchGazebo).start()
+    p = Process(target=launchGazebo)
+    p.start()
+    processes.append(p)
 
     for idx in range(num_of_clovers):
         id = idx
         x = init_formation_coords[id][0]
         y = init_formation_coords[id][1]
-        Process(target=launchSingleVehicle,args=(id, x, y)).start()
+        p = Process(target=launchSingleVehicle, args=(id, x, y))
+        p.start()
+        processes.append(p)
+    
+    time.sleep(5*num_of_clovers)
+    
+    def handler(signal_received, frame):
+        for p in processes:
+            p.terminate()
+        for p in processes:
+            while p.is_alive():
+                continue
+        exit()
+
+    signal.signal(signal.SIGINT, handler)
     rospy.loginfo("Simulation architeture done")
     
 if __name__ == '__main__':
