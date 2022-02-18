@@ -40,7 +40,7 @@ def launchSingleVehicle(id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0, verbose=Fal
             f'R:={roll}', f'P:={pitch}', f'Y:={yaw}']
 
     try:
-        p = subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        p = subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE)
         returncode = p.wait()
     finally:
         if p.poll() is None:

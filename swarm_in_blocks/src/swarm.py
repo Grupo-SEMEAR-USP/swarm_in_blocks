@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
    while not rospy.is_shutdown():
       menu()
-      key = input()
+      key = input('\n')
       if (key == str('1')):
          swarm.takeoff_all()
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
