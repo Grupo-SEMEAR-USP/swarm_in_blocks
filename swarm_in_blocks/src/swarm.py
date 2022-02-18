@@ -133,9 +133,11 @@ class Swarm:
 
       # Launch Gazebo and clover. Wait some time to all get
       if not already_launched:
+         print("Starting roscore, Gazebo and clovers")
          self.__launchGazeboAndClovers()
 
       # Create clover python objects
+      print("Starting swarm node and listening to clover services.")
       rospy.init_node('swarm')
       self.__createCloversObjects()
 
@@ -274,6 +276,7 @@ if __name__ == "__main__":
       print("7 - pyramid formation")
       print("O - circle formation")
       print("0 - initial position")
+      print("ap - apply formation")
       print("L - land all")
       print("E - exit")
 
@@ -285,11 +288,12 @@ if __name__ == "__main__":
 
 
    while not rospy.is_shutdown():
+      coord = swarm.des_formation_coord
       menu()
       key = input('\n')
       if (key == str('1')):
          swarm.takeoff_all()
-         print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
          #rospy.sleep(2)
 
       elif (key == str('2')):
@@ -297,8 +301,8 @@ if __name__ == "__main__":
             print("You need at least 2 clovers!\n")
          else:
             L = int(input("Insert the desired length: "))
-            coord = swarm.setFormation2D('line', N, L)
-            print("Drones coordinates: \n{}\n".format(coord))
+            swarm.setFormation2D('line', N, L)
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
             #rospy.sleep(5)
 
       elif (key == str('3')):
@@ -306,8 +310,8 @@ if __name__ == "__main__":
             print("You need at least 3 clovers!\n")
          else:
                L = int(input("Insert the desired side length: "))
-               coord = swarm.setFormation2D('triangle', N, L)
-               print("Drones coordinates: \n{}\n".format(coord))
+               swarm.setFormation2D('triangle', N, L)
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
                #rospy.sleep(5)
 
       elif (key == str('4f') or key == str('4F')):
@@ -315,8 +319,8 @@ if __name__ == "__main__":
             print("You need at least 4 clovers!\n")
          else:
             L = int(input("Insert the desired side length: "))
-            coord = swarm.setFormation2D('full_square', N, L)
-            print("Drones coordinates: \n{}\n".format(coord))
+            swarm.setFormation2D('full_square', N, L)
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
             #rospy.sleep(5)
 
       elif (key == str('4e') or key == str('4E')):
@@ -324,14 +328,14 @@ if __name__ == "__main__":
             print("You need at least 4 clovers!\n")
          else:
             L = int(input("Insert the desired side length: "))
-            coord = swarm.setFormation2D('empty_square', N, L)
-            print("Drones coordinates: \n{}\n".format(coord))
+            swarm.setFormation2D('empty_square', N, L)
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
             #rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
          L = int(input("Insert the desired ratio: "))
-         coord = swarm.setFormation2D('circle', N, L)
-         print("Drones coordinates: \n{}\n".format(coord))
+         swarm.setFormation2D('circle', N, L)
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
          #rospy.sleep(2)
 
       elif (key == str('5')):
@@ -341,13 +345,13 @@ if __name__ == "__main__":
                #type = input("Insert full or empty: ")
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('cube', N, L)
-               print("Drones coordinates: \n{}\n".format(coord))
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
                #rospy.sleep(5)
 
       elif (key == str('6')):
          L = int(input("Insert the desired ratio: "))
          swarm.setFormation3D('sphere', N, L)
-         print("Drones coordinates: \n{}\n".format(coord))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
          #rospy.sleep(5)
 
       elif (key == str('7')):
@@ -356,7 +360,7 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('pyramid', N, L)
-               print("Drones coordinates: \n{}\n".format(coord))
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
                rospy.sleep(5)
 
       elif (key == str('0')):
@@ -373,34 +377,34 @@ if __name__ == "__main__":
          sx = int(input("Insert the x scale: "))
          sy = int(input("Insert the y scale: "))
          sz = int(input("Insert the z scale: "))
-         swarm.scaleFormation(coord, sx, sy, sz)
+         swarm.scaleFormation(swarm.des_formation_coord, sx, sy, sz)
          swarm.plot_preview(swarm.des_formation_coord)
       
       elif (key == str('mr')):
          anglex = float(input("Insert the x angle: "))
          angley = float(input("Insert the y angle: "))
          anglez = float(input("Insert the z angle: "))
-         swarm.rotateFormation(coord, anglex, angley, anglez)
+         swarm.rotateFormation(swarm.des_formation_coord, anglex, angley, anglez)
          swarm.plot_preview(swarm.des_formation_coord)
 
       elif (key == str('mt')):
          tx = int(input("Insert the x translation: "))
          ty = int(input("Insert the y translation: "))
          tz = int(input("Insert the z translation: "))
-         swarm.translateFormation(coord, tx, ty, tz)
+         swarm.translateFormation(swarm.des_formation_coord, tx, ty, tz)
          swarm.plot_preview(swarm.des_formation_coord)
 
       elif (key == str('ciranda')):
          ang=0
          while(ang < 4*np.pi):
-            swarm.rotateFormation(coord, 0, 0, ang)
+            swarm.rotateFormation(swarm.des_formation_coord, 0, 0, ang)
             rospy.sleep(2)
-            swarm.applyFormation(coord)
+            swarm.applyFormation(swarm.des_formation_coord)
             ang += 0.2
             rospy.sleep(3)
 
       elif (key == str('ap')):
-         swarm.applyFormation(coord)
+         swarm.applyFormation()
 
       elif (key == str('e') or key == str('E')):
          break
