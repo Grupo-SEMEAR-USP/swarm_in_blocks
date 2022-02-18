@@ -64,15 +64,10 @@ def line(self, N, L=1):
     z0 = 1
     f = L/(N-1)
     print("Beginning line formation")
-    for clover in self.swarm:
-        x0 = 0 - self.init_x[clover.id]
-        y0 = 0 - self.init_y[clover.id]
-        point = [round(f*(N-1-clover.id),2), 0, z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
+    for idx in range(N):
+        point = [round(f*(N-1-idx),2), 0, z0, 1]
         coord = np.concatenate((coord,[point]))
-        #rospy.sleep(2)
     plot_preview(coord)
-    #rospy.sleep(5)
     print("Line done\n")
     return coord
 

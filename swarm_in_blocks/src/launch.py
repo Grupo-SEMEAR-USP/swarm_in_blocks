@@ -37,7 +37,7 @@ def launchSingleVehicle(uuid, id, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0):
     return parent
 
 def spawnGazeboAndVehicles(num_of_clovers):
-
+    
     uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
     roslaunch.configure_logging(uuid)
 
@@ -70,7 +70,6 @@ def spawnGazeboAndVehicles(num_of_clovers):
         rospy.loginfo("Killing vehicles launches")
         for parent in parents:
             parent.shutdown()
-
 
 
 if __name__ == '__main__':
