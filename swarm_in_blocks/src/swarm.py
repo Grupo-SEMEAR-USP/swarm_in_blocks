@@ -419,4 +419,4 @@ if __name__ == "__main__":
          swarm.plot_preview_3d(swarm.des_formation_coord)
 
       elif (key == str('e') or key == str('E')):
-         rospy.signal_shutdown('Encerrando simulação')
+         break
