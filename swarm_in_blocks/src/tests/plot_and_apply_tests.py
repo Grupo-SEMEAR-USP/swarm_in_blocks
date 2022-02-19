@@ -34,14 +34,14 @@ def plot():
     canvas.draw()
   
     # placing the canvas on the Tkinter window
-    canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().pack(anchor=W, fill='both', expand=True)
   
     # creating the Matplotlib toolbar
-    toolbar = NavigationToolbar2Tk(canvas, window)
-    toolbar.update()
+    # toolbar = NavigationToolbar2Tk(canvas, window)
+    # toolbar.update()
   
-    # placing the toolbar on the Tkinter window
-    canvas.get_tk_widget().pack()
+    # # placing the toolbar on the Tkinter window
+    # canvas.get_tk_widget().pack()
   
 # the main Tkinter window
 window = Tk()
@@ -52,11 +52,13 @@ window.title('Formation preview')
 # dimensions of the main window
 window.geometry("500x500")
   
-# button that displays the plot
-plot_button = Button(master = window, command = plot, height = 2, width = 10, text = "Plot")
+# Creating buttons
+apply_button = Button(master = window, command = plot, height = 2, width = 10, text = "Apply")
+cancel_button = Button(master = window, command = plot, height = 2, width = 10, text = "Cancel")
   
 # place the button in main window
-plot_button.pack()
+apply_button.pack(side='left')
+cancel_button.pack(side='left')
   
 # run the gui
 window.mainloop()
