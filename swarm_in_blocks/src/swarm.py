@@ -190,7 +190,6 @@ class Swarm:
          point = [clover.init_coord[0], clover.init_coord[1], z0, 1]
          clover.navigate(x=0, y=0, z=z0, frame_id='map', auto_arm=True)
          coord = np.concatenate((coord,[point]))
-      self.plot_preview(coord)
       self.curr_formation_coords = coord
 
    def return_to_home(self):
@@ -200,7 +199,6 @@ class Swarm:
          point = [clover.init_coord[0], clover.init_coord[1], 1, 1]
          clover.navigateWait(x=0, y=0, z=1)
          coord = np.concatenate((coord,[point]))
-      self.plot_preview(coord)
       self.curr_formation_coords = coord
 
    def land_all(self):
@@ -210,7 +208,6 @@ class Swarm:
          clover.land()
          point = [clover.init_coord[0], clover.init_coord[1],0,1]
          coord = np.concatenate((coord,[point]))
-      self.plot_preview(coord)
       self.curr_formation_coords = coord
 
    #Formations
