@@ -18,8 +18,6 @@ import time
 import sys
 import os
 import logging
-from tkinter import * 
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 # Local modules
 import formation
@@ -70,7 +68,7 @@ class SingleClover:
       self.set_rates = rospy.ServiceProxy(f"{self.name}/set_rates", srv.SetRates)
       
       rospy.wait_for_service(f"{self.name}/land")
-      self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger) 
+      self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
@@ -102,12 +100,12 @@ class Swarm:
       self.curr_formation_coords = []
 
       # Desired formation
-      self.des_formation_coord = []
+      self.des_formation_coords = []
       
       # Initial formation. By default on square formation with L = N//2 + 1.
       # (Ex: N=5 -> L=3)
       self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers-1)
-      self.init_formation_coords = self.des_formation_coord
+      self.init_formation_coords = self.des_formation_coords
 
       # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
       self.formation_list = []
@@ -128,10 +126,13 @@ class Swarm:
 
    def setInitialFormation(self, formation_str, L):
       self.setFormation2D(formation_str, self.num_of_clovers, L)
-      self.init_formation_coords = self.des_formation_coord
+      self.init_formation_coords = self.des_formation_coords
 
    def startPlanning(self):
-      pass
+      print("Starting swarm node and listening to clover services.")
+      rospy.init_node('swarm')
+      self.__createCloversObjects()
+      plot.plot_init(self)
 
    def startSimulation(self, already_launched=True):
 
@@ -150,7 +151,7 @@ class Swarm:
 
 
    def applyFormation(self):
-      coord = self.des_formation_coord
+      coord = self.des_formation_coords
       for idx, clover in enumerate(self.swarm):
          x0 = 0 - clover.init_coord[0]
          y0 = 0 - clover.init_coord[1]
@@ -230,7 +231,7 @@ class Swarm:
          coord = formation.triangle(N, L)
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
-      self.des_formation_coord = coord
+      self.des_formation_coords = coord
 
    def setFormation3D(self, shape, N, L):
       if (shape=='cube'):
@@ -241,23 +242,23 @@ class Swarm:
          coord = formation.pyramid(N, L)
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
-      self.des_formation_coord = coord
+      self.des_formation_coords = coord
 
    def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
-      self.des_formation_coord = new_coord
+      self.des_formation_coords = new_coord
 
    def scaleFormation(self, coord, sx, sy, sz):
       new_coord = transform.scaleFormation(coord, sx, sy, sz)
-      self.des_formation_coord = new_coord
+      self.des_formation_coords = new_coord
 
    def translateFormation(self, coord, tx, ty, tz):
       new_coord = transform.translateFormation(coord, tx, ty, tz)
-      self.des_formation_coord = new_coord
+      self.des_formation_coords = new_coord
 
    def rotateFormation(self, coord, anglex, angley, anglez):
       new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
-      self.des_formation_coord = new_coord
+      self.des_formation_coords = new_coord
 
    #Leader operations
    def setLeader(self, id):
@@ -287,19 +288,25 @@ if __name__ == "__main__":
       print("E - exit")
 
    swarm = Swarm(2)
+
+   # Starts the Gazebo simulation and clovers ready to operate
    swarm.startSimulation(already_launched=False)
+
+   # Starts the simulation just with the plots previews
+   #swarm.startPlanning()
+
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
    #swarm.launchGazeboAndClovers(init_form)
 
 
    while not rospy.is_shutdown():
-      coord = swarm.des_formation_coord
+      coord = swarm.des_formation_coords
       menu()
       key = input('\n')
       if (key == str('1')):
          swarm.takeoff_all()
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(2)
 
       elif (key == str('2')):
@@ -308,7 +315,7 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired length: "))
             swarm.setFormation2D('line', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('3')):
@@ -317,7 +324,7 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation2D('triangle', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                #rospy.sleep(5)
 
       elif (key == str('4f') or key == str('4F')):
@@ -326,7 +333,7 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired side length: "))
             swarm.setFormation2D('full_square', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('4e') or key == str('4E')):
@@ -335,13 +342,13 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired side length: "))
             swarm.setFormation2D('empty_square', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
          L = int(input("Insert the desired ratio: "))
          swarm.setFormation2D('circle', N, L)
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(2)
 
       elif (key == str('5')):
@@ -351,13 +358,13 @@ if __name__ == "__main__":
                #type = input("Insert full or empty: ")
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('cube', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                #rospy.sleep(5)
 
       elif (key == str('6')):
          L = int(input("Insert the desired ratio: "))
          swarm.setFormation3D('sphere', N, L)
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(5)
 
       elif (key == str('7')):
@@ -366,7 +373,7 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('pyramid', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coord))
+               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                rospy.sleep(5)
 
       elif (key == str('0')):
@@ -383,29 +390,26 @@ if __name__ == "__main__":
          sx = int(input("Insert the x scale: "))
          sy = int(input("Insert the y scale: "))
          sz = int(input("Insert the z scale: "))
-         swarm.scaleFormation(swarm.des_formation_coord, sx, sy, sz)
-         swarm.plot_preview(swarm.des_formation_coord)
+         swarm.scaleFormation(swarm.des_formation_coords, sx, sy, sz)
       
       elif (key == str('mr')):
          anglex = float(input("Insert the x angle: "))
          angley = float(input("Insert the y angle: "))
          anglez = float(input("Insert the z angle: "))
-         swarm.rotateFormation(swarm.des_formation_coord, anglex, angley, anglez)
-         swarm.plot_preview(swarm.des_formation_coord)
+         swarm.rotateFormation(swarm.des_formation_coords, anglex, angley, anglez)
 
       elif (key == str('mt')):
          tx = int(input("Insert the x translation: "))
          ty = int(input("Insert the y translation: "))
          tz = int(input("Insert the z translation: "))
-         swarm.translateFormation(swarm.des_formation_coord, tx, ty, tz)
-         swarm.plot_preview(swarm.des_formation_coord)
+         swarm.translateFormation(swarm.des_formation_coords, tx, ty, tz)
 
       elif (key == str('ciranda')):
          ang=0
          while(ang < 4*np.pi):
-            swarm.rotateFormation(swarm.des_formation_coord, 0, 0, ang)
+            swarm.rotateFormation(swarm.des_formation_coords, 0, 0, ang)
             rospy.sleep(2)
-            swarm.applyFormation(swarm.des_formation_coord)
+            swarm.applyFormation(swarm.des_formation_coords)
             ang += 0.2
             rospy.sleep(3)
 
@@ -413,10 +417,10 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         plot.plot_full_preview()
+         plot.plot_full_preview(swarm)
       
       elif (key == str('plt3d')):
-         swarm.plot_preview_3d(swarm.des_formation_coord)
+         swarm.plot_preview_3d(swarm.des_formation_coords)
 
       elif (key == str('e') or key == str('E')):
          break
