@@ -18,11 +18,14 @@ import time
 import sys
 import os
 import logging
+from tkinter import * 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 # Local modules
 import formation
 import launch
 import transform
+import plot
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
 
@@ -155,18 +158,21 @@ class Swarm:
       self.curr_formation_coords = coord
 
    #Preview formations
-   def plot_preview(self, coord):
-      plt.figure(figsize=(8, 8))
-      plt.subplots_adjust(bottom = 0.2)
-      plt.plot(coord[:,0],coord[:,1],'ro')
-      plt.axis([-1,11,-1,11])
-      plt.grid(True)
-      plt.xticks(np.linspace(0,10,11))
-      plt.yticks(np.linspace(0,10,11))
-      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-      button = Button(posit,'Confirm')
-      #button.on_clicked(swarm.applyFormation)
-      plt.show(block=False)
+   # def plot_preview(self, coord):
+      # plt.figure(figsize=(8, 8))
+      # plt.subplots_adjust(bottom = 0.2)
+      # plt.plot(coord[:,0],coord[:,1],'ro')
+      # plt.axis([-1,11,-1,11])
+      # plt.grid(True)
+      # plt.xticks(np.linspace(0,10,11))
+      # plt.yticks(np.linspace(0,10,11))
+      # posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+      # button = Button(posit,'Confirm')
+      # #button.on_clicked(swarm.applyFormation)
+      # plt.show(block=False)
+
+   # def plot_preview(self):
+   #    plot.plot_full_preview(self)
 
    def plot_preview_3d(self, coord):
       fig = plt.figure(figsize=(8, 8))
@@ -280,7 +286,7 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-   swarm = Swarm(4)
+   swarm = Swarm(2)
    swarm.startSimulation(already_launched=False)
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
@@ -407,10 +413,10 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         swarm.plot_preview(swarm.des_formation_coord)
+         plot.plot_full_preview()
       
       elif (key == str('plt3d')):
          swarm.plot_preview_3d(swarm.des_formation_coord)
 
       elif (key == str('e') or key == str('E')):
-         break
+         rospy.signal_shutdown('Encerrando simulação')
