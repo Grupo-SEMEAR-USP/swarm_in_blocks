@@ -12,20 +12,18 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-def plot_preview(coord):
-    #start_form='False'
-    plt.figure(figsize=(10, 10))
-    plt.subplots_adjust(bottom = 0.2)
+def plot_letter_preview(coord):
+    plt.figure(figsize=(8, 8))
+    #plt.subplots_adjust(bottom = 0.2)
     plt.plot(coord[:,0],coord[:,1],'ro')
     plt.axis([-1,11,-1,11])
     plt.grid(True)
     plt.xticks(np.linspace(0,10,11))
     plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
+    #posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+    #button = Button(posit,'Confirm')
     #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
+    plt.show()
 
 # Ideia:
 # fazer um dicionário com todos os arrays das coordenadas de cada Letra
@@ -34,8 +32,6 @@ def plot_preview(coord):
 # para ver quantos drones serão chamados.
 # Cada array letra vai ler uma quantidade da matriz master
 z=1
-
-
 
 A = np.array([[0, 0, z, 1],
              [0, 2, z, 1],
@@ -58,7 +54,7 @@ A = np.array([[0, 0, z, 1],
              [6, 3, z, 1],
              [6, 5, z, 1],
              [1, 6, z, 1],
-             [5, 7, z, 1]], dtype = float)  # Full 26
+             [5, 7, z, 1]], dtype = int)  # Full 26
 
 C =  np.array([[0, 2, z, 1],
               [0, 4, z, 1],
@@ -171,7 +167,7 @@ def Letras(c0, cn):
 def Letters_Words():
 	pass
 
-
-
-
-
+if __name__ == "__main__":
+    des_letter = input('\nType the desired letter: ')
+    letter_coords = Alphabet_dictionary[des_letter]
+    plot_letter_preview(letter_coords)
