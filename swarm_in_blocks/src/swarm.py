@@ -23,22 +23,6 @@ import logging
 import formation
 import launch
 import transform
-
-#Menu 
-def menu():
-   print("Press")
-   print("1 - takeoff all")
-   print("2 - line formation")
-   print("3 - triangle formation")
-   print("4 - square formation")
-   print("5 - cube formation")
-   print("6 - sphere formation")
-   print("7 - pyramid formation")
-   print("O - circle formation")
-   print("0 - initial position")
-   print("L - land all")
-   print("E - exit")
-
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
 
@@ -294,6 +278,8 @@ if __name__ == "__main__":
       print("O - circle formation")
       print("0 - initial position")
       print("ap - apply formation")
+      print("plt - plot preview")
+      print("plt3d - plot 3D preview")
       print("L - land all")
       print("E - exit")
 
@@ -422,6 +408,12 @@ if __name__ == "__main__":
 
       elif (key == str('ap')):
          swarm.applyFormation()
+
+      elif (key == str('plt')):
+         swarm.plot_preview(swarm.des_formation_coord)
+      
+      elif (key == str('plt3d')):
+         swarm.plot_preview_3d(swarm.des_formation_coord)
 
       elif (key == str('e') or key == str('E')):
          break
