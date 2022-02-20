@@ -15,6 +15,18 @@ from matplotlib.widgets import Button
 import numpy as np
 
 
+def plot_letter_preview(coord):
+    plt.figure(figsize=(8, 8))
+    #plt.subplots_adjust(bottom = 0.2)
+    plt.plot(coord[:,0],coord[:,1],'ro')
+    plt.axis([-1,11,-1,11])
+    plt.grid(True)
+    plt.xticks(np.linspace(0,10,11))
+    plt.yticks(np.linspace(0,10,11))
+    #posit = plt.axes([0.4, 0.1, 0.2, 0.05])
+    #button = Button(posit,'Confirm')
+    #button.on_clicked(start_form='True')
+    plt.show()
 
 # Ideia:
 # fazer um dicionário com todos os arrays das coordenadas de cada Letra
@@ -23,8 +35,6 @@ import numpy as np
 # para ver quantos drones serão chamados.
 # Cada array letra vai ler uma quantidade da matriz master
 z=1
-
-
 
 A = np.array([[0, 0, z, 1],
              [0, 2, z, 1],
