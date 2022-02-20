@@ -22,7 +22,9 @@ import logging
 # Local modules
 import formation
 import launch
+from swarm_in_blocks.src.Alphabet import Alphabet_dictionary
 import transform
+import Alphabet
 
 #Menu 
 def menu():

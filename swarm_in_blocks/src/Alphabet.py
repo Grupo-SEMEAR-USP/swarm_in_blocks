@@ -1,3 +1,5 @@
+from lib2to3.pgen2.literals import simple_escapes
+import string
 from tkinter.simpledialog import SimpleDialog
 from matplotlib import projections
 import mavros
@@ -12,20 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
-def plot_preview(coord):
-    #start_form='False'
-    plt.figure(figsize=(10, 10))
-    plt.subplots_adjust(bottom = 0.2)
-    plt.plot(coord[:,0],coord[:,1],'ro')
-    plt.axis([-1,11,-1,11])
-    plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
-    plt.yticks(np.linspace(0,10,11))
-    posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
-    plt.show(block=False)
-    #return start_form
+
 
 # Ideia:
 # fazer um dicionário com todos os arrays das coordenadas de cada Letra
@@ -48,17 +37,17 @@ A = np.array([[0, 0, z, 1],
              [6, 4, z, 1],
              [6, 6, z, 1],     
              [2, 4, z, 1],
-             [4, 4, z, 1],           		#Simple 12
+             [4, 4, z, 1],           				#	Simple 12
              [3, 8, z, 1],
              [1, 4, z, 1],
              [3, 4, z, 1],
-             [5, 4, z, 1],           		#Mediun 16
+             [5, 4, z, 1],           				#	Mediun 16
              [6, 1, z, 1],
              [6, 2, z, 1],
              [6, 3, z, 1],
              [6, 5, z, 1],
              [1, 6, z, 1],
-             [5, 7, z, 1]], dtype = float)  # Full 26
+             [5, 7, z, 1]], dtype = float)  		#	Full 22
 
 C =  np.array([[0, 2, z, 1],
               [0, 4, z, 1],
@@ -68,11 +57,11 @@ C =  np.array([[0, 2, z, 1],
               [6, 8, z, 1],
               [2, 0, z, 1],
               [4, 0, z, 1],
-              [6, 0, z, 1],							#Simple 9
+              [6, 0, z, 1],							#	Simple 9
               [1, 1, z, 1],
               [1, 7, z, 1],
               [0, 5, z, 1],
-              [0, 3, z, 1],							# Mediun 13
+              [0, 3, z, 1],							#	Mediun 13
               [3, 8, z, 1],
               [5, 8, z, 1],
               [3, 0, z, 1],
@@ -80,7 +69,7 @@ C =  np.array([[0, 2, z, 1],
               [0.5, 6.5, z, 1],
               [0.5, 1.5, z, 1],
               [1.5, 0.5, z, 1],
-              [1.5, 7.5, z, 1]], dtype = float) 	# Full 21
+              [1.5, 7.5, z, 1]], dtype = float) 	#	Full 21
 
 E = np.array([[0, 0, z, 1],
              [0, 2, z, 1],
@@ -94,16 +83,16 @@ E = np.array([[0, 0, z, 1],
              [3, 8, z, 1],
              [5, 8, z, 1],
              [1, 4, z, 1],
-             [3, 4, z, 1],          			#	Simple 13
+             [3, 4, z, 1],          				#	Simple 13
              [0, 1, z, 1],
              [0, 3, z, 1],
              [0, 5, z, 1],
              [0, 7, z, 1],
-             [2, 4, z, 1],          			#	Midiun 18
+             [2, 4, z, 1],          				#	Midiun 18
              [2, 0, z, 1],
              [4, 0, z, 1],
              [2, 8, z, 1],
-             [4, 8, z, 1]], dtype = float)    	#   Full 22 
+             [4, 8, z, 1]], dtype = float)    		#   Full 22 
 
 O = np.array([[0, 2, z, 1],
              [0, 4, z, 1],
@@ -114,7 +103,7 @@ O = np.array([[0, 2, z, 1],
              [6, 4, z, 1],
              [6, 2, z, 1],
              [4, 0, z, 1],
-             [2, 0, z, 1],						#Simple 10
+             [2, 0, z, 1],							#	Simple 10
              [0, 3, z, 1],
              [0, 5, z, 1],
              [6, 5, z, 1],
@@ -122,7 +111,7 @@ O = np.array([[0, 2, z, 1],
              [4, 1, z, 1],						
              [1, 1, z, 1],
              [5, 7, z, 1],
-             [1, 6.5, z, 1],					#Mediun 18
+             [1, 6.5, z, 1],						#	Mediun 18
              [3, 0, z, 1],
              [3, 8, z, 1],
              [0.5, 6.5, z, 1],
@@ -132,7 +121,7 @@ O = np.array([[0, 2, z, 1],
              [4.5, 0.5, z, 1],
              [1.5, 7.5, z, 1],
              [4.5, 7.5, z, 1],
-             [5.5, 6.5, z, 1]], dtype = float) 	#Full 28
+             [5.5, 6.5, z, 1]], dtype = float) 		#	Full 28
 
 X = np.array([[0, 0, z, 1],
              [0, 8, z, 1],
@@ -163,14 +152,59 @@ Alphabet_dictionary = {
 	"O": O,
 	"X": X
 }
+def Type_Format(simple, mediun, full, type = "S"):
+	if(type == "S" or type == "s"):
+		return (simple)
+	if(type == "M" or type == "m"):
+		return (mediun)
+	if(type == "F" or type == "f"):
+		return full
 
-def Letras(c0, cn):
-    pass
-    #for l in range(c0, cn):
+def Letter_Verification(letter, type):
+    if(letter == 'A'):
+        cn = Type_Format(12, 16, 22, type)
+
+    if(letter == 'C'):
+        cn = Type_Format(9, 13, 21, type)
+
+    if(letter == 'E'):
+        cn = Type_Format(13, 18, 22, type)
+
+    if(letter == 'O'):
+        cn = Type_Format(10, 18, 28, type)
+
+    if(letter == 'X'):
+        cn = Type_Format(9, 17, 21, type)
+     
+    return cn 
+
         
 def Letters_Words():
-	pass
+    a=1
+    sum = 0
+    coord = np.empty((0,4))
+    fill = []
+    max = []
+    
+    str = input(f"Please, enter a word or a letter: ")
+    print(f"\nSimple: Minimum Clovers needed, for this option press S or s")
+    print(f"Mediun: Average amount of clovers, for this option press M or m")
+    print(f"Full: Maximum fill, for this option press F or f\n")
+    
+    for char in str:
+        type = input(f"Please, enter fill type for {char.upper()}: ")
+        sum += Letter_Verification(char.upper(), "f")
+        max.append(sum)
+        fill.append(Letter_Verification(char.upper(), type))
+        coord = np.concatenate((coord, Alphabet_dictionary[char.upper()]))
+    #print(sum)
+        
+            
 
+
+
+if __name__ == "__main__":
+	Letters_Words()
 
 
 
