@@ -4,6 +4,7 @@
 	--bg-fly-side-bar: #c4c4c4; /* Fly Side Bar Background Color (Line 273) */
 	--bg-tabs: #c4c4c4; /* Tabs Background Color (Line 37) */
 	--border-color: #a1a1a1; /* Border Line Background Color (Line 38) */
+	--image: 0;
 }
 
 .dark-mode:root{ /* Dark-Mode Colors*/
@@ -12,6 +13,20 @@
 	--bg-fly-side-bar: #735FB7;
 	--bg-tabs: #5D5D9D;
 	--border-color: #735FB7;
+	--image: 1;
+}
+
+.Swarm_svg {  
+	-webkit-filter: invert(var(--image));  
+	filter: invert(var(--image));  
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
 }
 
 @keyframes blinker {
@@ -261,6 +276,130 @@ input:checked + .slider:before {
 	perspective: 1000px;
 }
 
+/* modal-overlay */
+
+::selection{
+	color: #fff;
+	background: #7d2ae8;
+}
+.view-modal, .popup{
+	position: absolute;
+	left: 50%;
+}
+button{
+	outline: none;
+	cursor: pointer;
+	font-weight: 500;
+	border-radius: 4px;
+	border: 2px solid transparent;
+	transition: background 0.1s linear, border-color 0.1s linear, color 0.1s linear;
+}
+.view-modal{
+	top: 50%;
+	color: #7d2ae8;
+	font-size: 18px;
+	padding: 10px 25px;
+	background: #fff;
+	transform: translate(-50%, -50%);
+}
+.popup{
+	background: #fff;
+	padding: 25px;
+	border-radius: 15px;
+	top: -150%;
+	max-width: 380px;
+	width: 100%;
+	opacity: 0;
+	pointer-events: none;
+	box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+	transform: translate(-50%, -50%) scale(1.2);
+	transition: top 0s 0.2s ease-in-out,
+				opacity 0.2s 0s ease-in-out,
+				transform 0.2s 0s ease-in-out;
+}
+.popup.show{
+	top: 50%;
+	opacity: 1;
+	pointer-events: auto;
+	transform:translate(-50%, -50%) scale(1);
+	transition: top 0s 0s ease-in-out,
+				opacity 0.2s 0s ease-in-out,
+				transform 0.2s 0s ease-in-out;
+
+}
+.popup :is(header, .icons, .field){
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.popup header{
+	padding-bottom: 15px;
+	border-bottom: 1px solid #ebedf9;
+}
+header span{
+	font-size: 21px;
+	font-weight: 600;
+}
+header .close, .icons a{
+	display: flex;
+	align-items: center;
+	border-radius: 50%;
+	justify-content: center;
+	transition: all 0.3s ease-in-out;
+}
+header .close{
+	color: #878787;
+	font-size: 17px;
+	background: #f2f3fb;
+	height: 33px;
+	width: 33px;
+	cursor: pointer;
+}
+header .close:hover{
+	background: #ebedf9;
+}
+.popup .content-modal{
+	margin: 20px 0;
+}
+.popup .icons{
+	margin: 15px 0 20px 0;
+}
+.content-modal p{
+	font-size: 16px;
+}
+.content-modal .field{
+	margin: 12px 0 -5px 0;
+	height: 45px;
+	border-radius: 4px;
+	padding: 0 5px;
+	border: 1px solid #e1e1e1;
+}
+.field.active{
+	border-color: #7d2ae8;
+}
+.field i{
+	width: 50px;
+	font-size: 18px;
+	text-align: center;
+}
+.field.active i{
+	color: #7d2ae8;
+}
+.field input{
+	width: 100%;
+	height: 100%;
+	border: none;
+	outline: none;
+	font-size: 15px;
+}
+.field button{
+	color: #fff;
+	padding: 5px 18px;
+	background: #7d2ae8;
+}
+.field button:hover{
+	background: #8d39fa;
+}
 
 /* python/blockly switch */
 #tabs li {
