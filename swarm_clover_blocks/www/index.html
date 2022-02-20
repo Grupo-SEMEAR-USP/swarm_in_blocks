@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- O Dark mode ta entre as linhas 53 e 55 Penne -->
 
 <html lang="en">
 <head>
@@ -50,12 +49,15 @@
 					title="python" 
 			/>
 		</li>
-		<label for="switch"> <!-- S2 Aqui S2 -->
-			<input type="checkbox" id="switch"> Dark Mode
-		</label>
 	</ul>
 
 	<div id="tools">
+		<div style="margin-bottom: 5px; margin-right: 110px;">
+		<label class="switch">
+			<input type="checkbox" id="switch">
+				<span class="slider"></span>
+		</label>
+		</div>
 		<div class="disconnected-light"></div>
 		<div class="disconnected"> Disconnected</div>
 		<div class="backend-fail">Failed to contact with <code>swarm_clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
@@ -83,13 +85,13 @@
 		<button onclick="stopProgram()" title="Stop" style="margin-bottom: 0px; margin-right: 6px;">
 			<img    src="./blockly/media/pause.png"
 					alt="Stop"
-					width="30"
-					height="30" 
+					width="26"
+					height="26" 
 			/>
 
 		</button>
 		<button onclick="land()" title="Stop and Land" style="margin-bottom: 0px;margin-right: 10px;">
-			<img    src="./blockly/media/flag_dark.png"
+			<img    src="./blockly/media/flag.png"
 					alt="Land"
 					width="35"
 					height="35" 

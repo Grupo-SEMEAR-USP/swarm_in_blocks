@@ -1,5 +1,5 @@
 :root{ /* Normal Colors*/
-	--bg-color: #54504c; /* Background Color (Line 255)*/
+	--bg-color: #a89a8e; /* Background Color (Line 255)*/
 	--bg-side-bar: #e0e0e0; /* Side Bar Background Color (Line 263) */
 	--bg-fly-side-bar: #c4c4c4; /* Fly Side Bar Background Color (Line 273) */
 	--bg-tabs: #c4c4c4; /* Tabs Background Color (Line 37) */
@@ -8,10 +8,51 @@
 
 .dark-mode:root{ /* Dark-Mode Colors*/
 	--bg-color: #54504c; 
-	--bg-side-bar: #5D5D9D;
+	--bg-side-bar: #9393be;
 	--bg-fly-side-bar: #735FB7;
 	--bg-tabs: #5D5D9D;
 	--border-color: #735FB7;
+}
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+.blink-one {
+	animation: blinker-one 1s linear infinite;
+}
+@keyframes blinker-one {
+	0% {
+	opacity: 0;
+	}
+}
+
+@keyframes blinker-two {
+	100% {
+	opacity: 0;
+	}
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 0.5; }
+	100% { opacity: 1; }
+}
+
+@keyframes shake {
+	10%, 90% {
+	transform: translate3d(-1.5px, 0, 0);
+	}
+	20%, 80% {
+	transform: translate3d(2.5px, 0, 0);
+	}
+	30%, 50%, 70% {
+	transform: translate3d(-4.5px, 0, 0);
+	}
+	40%, 60% {
+	transform: translate3d(4.5px, 0, 0);
+	}
 }
 
 body, html {
@@ -32,6 +73,8 @@ body {
 	font-size: 16px;
 }
 
+/*  tools and tabs visual */
+
 #tools, #tabs {
 	font-family: 'Poppins';
 	background: var(--bg-tabs);
@@ -46,6 +89,15 @@ body {
 	display: flex;
 	align-items: center;
 }
+
+#tabs {
+	grid-area: tabs;
+	list-style: none;
+	margin: 0;
+	padding: 10px;
+}
+
+/* <unsaved> and examples */
 
 #program-name {
 	width: 160px;
@@ -68,20 +120,78 @@ body {
 	color: red;
 }
 
-.disconnected-box {
-	margin-right: 150px;
-	background-color: rgb(224, 224, 224);
-	padding: 0.45rem 1.05rem;
-	border-radius:0.5rem; 
+/* dark mode switch */
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
 }
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	border-radius: 34px;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 40px;
+	width: 40px;
+	left: 0px;
+	bottom: 4px;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border-radius: 50%;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	box-shadow: 0 0px 15px #2020203d;
+	background: white url('./blockly/media/bright_mode.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+input:checked + .slider {
+	background-color:  rgb(154, 91, 212);
+}
+
+input:focus + .slider {
+	box-shadow: 0 0 1px rgb(154, 91, 212);
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(24px);
+	-ms-transform: translateX(24px);
+	transform: translateX(24px);
+	background: white url('./blockly/media/night-mode.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* disconnected */
 
 .disconnected {
 	font-size: 16px;
 	color: red;
 	display:inline;
-	margin-right: 150px;
-	text-shadow: 1px 1px 1px rgba(104, 104, 104, 0.918);
-
+	margin-right: 110px;
+	text-shadow: 1px 1px 2px rgba(212, 212, 212, 0.918);
 }
 
 .disconnected-light {
@@ -93,32 +203,8 @@ body {
 	border-radius: 50%;
 }
 
-@keyframes blinker {
-	50% {
-	opacity: 0;
-	}
-}
-.blink-one {
-	animation: blinker-one 1s linear infinite;
-}
-@keyframes blinker-one {
-	0% {
-	opacity: 0;
-	}
-}
 .blink-two {
 	animation: blinker-two 1.4s linear infinite;
-}
-@keyframes blinker-two {
-	100% {
-	opacity: 0;
-	}
-}
-
-@keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 0.5; }
-	100% { opacity: 1; }
 }
 
 .connected .disconnected { 
@@ -129,6 +215,7 @@ body {
 	display: none;
 }
 
+/* non visual settings */
 .backend-fail {
 	margin-right: 20px;
 	display: none;
@@ -142,6 +229,8 @@ body {
 }
 
 .running #running { display: block; }
+
+/* tools buttons (launch, run, stop and land) */
 
 #tools button {
 	font-size: 20px;
@@ -172,29 +261,8 @@ body {
 	perspective: 1000px;
 }
 
-@keyframes shake {
-	10%, 90% {
-	transform: translate3d(-1.5px, 0, 0);
-	}
-	20%, 80% {
-	transform: translate3d(2.5px, 0, 0);
-	}
-	30%, 50%, 70% {
-	transform: translate3d(-4.5px, 0, 0);
-	}
-	40%, 60% {
-	transform: translate3d(4.5px, 0, 0);
-	}
-}
 
-
-#tabs {
-	grid-area: tabs;
-	list-style: none;
-	margin: 0;
-	padding: 10px;
-}
-
+/* python/blockly switch */
 #tabs li {
 	font-size: 16px;
 	display: inline-block;
@@ -214,10 +282,12 @@ body {
 	border-bottom: 3px solid #00ff00;
 }
 
+
 #run {
 	width: 70px;
 }
 
+/* notifications */
 #notifications {
 	position: absolute;
 	right: 10px;
@@ -237,6 +307,7 @@ body {
 
 #notifications:empty { display: none; }
 
+/* blockly visual */
 .content {
 	display: none !important;
 	grid-area: content;
