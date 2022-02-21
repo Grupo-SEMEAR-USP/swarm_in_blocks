@@ -317,7 +317,7 @@ input:checked + .slider:before {
 	z-index: 10;
 
 }
-.popup :is(header, .icons, .field){
+.popup :is(header, .icons, .field, .ready){
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -356,11 +356,15 @@ header .close:hover{
 }
 .content-modal p{
 	font-size: 16px;
+	float:left;
+	margin-top: 10px;
 }
 
 .content-modal .field{
-	margin: 12px 0 -5px 0;
+	float:right;
+	margin: 0px 0 -5px 0;
 	height: 45px;
+	width:150px;
 	border-radius: 4px;
 	padding: 0 5px;
 	border: 1px solid #727070;
@@ -374,15 +378,26 @@ header .close:hover{
 	text-align: center;
 }
 .field.active i{
-	color: #7d2ae8;
+	color: rgb(154, 91, 212);
 }
 .field input{
-	width: 100%;
+	/* change here */
+	width: 82%;
 	height: 100%;
 	border: none;
 	outline: none;
 	font-size: 15px;
 }
+
+.field select{
+	width: 82%;
+	height: 100%;
+	border: none;
+	outline: none;
+	font-size: 15px;
+	background-color: transparent;
+}
+
 .field button{
 	color: #fff;
 	padding: 5px 18px;
@@ -391,6 +406,19 @@ header .close:hover{
 .field button:hover{
 	background: #8d39fa;
 }
+.ready button{
+	color: #fff; 
+	padding: 5px 18px; 
+	background: #8d39fa;
+	position: absolute;
+	top: 87%;
+	left: 70%;
+
+}
+.ready button:hover{
+	background-color: rgb(154, 91, 212);
+}
+
 /* python/blockly switch */
 #tabs li {
 	font-size: 16px;
