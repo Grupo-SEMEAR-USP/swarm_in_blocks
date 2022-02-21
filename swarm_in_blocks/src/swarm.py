@@ -11,7 +11,6 @@ from std_srvs.srv import Trigger
 
 # Other tools
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
 import numpy as np
 from multiprocessing import Process, Pool
 import time
@@ -161,32 +160,21 @@ class Swarm:
    #Preview formations
    # def plot_preview(self, coord):
       # plt.figure(figsize=(8, 8))
-      # plt.subplots_adjust(bottom = 0.2)
       # plt.plot(coord[:,0],coord[:,1],'ro')
       # plt.axis([-1,11,-1,11])
       # plt.grid(True)
       # plt.xticks(np.linspace(0,10,11))
       # plt.yticks(np.linspace(0,10,11))
-      # posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-      # button = Button(posit,'Confirm')
-      # #button.on_clicked(swarm.applyFormation)
       # plt.show(block=False)
-
-   # def plot_preview(self):
-   #    plot.plot_full_preview(self)
 
    def plot_preview_3d(self, coord):
       fig = plt.figure(figsize=(8, 8))
       ax = fig.add_subplot(111,projection='3d')
-      plt.subplots_adjust(bottom = 0.2)
       ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
       #plt.axis([-1,11,-1,11])
       plt.grid(True)
       plt.xticks(np.linspace(0,10,11))
       plt.yticks(np.linspace(0,10,11))
-      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-      button = Button(posit,'Confirm')
-      #button.on_clicked(start_form='True')
       plt.show(block=False)
 
    #Basic swarm operations
