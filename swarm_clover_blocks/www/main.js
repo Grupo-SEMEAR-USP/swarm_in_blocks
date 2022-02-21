@@ -12,6 +12,14 @@ import * as ros from './ros.js';
 import './blocks.js';
 import {generateCode, generateUserCode} from './python.js';
 
+//Switch Theme Changer
+const $html = document.querySelector('html')
+const $checkbox = document.querySelector('#switch')
+
+$checkbox.addEventListener('change', function(){
+	$html.classList.toggle('dark-mode')
+})
+
 // Tabs
 document.getElementById('tabs').addEventListener('click', function(e) {
 	var tab = e.target.getAttribute('data-tab');
@@ -29,7 +37,7 @@ var workspace = Blockly.inject('blockly', {
 	grid: {
 		spacing: 30,
 		length: 4,
-		colour: '#ce9bff',
+		colour: '#ffffff',
 		snap: true
 	},
 	zoom: { controls: true, wheel: true },
@@ -49,6 +57,35 @@ function readParams() {
 var ready = readParams(); // initialization complete promise
 
 var pythonArea = document.getElementById('python');
+
+// modal overlay 
+
+const viewBtn = document.querySelector(".view-modal"),
+popup = document.querySelector(".popup"),
+close = popup.querySelector(".close"),
+field = popup.querySelector(".field"),
+input = field.querySelector("input"),
+copy = popup.querySelector("button");
+
+viewBtn.onclick = ()=>{
+	popup.classList.toggle("show");
+}
+close.onclick = ()=>{
+	viewBtn.click();
+}
+
+copy.onclick = ()=>{
+  	input.select(); //select input value
+  	if(document.execCommand("copy")){ //if the selected text copy
+		field.classList.add("active");
+		copy.innerText = "Copied";
+		setTimeout(()=>{
+		window.getSelection().removeAllRanges(); //remove selection from document
+		field.classList.remove("active");
+		copy.innerText = "Copy";
+		}, 3000);
+	}
+}
 
 // update Python code
 workspace.addChangeListener(function(e) {
