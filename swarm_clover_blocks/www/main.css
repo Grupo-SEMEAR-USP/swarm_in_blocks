@@ -5,8 +5,8 @@
 	--bg-tabs: #c4c4c4; /* Tabs Background Color (Line 37) */
 	--border-color: #a1a1a1; /* Border Line Background Color (Line 38) */
 	--image: 0; /* Color invertor for swarm in blocks symbol */
-	--bg-button: rgb(230, 230, 230); /* Button Background Color (Line 38) */
-	--bg-disabled: #9e9e9e; /* Disabled Button Background Color (Line 38) */
+	--bg-button: rgb(230, 230, 230); /* Button Background Color (Line 256) */
+	--bg-disabled: #9e9e9e; /* Disabled Button Background Color (Line 273) */
 }
 
 .dark-mode:root{ /* Dark-Mode Colors*/
@@ -146,6 +146,7 @@ body {
 	display: inline-block;
 	width: 60px;
 	height: 34px;
+	padding-bottom: 10px;
 }
 
 .switch input {
@@ -160,7 +161,7 @@ body {
 	top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	bottom: 10px;
 	background-color: #ccc;
 	-webkit-transition: 0.4s;
 	transition: 0.4s;
@@ -314,6 +315,7 @@ input:checked + .slider:before {
 	transition: top 0s 0s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
+	z-index: 10;
 
 }
 .popup :is(header, .icons, .field){
