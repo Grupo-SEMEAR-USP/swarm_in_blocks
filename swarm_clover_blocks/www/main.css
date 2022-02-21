@@ -263,7 +263,6 @@ input:checked + .slider:before {
 	transition-duration: 0.3s;
 } 
 
-
 #tools button:hover {
 	background-color: rgb(154, 91, 212);
 	color: white;
@@ -349,28 +348,28 @@ header .close{
 header .close:hover{
 	background: #ebedf9;
 }
-.popup .content{
+.popup .content-modal{
 	margin: 20px 0;
 }
 .popup .icons{
 	margin: 15px 0 20px 0;
 }
-.content p{
+.content-modal p{
 	font-size: 16px;
 }
 
-.content .field{
+.content-modal .field{
 	margin: 12px 0 -5px 0;
 	height: 45px;
 	border-radius: 4px;
 	padding: 0 5px;
-	border: 1px solid #e1e1e1;
+	border: 1px solid #727070;
 }
 .field.active{
 	border-color: #7d2ae8;
 }
 .field i{
-	width: 50px;
+	width: 20px;
 	font-size: 18px;
 	text-align: center;
 }
