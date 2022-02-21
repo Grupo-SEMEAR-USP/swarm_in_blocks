@@ -258,10 +258,10 @@ input:checked + .slider:before {
 	width: 60px;
 	border-radius: 50%;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-	/* margin-bottom:2rem; */
 	color:var(--dark-blue);
 	transition-duration: 0.3s;
-}
+} 
+
 
 #tools button:hover {
 	background-color: rgb(154, 91, 212);
@@ -282,16 +282,10 @@ input:checked + .slider:before {
 }
 
 /* modal-overlay */
-
 ::selection{
 	color: #fff;
 	background: #7d2ae8;
 }
-
-.view-modal {
-	position: relative;
-}
-
 .popup{
 	position: absolute;
 	left: 50%;
@@ -353,16 +347,17 @@ header .close{
 header .close:hover{
 	background: #ebedf9;
 }
-.popup .content-modal{
+.popup .content{
 	margin: 20px 0;
 }
 .popup .icons{
 	margin: 15px 0 20px 0;
 }
-.content-modal p{
+.content p{
 	font-size: 16px;
 }
-.content-modal .field{
+
+.content .field{
 	margin: 12px 0 -5px 0;
 	height: 45px;
 	border-radius: 4px;
@@ -370,7 +365,7 @@ header .close:hover{
 	border: 1px solid #e1e1e1;
 }
 .field.active{
-	border-color: rgb(154, 91, 212);
+	border-color: #7d2ae8;
 }
 .field i{
 	width: 50px;
@@ -378,7 +373,7 @@ header .close:hover{
 	text-align: center;
 }
 .field.active i{
-	color: rgb(154, 91, 212);
+	color: #7d2ae8;
 }
 .field input{
 	width: 100%;
@@ -390,12 +385,11 @@ header .close:hover{
 .field button{
 	color: #fff;
 	padding: 5px 18px;
-	background:rgb(154, 91, 212);
+	background: #7d2ae8;
 }
 .field button:hover{
-	background:rgb(154, 91, 212);
+	background: #8d39fa;
 }
-
 /* python/blockly switch */
 #tabs li {
 	font-size: 16px;
