@@ -102,6 +102,8 @@ class Swarm:
       # Desired formation
       self.des_formation_name = ''
       self.des_formation_coords = []
+
+      self.mode = ''
       
       # Initial formation. By default on square formation with L = N//2 + 1.
       # (Ex: N=5 -> L=3)
@@ -131,6 +133,7 @@ class Swarm:
 
    def startPlanning(self):
       print("Starting planning mode...")
+      self.mode = 'Planning'
       plot.plot_init(self)
 
    def startSimulation(self, already_launched=True):
@@ -143,6 +146,7 @@ class Swarm:
       # Create clover python objects
       print("Starting swarm node and listening to clover services.")
       rospy.init_node('swarm')
+      self.mode = 'Simulation'
       self.__createCloversObjects()
 
    def startNavigation(self):
@@ -192,9 +196,11 @@ class Swarm:
       print("All drones returning")
       for clover in self.swarm:
          point = [clover.init_coord[0], clover.init_coord[1], 1, 1]
-         clover.navigateWait(x=0, y=0, z=1)
+         if self.mode == 'Simulation':
+            clover.navigateWait(x=0, y=0, z=1)
          coord = np.concatenate((coord,[point]))
       self.curr_formation_coords = coord
+      self.des_formation_coords = coord
 
    def land_all(self):
       coord = np.empty((0,4))

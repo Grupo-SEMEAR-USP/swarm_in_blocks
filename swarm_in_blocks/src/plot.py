@@ -3,9 +3,16 @@ from tkinter import *
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-  
+
+#IDEIA:
+# Planning
+# ***Save - salva curr
+# ***Resume
+# Apply (só simu)
+# Simulation
+
 # plot function is created for plotting the graph in tkinter window
-def plot():
+def save():
     pass
 
 def plot_full_preview(self):
@@ -50,11 +57,11 @@ def plot_full_preview(self):
     
     # Creating buttons
     apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
-    cancel_button = Button(master = window, command = window.destroy, height = 2, width = 10, text = "Cancel")
+    resume_button = Button(master = window, command = window.destroy, height = 2, width = 10, text = "Resume")
     
     # Placing the buttons on grid
     apply_button.grid(row=1, column=1, sticky=E)
-    cancel_button.grid(row=1, column=2, sticky=W)
+    resume_button.grid(row=1, column=2, sticky=W)
     
     # Run the gui
     window.mainloop()
@@ -94,7 +101,7 @@ def plot_init(self):
     canvas.get_tk_widget().grid(columnspan=3, row=0, column=0)
     
     # Creating buttons
-    add_command_button = Button(master = window, command = window.destroy, height = 2, width = 20, text = "Add next command")
+    add_command_button = Button(master = window, command = window.destroy, height = 2, width = 20, bg='#000000', text = "Add next command")
     add_command_button.grid(row=1, column=1)
     
     # Run the gui
