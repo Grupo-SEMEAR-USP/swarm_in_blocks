@@ -22,7 +22,25 @@ import logging
 # Local modules
 import formation
 import launch
+from swarm_in_blocks.src.Alphabet import Alphabet_dictionary
 import transform
+import Alphabet
+
+#Menu 
+def menu():
+   print("Press")
+   print("1 - takeoff all")
+   print("2 - line formation")
+   print("3 - triangle formation")
+   print("4 - square formation")
+   print("5 - cube formation")
+   print("6 - sphere formation")
+   print("7 - pyramid formation")
+   print("O - circle formation")
+   print("0 - initial position")
+   print("L - land all")
+   print("E - exit")
+
 import plot
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
