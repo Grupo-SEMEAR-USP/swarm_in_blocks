@@ -321,6 +321,7 @@ input:checked + .slider:before {
 	transition: top 0s 0s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
+	z-index: 10;
 
 }
 .popup :is(header, .icons, .field){
