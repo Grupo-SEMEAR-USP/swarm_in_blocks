@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-from tkinter.simpledialog import SimpleDialog
-from matplotlib import projections
 import mavros
 import rospy
 import mavros_msgs
@@ -10,10 +8,8 @@ from mavros_msgs.msg import State
 import time
 from clover import srv
 from std_srvs.srv import Trigger
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
 import numpy as np
-
+import Alphabet
 pi = np.pi
 
 #---Formations---
