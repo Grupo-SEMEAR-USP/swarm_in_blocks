@@ -22,25 +22,8 @@ import logging
 # Local modules
 import formation
 import launch
-from swarm_in_blocks.src.Alphabet import Alphabet_dictionary
 import transform
 import Alphabet
-
-#Menu 
-def menu():
-   print("Press")
-   print("1 - takeoff all")
-   print("2 - line formation")
-   print("3 - triangle formation")
-   print("4 - square formation")
-   print("5 - cube formation")
-   print("6 - sphere formation")
-   print("7 - pyramid formation")
-   print("O - circle formation")
-   print("0 - initial position")
-   print("L - land all")
-   print("E - exit")
-
 import plot
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
@@ -64,7 +47,7 @@ class SingleClover:
 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)
       
-      rospy.wait_for_service(f"{self.name}/get_telemetry")   
+      rospy.wait_for_service(f"{self.name}/get_telemetry")
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
       
       rospy.wait_for_service(f"{self.name}/navigate")
@@ -118,6 +101,7 @@ class Swarm:
       self.curr_formation_coords = []
 
       # Desired formation
+      self.des_formation_name = ''
       self.des_formation_coords = []
       
       # Initial formation. By default on square formation with L = N//2 + 1.
@@ -147,9 +131,7 @@ class Swarm:
       self.init_formation_coords = self.des_formation_coords
 
    def startPlanning(self):
-      print("Starting swarm node and listening to clover services.")
-      rospy.init_node('swarm')
-      self.__createCloversObjects()
+      print("Starting planning mode...")
       plot.plot_init(self)
 
    def startSimulation(self, already_launched=True):
@@ -308,10 +290,10 @@ if __name__ == "__main__":
    swarm = Swarm(2)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(already_launched=False)
+   #swarm.startSimulation(already_launched=False)
 
    # Starts the simulation just with the plots previews
-   #swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
