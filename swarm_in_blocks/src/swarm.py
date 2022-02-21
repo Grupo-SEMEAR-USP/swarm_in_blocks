@@ -96,6 +96,7 @@ class SingleClover:
          rospy.sleep(0.2)
 
 class Swarm:
+   # Private functions
    def __init__(self, num_of_clovers):
       
       # Basic parameters of the swarm
@@ -143,6 +144,7 @@ class Swarm:
       self.setFormation2D(formation_str, self.num_of_clovers, L)
       self.init_formation_coords = self.des_formation_coord
 
+   # Start pipeline
    def startPlanning(self):
       pass
 
@@ -160,7 +162,6 @@ class Swarm:
 
    def startNavigation(self):
       pass   
-
 
    def applyFormation(self):
       coord = self.des_formation_coord
@@ -256,6 +257,7 @@ class Swarm:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coord = coord
 
+   #Transformations
    def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
       self.des_formation_coord = new_coord
@@ -281,6 +283,7 @@ class Swarm:
       pass
 
 if __name__ == "__main__":
+
    #Menu 
    def menu():
       print("Press")
