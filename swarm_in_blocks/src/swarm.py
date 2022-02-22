@@ -104,6 +104,9 @@ class Swarm:
       self.des_formation_name = ''
       self.des_formation_coords = []
 
+      # Formations history
+
+      # Mode selected upon start
       self.mode = ''
       
       # Initial formation. By default on square formation with L = N//2 + 1.
@@ -163,14 +166,6 @@ class Swarm:
       self.curr_formation_coords = coord
 
    #Preview formations
-   # def plot_preview(self, coord):
-      # plt.figure(figsize=(8, 8))
-      # plt.plot(coord[:,0],coord[:,1],'ro')
-      # plt.axis([-1,11,-1,11])
-      # plt.grid(True)
-      # plt.xticks(np.linspace(0,10,11))
-      # plt.yticks(np.linspace(0,10,11))
-      # plt.show(block=False)
 
    def plot_preview_3d(self, coord):
       fig = plt.figure(figsize=(8, 8))
@@ -227,6 +222,7 @@ class Swarm:
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
+      self.des_formation_name = shape
 
    def setFormation3D(self, shape, N, L):
       if (shape=='cube'):
@@ -238,22 +234,27 @@ class Swarm:
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
+      self.des_formation_name = shape
 
    def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
       self.des_formation_coords = new_coord
+      self.des_formation_name = 'transform'
 
    def scaleFormation(self, coord, sx, sy, sz):
       new_coord = transform.scaleFormation(coord, sx, sy, sz)
       self.des_formation_coords = new_coord
+      self.des_formation_name = 'scale'
 
    def translateFormation(self, coord, tx, ty, tz):
       new_coord = transform.translateFormation(coord, tx, ty, tz)
       self.des_formation_coords = new_coord
+      self.des_formation_name = 'translate'
 
    def rotateFormation(self, coord, anglex, angley, anglez):
       new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
       self.des_formation_coords = new_coord
+      self.des_formation_name = 'rotate'
 
    #Leader operations
    def setLeader(self, id):
@@ -408,7 +409,7 @@ if __name__ == "__main__":
             ang += 0.2
             rospy.sleep(3)
 
-      elif (key == str('ap')):
+      elif (key == str('ap') or key == str('AP')):
          swarm.applyFormation()
 
       elif (key == str('plt')):
