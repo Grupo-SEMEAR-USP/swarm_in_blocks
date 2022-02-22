@@ -1,8 +1,8 @@
 from tkinter import * 
 from tkinter import ttk
-#from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 #IDEIA:
@@ -27,6 +27,8 @@ def plot_full_preview(self):
     
     # Dimensions of the main window
     window.geometry("500x500")
+
+    #window.iconbitmap('./catkin_ws/src/swarm_in_blocks/swarm_in_blocks/Preto.png')
 
     # Setting the grid configuration
     window.columnconfigure(1, weight=2)
@@ -82,6 +84,11 @@ def plot_init(self):
     # Dimensions of the main window
     window.geometry("500x500")
 
+    path = os.getcwd() + '/images/Preto.png'
+    img = PhotoImage(file=path)
+    #window.tk.call('wm', 'iconphoto', window._w, img)
+    window.iconphoto(True, img)
+
     # Setting the grid configuration
     window.columnconfigure(1, weight=4)
     window.rowconfigure(0, weight=6)
@@ -115,7 +122,6 @@ def plot_init(self):
 
     add_command_button.grid(row=1, column=1)
     
+    window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
     # Run the gui
     window.mainloop()
-    # window.update_idletasks()
-    # window.update()
