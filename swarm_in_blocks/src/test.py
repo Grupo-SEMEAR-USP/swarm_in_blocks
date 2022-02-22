@@ -1,13 +1,14 @@
 from swarm import Swarm
+import plot
+import rospy
 
 swarm = Swarm(2)
 swarm.startSimulation(already_launched=True)
+swarm.takeoff_all()
 
-# swarm.takeoff_all()
-swarm.setFormation2D('line', swarm.num_of_clovers, 5)
-swarm.transformFormation()
-swarm.plot_preview()
+input()
+
+swarm.transformFormation(1,1,1,0,0,0,2,2,5)
 swarm.applyFormation()
 
-swarm.land_all()
-
+input()

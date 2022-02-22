@@ -22,7 +22,6 @@ import logging
 # Local modules
 import formation
 import launch
-from swarm_in_blocks.src.Alphabet import Alphabet_dictionary
 import transform
 import Alphabet
 
@@ -154,7 +153,7 @@ class Swarm:
       self.__createCloversObjects()
       plot.plot_init(self)
 
-   def startSimulation(self, already_launched=True):
+   def startSimulation(self, already_launched=False):
 
       # Launch Gazebo and clover. Wait some time to all get
       if not already_launched:
@@ -264,8 +263,8 @@ class Swarm:
       self.des_formation_coords = coord
 
    #Transformations
-   def transformFormation(self, coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
-      new_coord = transform.transformFormation(coord, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
+   def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
+      new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
       self.des_formation_coords = new_coord
 
    def scaleFormation(self, coord, sx, sy, sz):
@@ -311,10 +310,10 @@ if __name__ == "__main__":
    swarm = Swarm(2)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(already_launched=False)
+   # swarm.startSimulation(already_launched=False)
 
    # Starts the simulation just with the plots previews
-   #swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
