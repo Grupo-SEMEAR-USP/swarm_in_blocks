@@ -1,10 +1,11 @@
+
 from swarm import Swarm
 import plot
 import rospy
 
 swarm = Swarm(2)
 swarm.startSimulation(already_launched=True)
-swarm.takeoff_all()
+swarm.takeoffAll()
 
 input()
 

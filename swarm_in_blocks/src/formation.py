@@ -21,7 +21,6 @@ def line(N, L=1):
     print("Beginning line formation")
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Line done\n")
     return coord
@@ -36,7 +35,6 @@ def circle(N, L=2):
         xi = L*np.cos(idx*angle)
         yi = L*np.sin(idx*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Circle done\n")
     return coord
@@ -124,7 +122,7 @@ def triangle(N, L=2):
     
     #Verificações
     if(N%2==0 and N%3!=0):
-        S=N-1
+        S=N-p
     elif(N%2!=0 and N>7):
         S=N-p
     elif(N%3==0 and N>3):
@@ -134,28 +132,41 @@ def triangle(N, L=2):
     if(N>7):
         if(N%2!=0 or N%3==0):
             c3 = L/(p+1)
+        if(N%2==0 and N>12):
+            c3 = L/p
 
     for l in range(0,N):
         for c in range(0,4):  
         #Define o x     
             if(c==0): 
-                if(l<=id and reta*c1*l<=h):
-                    x=round(reta*c1*l,2)
+                if(l<=id and (h/Ld)*l<=h):
+                    x=round((h/Ld)*l,2)
+                    if(l==id and N<5):
+                        x=round(h,2)
+                
                 else:
-                    x=round(reta*c1*cx,2)
+                    x=round((h/Ld)*cx,2)
                     cx+=1
+                    if(l==id and N<5):
+                        x=round(h,2)
                 
                 if(l>=S and S>2):
                         x=0
                     
         #Define o y  
             elif(c==1):
-                if(l<=id and reta*c1*l<=h):
-                    y=c1*l
+                if(l<=id and (h/Ld)*l<=h):
+                    y=(L/Ld)*(l/2)
                     cy=0
+                    if(l==id and N<5):
+                        y=L/2
+                
                 else:
-                    y=L-c1*cy
+                    y=L - (L/Ld)*(cy/2)
                     cy+=1
+                    if(l==id and N<5):
+                        y=L/2
+
                 if(l>=S):
                     y=c3
                     c3+=1
@@ -168,15 +179,6 @@ def triangle(N, L=2):
         #Define o quarto parametro
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))
-
-    # for clover in self.swarm:
-    #     x0 = 0 - self.init_x[clover.id]
-    #     y0 = 0 - self.init_y[clover.id]
-    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
-
-    #     if(clover.id>=S):
-    #         rospy.sleep(5)
-    #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
     return coord
 
 #---3D Formations---
@@ -208,7 +210,6 @@ def sphere(N, L=2):
         yi = L*np.sin(i*theta)*np.sin(i*phi)
         zi = L*np.cos(i*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Circle done\n")
     return coord
@@ -269,11 +270,6 @@ def pyramid(N, L):
             
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))      
-
-    # for clover in self.swarm:
-    #     x0 = 0 - self.init_x[clover.id]
-    #     y0 = 0 - self.init_y[clover.id]
-    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
     return coord         
 
 #---Support Functions---
@@ -287,7 +283,6 @@ def square_side(N, L, q, n, yi, coord, z0=1):
         f = L/(n-1)
     for idx in range(q,n+q):
         point = [round(f*(n-1-j),2), yi, z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         q += 1
         j += 1

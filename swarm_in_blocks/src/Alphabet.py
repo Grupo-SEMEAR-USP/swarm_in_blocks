@@ -18,11 +18,12 @@ import numpy as np
 
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
+    plt.figure.set_aspect('equal', adjustable='box')
     #plt.subplots_adjust(bottom = 0.2)
     plt.plot(coord[:,0],coord[:,1],'ro')
-    plt.axis([-1,11,-1,11])
+    #plt.axis([-1,11,-1,11])
     plt.grid(True)
-    plt.xticks(np.linspace(0,10,11))
+    plt.xticks(np.linspace(0,40,44))
     plt.yticks(np.linspace(0,10,11))
     #posit = plt.axes([0.4, 0.1, 0.2, 0.05])
     #button = Button(posit,'Confirm')
@@ -273,7 +274,7 @@ def Letters_Words():
     max = []
     
     str = input(f"Please, enter cont word or cont letter: ")
-    #option = input(f"\nShow one by one pres o or O\nShow all: press a or A")
+    option = input(f"\nShow one by one, pres o or O\nShow all, press a or A\n: ")
     print(f"\nSimple: Minimum Clovers needed, for this option press S or s")
     print(f"Mediun: Average amount of clovers, for this option press M or m")
     print(f"Full: Maximum fill, for this option press F or f\n")
@@ -292,7 +293,12 @@ def Letters_Words():
             max.append(sum)
             fill.append(Letter_Verification(char.upper(), type))
             letter_coord=np.concatenate((letter_coord, Alphabet_dictionary[char.upper()]))
-            
+    
+    if(option == "A" or option == "a"): 
+        space = 8
+
+    elif(option == "O" or option == "o"):
+        space = 0       
     
     while(index<sum):
         
@@ -310,7 +316,8 @@ def Letters_Words():
                 letter_coord[index][0]+=8
                 if(cont<(len(fill)-1) and len(fill)>2):
                     cont+=1
-                    space+=8
+                    if(option == "A" or option == "a"):
+                        space+=8
                 
                 if(cont==len(fill)-1):
                     index+=1
