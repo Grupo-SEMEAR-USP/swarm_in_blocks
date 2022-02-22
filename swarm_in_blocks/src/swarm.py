@@ -11,7 +11,6 @@ from std_srvs.srv import Trigger
 
 # Other tools
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
 import numpy as np
 from multiprocessing import Process, Pool
 import time
@@ -22,25 +21,8 @@ import logging
 # Local modules
 import formation
 import launch
-from swarm_in_blocks.src.Alphabet import Alphabet_dictionary
 import transform
 import Alphabet
-
-#Menu 
-def menu():
-   print("Press")
-   print("1 - takeoff all")
-   print("2 - line formation")
-   print("3 - triangle formation")
-   print("4 - square formation")
-   print("5 - cube formation")
-   print("6 - sphere formation")
-   print("7 - pyramid formation")
-   print("O - circle formation")
-   print("0 - initial position")
-   print("L - land all")
-   print("E - exit")
-
 import plot
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
@@ -64,7 +46,7 @@ class SingleClover:
 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)
       
-      rospy.wait_for_service(f"{self.name}/get_telemetry")   
+      rospy.wait_for_service(f"{self.name}/get_telemetry")
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
       
       rospy.wait_for_service(f"{self.name}/navigate")
@@ -118,7 +100,10 @@ class Swarm:
       self.curr_formation_coords = []
 
       # Desired formation
+      self.des_formation_name = ''
       self.des_formation_coords = []
+
+      self.mode = ''
       
       # Initial formation. By default on square formation with L = N//2 + 1.
       # (Ex: N=5 -> L=3)
@@ -147,9 +132,8 @@ class Swarm:
       self.init_formation_coords = self.des_formation_coords
 
    def startPlanning(self):
-      print("Starting swarm node and listening to clover services.")
-      rospy.init_node('swarm')
-      self.__createCloversObjects()
+      print("Starting planning mode...")
+      self.mode = 'Planning'
       plot.plot_init(self)
 
    def startSimulation(self, already_launched=True):
@@ -162,6 +146,7 @@ class Swarm:
       # Create clover python objects
       print("Starting swarm node and listening to clover services.")
       rospy.init_node('swarm')
+      self.mode = 'Simulation'
       self.__createCloversObjects()
 
    def startNavigation(self):
@@ -179,32 +164,21 @@ class Swarm:
    #Preview formations
    # def plot_preview(self, coord):
       # plt.figure(figsize=(8, 8))
-      # plt.subplots_adjust(bottom = 0.2)
       # plt.plot(coord[:,0],coord[:,1],'ro')
       # plt.axis([-1,11,-1,11])
       # plt.grid(True)
       # plt.xticks(np.linspace(0,10,11))
       # plt.yticks(np.linspace(0,10,11))
-      # posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-      # button = Button(posit,'Confirm')
-      # #button.on_clicked(swarm.applyFormation)
       # plt.show(block=False)
-
-   # def plot_preview(self):
-   #    plot.plot_full_preview(self)
 
    def plot_preview_3d(self, coord):
       fig = plt.figure(figsize=(8, 8))
       ax = fig.add_subplot(111,projection='3d')
-      plt.subplots_adjust(bottom = 0.2)
       ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
       #plt.axis([-1,11,-1,11])
       plt.grid(True)
       plt.xticks(np.linspace(0,10,11))
       plt.yticks(np.linspace(0,10,11))
-      posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-      button = Button(posit,'Confirm')
-      #button.on_clicked(start_form='True')
       plt.show(block=False)
 
    #Basic swarm operations
@@ -222,9 +196,11 @@ class Swarm:
       print("All drones returning")
       for clover in self.swarm:
          point = [clover.init_coord[0], clover.init_coord[1], 1, 1]
-         clover.navigateWait(x=0, y=0, z=1)
+         if self.mode == 'Simulation':
+            clover.navigateWait(x=0, y=0, z=1)
          coord = np.concatenate((coord,[point]))
       self.curr_formation_coords = coord
+      self.des_formation_coords = coord
 
    def land_all(self):
       coord = np.empty((0,4))
@@ -308,10 +284,10 @@ if __name__ == "__main__":
    swarm = Swarm(2)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(already_launched=False)
+   #swarm.startSimulation(already_launched=False)
 
    # Starts the simulation just with the plots previews
-   #swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()

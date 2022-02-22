@@ -21,7 +21,6 @@ def line(N, L=1):
     print("Beginning line formation")
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Line done\n")
     return coord
@@ -36,7 +35,6 @@ def circle(N, L=2):
         xi = L*np.cos(idx*angle)
         yi = L*np.sin(idx*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Circle done\n")
     return coord
@@ -168,15 +166,6 @@ def triangle(N, L=2):
         #Define o quarto parametro
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))
-
-    # for clover in self.swarm:
-    #     x0 = 0 - self.init_x[clover.id]
-    #     y0 = 0 - self.init_y[clover.id]
-    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
-
-    #     if(clover.id>=S):
-    #         rospy.sleep(5)
-    #         clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=1)
     return coord
 
 #---3D Formations---
@@ -208,7 +197,6 @@ def sphere(N, L=2):
         yi = L*np.sin(i*theta)*np.sin(i*phi)
         zi = L*np.cos(i*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
     print("Circle done\n")
     return coord
@@ -269,11 +257,6 @@ def pyramid(N, L):
             
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))      
-
-    # for clover in self.swarm:
-    #     x0 = 0 - self.init_x[clover.id]
-    #     y0 = 0 - self.init_y[clover.id]
-    #     clover.navigate(x=x0+coord[clover.id][0], y=y0+coord[clover.id][1],z=coord[clover.id][2])
     return coord         
 
 #---Support Functions---
@@ -287,7 +270,6 @@ def square_side(N, L, q, n, yi, coord, z0=1):
         f = L/(n-1)
     for idx in range(q,n+q):
         point = [round(f*(n-1-j),2), yi, z0, 1]
-        #clover.navigate(x=x0+point[0], y=y0+point[1], z=point[2])
         coord = np.concatenate((coord,[point]))
         q += 1
         j += 1
