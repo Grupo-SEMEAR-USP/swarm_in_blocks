@@ -122,7 +122,7 @@ def triangle(N, L=2):
     
     #Verificações
     if(N%2==0 and N%3!=0):
-        S=N-1
+        S=N-p
     elif(N%2!=0 and N>7):
         S=N-p
     elif(N%3==0 and N>3):
@@ -132,28 +132,41 @@ def triangle(N, L=2):
     if(N>7):
         if(N%2!=0 or N%3==0):
             c3 = L/(p+1)
+        if(N%2==0 and N>12):
+            c3 = L/p
 
     for l in range(0,N):
         for c in range(0,4):  
         #Define o x     
             if(c==0): 
-                if(l<=id and reta*c1*l<=h):
-                    x=round(reta*c1*l,2)
+                if(l<=id and (h/Ld)*l<=h):
+                    x=round((h/Ld)*l,2)
+                    if(l==id and N<5):
+                        x=round(h,2)
+                
                 else:
-                    x=round(reta*c1*cx,2)
+                    x=round((h/Ld)*cx,2)
                     cx+=1
+                    if(l==id and N<5):
+                        x=round(h,2)
                 
                 if(l>=S and S>2):
                         x=0
                     
         #Define o y  
             elif(c==1):
-                if(l<=id and reta*c1*l<=h):
-                    y=c1*l
+                if(l<=id and (h/Ld)*l<=h):
+                    y=(L/Ld)*(l/2)
                     cy=0
+                    if(l==id and N<5):
+                        y=L/2
+                
                 else:
-                    y=L-c1*cy
+                    y=L - (L/Ld)*(cy/2)
                     cy+=1
+                    if(l==id and N<5):
+                        y=L/2
+
                 if(l>=S):
                     y=c3
                     c3+=1
