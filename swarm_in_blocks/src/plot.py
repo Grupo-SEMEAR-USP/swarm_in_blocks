@@ -14,7 +14,6 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
     #resume
     #cancel
 
-
 # plot function is created for plotting the graph in tkinter window
 def save():
     pass
@@ -22,13 +21,12 @@ def save():
 def next(self):
     global i; i += 1
     coord = self.formation_list[i][2]
-    create_swarm_preview(self, coord)
+    create_swarm_preview(self, coord, first_run=False)
 
 def prev(self):
     global i; i -= 1
     coord = self.formation_list[i][2]
-    print('a')
-    #create_swarm_preview(self, coord)
+    create_swarm_preview(self, coord, first_run=False)
 
 def plot_preview2d(self, coord):
     # Define the plot size
@@ -62,7 +60,7 @@ def plot_preview3d(self, coord):  #NÃO TESTADO
     return fig
 
 
-def create_swarm_preview(self, coord):
+def create_swarm_preview(self, coord, first_run=True):
     # Main Tkinter window
     window = Tk()
     
@@ -86,18 +84,20 @@ def create_swarm_preview(self, coord):
     # placing the canvas on the Tkinter window
     canvas.get_tk_widget().grid(columnspan=4, row=0, column=0)
     
-    global i
-    i = len(self.formation_list)
+    if first_run==True:
+        global i
+        i = len(self.formation_list)-1
+        first_run=False
 
     # Creating buttons
     # Sumir com next e prev nos valores máximos
     #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
-    save_button = Button(master = window, command = prev, height = 2, width = 10, text = "Save")
+    prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 2, width = 10, text = "Prev")
     resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
     
     # Placing the buttons on grid
     #apply_button.grid(row=1, column=1, sticky=E)
-    save_button.grid(row=1, column=1, sticky=E)
+    prev_button.grid(row=1, column=1, sticky=E)
     resume_button.grid(row=1, column=2, sticky=W)
     
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
