@@ -58,7 +58,7 @@ var ready = readParams(); // initialization complete promise
 
 var pythonArea = document.getElementById('python');
 
-// modal overlay 
+//* modal overlay 
 
 const viewBtn = document.querySelector(".view-modal"),
 popup = document.querySelector(".popup"),
