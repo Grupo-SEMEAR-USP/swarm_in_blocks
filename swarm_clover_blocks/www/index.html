@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
 	<script src="highlight/highlight.pack.js"></script> 
+	<script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 	<script src="roslib.js"></script>
 	<script src="blockly/blockly_compressed.js"></script>
 	<script src="blockly/python_compressed.js"></script>
@@ -80,22 +81,6 @@
 						class="Swarm_svg" 
 			/>
 		</button>
-		<div class="popup">
-			<header>
-				<span>Launch</span>
-				<div class="close"><i class="uil uil-times"></i></div>
-			</header>
-			<div class="content-modal">
-				<p>number of clovers: </p>
-				<br>
-				<p>initial formation: </p>
-				<div class="field">
-					<i class="url-icon uil uil-link"></i>
-					<input type="text">
-					<button style="display: none;">Ready</button>
-				</div>
-			</div>
-		</div>
 		<button onclick="runProgram()" disabled id="run" disabled title="Run" style="margin-bottom: 0px; margin-right: 6px;">
 			<img    src="./blockly/media/play_dark.png"
 					alt="Run"
@@ -120,6 +105,48 @@
 					class="Swarm_svg" 
 			/>
 		</button>
+	</div>
+
+	<!-- launch pop up -->
+	<div class="popup">
+		<header>
+			<span>Launch</span>
+			<div class="close"><i class="uil uil-times"></i></div>
+		</header>
+		<div class="content-modal">
+			<p>Number of clovers </p>
+			<div class="field">
+				<span class="iconify" data-icon="bi:boxes"></span>
+				<input type="number" min="0" stpe="1">
+				<button style="display: none;">Ready</button>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			<p>Launch mode </p>
+			<div class="field">
+				<i class="url-icon uil uil-link"></i>
+				<select name="Launch mode">
+					<option value="planning"> Planning </option>
+					<option value="simulation"> Simulation </option>
+					<option value="navigation"> Navigation </option>
+				</select>
+				<button style="display: none;">Ready</button>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			<p>initial formation </p>
+			<div class="field">
+				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
+				<select name="Initial formation">
+					<option value="Line"> Line </option>
+					<option value="Square"> Square </option>
+					<option value="Other"> Other </option>
+				</select>
+				<button style="display: none;">Ready</button>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			<div class="ready">
+				<button > Ready </button>
+			</div>
+		</div>
 	</div>
 
 	<div id="notifications"></div>
