@@ -191,18 +191,6 @@ class Swarm:
       self.curr_formation_coords =  self.des_formation_coords
 
 
-   #Preview formations
-
-   # def plot_preview_3d(self, coord):
-   #    fig = plt.figure(figsize=(8, 8))
-   #    ax = fig.add_subplot(111,projection='3d')
-   #    ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
-   #    #plt.axis([-1,11,-1,11])
-   #    plt.grid(True)
-   #    plt.xticks(np.linspace(0,10,11))
-   #    plt.yticks(np.linspace(0,10,11))
-   #    plt.show(block=False)
-
    #Basic swarm operations
    def takeoffAll(self, z0=1):
 
@@ -355,10 +343,10 @@ if __name__ == "__main__":
    swarm = Swarm(4)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(already_launched=False)
+   #swarm.startSimulation(already_launched=False)
 
    # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
@@ -482,13 +470,13 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         plot.plot_full_preview(swarm)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
 
       elif (key == str('p')):
          print(swarm.formation_list)
       
       elif (key == str('plt3d')):
-         swarm.plot_preview_3d(swarm.des_formation_coords)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
 
       elif (key == str('e') or key == str('E')):
          break
