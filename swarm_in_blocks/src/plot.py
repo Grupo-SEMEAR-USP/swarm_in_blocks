@@ -6,17 +6,17 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 #IDEIA:
-# ***Save - salva curr
-# ***Resume
-# Apply (só simu)
+#Planning
+    #prev
+    #next
+    #save
+    #resume
+    #cancel
+
 
 # plot function is created for plotting the graph in tkinter window
 def save():
     pass
-
-def quit_destroy(window):
-    window.quit()
-    window.destroy()
 
 def plot_full_preview(self):
     # Main Tkinter window
@@ -67,6 +67,7 @@ def plot_full_preview(self):
     save_button.grid(row=1, column=1, sticky=E)
     resume_button.grid(row=1, column=2, sticky=W)
     
+    window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
     # Run the gui
     window.mainloop()
 
