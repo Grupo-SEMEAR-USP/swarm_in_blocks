@@ -1,4 +1,5 @@
 from tkinter import * 
+from tkinter import ttk
 #from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,6 +13,10 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 # plot function is created for plotting the graph in tkinter window
 def save():
     pass
+
+def quit_destroy(window):
+    window.quit()
+    window.destroy()
 
 def plot_full_preview(self):
     # Main Tkinter window
@@ -55,7 +60,7 @@ def plot_full_preview(self):
     # Creating buttons
     #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
     save_button = Button(master = window, command = save, height = 2, width = 10, text = "Save")
-    resume_button = Button(master = window, command = window.destroy, height = 2, width = 10, text = "Resume")
+    resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
     
     # Placing the buttons on grid
     #apply_button.grid(row=1, column=1, sticky=E)
@@ -63,7 +68,7 @@ def plot_full_preview(self):
     resume_button.grid(row=1, column=2, sticky=W)
     
     # Run the gui
-    #window.mainloop()
+    window.mainloop()
 
 
 def plot_init(self):
@@ -105,8 +110,11 @@ def plot_init(self):
     canvas.get_tk_widget().grid(columnspan=3, row=0, column=0)
     
     # Creating buttons
-    add_command_button = Button(master = window, command = window.destroy, height = 2, width = 20, bg='white', activebackground='yellow', text = "Add next command")
+    add_command_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 20, bg='white', activebackground='yellow', text = "Add next command")
+
     add_command_button.grid(row=1, column=1)
     
     # Run the gui
-    #window.mainloop()
+    window.mainloop()
+    # window.update_idletasks()
+    # window.update()
