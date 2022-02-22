@@ -19,15 +19,15 @@ import numpy as np
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
     plt.figure.set_aspect('equal', adjustable='box')
-    #plt.subplots_adjust(bottom = 0.2)
     plt.plot(coord[:,0],coord[:,1],'ro')
-    #plt.axis([-1,11,-1,11])
+    max_point = int(np.amax(coord[:,0:2]))
+    min_point = int(np.amin(coord[:,0:2]))
+    if max_point <= 10: max_point=10
+    if min_point >= 0: min_point=0
+    plt.axis([(min_point-1),(max_point+1),(min_point-1),(max_point+1)])
+    plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
+    plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
     plt.grid(True)
-    plt.xticks(np.linspace(0,40,44))
-    plt.yticks(np.linspace(0,10,11))
-    #posit = plt.axes([0.4, 0.1, 0.2, 0.05])
-    #button = Button(posit,'Confirm')
-    #button.on_clicked(start_form='True')
     plt.show()
 
 # Ideia:
