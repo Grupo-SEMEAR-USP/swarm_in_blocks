@@ -54,16 +54,20 @@ body {
 
 .row{
     display: flex;
+    flex-wrap: wrap;
 }
 
 .column1 {
+    margin-left: 10px;
     padding: 5px;
-    flex: 1 100 auto; /* flex-grow, flex-shrink, flex-basis */
+    width: 51.5%;
+    box-sizing: border-box;
 }
 
 .column2 {
     padding: 5px;
-    flex: 1 1 auto; /* flex-grow, flex-shrink, flex-basis */
+    width: 47%;
+    box-sizing: border-box;
 }
 
 .eazy2 {

@@ -95,6 +95,7 @@ class Swarm:
       self.form_pose = [0,0,0,0,0,0]
 
       # Initial formation
+      self.init_formation_name = ''
       self.init_formation_coords = []
 
       # Current formation name and coord in homogeneous line vector type 
@@ -106,18 +107,23 @@ class Swarm:
       self.des_formation_name = ''
       self.des_formation_coords = []
 
-      # Formations history
-
       # Mode selected upon start
       self.mode = ''
       
+      # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
+      self.op_num = 0
+      self.formation_list = np.empty((0,3))
+
       # Initial formation. By default on square formation with L = N//2 + 1.
       # (Ex: N=5 -> L=3)
       self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers-1)
       self.init_formation_coords = self.des_formation_coords
+      self.init_formation_name = self.des_formation_name
 
       # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
-      self.formation_list = []
+      self.op_num = 0
+      self.formation_list = np.empty((0,3))
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.init_formation_name,self.init_formation_coords]]))
 
       # Leader id of the swarm
       self.leader_id = None
@@ -190,18 +196,6 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
-
-   #Preview formations
-
-   # def plot_preview_3d(self, coord):
-   #    fig = plt.figure(figsize=(8, 8))
-   #    ax = fig.add_subplot(111,projection='3d')
-   #    ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
-   #    #plt.axis([-1,11,-1,11])
-   #    plt.grid(True)
-   #    plt.xticks(np.linspace(0,10,11))
-   #    plt.yticks(np.linspace(0,10,11))
-   #    plt.show(block=False)
 
    #Basic swarm operations
    def takeoffAll(self, z0=1):
@@ -278,6 +272,8 @@ class Swarm:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
       self.des_formation_name = shape
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def setFormation3D(self, shape, N, L):
       if (shape=='cube'):
@@ -290,6 +286,8 @@ class Swarm:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
       self.des_formation_name = shape
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -312,21 +310,29 @@ class Swarm:
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'transform'
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def scaleFormation(self, coord, sx, sy, sz):
       new_coord = transform.scaleFormation(coord, sx, sy, sz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'scale'
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def translateFormation(self, coord, tx, ty, tz):
       new_coord = transform.translateFormation(coord, tx, ty, tz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'translate'
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def rotateFormation(self, coord, anglex, angley, anglez):
       new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'rotate'
+      self.op_num += 1
+      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    #Leader operations
    def setLeader(self, id):
@@ -359,10 +365,10 @@ if __name__ == "__main__":
    swarm = Swarm(4)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(already_launched=False)
+   #swarm.startSimulation(already_launched=False)
 
    # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
@@ -486,10 +492,13 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         plot.plot_full_preview(swarm)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
+
+      elif (key == str('p')):
+         print(swarm.formation_list)
       
       elif (key == str('plt3d')):
-         swarm.plot_preview_3d(swarm.des_formation_coords)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
 
       elif (key == str('e') or key == str('E')):
          break
