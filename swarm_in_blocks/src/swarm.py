@@ -24,6 +24,7 @@ import launch
 import transform
 import Alphabet
 import plot
+import formation3D
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
@@ -120,6 +121,11 @@ class Swarm:
 
       # Leader id of the swarm
       self.leader_id = None
+
+      # Private atributes for internal class organization
+      self.__mesh = None
+      self.__pcd = None
+      self.__meshzoo_names = ['christ_the_redeemer','motherland_calls']
 
    def __launchGazeboAndClovers(self):
       launch.spawnGazeboAndVehicles(self.num_of_clovers, self.init_formation_coords)
@@ -285,6 +291,22 @@ class Swarm:
       self.des_formation_coords = coord
       self.des_formation_name = shape
 
+   def setFormation3DfromMesh(self, model_path):
+      self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
+
+   def setFormation3DFromMeshZoo(self, mesh_name):
+
+      if mesh_name.lower() not in self.__meshzoo_names:
+         raise Exception("Input mesh name is not on mesh zoo. The name is correct?")
+      #TODO
+
+
+   def visualizePointCloud(self):
+      formation3D.visualizePointCloud(self.__pcd)
+
+   def visualizeMesh(self):
+      formation3D.visualizeMesh(self.__mesh)
+   
    #Transformations
    def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
