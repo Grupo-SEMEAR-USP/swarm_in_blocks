@@ -18,7 +18,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 def save():
     pass
 
-def next(self):
+def nextel(self):
     global i; i += 1
     coord = self.formation_list[i][2]
     create_swarm_preview(self, coord, first_run=False)
@@ -71,6 +71,7 @@ def create_swarm_preview(self, coord, first_run=True):
     window.geometry("500x500")
 
     # Setting the grid configuration
+    window.columnconfigure(0, weight=2)
     window.columnconfigure(1, weight=2)
     window.columnconfigure(2, weight=2)
     window.rowconfigure(0, weight=6)
@@ -90,15 +91,42 @@ def create_swarm_preview(self, coord, first_run=True):
         first_run=False
 
     # Creating buttons
-    # Sumir com next e prev nos valores máximos
-    #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
-    prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 2, width = 10, text = "Prev")
-    resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
+    # Sumir com next e prev nos valores máximos (ja funcional) (precisa melhorar o posicionamento)
+    # Atchim se vc ler isso antes que eu acorde, ta com um problema que quando muda de tela ele nao ativa a aba pra mudar as formacoes
+
+    path_1 = os.getcwd() + '/images/seta_direita.png'
+    right_arrow = PhotoImage(file=path_1)
+
+    path_2 = os.getcwd() + '/images/seta_esquerda.png'
+    left_arrow = PhotoImage(file=path_2) 
+
+    if i == len(self.formation_list)-1:
+        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 40, width = 100, image = left_arrow)
+        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
+        
+        prev_button.grid(row=1, column=0)
+        resume_button.grid(row=1, column=2)
+
+    elif i == 0:
+        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
+        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self)], height = 40, width = 100, image = right_arrow)
+
+        resume_button.grid(row=1, column=0)
+        next_button.grid(row=1, column=2)
+
+    else :
+        
+        #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
+        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 40, width = 100, image = left_arrow)
+        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
+        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self)], height = 40, width = 100, image = right_arrow)
     
-    # Placing the buttons on grid
-    #apply_button.grid(row=1, column=1, sticky=E)
-    prev_button.grid(row=1, column=1, sticky=E)
-    resume_button.grid(row=1, column=2, sticky=W)
+        # Placing the buttons on grid
+        #apply_button.grid(row=1, column=1, sticky=E)
+        prev_button.grid(row=1, column=0)
+        resume_button.grid(row=1, column=1)
+        next_button.grid(row=1, column=2)
+
     
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
     # Run the gui
