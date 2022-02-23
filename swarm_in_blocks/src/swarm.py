@@ -350,7 +350,8 @@ if __name__ == "__main__":
       print("1 - takeoff all")
       print("2 - line formation")
       print("3 - triangle formation")
-      print("4 - square formation")
+      print("4e - empty square formation")
+      print("4f - full square formation")
       print("5 - cube formation")
       print("6 - sphere formation")
       print("7 - pyramid formation")
@@ -359,6 +360,7 @@ if __name__ == "__main__":
       print("ap - apply formation")
       print("plt - plot preview")
       print("plt3d - plot 3D preview")
+      print("fl - formation list")
       print("L - land all")
       print("E - exit")
 
@@ -492,13 +494,13 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
-
-      elif (key == str('p')):
-         print(swarm.formation_list)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='2D')
       
       elif (key == str('plt3d')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='3D')
+
+      elif (key == str('fl') or key == str('FL')):
+         print(swarm.formation_list)
 
       elif (key == str('e') or key == str('E')):
          break

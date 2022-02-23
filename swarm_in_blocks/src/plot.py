@@ -17,27 +17,34 @@ Buttons:
 
 Colors:
 '''
+# Defining colors
+background_color = '#5d5d9d'
+grid_color = '#000000'
+points_color = 'orange'
 
 # plot function is created for plotting the graph in tkinter window
 def save():
     pass
 
-def nextel(self):
+def nextel(self, preview_type):
     global i; i += 1
     coord = self.formation_list[i][2]
-    create_swarm_preview(self, coord, first_run=False)
+    create_swarm_preview(self, coord, preview_type, first_run=False)
 
-def prev(self):
+def prev(self, preview_type):
     global i; i -= 1
     coord = self.formation_list[i][2]
-    create_swarm_preview(self, coord, first_run=False)
+    create_swarm_preview(self, coord, preview_type, first_run=False)
 
 def plot_preview2d(self, coord):
     # Define the plot size
     fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(1, 1, 1)
+    fig.patch.set_facecolor(background_color)
+    ax.set_facecolor(background_color)
 
     # Recieves the plot
-    plt.plot(coord[:,0],coord[:,1],'ro')
+    plt.plot(coord[:,0], coord[:,1], color=points_color, marker='o', linestyle='')
 
     # Set the axis and grid
     max_point = int(np.amax(coord[:,0:2]))
@@ -47,25 +54,36 @@ def plot_preview2d(self, coord):
     plt.axis([(min_point-1),(max_point+1),(min_point-1),(max_point+1)])
     plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
     plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
-    plt.grid(True)
+    ax.tick_params(axis='both', colors=grid_color)    #setting up X-axis tick color to red
+    for spine in ['top', 'right', 'left', 'bottom']:
+        ax.spines[spine].set_color(grid_color)
+        ax.spines[spine].set_linewidth(3)
+    plt.grid(True, color=grid_color)
     return fig
 
-def plot_preview3d(self, coord):  #NÃO TESTADO
+def plot_preview3d(self, coord): 
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111,projection='3d')
+    fig.patch.set_facecolor(background_color)
+    ax.set_facecolor(background_color)
+
     ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
     max_point = int(np.amax(coord[:,0:3]))
     min_point = int(np.amin(coord[:,0:3]))
     if max_point <= 10: max_point=10
     if min_point >= 0: min_point=0
-    plt.axis([(min_point-1),(max_point+1),(min_point-1),(max_point+1)])
+    ax.set(xlim=((min_point-1),(max_point+1)), ylim=((min_point-1),(max_point+1)), zlim=((min_point-1),(max_point+1)))
     plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
     plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
-    plt.grid(True)
+    ax.tick_params(axis='both', colors=grid_color) 
+    for spine in ['top', 'right', 'left', 'bottom']:
+        ax.spines[spine].set_color(grid_color)
+        ax.spines[spine].set_linewidth(3)
+    plt.grid(True, color='black')
     return fig
 
 
-def create_swarm_preview(self, coord, first_run=True):
+def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     # Main Tkinter window
     window = Tk()
     
@@ -73,7 +91,11 @@ def create_swarm_preview(self, coord, first_run=True):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.geometry("500x500")
+    window.minsize(300, 300)     
+    window.maxsize(700, 700)                                                   # Set minimum dimension values
+    positionRight = int(window.winfo_screenwidth()/2 - 500/2)
+    positionDown = int(window.winfo_screenheight()/2 - 500/2)
+    window.geometry("500x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
     # Setting the grid configuration
     window.columnconfigure(0, weight=2)
@@ -81,7 +103,12 @@ def create_swarm_preview(self, coord, first_run=True):
     window.columnconfigure(2, weight=2)
     window.rowconfigure(0, weight=6)
 
-    fig = plot_preview2d(self, coord)
+    if preview_type=='2D':
+        fig = plot_preview2d(self, coord)
+    elif preview_type=='3D':
+        fig = plot_preview3d(self, coord)
+    else: 
+        pass #Retornar código de erro depois
 
     # creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
@@ -106,7 +133,7 @@ def create_swarm_preview(self, coord, first_run=True):
     left_arrow = PhotoImage(file=path_2) 
 
     if i == len(self.formation_list)-1:
-        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 40, width = 100, image = left_arrow)
+        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self,  preview_type)], height = 40, width = 100, image = left_arrow)
         resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
         
         prev_button.grid(row=1, column=0)
@@ -114,7 +141,7 @@ def create_swarm_preview(self, coord, first_run=True):
 
     elif i == 0:
         resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
-        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self)], height = 40, width = 100, image = right_arrow)
+        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self,  preview_type)], height = 40, width = 100, image = right_arrow)
 
         resume_button.grid(row=1, column=0)
         next_button.grid(row=1, column=2)
@@ -122,9 +149,9 @@ def create_swarm_preview(self, coord, first_run=True):
     else :
         
         #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
-        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self)], height = 40, width = 100, image = left_arrow)
+        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self,  preview_type)], height = 40, width = 100, image = left_arrow)
         resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
-        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self)], height = 40, width = 100, image = right_arrow)
+        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self,  preview_type)], height = 40, width = 100, image = right_arrow)
     
         # Placing the buttons on grid
         #apply_button.grid(row=1, column=1, sticky=E)
@@ -146,7 +173,8 @@ def plot_init(self):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.minsize(300, 300)                                                     # Set minimum dimension values
+    window.minsize(300, 300)     
+    window.maxsize(700, 700)                                                   # Set minimum dimension values
     positionRight = int(window.winfo_screenwidth()/2 - 500/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
     window.geometry("500x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
@@ -173,10 +201,11 @@ def plot_init(self):
     canvas.get_tk_widget().grid(columnspan=3, row=0, column=0)
     
     # Creating buttons
-    add_command_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 20, bg='white', activebackground='yellow', text = "Add next command")
+    add_command_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 20, bg='lightskyblue', activebackground='yellow', text = "Add next command")
 
     add_command_button.grid(row=1, column=1)
     
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
+    
     # Run the gui
     window.mainloop()
