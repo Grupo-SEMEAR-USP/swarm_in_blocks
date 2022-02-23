@@ -6,13 +6,17 @@ import numpy as np
 import os
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
-#IDEIA:
-#Planning
-    #prev
-    #next
-    #save
-    #resume
-    #cancel
+'''
+IDEIA:
+Buttons:
+    prev
+    next
+    save
+    resume
+    cancel (just simulation)
+
+Colors:
+'''
 
 # plot function is created for plotting the graph in tkinter window
 def save():
@@ -34,6 +38,7 @@ def plot_preview2d(self, coord):
 
     # Recieves the plot
     plt.plot(coord[:,0],coord[:,1],'ro')
+
     # Set the axis and grid
     max_point = int(np.amax(coord[:,0:2]))
     min_point = int(np.amin(coord[:,0:2]))
@@ -141,11 +146,15 @@ def plot_init(self):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.geometry("500x500")
+    window.minsize(300, 300)                                                     # Set minimum dimension values
+    positionRight = int(window.winfo_screenwidth()/2 - 500/2)
+    positionDown = int(window.winfo_screenheight()/2 - 500/2)
+    window.geometry("500x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
+    #window.resizable(0,0)                                                       # Don't allow to resize the window
+    #window.wm_attributes('-topmost', True)                                      # Window stays always on top
 
     path = os.getcwd() + '/images/Preto.png'
     img = PhotoImage(file=path)
-    #window.tk.call('wm', 'iconphoto', window._w, img)
     window.iconphoto(True, img)
 
     # Setting the grid configuration
