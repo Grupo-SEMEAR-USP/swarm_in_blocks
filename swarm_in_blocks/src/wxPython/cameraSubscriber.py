@@ -8,8 +8,8 @@ rosrun proteus_demo ImageView.py image:=/ATRV/CameraMain
 image:=/clover0/main_camera/image_raw
 image:=/clover0/main_camera/parameter_updates
 """
-from curses import panel
-from re import I
+
+
 
 
 import roslib
@@ -19,7 +19,6 @@ import rospy
 from sensor_msgs.msg import Image
 
 import wx
-import sys
 
 subscribers = [] # lista com o atual subscriber
 
@@ -104,7 +103,7 @@ def handle_image(image):
 
 
 
-def main(argv):
+def main():
     app = ImageViewApp()
     rospy.init_node('ImageView')
     #rospy.sleep(0.1)
@@ -132,4 +131,4 @@ def topics_sorter():
 if __name__ == "__main__":
     topics_sorter() # separa os topicos desejados
     print(clovers)
-    sys.exit(main(sys.argv))
+    main()
