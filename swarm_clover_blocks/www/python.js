@@ -21,17 +21,19 @@ Blockly.Python.addReservedWords('SetLEDs,LEDState,set_leds');
 const IMPORT_SRV = `from clover import srv
 from std_srvs.srv import Trigger`;
 
-const NAVIGATE_WAIT = () => `\ndef navigate_wait(x=0, y=0, z=0, speed=0.5, frame_id='body', auto_arm=False):
+function NAVIGATE_WAIT(id){ 
+	return `\ndef navigate_wait_${id}(x=0, y=0, z=0, speed=0.5, frame_id='body${id}', auto_arm=False):
     res = navigate(x=x, y=y, z=z, yaw=float('nan'), speed=speed, frame_id=frame_id, auto_arm=auto_arm)
 
     if not res.success:
         raise Exception(res.message)
 
     while not rospy.is_shutdown():
-        telem = get_telemetry(frame_id='navigate_target')
+        telem = get_telemetry_${id}(frame_id='navigate_target${id}')
         if math.sqrt(telem.x ** 2 + telem.y ** 2 + telem.z ** 2) < ${params.navigate_tolerance}:
             return
         rospy.sleep(${params.sleep_time})\n`;
+	}
 
 const LAND_WAIT = () => `\ndef land_wait():
     land()
@@ -61,38 +63,38 @@ const GET_DISTANCE = `\ndef get_distance(x, y, z, frame_id):
     return math.sqrt((x - telem.x) ** 2 + (y - telem.y) ** 2 + (z - telem.z) ** 2)\n`;
 
 var rosDefinitions = {};
-
-function generateROSDefinitions() {
+function generateROSDefinitions(id) {
+	
 	// order for ROS definitions is significant, so generate all ROS definitions as one
 	var code = `rospy.init_node('flight')\n\n`;
 	if (rosDefinitions.offboard) {
-		code += `get_telemetry = rospy.ServiceProxy('get_telemetry', srv.GetTelemetry)\n`;
-		code += `navigate = rospy.ServiceProxy('navigate', srv.Navigate)\n`;
+		code += `get_telemetry_${id} = rospy.ServiceProxy('clover${id}/get_telemetry', srv.GetTelemetry)\n`;
+		code += `navigate_${id} = rospy.ServiceProxy('clover${id}/navigate', srv.Navigate)\n`;
 		if (rosDefinitions.setVelocity) {
-			code += `set_velocity = rospy.ServiceProxy('set_velocity', srv.SetVelocity)\n`;
+			code += `set_velocity_${id} = rospy.ServiceProxy('clover${id}/set_velocity', srv.SetVelocity)\n`;
 		}
 		if (rosDefinitions.setAttitude) {
-			code += `set_attitude = rospy.ServiceProxy('set_attitude', srv.SetAttitude)\n`;
+			code += `set_attitude_${id} = rospy.ServiceProxy('clover${id}/set_attitude', srv.SetAttitude)\n`;
 		}
 		if (rosDefinitions.setRates) {
-			code += `set_rates = rospy.ServiceProxy('set_rates', srv.SetRates)\n`;
+			code += `set_rates_${id} = rospy.ServiceProxy('clover${id}/set_rates', srv.SetRates)\n`;
 		}
-		code += `land = rospy.ServiceProxy('land', Trigger)\n`;
+		code += `land_${id} = rospy.ServiceProxy('clover${id}/land', Trigger)\n`;
 	}
 	if (rosDefinitions.setEffect) {
 		Blockly.Python.definitions_['import_led_effect'] = 'from clover.srv import SetLEDEffect';
-		code += `set_effect = rospy.ServiceProxy('led/set_effect', SetLEDEffect, persistent=True)\n`;
+		code += `set_effect_${id} = rospy.ServiceProxy('clover${id}/led/set_effect', SetLEDEffect, persistent=True)\n`;
 	}
 	if (rosDefinitions.setLeds) {
 		Blockly.Python.definitions_['import_set_led'] = 'from led_msgs.srv import SetLEDs\nfrom led_msgs.msg import LEDState';
-		code += `set_leds = rospy.ServiceProxy('led/set_leds', SetLEDs, persistent=True)\n`;
+		code += `set_leds_${id} = rospy.ServiceProxy('clover${id}/led/set_leds', SetLEDs, persistent=True)\n`;
 	}
 	if (rosDefinitions.ledStateArray) {
 		Blockly.Python.definitions_['import_led_state_array'] = 'from led_msgs.msg import LEDStateArray';
 	}
 	if (rosDefinitions.navigateWait) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
-		code += NAVIGATE_WAIT();
+		code += NAVIGATE_WAIT(id);
 	}
 	if (rosDefinitions.landWait) {
 		code += LAND_WAIT();
@@ -113,18 +115,18 @@ function generateROSDefinitions() {
 		Blockly.Python.definitions_['import_math'] = 'import math';
 		code += GET_DISTANCE;
 	}
-	Blockly.Python.definitions_['ros'] = code;
+	Blockly.Python.definitions_[`ros_${id}`] = code;
 }
 
-function initNode() {
+function initNode(id) {
 	Blockly.Python.definitions_['import_rospy'] = 'import rospy';
-	generateROSDefinitions();
+	generateROSDefinitions(id);
 }
 
-function simpleOffboard() {
+function simpleOffboard(id) {
 	rosDefinitions.offboard = true;
 	Blockly.Python.definitions_['import_srv'] = IMPORT_SRV;
-	initNode();
+	initNode(id);
 }
 
 // Adjust indentation
@@ -146,15 +148,7 @@ export function generateCode(workspace) {
 function buildFrameId(block) {
 	let frame = block.getFieldValue('FRAME_ID').toLowerCase();
 	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
-	if (frame == 'aruco') { // aruco marker frame
-		if (id.match(/^[0-9]+$/)) { // id is positive integer
-			return `'${frame}_${id}'`;
-		} else { // something else...
-			return `'${frame}_' + str(int(${id}))`;
-		}
-	} else {
-		return `'${frame}'`;
-	}
+	return `'${frame}${id}'`;
 }
 
 Blockly.Python.navigate = function(block) {
@@ -163,22 +157,23 @@ Blockly.Python.navigate = function(block) {
 	let z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_NONE);
 	let frameId = buildFrameId(block);
 	let speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
 
 	let params = [`x=${x}`, `y=${y}`, `z=${z}`, `frame_id=${frameId}`, `speed=${speed}`];
 
-	simpleOffboard();
+	simpleOffboard(id);
 
 	if (block.getFieldValue('WAIT') == 'TRUE') {
 		rosDefinitions.navigateWait = true;
-		simpleOffboard();
+		simpleOffboard(id);
 
-		return `navigate_wait(${params.join(', ')}),\n`;
+		return `navigate_wait_${id}(${params.join(', ')}),\n`;
 
 	} else {
 		if (frameId != 'body') {
 			params.push(`yaw=float('nan')`);
 		}
-		return `navigate(${params.join(', ')})\n`;
+		return `navigate_${id}(${params.join(', ')})\n`;
 	}
 }
 
@@ -206,9 +201,9 @@ Blockly.Python.take_off = function(block) {
 		rosDefinitions.navigateWait = true;
 		simpleOffboard();
 
-		return `navigate_wait(z=${z}, frame_id='body', auto_arm=True)\n`;
+		return `navigate_wait_${id}(z=${z}, frame_id='body', auto_arm=True)\n`;
 	} else {
-		return `navigate(z=${z}, frame_id='body', auto_arm=True)\n`;
+		return `navigate_{id}(z=${z}, frame_id='body0', auto_arm=True)\n`;
 	}
 }
 
