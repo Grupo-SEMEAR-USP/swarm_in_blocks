@@ -86,7 +86,7 @@ class ImageViewPanel(wx.Panel):
         self.Bind(wx.EVT_TIMER, self.NextFrame)
 
         self.img = np.zeros((640,480,3))
-        self.bmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
+        self.staticbmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
 
     """ class ImageViewPanel creates a panel with an image on it, inherits wx.Panel """
     def update(self, image):
@@ -99,7 +99,7 @@ class ImageViewPanel(wx.Panel):
         
         self.img = image
         self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
-        self.bmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
+        self.staticbmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
         
         #sizer.Add(bmp, pos=(0,2))
         
@@ -108,12 +108,12 @@ class ImageViewPanel(wx.Panel):
 
     def OnPaint(self, evt):
         dc = wx.BufferedPaintDC(self)
-        dc.DrawBitmap(self.bmp, 0, 0)
+        dc.DrawBitmap(self.staticbmp, 0, 0)
 
     def NextFrame(self, event):
         
         # self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
-        self.bmp.CopyFromBuffer(self.img)
+        self.staticbmp.CopyFromBuffer(self.img)
         self.Refresh()
 
 t0 = 0

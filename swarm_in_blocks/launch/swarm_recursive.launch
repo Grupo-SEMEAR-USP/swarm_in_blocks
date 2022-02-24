@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <launch>
-    <arg name="num" default="0"/>
-    <arg name="ID" default="$(arg num)"/> 
+    <arg name="num" default="1"/>
+    <arg name="ID" default="0"/> 
     
     <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
         <arg name="x" value="0"/>
@@ -11,7 +11,7 @@
         <arg name="R" value="0"/>
         <arg name="P" value="0"/>
         <arg name="Y" value="0"/>
-        <arg name="ID" value="$(arg num)"/>
+        <arg name="ID" value="$(arg ID)"/>
     </include>
         
     <!-- chamar outros includes recursivamente -->

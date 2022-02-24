@@ -15,7 +15,7 @@ const COLOR_GPIO = "#5b97cc";
 const COLOR_SWARM = "#cf0173";
 const DOCS_URL = 'https://clover.coex.tech/en/blocks.html';
 
-var frameIds = [["body", "BODY"], ["markers map", "ARUCO_MAP"], ["marker", "ARUCO"], ["last navigate target", "NAVIGATE_TARGET"], ["map", "MAP"]];
+var frameIds = [["body", "BODY"], ["last navigate target", "NAVIGATE_TARGET"], ["map", "MAP"]];
 
 function considerFrameId(e) {
 	if (!(e instanceof Blockly.Events.Change || e instanceof Blockly.Events.Create)) return;
@@ -23,7 +23,7 @@ function considerFrameId(e) {
 	var frameId = this.getFieldValue('FRAME_ID');
 	// set appropriate coordinates labels
 	if (this.getInput('X')) { // block has x-y-z fields
-		if (frameId == 'BODY' || frameId == 'NAVIGATE_TARGET' || frameId == 'BASE_LINK') {
+		if (frameId == 'BODY0' || frameId == 'NAVIGATE_TARGET' || frameId == 'BASE_LINK') {
 			this.getInput('X').fieldRow[0].setValue('forward');
 			this.getInput('Y').fieldRow[0].setValue('left');
 			this.getInput('Z').fieldRow[0].setValue('up');
@@ -32,9 +32,6 @@ function considerFrameId(e) {
 			this.getInput('Y').fieldRow[0].setValue('y');
 			this.getInput('Z').fieldRow[0].setValue('z');
 		}
-	}
-	if (this.getInput('ID')) { // block has marker id field
-		this.getInput('ID').setVisible(frameId == 'ARUCO'); // toggle id field
 	}
 	this.render();
 }
@@ -80,13 +77,12 @@ Blockly.Blocks['navigate'] = {
 		this.appendDummyInput()
 			.appendField("relative to")
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
-		this.appendValueInput("ID")
-			.setCheck("Number")
-			.appendField("with ID")
-			.setVisible(false)
 		this.appendValueInput("SPEED")
 			.setCheck("Number")
 			.appendField("with speed");
+		this.appendValueInput("ID")
+			.setCheck("Number")
+			.appendField("with ID");
 		this.appendDummyInput()
 			.appendField("wait")
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
@@ -118,8 +114,7 @@ Blockly.Blocks['set_velocity'] = {
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
-			.setVisible(false)
+			.appendField("with ID");
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);

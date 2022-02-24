@@ -35,7 +35,7 @@
                                     rangefinder:=false
                                     led:=true
                                     gps:=true
-                                    maintain_camera_rate:=true
+                                    maintain_camera_rate:=false
                                     use_clover_physics:=false 
                                     mavlink_tcp_port:=$(arg mavlink_tcp_port)"/>
                                     
