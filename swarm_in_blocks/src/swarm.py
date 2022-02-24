@@ -24,6 +24,7 @@ import launch
 import transform
 import Alphabet
 import plot
+import formation3D
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
@@ -126,6 +127,11 @@ class Swarm:
 
       # Leader id of the swarm
       self.leader_id = None
+
+      # Private atributes for internal class organization
+      self.__mesh = None
+      self.__pcd = None
+      self.__meshzoo_names = ['christ_the_redeemer','motherland_calls']
 
    def __launchGazeboAndClovers(self):
       launch.spawnGazeboAndVehicles(self.num_of_clovers, self.init_formation_coords)
@@ -283,6 +289,22 @@ class Swarm:
       self.op_num += 1
       self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
+   def setFormation3DfromMesh(self, model_path):
+      self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
+
+   def setFormation3DFromMeshZoo(self, mesh_name):
+
+      if mesh_name.lower() not in self.__meshzoo_names:
+         raise Exception("Input mesh name is not on mesh zoo. The name is correct?")
+      #TODO
+
+
+   def visualizePointCloud(self):
+      formation3D.visualizePointCloud(self.__pcd)
+
+   def visualizeMesh(self):
+      formation3D.visualizeMesh(self.__mesh)
+   
    #Transformations
    def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
@@ -328,7 +350,8 @@ if __name__ == "__main__":
       print("1 - takeoff all")
       print("2 - line formation")
       print("3 - triangle formation")
-      print("4 - square formation")
+      print("4e - empty square formation")
+      print("4f - full square formation")
       print("5 - cube formation")
       print("6 - sphere formation")
       print("7 - pyramid formation")
@@ -337,6 +360,7 @@ if __name__ == "__main__":
       print("ap - apply formation")
       print("plt - plot preview")
       print("plt3d - plot 3D preview")
+      print("fl - formation list")
       print("L - land all")
       print("E - exit")
 
@@ -470,13 +494,13 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
-
-      elif (key == str('p')):
-         print(swarm.formation_list)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='2D')
       
       elif (key == str('plt3d')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords)
+         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='3D')
+
+      elif (key == str('fl') or key == str('FL')):
+         print(swarm.formation_list)
 
       elif (key == str('e') or key == str('E')):
          break
