@@ -11,7 +11,9 @@ image:=/clover0/main_camera/parameter_updates
 
 
 
-
+from pickletools import uint8
+import cv2
+import numpy as np
 import roslib
 roslib.load_manifest('rospy')
 roslib.load_manifest('sensor_msgs')
@@ -92,10 +94,15 @@ class ImageViewPanel(wx.Panel):
         bmp = wx.Bitmap.FromBuffer(image.width, image.height, image.data)
         #sizer.Add(bmp, pos=(0,2))
         self.staticbmp.SetBitmap(bmp)
-
+        self.Refresh()
 
 def handle_image(image):
     # make sure we update in the UI thread
+
+    #np_arr = np.frombuffer(image.data, dtype=uint8)
+    
+    #imageD = cv2.imdecode(np.array(image.data, ), cv2.IMREAD_COLOR)
+
     wx.CallAfter(wx.GetApp().panel.update, image)
     #wx.GetApp().panel.update(image)
     # http://wiki.wxpython.org/LongRunningTasks

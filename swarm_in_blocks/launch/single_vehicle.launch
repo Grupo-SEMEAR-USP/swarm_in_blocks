@@ -33,9 +33,9 @@
                                     $(find clover_description)/urdf/clover/clover4.xacro 
                                     main_camera:=true
                                     rangefinder:=false
-                                    led:=false 
+                                    led:=true 
                                     gps:=true
-                                    maintain_camera_rate:=false
+                                    maintain_camera_rate:=true
                                     use_clover_physics:=false 
                                     mavlink_tcp_port:=$(arg mavlink_tcp_port)"/>
                                     
