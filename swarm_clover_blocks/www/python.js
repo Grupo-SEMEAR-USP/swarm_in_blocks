@@ -23,7 +23,7 @@ from std_srvs.srv import Trigger`;
 
 function NAVIGATE_WAIT(id){ 
 	return `\ndef navigate_wait_${id}(x=0, y=0, z=0, speed=0.5, frame_id='body${id}', auto_arm=False):
-    res = navigate(x=x, y=y, z=z, yaw=float('nan'), speed=speed, frame_id=frame_id, auto_arm=auto_arm)
+    res = navigate_${id}(x=x, y=y, z=z, yaw=float('nan'), speed=speed, frame_id=frame_id, auto_arm=auto_arm)
 
     if not res.success:
         raise Exception(res.message)
