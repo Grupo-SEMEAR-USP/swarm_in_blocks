@@ -1,6 +1,7 @@
 from re import I
 from tkinter import * 
 from tkinter import ttk
+from turtle import color
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -16,17 +17,24 @@ Buttons:
     cancel (just simulation)
 
 Colors:
+
 '''
 # Defining colors
-background_color = '#5d5d9d'
-grid_color = '#000000'
-points_color = 'orange'
+#background_color = '#9597bf' #dark
+background_color = '#868686' #light
+grid_color = 'black'
+#points_color = '#ff00dd' #dark1
+#points_color = '#ffae00' #dark2
+points_color = '#20c000' #light
+button_color = 'black'
+button_font_color = 'white'
+active_button_color = 'gray'
 
 # plot function is created for plotting the graph in tkinter window
 def save():
     pass
 
-def nextel(self, preview_type):
+def next(self, preview_type):
     global i; i += 1
     coord = self.formation_list[i][2]
     create_swarm_preview(self, coord, preview_type, first_run=False)
@@ -79,7 +87,7 @@ def plot_preview3d(self, coord):
     for spine in ['top', 'right', 'left', 'bottom']:
         ax.spines[spine].set_color(grid_color)
         ax.spines[spine].set_linewidth(3)
-    plt.grid(True, color='black')
+    plt.grid(True)
     return fig
 
 
@@ -103,6 +111,9 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     window.columnconfigure(2, weight=2)
     window.rowconfigure(0, weight=6)
 
+    # Setting the layout
+    window.config(background=background_color)
+
     if preview_type=='2D':
         fig = plot_preview2d(self, coord)
     elif preview_type=='3D':
@@ -113,8 +124,6 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     # creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
     canvas.draw()
-  
-    # placing the canvas on the Tkinter window
     canvas.get_tk_widget().grid(columnspan=4, row=0, column=0)
     
     if first_run==True:
@@ -123,9 +132,6 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
         first_run=False
 
     # Creating buttons
-    # Sumir com next e prev nos valores máximos (ja funcional) (precisa melhorar o posicionamento)
-    # Atchim se vc ler isso antes que eu acorde, ta com um problema que quando muda de tela ele nao ativa a aba pra mudar as formacoes
-
     path_1 = os.getcwd() + '/images/seta_direita.png'
     right_arrow = PhotoImage(file=path_1)
 
@@ -133,33 +139,70 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     left_arrow = PhotoImage(file=path_2) 
 
     if i == len(self.formation_list)-1:
-        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self,  preview_type)], height = 40, width = 100, image = left_arrow)
-        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
+        prev_button = Button(master = window, 
+                            command = lambda:[window.quit(), window.destroy(), 
+                            prev(self,  preview_type)], 
+                            height = 40, width = 100,
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            image = left_arrow)
+    
+        resume_button = Button(master = window, 
+                            command = lambda: [window.quit(), window.destroy()], 
+                            height = 2, width = 10, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            text = "Resume")
         
-        prev_button.grid(row=1, column=0)
-        resume_button.grid(row=1, column=2)
+        prev_button.grid(row=1, column=0, pady=10)
+        prev_button.config(highlightthickness=0)
+        resume_button.grid(row=1, column=2, pady=10)
 
     elif i == 0:
-        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
-        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self,  preview_type)], height = 40, width = 100, image = right_arrow)
-
-        resume_button.grid(row=1, column=0)
-        next_button.grid(row=1, column=2)
-
-    else :
+        resume_button = Button(master = window, 
+                            command = lambda: [window.quit(), window.destroy()], 
+                            height = 2, width = 10, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            text = "Resume")
         
-        #apply_button = Button(master = window, command = self.applyFormation, height = 2, width = 10, text = "Apply")
-        prev_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), prev(self,  preview_type)], height = 40, width = 100, image = left_arrow)
-        resume_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 10, text = "Resume")
-        next_button = Button(master = window, command = lambda:[window.quit(), window.destroy(), nextel(self,  preview_type)], height = 40, width = 100, image = right_arrow)
-    
+        next_button = Button(master = window, 
+                            command = lambda:[window.quit(), window.destroy(), 
+                            next(self,  preview_type)], 
+                            height = 40, width = 100, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            image = right_arrow)
+
+        next_button.grid(row=1, column=2, pady=10)
+        next_button.config(highlightthickness=0)
+        resume_button.grid(row=1, column=0, pady=10)
+
+    else :  
+        prev_button = Button(master = window, 
+                            command = lambda:[window.quit(), window.destroy(), prev(self,  preview_type)], 
+                            height = 40, width = 100, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            image = left_arrow)
+
+        resume_button = Button(master = window, 
+                            command = lambda: [window.quit(), window.destroy()], 
+                            height = 2, width = 10, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            text = "Resume")
+
+        next_button = Button(master = window, 
+                            command = lambda:[window.quit(), window.destroy(), next(self,  preview_type)], 
+                            height = 40, width = 100, 
+                            bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                            image = right_arrow)
+                                
         # Placing the buttons on grid
         #apply_button.grid(row=1, column=1, sticky=E)
-        prev_button.grid(row=1, column=0)
-        resume_button.grid(row=1, column=1)
-        next_button.grid(row=1, column=2)
+        prev_button.grid(row=1, column=0, pady=10)
+        prev_button.config(highlightthickness=0)
+        next_button.grid(row=1, column=2, pady=10)
+        next_button.config(highlightthickness=0)
+        resume_button.grid(row=1, column=1, pady=10)
 
-    
+    resume_button.config(highlightthickness=0)
+
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
     # Run the gui
     window.mainloop()
@@ -181,13 +224,12 @@ def plot_init(self):
     #window.resizable(0,0)                                                       # Don't allow to resize the window
     #window.wm_attributes('-topmost', True)                                      # Window stays always on top
 
-    path = os.getcwd() + '/images/Preto.png'
-    img = PhotoImage(file=path)
-    window.iconphoto(True, img)
-
     # Setting the grid configuration
     window.columnconfigure(1, weight=4)
     window.rowconfigure(0, weight=6)
+
+    # Setting the layout
+    window.config(background=background_color)
 
     # Recieves the plot
     coord = self.init_formation_coords
@@ -196,16 +238,23 @@ def plot_init(self):
     # creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
     canvas.draw()
-  
-    # placing the canvas on the Tkinter window
     canvas.get_tk_widget().grid(columnspan=3, row=0, column=0)
     
     # Creating buttons
-    add_command_button = Button(master = window, command = lambda: [window.quit(), window.destroy()], height = 2, width = 20, bg='lightskyblue', activebackground='yellow', text = "Add next command")
+    path = os.getcwd() + '/images/Preto.png'
+    img = PhotoImage(file=path)
+    window.iconphoto(True, img)
 
-    add_command_button.grid(row=1, column=1)
+    resume_button = Button(master = window, 
+                                command = lambda: [window.quit(), window.destroy()], 
+                                height = 2, width = 20, 
+                                bg=button_color, fg=button_font_color, activebackground=active_button_color, 
+                                text = "Resume")
+
+    resume_button.grid(row=1, column=1, pady = 10)
+    resume_button.config(highlightthickness=0)
+    #window.config(highlightbackground = "red", highlightcolor= "red")
     
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
-    
     # Run the gui
     window.mainloop()
