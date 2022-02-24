@@ -18,8 +18,8 @@ def formation3DFromMesh(model_path, number_of_points):
     coords = np.hstack((coords, ones))
     return coords, mesh, pcd
 
-def formation3DfromMeshZoo(mesh_name):
-    pass
+# def formation3DfromMeshZoo(mesh_name):
+#     pass
 
 def visualizeMesh(mesh):
     if mesh is None:
