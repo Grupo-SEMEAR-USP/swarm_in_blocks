@@ -15,17 +15,15 @@ Buttons:
     save
     resume
     cancel (just simulation)
-
-Colors:
-
 '''
 # Defining colors
-#background_color = '#9597bf' #dark
-background_color = '#868686' #light
+background_color = '#9597bf' #dark
+#background_color = 'white' #dark
+#background_color = '#868686' #light
 grid_color = 'black'
 #points_color = '#ff00dd' #dark1
-#points_color = '#ffae00' #dark2
-points_color = '#20c000' #light
+points_color = 'red' #dark2
+#points_color = '#20c000' #light
 button_color = 'black'
 button_font_color = 'white'
 active_button_color = 'gray'
@@ -36,12 +34,12 @@ def save():
 
 def next(self, preview_type):
     global i; i += 1
-    coord = self.formation_list[i][2]
+    coord = self.formation_list['formation {}'.format(i)]['coord']
     create_swarm_preview(self, coord, preview_type, first_run=False)
 
 def prev(self, preview_type):
     global i; i -= 1
-    coord = self.formation_list[i][2]
+    coord = self.formation_list['formation {}'.format(i)]['coord']
     create_swarm_preview(self, coord, preview_type, first_run=False)
 
 def plot_preview2d(self, coord):
@@ -229,7 +227,25 @@ def plot_init(self):
     window.rowconfigure(0, weight=6)
 
     # Setting the layout
-    window.config(background=background_color)
+    menubar = Menu(window)
+    window.config(background=background_color, menu=menubar)
+
+    # create the Options_menu
+    options_menu = Menu(menubar, tearoff=0)
+    options_menu.add_command(label='Save last formation', command=save)
+    options_menu.add_command(label='Save all the formation history')
+    options_menu.add_command(label='Close')
+    options_menu.add_separator()
+    options_menu.add_command(label='Exit', command=window.destroy)
+
+    # create the Help menu
+    help_menu = Menu(menubar, tearoff=0)
+    help_menu.add_command(label='Welcome')
+    help_menu.add_command(label='About...')
+
+    # add the menus to the menubar
+    menubar.add_cascade(label="Options", menu=options_menu)
+    menubar.add_cascade(label="Help", menu=help_menu)
 
     # Recieves the plot
     coord = self.init_formation_coords
