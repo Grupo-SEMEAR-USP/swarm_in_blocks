@@ -86,23 +86,6 @@ close.onclick = ()=>{
 // 		}, 3000);
 // 	}
 // }
-function rangeTest() {
-	var min = 0;
-	var max = 20;
-	
-	var inputRef = document.getElementById("txt");
-	var txtValue = inputRef.value;
-	if(isNaN(parseFloat(txtValue))){
-	  console.log("warning input is not a number");
-	  return;
-	}
-	var newNum = parseFloat(txtValue);
-	console.log(`NEW:${newNum}`);
-	if (newNum > max || newNum < min) {
-	  console.log('input not in range (' + min + ", " + max + ")");
-	  inputRef.value = "";
-	}
-  }
 
 // update Python code
 workspace.addChangeListener(function(e) {

@@ -20,6 +20,26 @@
 	<script src="blockly/blocks_compressed.js"></script>
 	<script src="blockly/msg/js/en.js"></script>
 	<script type="module" src="main.js"></script>
+	<!-- launch clover Range Enforced -->
+	<script type="text/javascript">
+		function rage_enforced() {
+			var min = 0;
+			var max = 20;
+			
+			var inputRef = document.getElementById("txt");
+			var txtValue = inputRef.value;
+			if(isNaN(parseFloat(txtValue))){
+				console.log("warning input is not a number");
+				return;
+			}
+			var newNum = parseFloat(txtValue);
+			console.log(`NEW:${newNum}`);
+			if (newNum > max || newNum < min) {
+				console.log('input not in range (' + min + ", " + max + ")");
+				inputRef.value = "";
+				}
+		}
+	</script>
 </head>
 
 
@@ -117,8 +137,7 @@
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
-				<input type="number" id="txt" onkeyup="rangeTest()" min="0" max="20" stpe="1">
-				<!-- <div class="warning" style="display: none;"></div> -->
+				<input type="number" id="txt" onkeyup="rage_enforced()" min="0" max="20" stpe="1">
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
