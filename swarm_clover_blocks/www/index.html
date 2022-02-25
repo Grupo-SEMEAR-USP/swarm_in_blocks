@@ -37,14 +37,39 @@
 			if (newNum > max || newNum < min) {
 				console.log('input not in range (' + min + ", " + max + ")");
 				inputRef.value = "";
-				}
+				inputRef.classList.add("apply-shake");
+				setTimeout(function(){
+					inputRef.classList.remove("apply-shake");
+				}, 500);	
+			}
 		}
 	</script>
+	<style>
+		@keyframes shake {
+			10%, 90% {
+			transform: translate3d(-1.5px, 0, 0);
+			}
+			20%, 80% {
+			transform: translate3d(2.5px, 0, 0);
+			}
+			30%, 50%, 70% {
+			transform: translate3d(-4.5px, 0, 0);
+			}
+			40%, 60% {
+			transform: translate3d(4.5px, 0, 0);
+			}
+		}
+		.apply-shake {
+			position: relative;
+			animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+			animation-iteration-count: 3;
+		}
+	</style>
 </head>
 
 
 <body data-tab="blocks">
-	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px">
+	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px;">
 		<a href="http://www.semear.eesc.usp.br/wordpress/" style="text-align:left" target=_blank; rel=noopener noreferrer>
 			<img	src="./blockly/media/Swarm_in_Blocks.svg"
 					alt="Swarm in Blocks"
