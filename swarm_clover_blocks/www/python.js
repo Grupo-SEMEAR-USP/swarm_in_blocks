@@ -21,13 +21,30 @@ Blockly.Python.addReservedWords('SetLEDs,LEDState,set_leds');
 const IMPORT_SRV = `from clover import srv
 from std_srvs.srv import Trigger`;
 
+/*
+Blocos que falta arrumar:
+Forms
+Current Position, Yaw e Pitch,roll
+time
+arrived
+rangefinder
+flightmode
+armed
+current voltage
+set led effect
+set led
+led count
+read gpio
+set gpio
+set gpio pwm
+set gpio duty cicle
+*/
+
 function NAVIGATE_WAIT(id){ 
 	return `\ndef navigate_wait_${id}(x=0, y=0, z=0, speed=0.5, frame_id='body${id}', auto_arm=False):
-    res = navigate(x=x, y=y, z=z, yaw=float('nan'), speed=speed, frame_id=frame_id, auto_arm=auto_arm)
-
+    res = navigate_${id}(x=x, y=y, z=z, yaw=float('nan'), speed=speed, frame_id=frame_id, auto_arm=auto_arm)
     if not res.success:
         raise Exception(res.message)
-
     while not rospy.is_shutdown():
         telem = get_telemetry_${id}(frame_id='navigate_target${id}')
         if math.sqrt(telem.x ** 2 + telem.y ** 2 + telem.z ** 2) < ${params.navigate_tolerance}:
@@ -35,21 +52,21 @@ function NAVIGATE_WAIT(id){
         rospy.sleep(${params.sleep_time})\n`;
 	}
 
-const LAND_WAIT = () => `\ndef land_wait():
-    land()
-    while get_telemetry().armed:
+const LAND_WAIT = (id) => `\ndef land_wait_${id}():
+    land_${id}()
+    while get_telemetry_${id}().armed:
         rospy.sleep(${params.sleep_time})\n`;
 
-const WAIT_YAW = () => `\ndef wait_yaw():
+const WAIT_YAW = (id) => `\ndef wait_yaw_${id}():
     while not rospy.is_shutdown():
-        telem = get_telemetry(frame_id='navigate_target')
+        telem = get_telemetry_${id}(frame_id='navigate_target${id}')
         if abs(telem.yaw) < math.radians(${params.yaw_tolerance}):
             return
         rospy.sleep(${params.sleep_time})\n`;
 
-const WAIT_ARRIVAL = () => `\ndef wait_arrival():
+const WAIT_ARRIVAL = (id) => `\ndef wait_arrival_${id}():
     while not rospy.is_shutdown():
-        telem = get_telemetry(frame_id='navigate_target')
+        telem = get_telemetry_${id}(frame_id='navigate_target${id}')
         if math.sqrt(telem.x ** 2 + telem.y ** 2 + telem.z ** 2) < ${params.navigate_tolerance}:
             return
         rospy.sleep(${params.sleep_time})\n`;
@@ -97,19 +114,19 @@ function generateROSDefinitions(id) {
 		code += NAVIGATE_WAIT(id);
 	}
 	if (rosDefinitions.landWait) {
-		code += LAND_WAIT();
+		code += LAND_WAIT(id);
 	}
 	if (rosDefinitions.waitArrival) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
-		code += WAIT_ARRIVAL();
+		code += WAIT_ARRIVAL(id);
 	}
 	if (rosDefinitions.arrived) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
-		code += ARRIVED();
+		code += ARRIVED(id);
 	}
 	if (rosDefinitions.waitYaw) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
-		code += WAIT_YAW();
+		code += WAIT_YAW(id);
 	}
 	if (rosDefinitions.distance) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
@@ -170,7 +187,7 @@ Blockly.Python.navigate = function(block) {
 		return `navigate_wait_${id}(${params.join(', ')}),\n`;
 
 	} else {
-		if (frameId != 'body') {
+		if (frameId != 'body${id}') {
 			params.push(`yaw=float('nan')`);
 		}
 		return `navigate_${id}(${params.join(', ')})\n`;
@@ -182,10 +199,11 @@ Blockly.Python.set_velocity = function(block) {
 	let y = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_NONE);
 	let z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_NONE);
 	let frameId = buildFrameId(block);
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
 
-	simpleOffboard();
+	simpleOffboard(id);
 
-	if (frameId == `'body'`) {
+	if (frameId == `'body${id}'`) {
 		return `set_velocity(vx=${x}, vy=${y}, vz=${z}, frame_id=${frameId})\n`;
 	} else {
 		return `set_velocity(vx=${x}, vy=${y}, vz=${z}, yaw=float('nan'), frame_id=${frameId})\n`;
@@ -193,30 +211,32 @@ Blockly.Python.set_velocity = function(block) {
 }
 
 Blockly.Python.take_off = function(block) {
-	simpleOffboard();
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
+	simpleOffboard(id);
 
 	let z = Blockly.Python.valueToCode(block, 'ALT', Blockly.Python.ORDER_NONE);
 
 	if (block.getFieldValue('WAIT') == 'TRUE') {
 		rosDefinitions.navigateWait = true;
-		simpleOffboard();
+		simpleOffboard(id);
 
-		return `navigate_wait_${id}(z=${z}, frame_id='body', auto_arm=True)\n`;
+		return `navigate_wait_${id}(z=${z}, frame_id='body${id}', auto_arm=True)\n`;
 	} else {
-		return `navigate_{id}(z=${z}, frame_id='body0', auto_arm=True)\n`;
+		return `navigate_${id}(z=${z}, frame_id='body${id}', auto_arm=True)\n`;
 	}
 }
 
 Blockly.Python.land = function(block) {
-	simpleOffboard();
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
+	simpleOffboard(id);
 
 	if (block.getFieldValue('WAIT') == 'TRUE') {
 		rosDefinitions.landWait = true;
-		simpleOffboard();
+		simpleOffboard(id);
 
-		return `land_wait()\n`;
+		return `land_wait_${id}()\n`;
 	} else {
-		return 'land()\n';
+		return `land_${id}()\n`;
 	}
 }
 
@@ -228,22 +248,24 @@ Blockly.Python.angle = function(block) {
 }
 
 Blockly.Python.set_yaw = function(block) {
-	simpleOffboard();
 	let yaw = Blockly.Python.valueToCode(block, 'YAW', Blockly.Python.ORDER_NONE);
 	let frameId = buildFrameId(block);
-	let code = `navigate(x=float('nan'), y=float('nan'), z=float('nan'), yaw=${yaw}, frame_id=${frameId})\n`;
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
+	simpleOffboard(id);
+	let code = `navigate_${id}(x=float('nan'), y=float('nan'), z=float('nan'), yaw=${yaw}, frame_id=${frameId})\n`;
 	if (block.getFieldValue('WAIT') == 'TRUE') {
 		rosDefinitions.waitYaw = true;
-		simpleOffboard();
-		code += 'wait_yaw()\n';
+		simpleOffboard(id);
+		code += `wait_yaw_${id}()\n`;
 	}
 	return code;
 }
 
 Blockly.Python.wait_arrival = function(block) {
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
 	rosDefinitions.waitArrival = true;
-	simpleOffboard();
-	return 'wait_arrival()\n';
+	simpleOffboard(id);
+	return `wait_arrival_${id}()\n`;
 }
 
 Blockly.Python.get_time = function(block) {
@@ -258,7 +280,7 @@ Blockly.Python.arrived = function(block) {
 }
 
 Blockly.Python.wait = function(block) {
-	initNode();
+	initNode(0);
 	return `rospy.sleep(${Blockly.Python.valueToCode(block, 'TIME', Blockly.Python.ORDER_NONE)})\n`;
 }
 
@@ -272,19 +294,20 @@ Blockly.Python.setpoint = function(block) {
 	let pitch = Blockly.Python.valueToCode(block, 'PITCH', Blockly.Python.ORDER_NONE);
 	let roll = Blockly.Python.valueToCode(block, 'ROLL', Blockly.Python.ORDER_NONE);
 	let thrust = Blockly.Python.valueToCode(block, 'THRUST', Blockly.Python.ORDER_NONE);
+	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
 
 	if (type == 'VELOCITY') {
 		rosDefinitions.setVelocity = true;
-		simpleOffboard();
-		return `set_velocity(vx=${vx}, vy=${vy}, vz=${vz}, frame_id=${frameId}, yaw=float('nan'))\n`;
+		simpleOffboard(id);
+		return `set_velocity_${id}(vx=${vx}, vy=${vy}, vz=${vz}, frame_id=${frameId}, yaw=float('nan'))\n`;
 	} else if (type == 'ATTITUDE') {
 		rosDefinitions.setAttitude = true;
-		simpleOffboard();
-		return `set_attitude(pitch=${pitch}, roll=${roll}, yaw=${yaw}, thrust=${thrust}, frame_id=${frameId})\n`;
+		simpleOffboard(id);
+		return `set_attitude_${id}(pitch=${pitch}, roll=${roll}, yaw=${yaw}, thrust=${thrust}, frame_id=${frameId})\n`;
 	} else if (type == 'RATES') {
 		rosDefinitions.setRates = true;
-		simpleOffboard();
-		return `set_rates(pitch_rate=${pitch}, roll_rate=${roll}, yaw_rate=${yaw}, thrust=${thrust})\n`;
+		simpleOffboard(id);
+		return `set_rates_${id}(pitch_rate=${pitch}, roll_rate=${roll}, yaw_rate=${yaw}, thrust=${thrust})\n`;
 	}
 }
 
@@ -400,7 +423,6 @@ Blockly.Python.set_led = function(block) {
 }
 
 const GET_LED_COUNT = `led_count = None
-
 def get_led_count():
     global led_count
     if led_count is None:
@@ -520,4 +542,3 @@ Blockly.Python.forms = function(block) {
 	// obs: no return foi usado uma "gambiarra", vários navigate_wait são concatenados com ",\n" entre eles,
 	// dessa forma é possível montar uma lista de intruções para serem seguidas
 }
-

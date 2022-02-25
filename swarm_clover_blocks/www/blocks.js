@@ -57,6 +57,9 @@ function updateSetpointBlock(e) {
 	if (type == 'RATES') {
 		this.getInput('ID').setVisible(false);
 	}
+	else {
+		this.getInput('ID').setVisible(true);
+	} 
 
 	this.render();
 }
@@ -162,7 +165,6 @@ Blockly.Blocks['setpoint'] = {
 		this.appendValueInput("ID")
 			.setCheck("Number")
 			.appendField("with ID")
-			.setVisible(false);
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -194,7 +196,6 @@ Blockly.Blocks['get_position'] = {
 		this.appendValueInput("ID")
 			.setCheck("Number")
 			.appendField("with ID")
-			.setVisible(false)
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current position or velocity in meters or meters per second.");
@@ -274,6 +275,9 @@ Blockly.Blocks['wait_arrival'] = {
 	init: function () {
 		this.appendDummyInput()
 			.appendField("wait arrival");
+		this.appendValueInput("ID")
+			.setCheck("Number")
+			.appendField("with ID")
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(COLOR_FLIGHT);
@@ -368,6 +372,10 @@ Blockly.Blocks['take_off'] = {
 		this.appendDummyInput()
 			.appendField("wait")
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
+		this.appendValueInput("ID")
+			.setCheck("Number")
+			.appendField("with ID");
+		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(COLOR_FLIGHT);
@@ -383,7 +391,10 @@ Blockly.Blocks['land'] = {
 		this.appendDummyInput()
 			.appendField("wait")
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
-		this.setInputsInline(true);
+		this.appendValueInput("ID")
+			.setCheck("Number")
+			.appendField("with ID");
+		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(COLOR_FLIGHT);
@@ -462,7 +473,10 @@ Blockly.Blocks['set_yaw'] = {
 		this.appendDummyInput()
 			.appendField("wait")
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
-		this.setInputsInline(true);
+		this.appendValueInput("ID")
+			.setCheck("Number")
+			.appendField("with ID");
+		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(COLOR_FLIGHT);
