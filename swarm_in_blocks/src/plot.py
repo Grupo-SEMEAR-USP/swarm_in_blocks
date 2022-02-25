@@ -22,7 +22,7 @@ background_color = '#d4d4d4' #cinza claro
 #background_color = '#868686' #light
 grid_color = 'black'
 #points_color = '#700b8c' #roxo
-points_color = '#bf3459' #vermelho
+points_color = 'red' #vermelho
 #points_color = 'orange' #laranja
 button_color = 'black'
 button_font_color = 'white'
@@ -232,6 +232,8 @@ def plot_init(self):
     positionRight = int(window.winfo_screenwidth()/2 - 500/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
     window.geometry("500x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
+
+    window.config(background=background_color)
 
     # Setting the grid configuration
     window.columnconfigure(0, weight=6)
