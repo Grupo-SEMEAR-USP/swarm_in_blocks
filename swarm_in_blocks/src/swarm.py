@@ -10,7 +10,6 @@ from clover import srv
 from std_srvs.srv import Trigger
 
 # Other tools
-# import matplotlib.pyplot as plt
 import numpy as np
 from threading import Thread
 import time
