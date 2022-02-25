@@ -63,8 +63,8 @@ const GET_DISTANCE = `\ndef get_distance(x, y, z, frame_id):
     return math.sqrt((x - telem.x) ** 2 + (y - telem.y) ** 2 + (z - telem.z) ** 2)\n`;
 
 var rosDefinitions = {};
-
 function generateROSDefinitions(id) {
+	
 	// order for ROS definitions is significant, so generate all ROS definitions as one
 	var code = `rospy.init_node('flight')\n\n`;
 	if (rosDefinitions.offboard) {
@@ -115,7 +115,7 @@ function generateROSDefinitions(id) {
 		Blockly.Python.definitions_['import_math'] = 'import math';
 		code += GET_DISTANCE;
 	}
-	Blockly.Python.definitions_['ros_{}'] = code;
+	Blockly.Python.definitions_[`ros_${id}`] = code;
 }
 
 function initNode(id) {
