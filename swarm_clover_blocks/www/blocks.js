@@ -23,7 +23,7 @@ function considerFrameId(e) {
 	var frameId = this.getFieldValue('FRAME_ID');
 	// set appropriate coordinates labels
 	if (this.getInput('X')) { // block has x-y-z fields
-		if (frameId == 'BODY0' || frameId == 'NAVIGATE_TARGET' || frameId == 'BASE_LINK') {
+		if (frameId == 'BODY' || frameId == 'NAVIGATE_TARGET' || frameId == 'BASE_LINK') {
 			this.getInput('X').fieldRow[0].setValue('forward');
 			this.getInput('Y').fieldRow[0].setValue('left');
 			this.getInput('Z').fieldRow[0].setValue('up');
