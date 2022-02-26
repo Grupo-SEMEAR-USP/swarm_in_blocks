@@ -14,11 +14,12 @@ from std_srvs.srv import Trigger
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
+import transform
 
 
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
-    plt.figure.set_aspect('equal', adjustable='box')
+   # plt.figure.set_aspect('equal', adjustable='box')
     plt.plot(coord[:,0],coord[:,1],'ro')
     max_point = int(np.amax(coord[:,0:2]))
     min_point = int(np.amin(coord[:,0:2]))
@@ -263,83 +264,43 @@ def Letter_Verification(letter, type):
     return cn 
 
         
-def Letters_Words():
-    cont = 1
-    space = 8
-    sum = 0
-    index = 0
-    coord = np.empty((0,4))
-    letter_coord = np.empty((0,4))
-    fill = []
-    max = []
-    
-    str = input(f"Please, enter cont word or cont letter: ")
-    option = input(f"\nShow one by one, pres o or O\nShow all, press a or A\n: ")
-    print(f"\nSimple: Minimum Clovers needed, for this option press S or s")
-    print(f"Mediun: Average amount of clovers, for this option press M or m")
-    print(f"Full: Maximum fill, for this option press F or f\n")
+def Letters(letter, type="s"):
+    letter_coord = Alphabet_dictionary[letter]
+    #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
+    return letter_coord[:Letter_Verification(letter, type)]
 
-    if(str == "SWARM_S"):
-        type = input(f"Please, enter fill type for SWARM: ")
-        sum += Letter_Verification("SWARM_S", "f")
-        max.append(sum)
-        fill.append(Letter_Verification("SWARM_S", type))
-        letter_coord = Alphabet_dictionary["SWARM_S"]
-
-    else:
-        for char in str:
-            type = input(f"Please, enter fill type for {char.upper()}: ")
-            sum += Letter_Verification(char.upper(), "f")
-            max.append(sum)
-            fill.append(Letter_Verification(char.upper(), type))
-            letter_coord=np.concatenate((letter_coord, Alphabet_dictionary[char.upper()]))
-    
-    if(option == "A" or option == "a"): 
-        space = 8
-
-    elif(option == "O" or option == "o"):
-        space = 0       
-    
-    while(index<sum):
-        
-        if(len(fill)>1):
-            point = [letter_coord[index][0], letter_coord[index][1], z, 1]
-
-            if(index>=fill[cont-1] and index<=(fill[cont] + max[cont-1])):
-                point = [letter_coord[index][0] + space, letter_coord[index][1], z, 1] 
-            
-            if(index == fill[0]-1):
-                index = max[0]-1
-
-            if(index == (fill[cont] + max[cont-1])-1):
-                index = max[cont]-1
-                letter_coord[index][0]+=8
-                if(cont<(len(fill)-1) and len(fill)>2):
-                    cont+=1
-                    if(option == "A" or option == "a"):
-                        space+=8
-                
-                if(cont==len(fill)-1):
-                    index+=1
-            else: 
-                index+=1
-    
+def Word(list_str, type_list):
+   i=6 
+   word_list = list(map(Letters, list_str, type_list))
+   n = len(word_list)
+   word_list_2=[]
+   for index in range(n):
+        if(index==0):
+            word_list_2.append(word_list[index])
         else:
-            point = [letter_coord[index][0], letter_coord[index][1], z, 1]
-            if(index == fill[0]-1):
-                index = max[0]
-            index+=1
-        
-        coord = np.concatenate((coord, [point]))
+            word_list_2.append(transform.translateFormation(word_list[index],i,0,0))
+            i+=8
 
-    plot_letter_preview(coord)
-    #print(coord)
-    return(coord)
+   word_coord = np.vstack((word_list_2))
+   print(word_coord)
+   plot_letter_preview(word_coord)
+   return word_coord
 
+       
 if __name__ == "__main__":
-	Letters_Words()
+    # l = "A"
+    # t = "f"
+    # Letters(l, t)
 
+    str = input(f"Please, enter cont word or cont letter: ")
+    list_str = []
+    type_list = []
+    #usar map aqui
+    for char in str:
+        list_str.append(char.upper())
+        type_list.append(Letter_Verification(char.upper(), "s"))
 
+    Word(list_str, type_list)
 
 
 

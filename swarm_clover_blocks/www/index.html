@@ -20,11 +20,56 @@
 	<script src="blockly/blocks_compressed.js"></script>
 	<script src="blockly/msg/js/en.js"></script>
 	<script type="module" src="main.js"></script>
+	<!-- launch clover Range Enforced -->
+	<script type="text/javascript">
+		function rage_enforced() {
+			var min = 0;
+			var max = 20;
+			
+			var inputRef = document.getElementById("txt");
+			var txtValue = inputRef.value;
+			if(isNaN(parseFloat(txtValue))){
+				console.log("warning input is not a number");
+				return;
+			}
+			var newNum = parseFloat(txtValue);
+			console.log(`NEW:${newNum}`);
+			if (newNum > max || newNum < min) {
+				console.log('input not in range (' + min + ", " + max + ")");
+				inputRef.value = "";
+				inputRef.classList.add("apply-shake");
+				setTimeout(function(){
+					inputRef.classList.remove("apply-shake");
+				}, 500);	
+			}
+		}
+	</script>
+	<style>
+		@keyframes shake {
+			10%, 90% {
+			transform: translate3d(-1.5px, 0, 0);
+			}
+			20%, 80% {
+			transform: translate3d(2.5px, 0, 0);
+			}
+			30%, 50%, 70% {
+			transform: translate3d(-4.5px, 0, 0);
+			}
+			40%, 60% {
+			transform: translate3d(4.5px, 0, 0);
+			}
+		}
+		.apply-shake {
+			position: relative;
+			animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+			animation-iteration-count: 3;
+		}
+	</style>
 </head>
 
 
 <body data-tab="blocks">
-	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px">
+	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px;">
 		<a href="http://www.semear.eesc.usp.br/wordpress/" style="text-align:left" target=_blank; rel=noopener noreferrer>
 			<img	src="./blockly/media/Swarm_in_Blocks.svg"
 					alt="Swarm in Blocks"
@@ -117,8 +162,7 @@
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
-				<input type="number" id="txt" onkeyup="rangeTest()" min="0" max="20" stpe="1">
-				<!-- <div class="warning" style="display: none;"></div> -->
+				<input type="number" id="txt" onkeyup="rage_enforced()" min="0" max="20" stpe="1">
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
@@ -156,6 +200,15 @@
 	<pre id="python" class="content" contenteditable oncut="return false" onpaste="return false" onkeydown="if(!event.metaKey) return false" spellcheck="false"></pre>
 
 	<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+		<!-- Categoria Swarm com os blocos LED_HEIGHT e FORMS -->
+		<category name="Swarm" colour="#cf0173">
+			<block type="forms">
+				<value name="Z"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="X"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>				
+			</block> 
+		</category>
 		<category name="Flight" colour="#870b99">
 			<block type="navigate">
 				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
@@ -166,15 +219,21 @@
 			</block>
 			<block type="take_off">
 				<value name="ALT"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
-			<block type="land"></block>
+			<block type="land">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
 			<block type="set_yaw">
 				<value name="YAW"><shadow type="angle"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="wait">
 				<value name="TIME"><shadow type="math_number"><field name="NUM">3</field></shadow></value>
 			</block>
-			<block type="wait_arrival"></block>
+			<block type="wait_arrival">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
 			<block type="setpoint">
 				<value name="VX"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="VY"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
@@ -187,29 +246,16 @@
 			</block>
 			<!-- <block type="key_pressed"></block> -->
 		</category>
-		<!-- Categoria Swarm com os blocos LED_HEIGHT e FORMS -->
-
-		<category name="Swarm" colour="#cf0173">
-			<block type="led_height">
-				<value name="if"><shadow type="math_number"><field name="NUM"></field></shadow></value>				
-			</block> 
-			<block type="forms">
-				<value name="Z"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
-				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
-				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
-				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>				
-			</block> 
-		</category>
 		<category name="State" colour="#bf7300">
 			<block type="get_position">
-				<field name="FRAME_ID">ARUCO_MAP</field>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="get_yaw">
-				<field name="FRAME_ID">ARUCO_MAP</field>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
-			<block type="get_attitude"></block>
+			<block type="get_attitude">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
 			<block type="distance">
 				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="Y"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
@@ -217,23 +263,35 @@
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="get_time"></block>
-			<block type="arrived"></block>
+			<block type="arrived">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
 			<block type="rangefinder_distance"></block>
-			<block type="mode"></block>
-			<block type="armed"></block>
-			<block type="voltage"></block>
+			<block type="mode">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="armed">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="voltage">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
 		</category>
 		<category name="LED" colour="#006f2b">
 			<block type="set_effect">
 				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="set_led">
 				<value name="INDEX"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
-			<block type="led_count"></block>
+			<block type="led_count">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>	
+			</block>
 		</category>
-		<category name="GPIO" colour="#5b97cc">
+		<!-- <category name="GPIO" colour="#5b97cc">
 			<block type="gpio_read">
 				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
 			</block>
@@ -249,7 +307,7 @@
 				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
 				<value name="DUTY_CYCLE"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
 			</block>
-		</category>
+		</category> -->
 		<sep></sep>
 		<category name="Logic" colour="#5b80a5">
 			<block type="controls_if"></block>
