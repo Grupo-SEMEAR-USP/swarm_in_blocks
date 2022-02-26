@@ -110,7 +110,10 @@ E = np.array([[0, 0, z, 1],
              [2, 0, z, 1],
              [3, 0, z, 1],
              [2, 8, z, 1],
-             [3, 8, z, 1]], dtype = float)    		#   Full 22 
+             [3, 8, z, 1],
+             [4, 8, z, 1],
+             [3, 4, z, 1],
+             [4, 0, z, 1],], dtype = float)    		#   Full 25 
 
 O = np.array([[0, 2, z, 1],
              [0, 4, z, 1],
@@ -139,7 +142,7 @@ O = np.array([[0, 2, z, 1],
              [4.5, 0.5, z, 1],
              [1.5, 7.5, z, 1],
              [4.5, 7.5, z, 1],
-             [6.5, 6.5, z, 1]], dtype = float) 		#	Full 28
+             [5.5, 6.5, z, 1]], dtype = float) 		#	Full 28
 
 S = np.array([[1, 0, z, 1],
              [4, 0, z, 1],
@@ -239,7 +242,9 @@ def Type_Format(simple, mediun, full, type = "S"):
 	if(type == "F" or type == "f"):
 		return full
 
-def Letter_Verification(letter, type):
+def Letter_Verification(letter):
+    type = input(f"Please press the type: ")
+
     if(letter == 'A'):
         cn = Type_Format(12, 16, 26, type)
 
@@ -247,7 +252,7 @@ def Letter_Verification(letter, type):
         cn = Type_Format(9, 13, 21, type)
 
     if(letter == 'E'):
-        cn = Type_Format(13, 18, 22, type)
+        cn = Type_Format(13, 18, 25, type)
 
     if(letter == 'O'):
         cn = Type_Format(10, 18, 28, type)
@@ -264,17 +269,17 @@ def Letter_Verification(letter, type):
     return cn 
 
         
-def Letters(letter, type="s"):
+def Letters(letter):
     letter_coord = Alphabet_dictionary[letter]
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
-    return letter_coord[:Letter_Verification(letter, type)]
+    return letter_coord[:Letter_Verification(letter)]
 
-def Word(list_str, type_list):
+def Word(list_str):
    i=6 
-   word_list = list(map(Letters, list_str, type_list))
-   n = len(word_list)
+   word_list = list(map(Letters, list_str))
    word_list_2=[]
-   for index in range(n):
+
+   for index in range(len(word_list)):
         if(index==0):
             word_list_2.append(word_list[index])
         else:
@@ -282,25 +287,16 @@ def Word(list_str, type_list):
             i+=8
 
    word_coord = np.vstack((word_list_2))
-   print(word_coord)
-   plot_letter_preview(word_coord)
    return word_coord
 
        
 if __name__ == "__main__":
-    # l = "A"
-    # t = "f"
-    # Letters(l, t)
-
-    str = input(f"Please, enter cont word or cont letter: ")
-    list_str = []
-    type_list = []
-    #usar map aqui
-    for char in str:
-        list_str.append(char.upper())
-        type_list.append(Letter_Verification(char.upper(), "s"))
-
-    Word(list_str, type_list)
+    coord = np.empty((0,4))
+    #str = input(f"Please, enter cont word: ")
+    #list_str = list(str.upper())
+    #Word(list_str)
+    coord = Letters('E')
+    plot_letter_preview(coord)
 
 
 
