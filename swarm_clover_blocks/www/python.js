@@ -21,21 +21,6 @@ Blockly.Python.addReservedWords('SetLEDs,LEDState,set_leds');
 const IMPORT_SRV = `from clover import srv
 from std_srvs.srv import Trigger`;
 
-/*
-Blocos que falta arrumar:
-Forms
-Current Position, Yaw e Pitch,roll
-time
-arrived
-rangefinder
-flightmode
-armed
-current voltage
-set led effect
-set led
-led count
-*/
-
 function NAVIGATE_WAIT(id) { 
 	return `
 	\ndef navigate_wait_${id}(x=0, y=0, z=0, speed=0.5, frame_id='body${id}', auto_arm=False):
