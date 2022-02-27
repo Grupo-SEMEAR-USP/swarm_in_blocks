@@ -10,7 +10,6 @@ from clover import srv
 from std_srvs.srv import Trigger
 
 # Other tools
-# import matplotlib.pyplot as plt
 import numpy as np
 from threading import Thread
 import time
@@ -112,18 +111,13 @@ class Swarm:
       
       # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
       self.op_num = 0
-      self.formation_list = np.empty((0,3))
+      self.formation_list = {}
 
       # Initial formation. By default on square formation with L = N//2 + 1.
       # (Ex: N=5 -> L=3)
       self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers-1)
       self.init_formation_coords = self.des_formation_coords
       self.init_formation_name = self.des_formation_name
-
-      # Lists of formations. Can be used to plan a formation changing for formation that is hard to generate in real time.
-      self.op_num = 0
-      self.formation_list = np.empty((0,3))
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.init_formation_name,self.init_formation_coords]]))
 
       # Leader id of the swarm
       self.leader_id = None
@@ -272,8 +266,8 @@ class Swarm:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
       self.des_formation_name = shape
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def setFormation3D(self, shape, N, L):
       if (shape=='cube'):
@@ -286,8 +280,8 @@ class Swarm:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
       self.des_formation_name = shape
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -310,29 +304,29 @@ class Swarm:
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'transform'
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def scaleFormation(self, coord, sx, sy, sz):
       new_coord = transform.scaleFormation(coord, sx, sy, sz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'scale'
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def translateFormation(self, coord, tx, ty, tz):
       new_coord = transform.translateFormation(coord, tx, ty, tz)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'translate'
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    def rotateFormation(self, coord, anglex, angley, anglez):
       new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
       self.des_formation_coords = new_coord
       self.des_formation_name = 'rotate'
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-      self.formation_list = np.concatenate((self.formation_list,[[self.op_num,self.des_formation_name,self.des_formation_coords]]))
 
    #Leader operations
    def setLeader(self, id):

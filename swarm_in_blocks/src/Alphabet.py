@@ -14,11 +14,12 @@ from std_srvs.srv import Trigger
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
+import transform
 
 
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
-    plt.figure.set_aspect('equal', adjustable='box')
+   # plt.figure.set_aspect('equal', adjustable='box')
     plt.plot(coord[:,0],coord[:,1],'ro')
     max_point = int(np.amax(coord[:,0:2]))
     min_point = int(np.amin(coord[:,0:2]))
@@ -109,7 +110,10 @@ E = np.array([[0, 0, z, 1],
              [2, 0, z, 1],
              [3, 0, z, 1],
              [2, 8, z, 1],
-             [3, 8, z, 1]], dtype = float)    		#   Full 22 
+             [3, 8, z, 1],
+             [4, 8, z, 1],
+             [3, 4, z, 1],
+             [4, 0, z, 1],], dtype = float)    		#   Full 25 
 
 O = np.array([[0, 2, z, 1],
              [0, 4, z, 1],
@@ -138,7 +142,7 @@ O = np.array([[0, 2, z, 1],
              [4.5, 0.5, z, 1],
              [1.5, 7.5, z, 1],
              [4.5, 7.5, z, 1],
-             [6.5, 6.5, z, 1]], dtype = float) 		#	Full 28
+             [5.5, 6.5, z, 1]], dtype = float) 		#	Full 28
 
 S = np.array([[1, 0, z, 1],
              [4, 0, z, 1],
@@ -238,7 +242,9 @@ def Type_Format(simple, mediun, full, type = "S"):
 	if(type == "F" or type == "f"):
 		return full
 
-def Letter_Verification(letter, type):
+def Letter_Verification(letter):
+    type = input(f"Please press the type: ")
+
     if(letter == 'A'):
         cn = Type_Format(12, 16, 26, type)
 
@@ -246,7 +252,7 @@ def Letter_Verification(letter, type):
         cn = Type_Format(9, 13, 21, type)
 
     if(letter == 'E'):
-        cn = Type_Format(13, 18, 22, type)
+        cn = Type_Format(13, 18, 25, type)
 
     if(letter == 'O'):
         cn = Type_Format(10, 18, 28, type)
@@ -263,83 +269,34 @@ def Letter_Verification(letter, type):
     return cn 
 
         
-def Letters_Words():
-    cont = 1
-    space = 8
-    sum = 0
-    index = 0
-    coord = np.empty((0,4))
-    letter_coord = np.empty((0,4))
-    fill = []
-    max = []
-    
-    str = input(f"Please, enter cont word or cont letter: ")
-    option = input(f"\nShow one by one, pres o or O\nShow all, press a or A\n: ")
-    print(f"\nSimple: Minimum Clovers needed, for this option press S or s")
-    print(f"Mediun: Average amount of clovers, for this option press M or m")
-    print(f"Full: Maximum fill, for this option press F or f\n")
+def Letters(letter):
+    letter_coord = Alphabet_dictionary[letter]
+    #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
+    return letter_coord[:Letter_Verification(letter)]
 
-    if(str == "SWARM_S"):
-        type = input(f"Please, enter fill type for SWARM: ")
-        sum += Letter_Verification("SWARM_S", "f")
-        max.append(sum)
-        fill.append(Letter_Verification("SWARM_S", type))
-        letter_coord = Alphabet_dictionary["SWARM_S"]
+def Word(list_str):
+   i=6 
+   word_list = list(map(Letters, list_str))
+   word_list_2=[]
 
-    else:
-        for char in str:
-            type = input(f"Please, enter fill type for {char.upper()}: ")
-            sum += Letter_Verification(char.upper(), "f")
-            max.append(sum)
-            fill.append(Letter_Verification(char.upper(), type))
-            letter_coord=np.concatenate((letter_coord, Alphabet_dictionary[char.upper()]))
-    
-    if(option == "A" or option == "a"): 
-        space = 8
-
-    elif(option == "O" or option == "o"):
-        space = 0       
-    
-    while(index<sum):
-        
-        if(len(fill)>1):
-            point = [letter_coord[index][0], letter_coord[index][1], z, 1]
-
-            if(index>=fill[cont-1] and index<=(fill[cont] + max[cont-1])):
-                point = [letter_coord[index][0] + space, letter_coord[index][1], z, 1] 
-            
-            if(index == fill[0]-1):
-                index = max[0]-1
-
-            if(index == (fill[cont] + max[cont-1])-1):
-                index = max[cont]-1
-                letter_coord[index][0]+=8
-                if(cont<(len(fill)-1) and len(fill)>2):
-                    cont+=1
-                    if(option == "A" or option == "a"):
-                        space+=8
-                
-                if(cont==len(fill)-1):
-                    index+=1
-            else: 
-                index+=1
-    
+   for index in range(len(word_list)):
+        if(index==0):
+            word_list_2.append(word_list[index])
         else:
-            point = [letter_coord[index][0], letter_coord[index][1], z, 1]
-            if(index == fill[0]-1):
-                index = max[0]
-            index+=1
-        
-        coord = np.concatenate((coord, [point]))
+            word_list_2.append(transform.translateFormation(word_list[index],i,0,0))
+            i+=8
 
-    plot_letter_preview(coord)
-    #print(coord)
-    return(coord)
+   word_coord = np.vstack((word_list_2))
+   return word_coord
 
+       
 if __name__ == "__main__":
-	Letters_Words()
-
-
+    coord = np.empty((0,4))
+    #str = input(f"Please, enter cont word: ")
+    #list_str = list(str.upper())
+    #Word(list_str)
+    coord = Letters('E')
+    plot_letter_preview(coord)
 
 
 
