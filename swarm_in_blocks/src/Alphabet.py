@@ -16,7 +16,6 @@ from matplotlib.widgets import Button
 import numpy as np
 import transform
 
-
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
    # plt.figure.set_aspect('equal', adjustable='box')
@@ -234,6 +233,7 @@ Alphabet_dictionary = {
 	"X": X,
     "SWARM_S": SWARM_S
 }
+
 def Type_Format(simple, mediun, full, type = "S"):
 	if(type == "S" or type == "s"):
 		return (simple)
@@ -267,8 +267,7 @@ def Letter_Verification(letter):
         cn = Type_Format(11, 17, 32, type)
 
     return cn 
-
-        
+   
 def Letters(letter):
     letter_coord = Alphabet_dictionary[letter]
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
@@ -288,8 +287,7 @@ def Word(list_str):
 
    word_coord = np.vstack((word_list_2))
    return word_coord
-
-       
+     
 if __name__ == "__main__":
     coord = np.empty((0,4))
     #str = input(f"Please, enter cont word: ")

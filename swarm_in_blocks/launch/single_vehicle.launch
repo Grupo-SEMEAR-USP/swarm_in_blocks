@@ -60,7 +60,7 @@
             <param name="target_system_id" value="$(eval 1 + arg('ID'))"/>
             <param name="target_component_id" value="1"/>
             <param name="gcs_quiet_mode" value="true"/>
-            <param name="conn/timeout" value="8"/>
+            <param name="conn/timeout" value="20"/>
 
             <param name="local_position/child_frame_id" value="base_link$(arg ID)"/>
             <param name="local_position/tf/child_frame_id" value="base_link$(arg ID)"/>
