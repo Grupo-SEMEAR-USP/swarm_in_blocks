@@ -282,6 +282,19 @@ class Swarm:
       self.des_formation_name = shape
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
+   
+   def setAlphabet(self):
+      coord= Alphabet.Letters("SWARM_S")
+      for clover in swarm:
+         if(clover.id%2==0):
+            z=3
+            if((clover.id+1)%5==0 and (clover.id>5)):
+                z+=1
+                if(clover.id%2==0):
+                    z=3
+         y0 = 0 - clover.id
+         rospy.sleep(2)
+         clover.navigate(coord[clover.id][0], clover[clover.id][1] - y0, z)
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -351,6 +364,7 @@ if __name__ == "__main__":
       print("7 - pyramid formation")
       print("O - circle formation")
       print("0 - initial position")
+      print("A - Alphabet formation")
       print("ap - apply formation")
       print("plt - plot preview")
       print("plt3d - plot 3D preview")
@@ -451,6 +465,9 @@ if __name__ == "__main__":
          swarm.returnToHome()
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(2)
+      
+      elif  (key == str('A') or str('a')):
+         swarm.setAlphabet()
 
       elif (key == str('l') or key == str('L')):
          swarm.landAll()

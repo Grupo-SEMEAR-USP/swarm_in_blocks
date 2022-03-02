@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 import transform
+import swarm
 
 
 def plot_letter_preview(coord):
@@ -297,6 +298,10 @@ if __name__ == "__main__":
     #Word(list_str)
     coord = Letters('E')
     plot_letter_preview(coord)
+    
+   
+
+    
 
 
 
