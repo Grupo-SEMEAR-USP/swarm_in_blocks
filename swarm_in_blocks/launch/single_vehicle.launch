@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+
+
 <launch>
     <!-- Posix SITL environment launch script -->
     <!-- launchs PX4 SITL and spawns vehicle -->
@@ -22,7 +24,7 @@
     <arg name="a" value="$(eval 14540 + arg('ID'))"/>
     <arg name="b" value="$(eval 14580 + arg('ID'))"/>
     <arg name="fcu_url" default="udp://:$(arg a)@localhost:$(arg b)"/>
-    
+
     <!-- PX4 configs -->
     <arg name="interactive" default="false"/>
 
@@ -31,14 +33,14 @@
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=true
+                                    main_camera:=false
                                     rangefinder:=false
-                                    led:=true
+                                    led:=true 
                                     gps:=true
-                                    maintain_camera_rate:=false
+                                    maintain_camera_rate:=true
                                     use_clover_physics:=false 
                                     mavlink_tcp_port:=$(arg mavlink_tcp_port)"/>
-                                    
+
         <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
         <!-- PX4 SITL -->
         <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>
@@ -58,8 +60,8 @@
             <param name="target_system_id" value="$(eval 1 + arg('ID'))"/>
             <param name="target_component_id" value="1"/>
             <param name="gcs_quiet_mode" value="true"/>
-            <param name="conn/timeout" value="8"/>
-            
+            <param name="conn/timeout" value="20"/>
+
             <param name="local_position/child_frame_id" value="base_link$(arg ID)"/>
             <param name="local_position/tf/child_frame_id" value="base_link$(arg ID)"/>
             <param name="global_position/child_frame_id" value="base_link$(arg ID)"/>
@@ -67,7 +69,7 @@
             <!-- <param name="setpoint_position/tf/child_frame_id" value="base_link$(arg ID)"/> -->
             <!-- <param name="fake_gps/tf/child_frame_id" value="base_link$(arg ID)"/> -->
             <!-- <param name="setpoint_position/tf/child_frame_id" value="base_link$(arg ID)"/> -->
-            
+
             <!-- basic params -->
             <rosparam command="load" file="$(find clover)/launch/mavros_config.yaml"/>
             <rosparam param="plugin_whitelist">

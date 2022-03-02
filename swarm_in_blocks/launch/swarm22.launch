@@ -252,7 +252,7 @@
     </include>
 
     <!-- UAV20 -->
-    <!-- <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
         <arg name="ID" value="20"/>
         <arg name="x" value="0"/>
         <arg name="y" value="20"/>
@@ -260,10 +260,10 @@
         <arg name="R" value="0"/>
         <arg name="P" value="0"/>
         <arg name="Y" value="0"/>
-    </include> -->
+    </include>
 
     <!-- UAV21 -->
-    <!-- <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
         <arg name="ID" value="21"/>
         <arg name="x" value="0"/>
         <arg name="y" value="21"/>
@@ -271,10 +271,10 @@
         <arg name="R" value="0"/>
         <arg name="P" value="0"/>
         <arg name="Y" value="0"/>
-    </include> -->
+    </include>
 
     <!-- UAV22 -->
-    <!-- <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
         <arg name="ID" value="22"/>
         <arg name="x" value="0"/>
         <arg name="y" value="22"/>
@@ -282,7 +282,7 @@
         <arg name="R" value="0"/>
         <arg name="P" value="0"/>
         <arg name="Y" value="0"/>
-    </include> -->
+    </include>
 
 </launch>
 <!-- to add more UAVs (up to 10):

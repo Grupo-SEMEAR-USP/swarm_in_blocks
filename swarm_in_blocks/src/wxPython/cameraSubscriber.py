@@ -108,7 +108,8 @@ class ImageViewPanel(wx.Panel):
 
     def OnPaint(self, evt):
         dc = wx.BufferedPaintDC(self)
-        dc.DrawBitmap(self.staticbmp, 0, 0)
+        dc.DrawBitmap(self.staticbmp, 90, 30)
+        
 
     def NextFrame(self, event):
         
