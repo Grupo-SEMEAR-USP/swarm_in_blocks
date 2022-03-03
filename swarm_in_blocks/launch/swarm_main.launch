@@ -2,7 +2,7 @@
 
 <launch>
     <!-- Number of iterations -->
-    <arg name="num" default="35"/>
+    <arg name="num" default="33"/>
 
     <!-- MAVROS posix SITL environment launch script -->
     <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->

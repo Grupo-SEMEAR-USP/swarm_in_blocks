@@ -21,8 +21,8 @@
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
     <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
-    <arg name="a" value="$(eval 14540 + arg('ID'))"/>
-    <arg name="b" value="$(eval 14580 + arg('ID'))"/>
+    <arg name="a" value="$(eval 51000 + arg('ID'))"/>
+    <arg name="b" value="$(eval 50000 + arg('ID'))"/>
     <arg name="fcu_url" default="udp://:$(arg a)@localhost:$(arg b)"/>
 
     <!-- PX4 configs -->
