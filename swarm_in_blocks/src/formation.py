@@ -159,10 +159,10 @@ def triangle(N, L=2):
                     y=(L/Ld)*(l/2)
                     cy=0
                     if(l==id and N<5):
-                        y=L/2
+                        y = L/2
                 
                 else:
-                    y=L - (L/Ld)*(cy/2)
+                    y = L - (L/Ld)*(cy/2)
                     cy+=1
                     if(l==id and N<5):
                         y=L/2
@@ -231,46 +231,64 @@ def pyramid(N, L):
     cpx=0
     cpy=0
     z=1
-    for l in range(0,N):
-        for c in range(0,4): 
-            #Define o x
-                if(c==0):
-                    if((l-1)%3==0):
-                        x=h
-                        h-=1/2
-                    else:
-                        x=cpx
+    x=h/Ld
+    for idx in range(N):
+        if((idx-1)%3==0):
+            point=[x*cpx, L - (L/Ld)*(cpy/2), z, 1]
+            cpx+=1
+            cpy+=1
+            z+=1
+        if((idx-2)%3==0):
+            point=[h-x*cpx, L/2, z, 1]
+        
+        if((idx%3)==0):
+            point = [x*cpx, (L/Ld)*(cpy/2), z, 1]
+        
 
-                    if((l-2)%3==0):
-                        cpx+=1/2
-                        
-                    if(l==N-1):
-                        x=round(h/2, 2)
-                        
-            #Define o y
-                if(c==1):
-                    if(l%3==0 and l>0):
-                        L1 -= 1/2
-
-                    if((l-2)%3==0):
-                        y=L1
-                    elif((l-1)%3==0):
-                        y=L1/2
-                    else:
-                        y=cpy
-                        cpy+=1/2
-
-                    if(l==N-1):
-                        y=L/2
+        coord = np.concatenate((coord,[point]))
+    
+    return (coord)
             
-            #Define o z
-                if(c==2):
-                    if((l-2)%3==0):
-                        z+=1
+    # for l in range(0,N):
+    #     for c in range(0,4): 
+    #         #Define o x
+    #             if(c==0):
+    #                 if((l-1)%3==0):
+    #                     x=h
+    #                     h-=1/2
+    #                 else:
+    #                     x=cpx
+
+    #                 if((l-2)%3==0):
+    #                     cpx+=1/2
+                        
+    #                 if(l==N-1):
+    #                     x=round(h/2, 2)
+                        
+    #         #Define o y
+    #             if(c==1):
+    #                 if(l%3==0 and l>0):
+    #                     L1 -= 1/2
+
+    #                 if((l-2)%3==0):
+    #                     y=L1
+    #                 elif((l-1)%3==0):
+    #                     y=L1/2
+    #                 else:
+    #                     y=cpy
+    #                     cpy+=1/2
+
+    #                 if(l==N-1):
+    #                     y=L/2
             
-        point=[x,y,z,1]
-        coord = np.concatenate((coord,[point]))      
-    return coord         
+    #         #Define o z
+    #             if(c==2):
+    #                 if((l-2)%3==0):
+    #                     z+=1
+            
+    #     point=[x,y,z,1]
+    #     coord = np.concatenate((coord,[point]))      
+    # return coord         
 
 #---Support Functions---
 

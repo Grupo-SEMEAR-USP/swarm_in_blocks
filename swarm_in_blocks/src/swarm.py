@@ -284,17 +284,18 @@ class Swarm:
       self.op_num += 1
    
    def setAlphabet(self):
-      coord= Alphabet.Letters("SWARM_S")
-      for clover in swarm:
+      coord = Alphabet.Letters("SWARM_S")
+      for idx, clover in enumerate(self.swarm):
+         y = 0 - clover.id
+         #z = self.des_formation_coords[idx][2]  
          if(clover.id%2==0):
             z=3
             if((clover.id+1)%5==0 and (clover.id>5)):
                 z+=1
                 if(clover.id%2==0):
                     z=3
-         y0 = 0 - clover.id
-         rospy.sleep(2)
-         clover.navigate(coord[clover.id][0], clover[clover.id][1] - y0, z)
+         clover.navigate(coord[idx][0], y + coord[idx][1], z)
+      
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)

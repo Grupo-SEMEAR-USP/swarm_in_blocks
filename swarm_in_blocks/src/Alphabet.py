@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 import transform
-import swarm
+
 
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
@@ -192,17 +192,18 @@ X = np.array([[0, 0, z, 1],
              [3.5, 3.5, z, 1]], dtype = float)		#   Full 21
 
 SWARM_S = np.array([[1, 1, z, 1],
-             [4, 1, z, 1],
-             [5, 1, z, 1],
+             [4.5, 1, z, 1],
+             #[5, 1, z, 1],
              [5, 3, z, 1],
              [5, 5, z, 1],
              [3, 5, z, 1],
              [1, 5, z, 1],
              [0, 7, z, 1],
-             [1, 9, z, 1],
-             [2, 9, z, 1],
+             [0.5, 9, z, 1],
+             [1.5, 9, z, 1],
+             [1.5, 9, z, 1],
              [4, 9, z, 1],                           #   Simple 11
-             [3, 1, z, 1],
+             [3.5, 1, z, 1],
              [5, 2, z, 1],
              [5, 4, z, 1],
              [4, 5, z, 1],
@@ -210,20 +211,19 @@ SWARM_S = np.array([[1, 1, z, 1],
              [0, 8, z, 1],                         #   Mediun 17 
              [0, 1.5, z, 1],
              [0, 1, z, 1],
-             [2, 1, z, 1],
+             [2.25, 1, z, 1],
              [2, 5, z, 1],
              [5, 9, z, 1],
              [5, 8.5, z, 1],
-             [3, 8, z, 1],
-             [2, 0, z, 1],
-             [1.5, 0.5, z, 1],
-             [2.5, 0.5, z, 1],
-             [2.5, 8.5, z, 1],
-             [3.5, 8.5, z, 1],
-             [2, 0.5, z, 1],
+             [2.75, 8, z, 1],
+             [2.25, 0, z, 1],
+             [1.625, 0.5, z, 1],
+             [2.875, 0.5, z, 1],
+             [2.125, 8.5, z, 1],
+             [3.375, 8.5, z, 1],
+             [2.25, 0.5, z, 1],
              #[0, 9, z, 1],
-             [0, 5, z, 1],
-             [1, 9, z, 1]], dtype = float)        #   Full 33)
+             [0, 5, z, 1]], dtype = float)        #   Full 31)
              
 Alphabet_dictionary = {
     "A": A,
@@ -265,7 +265,7 @@ def Letter_Verification(letter):
         cn = Type_Format(9, 17, 21, type)
 
     if(letter == "SWARM_S"):
-        cn = Type_Format(11, 17, 32, type)
+        cn = Type_Format(11, 17, 31, type)
 
     return cn 
    
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     #str = input(f"Please, enter cont word: ")
     #list_str = list(str.upper())
     #Word(list_str)
-    coord = Letters('E')
+    coord = Letters('SWARM_S')
     plot_letter_preview(coord)
     
    
