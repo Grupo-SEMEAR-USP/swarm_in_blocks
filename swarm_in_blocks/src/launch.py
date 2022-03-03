@@ -66,7 +66,7 @@ def spawnGazeboAndVehicles(num_of_clovers, init_formation_coords):
         p.start()
         processes.append(p)
     
-    time.sleep(5*num_of_clovers)
+    time.sleep(2*num_of_clovers)
     
     def handler(signal_received, frame):
         for p in processes:
