@@ -2,7 +2,7 @@
 
 <launch>
     <!-- Number of iterations -->
-    <arg name="num" default="35"/>
+    <arg name="num" default="33"/>
 
     <!-- MAVROS posix SITL environment launch script -->
     <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->
@@ -42,11 +42,5 @@
         <arg name="num" value="$(arg num)"/>
         <arg name="ID" value="0"/>
     </include>
-
     
 </launch>
-<!-- to add more UAVs (up to 10):
-Increase the id
-Change the name space
-Set the FCU to default="udp://:14540+id@localhost:14550+id"
-Set the malink_udp_port to 14560+id) -->

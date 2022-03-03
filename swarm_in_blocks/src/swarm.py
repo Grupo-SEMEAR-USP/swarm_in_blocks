@@ -129,11 +129,12 @@ class Swarm:
 
    def __launchGazeboAndClovers(self):
       launch.spawnGazeboAndVehicles(self.num_of_clovers, self.init_formation_coords)
-      time.sleep(5*self.num_of_clovers)
    
    # Create clover objects and append to clover object list
    def __createCloversObjects(self):
       for index in range(self.num_of_clovers):
+         if index == 10:
+            continue
          clover_object = SingleClover(f"clover{index}", index)
          clover_object.init_coord = self.init_formation_coords[index]
          self.swarm.append(clover_object)
@@ -283,18 +284,18 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
    
-   def setAlphabet(self):
-      coord= Alphabet.Letters("SWARM_S")
-      for clover in swarm:
-         if(clover.id%2==0):
-            z=3
-            if((clover.id+1)%5==0 and (clover.id>5)):
-                z+=1
-                if(clover.id%2==0):
-                    z=3
-         y0 = 0 - clover.id
-         rospy.sleep(2)
-         clover.navigate(coord[clover.id][0], clover[clover.id][1] - y0, z)
+   def setAlphabet(self,z0=1):
+      self.des_formation_coords = Alphabet.Letters("SWARM_S")
+      for idx in range(self.num_of_clovers):
+         #z = self.des_formation_coords[idx][2]
+         if(idx%2==0):
+            z=1.5
+            if((idx+1)%5==0 and (idx>5)):
+               z+=1
+               if(idx%2==0):
+                  z=z0
+         self.des_formation_coords[idx][2] = z
+
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -372,7 +373,7 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-   swarm = Swarm(4)
+   swarm = Swarm(32)
 
    # Starts the Gazebo simulation and clovers ready to operate
    #swarm.startSimulation(already_launched=False)
@@ -466,7 +467,7 @@ if __name__ == "__main__":
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(2)
       
-      elif  (key == str('A') or str('a')):
+      elif  (key == str('A')):
          swarm.setAlphabet()
 
       elif (key == str('l') or key == str('L')):

@@ -288,14 +288,7 @@ def Word(list_str):
 
    word_coord = np.vstack((word_list_2))
    return word_coord
-     
-if __name__ == "__main__":
-    coord = np.empty((0,4))
-    #str = input(f"Please, enter cont word: ")
-    #list_str = list(str.upper())
-    #Word(list_str)
-    coord = Letters('E')
-    plot_letter_preview(coord)
+    
     
    
 
