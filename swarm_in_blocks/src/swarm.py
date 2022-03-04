@@ -2,6 +2,7 @@
 
 # ROS modedules
 import rospy
+import rosnode
 from mavros_msgs import srv
 from mavros_msgs.msg import State
 
@@ -15,6 +16,7 @@ from threading import Thread
 import time
 # import sys
 # import os
+import traceback
 import logging
 
 # Local modules
@@ -83,10 +85,16 @@ class SingleClover:
 
 class Swarm:
    # Private functions
-   def __init__(self, num_of_clovers):
+   def __init__(self, num_of_clovers=None):
       
       # Basic parameters of the swarm
-      self.num_of_clovers = num_of_clovers
+   
+      if num_of_clovers is None:
+         self.num_of_clovers = self.__checkNumOfClovers()
+         if self.num_of_clovers == 0:
+            raise Exception("Failed to init swarm object. Have you launched the swarm?")
+      else:
+         self.num_of_clovers = num_of_clovers
       self.swarm = []
       self.id_clover = []
 
@@ -113,9 +121,6 @@ class Swarm:
       self.op_num = 0
       self.formation_list = {}
 
-      # Initial formation. By default on square formation with L = N//2 + 1.
-      # (Ex: N=5 -> L=3)
-      self.setFormation2D('line', self.num_of_clovers, self.num_of_clovers-1)
       self.init_formation_coords = self.des_formation_coords
       self.init_formation_name = self.des_formation_name
 
@@ -133,8 +138,6 @@ class Swarm:
    # Create clover objects and append to clover object list
    def __createCloversObjects(self):
       for index in range(self.num_of_clovers):
-         if index == 10:
-            continue
          clover_object = SingleClover(f"clover{index}", index)
          clover_object.init_coord = self.init_formation_coords[index]
          self.swarm.append(clover_object)
@@ -142,6 +145,52 @@ class Swarm:
    def setInitialFormation(self, formation_str, L):
       self.setFormation2D(formation_str, self.num_of_clovers, L)
       self.init_formation_coords = self.des_formation_coords
+   
+   def __checkNumOfClovers(self):
+      
+      topic_list = rosnode.get_node_names()
+
+      num_of_clovers = 0
+      for topic in topic_list:
+         if ('clover' in topic) and ('mavros' in topic):
+            num_of_clovers += 1
+      
+      return num_of_clovers
+
+   def getInitialFormation(self):
+      
+      coords = np.zeros((self.num_of_clovers, 4))
+      coords[:] = np.NaN
+
+      for idx in range(self.num_of_clovers):
+         try:
+            x = rospy.get_param(f"clover{idx}/initial_pose/x")
+            y = rospy.get_param(f"clover{idx}/initial_pose/y")
+            z = rospy.get_param(f"clover{idx}/initial_pose/z")
+            coords[idx] = [x, y, z, 1]
+         except Exception:
+            print(traceback.format_exc())
+            continue
+      
+      # See if there is a clover that wasnt able to retrieve it initial pose
+      initial_pose_failed = np.argwhere(np.isnan(coords))
+      initial_pose_failed = initial_pose_failed[:,0]
+      initial_pose_failed = np.unique(initial_pose_failed)
+
+      # Update initial_formation
+      if not initial_pose_failed:
+         self.init_formation_coords = coords
+         self.des_formation_coords = self.init_formation_coords
+
+      # Log the result
+      if not initial_pose_failed:
+         print(f"Initial Formation: {self.num_of_clovers} retrieved their initial pose.")
+         print(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed {len(initial_pose_failed)} clovers.")
+      else:
+         print(f"Initial Formation: {self.num_of_clovers} retrieved their initial pose.")
+         for id in initial_pose_failed:
+            print(f"Initial Formation: failed to get initial pose from clover {id}")
+         print(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed {len(initial_pose_failed)} clovers.")
 
    # Start pipeline
    def startPlanning(self):
@@ -149,31 +198,35 @@ class Swarm:
       self.mode = 'Planning'
       plot.plot_init(self)
 
-   def startSimulation(self, already_launched=False):
+   def startSimulation(self, launch=False):
       print("Starting simulation mode...")
       self.mode = 'Simulation'
 
       # Launch Gazebo and clover. Wait some time to all get
-      if not already_launched:
+      if launch:
+         # See if initial formation is [], then set default inital formation
+         if not self.init_formation_coords:
+            # Initial formation. By default on square formation with L = N//2 + 1.
+            # (Ex: N=5 -> L=3)
+            self.setInitialFormation('square', self.num_of_clovers//2+1)
          print("Starting roscore, Gazebo and clovers...")
          self.__launchGazeboAndClovers()
+      
+      if not launch:
+         # self.checkClovers()
+         self.getInitialFormation()
 
       # Create clover python objects
       print("Starting swarm node and listening to clover services...")
       rospy.init_node('swarm')
       self.__createCloversObjects()
+
+      # All done. Updating current formation
+      self.curr_formation_coords = self.des_formation_coords
       print("Started simulation.")
 
    def startNavigation(self):
       self.mode = 'Navigation'   
-
-   # def applyFormation(self):
-   #    coord = self.des_formation_coords
-   #    for idx, clover in enumerate(self.swarm):
-   #       x0 = 0 - clover.init_coord[0]
-   #       y0 = 0 - clover.init_coord[1]
-   #       clover.navigateWait(x=x0+coord[idx][0],y=y0+coord[idx][1],z=coord[idx][2])
-   #    self.curr_formation_coords = coord
    
    def applyFormation(self):
       
@@ -191,13 +244,12 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
-
    #Basic swarm operations
-   def takeoffAll(self, z0=1):
+   def takeOffAll(self, z=1):
 
       print("All drones taking off")
       self.des_formation_coords = self.init_formation_coords
-      self.des_formation_coords[:,2] = z0
+      self.des_formation_coords[:,2] = z
       
       threads = []
       for idx, clover in enumerate(self.swarm):
@@ -245,7 +297,6 @@ class Swarm:
       self.applyFormation()   
 
    def returnAndLand(self):
-      
       print("Return to home...")
       self.returnToHome()
       print("Landing...")
@@ -283,19 +334,18 @@ class Swarm:
       self.des_formation_name = shape
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
-   
-   def setAlphabet(self,z0=1):
+
+   def setAlphabet(self, z=1):
       self.des_formation_coords = Alphabet.Letters("SWARM_S")
       for idx in range(self.num_of_clovers):
          #z = self.des_formation_coords[idx][2]
          if(idx%2==0):
-            z=1.5
+            z = 1.5
             if((idx+1)%5==0 and (idx>5)):
-               z+=1
+               z += 1
                if(idx%2==0):
-                  z=z0
+                  z = z
          self.des_formation_coords[idx][2] = z
-
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -305,7 +355,6 @@ class Swarm:
       if mesh_name.lower() not in self.__meshzoo_names:
          raise Exception("Input mesh name is not on mesh zoo. The name is correct?")
       #TODO
-
 
    def visualizePointCloud(self):
       formation3D.visualizePointCloud(self.__pcd)
@@ -321,23 +370,20 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def scaleFormation(self, coord, sx, sy, sz):
-      new_coord = transform.scaleFormation(coord, sx, sy, sz)
-      self.des_formation_coords = new_coord
+   def scaleFormation(self, sx, sy, sz):
+      self.des_formation_coords = transform.scaleFormation(self.des_formation_coords, sx, sy, sz)
       self.des_formation_name = 'scale'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def translateFormation(self, coord, tx, ty, tz):
-      new_coord = transform.translateFormation(coord, tx, ty, tz)
-      self.des_formation_coords = new_coord
+   def translateFormation(self, tx, ty, tz):
+      self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
       self.des_formation_name = 'translate'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
    def rotateFormation(self, coord, anglex, angley, anglez):
-      new_coord = transform.rotateFormation(coord, anglex, angley, anglez)
-      self.des_formation_coords = new_coord
+      self.des_formation_coords = transform.rotateFormation(self.des_formation_coords, anglex, angley, anglez)
       self.des_formation_name = 'rotate'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
@@ -373,25 +419,23 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-   swarm = Swarm(32)
+   swarm = Swarm(2)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   #swarm.startSimulation(already_launched=False)
+   # swarm.startSimulation(launch=False)
 
    # Starts the simulation just with the plots previews
    swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
-   #swarm.launchGazeboAndClovers(init_form)
-
-
+   
    while not rospy.is_shutdown():
       coord = swarm.des_formation_coords
       menu()
       key = input('\n')
       if (key == str('1')):
-         swarm.takeoffAll()
+         swarm.takeOffAll()
          print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(2)
 
@@ -479,26 +523,26 @@ if __name__ == "__main__":
          sx = int(input("Insert the x scale: "))
          sy = int(input("Insert the y scale: "))
          sz = int(input("Insert the z scale: "))
-         swarm.scaleFormation(swarm.des_formation_coords, sx, sy, sz)
+         swarm.scaleFormation(sx, sy, sz)
       
       elif (key == str('mr')):
          anglex = float(input("Insert the x angle: "))
          angley = float(input("Insert the y angle: "))
          anglez = float(input("Insert the z angle: "))
-         swarm.rotateFormation(swarm.des_formation_coords, anglex, angley, anglez)
+         swarm.rotateFormation(anglex, angley, anglez)
 
       elif (key == str('mt')):
          tx = int(input("Insert the x translation: "))
          ty = int(input("Insert the y translation: "))
          tz = int(input("Insert the z translation: "))
-         swarm.translateFormation(swarm.des_formation_coords, tx, ty, tz)
+         swarm.translateFormation(tx, ty, tz)
 
       elif (key == str('ciranda')):
          ang=0
          while(ang < 4*np.pi):
-            swarm.rotateFormation(swarm.des_formation_coords, 0, 0, ang)
+            swarm.rotateFormation(0, 0, ang)
             rospy.sleep(2)
-            swarm.applyFormation(swarm.des_formation_coords)
+            swarm.applyFormation()
             ang += 0.2
             rospy.sleep(3)
 
