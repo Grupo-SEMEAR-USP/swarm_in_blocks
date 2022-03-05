@@ -22,7 +22,10 @@ from std_srvs.srv import Trigger
 from clover_blocks.msg import Prompt
 from clover_blocks.srv import Run, Load, Store
 
-webbrowser.open_new("localhost") #opens localhost automatically
+webbrowser.open("localhost") #opens localhost automatically
+
+#insert Swarm In Blocks path to the sys path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, 'swarm_in_blocks', 'src'))
 
 rospy.init_node('clover_blocks')
 

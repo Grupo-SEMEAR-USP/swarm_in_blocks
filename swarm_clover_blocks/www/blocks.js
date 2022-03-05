@@ -682,3 +682,167 @@ Blockly.Blocks['forms'] = {
 		this.setHelpUrl("");
 		}
 };
+
+// Swarm blocks
+
+Blockly.Blocks['take_off_all'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField("Take off all");
+		this.appendValueInput("Z")
+			.setCheck("Number")
+			.appendField("heigth");
+		this.setColour(COLOR_SWARM);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+	this.setTooltip("Take off all drones");
+	this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['land_all'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField("land all");
+		this.setColour(COLOR_SWARM);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("Land all clovers immediately");
+		this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['return_and_land'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("return to home and land");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+this.setTooltip("");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['set_2d_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("set 2D formation");
+	this.appendDummyInput()
+		.appendField("formation")
+		.appendField(new Blockly.FieldDropdown([["line","LINE"], ["full square","FULL_SQUARE"], ["empty square","EMPTY_SQUARE"]]), "2D formation");
+	this.appendValueInput("NUM")
+		.setCheck("Number")
+		.appendField("number of clovers");
+	this.appendValueInput("LENGTH")
+		.setCheck("Number")
+		.appendField("length / side");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Generate a 2D formation for the swarm.");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['set_3d_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("set 3D formation");
+	this.appendDummyInput()
+		.appendField("formation")
+		.appendField(new Blockly.FieldDropdown([["cube", "CUBE"], ["sphere", "SPHERE"], ["pyramid", "PYRAMID"]]), "3D formation");
+	this.appendValueInput("NUM")
+		.setCheck("Number")
+		.appendField("number of clovers");
+	this.appendValueInput("LENGTH")
+		.setCheck("Number")
+		.appendField("length / side");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Generate a 3D formation for the swarm.");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['translate_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("translate formation");
+	this.appendValueInput("TX")
+		.setCheck("Number")
+		.appendField("translation in X");
+	this.appendValueInput("TY")
+		.setCheck("Number")
+		.appendField("translation in Y");
+	this.appendValueInput("TZ")
+		.setCheck("Number")
+		.appendField("translation in Z");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Translate formation by x, y and z in meters.");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['rotate_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("rotate formation");
+	this.appendValueInput("ANGLEX")
+		.setCheck("Number")
+		.appendField("angle in x");
+	this.appendValueInput("ANGLEY")
+		.setCheck("Number")
+		.appendField("angle in y");
+	this.appendValueInput("ANGLEZ")
+		.setCheck("Number")
+		.appendField("angle in z");
+	this.appendDummyInput()
+		.appendField("in radians");
+	this.setInputsInline(false);
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['scale_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("scale formation");
+	this.appendValueInput("SX")
+		.setCheck("Number")
+		.appendField("scale in x");
+	this.appendValueInput("SY")
+		.setCheck("Number")
+		.appendField("scale in y");
+	this.appendValueInput("SZ")
+		.setCheck("Number")
+		.appendField("scale in z");
+	this.setInputsInline(false);
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Scale formation in x, y and z axis.");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['apply_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("apply formation");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Apply desired formation");
+this.setHelpUrl("");
+	}
+};

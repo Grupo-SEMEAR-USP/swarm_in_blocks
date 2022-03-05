@@ -442,59 +442,6 @@ Blockly.Python.led_count = function(block) {
 	return [`get_led_count_${id}()`, Blockly.Python.ORDER_FUNCTION_CALL]
 }
 
-// only supported on embedded enviroment
-// function pigpio() {
-// 	Blockly.Python.definitions_['import_pigpio'] = 'import pigpio';
-// 	Blockly.Python.definitions_['init_pigpio'] = 'pi = pigpio.pi()';
-// }
-
-// const GPIO_READ = `\ndef gpio_read(pin):
-//     pi.set_mode(pin, pigpio.INPUT)
-//     return pi.read(pin)\n`;
-
-// const GPIO_WRITE = `\ndef gpio_write(pin, level):
-//     pi.set_mode(pin, pigpio.OUTPUT)
-//     pi.write(pin, level)\n`;
-
-// const SET_SERVO = `\ndef set_servo(pin, pwm):
-//     pi.set_mode(pin, pigpio.OUTPUT)
-//     pi.set_servo_pulsewidth(pin, pwm)\n`;
-
-// const SET_DUTY_CYCLE = `\ndef set_duty_cycle(pin, duty_cycle):
-//     pi.set_mode(pin, pigpio.OUTPUT)
-//     pi.set_PWM_dutycycle(pin, duty_cycle * 255)\n`;
-
-// Blockly.Python.gpio_read = function(block) {
-// 	pigpio();
-// 	Blockly.Python.definitions_['gpio_read'] = GPIO_READ;
-// 	var pin = Blockly.Python.valueToCode(block, 'PIN', Blockly.Python.ORDER_NONE);
-// 	return [`gpio_read(${pin})`, Blockly.Python.ORDER_FUNCTION_CALL];
-// }
-
-// Blockly.Python.gpio_write = function(block) {
-// 	pigpio();
-// 	Blockly.Python.definitions_['gpio_write'] = GPIO_WRITE;
-// 	var pin = Blockly.Python.valueToCode(block, 'PIN', Blockly.Python.ORDER_NONE);
-// 	var level = Blockly.Python.valueToCode(block, 'LEVEL', Blockly.Python.ORDER_NONE);
-// 	return `gpio_write(${pin}, ${level})\n`;
-// }
-
-// Blockly.Python.set_servo = function(block) {
-// 	pigpio();
-// 	Blockly.Python.definitions_['set_servo'] = SET_SERVO;
-// 	var pin = Blockly.Python.valueToCode(block, 'PIN', Blockly.Python.ORDER_NONE);
-// 	var pwm = Blockly.Python.valueToCode(block, 'PWM', Blockly.Python.ORDER_NONE);
-// 	return `set_servo(${pin}, ${pwm})\n`;
-// }
-
-// Blockly.Python.set_duty_cycle = function(block) {
-// 	pigpio();
-// 	Blockly.Python.definitions_['set_duty_cycle'] = SET_DUTY_CYCLE;
-// 	var pin = Blockly.Python.valueToCode(block, 'PIN', Blockly.Python.ORDER_NONE);
-// 	var dutyCycle = Blockly.Python.valueToCode(block, 'DUTY_CYCLE', Blockly.Python.ORDER_NONE);
-// 	return `set_duty_cycle(${pin}, ${dutyCycle})\n`;
-// }
-
 //! FORMS (FORMAÇÃO)
 // definição
 Blockly.Python.forms = function(block) {
@@ -542,3 +489,89 @@ Blockly.Python.forms = function(block) {
 	// obs: no return foi usado uma "gambiarra", vários navigate_wait são concatenados com ",\n" entre eles,
 	// dessa forma é possível montar uma lista de intruções para serem seguidas
 }
+
+// Swarm blocks
+
+function initSwarm(){
+	Blockly.Python.definitions_['import_swarm'] = 'from swarm import Swarm'
+	Blockly.Python.definitions_['init_swarm'] = 'swarm = Swarm()\nswarm.startSimulation(launch=False)'
+}
+
+Blockly.Python['take_off_all'] = function(block) {
+	initSwarm()
+	var z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.takeOffAll(z=${z})\n`;
+	return code;
+};
+
+Blockly.Python['land_all'] = function(block) {
+	initSwarm()
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.landAll()\n`;
+	return code;
+};
+
+Blockly.Python['return_and_land'] = function(block) {
+	initSwarm()
+	// TODO: Assemble Python into code variable.
+	var code = 'swarm.returnAndLand()\n';
+	return code;
+};
+
+Blockly.Python['set_2d_formation'] = function(block) {
+	initSwarm()
+	var formation = block.getFieldValue('2D formation');
+	var num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
+	var length = Blockly.Python.valueToCode(block, 'LENGTH', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.setFormation2D(${formation},${num},${length})\n`;
+	return code;
+};
+
+Blockly.Python['set_3d_formation'] = function(block) {
+	initSwarm()
+	var formation = block.getFieldValue('3D formation');
+	var num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
+	var length = Blockly.Python.valueToCode(block, 'LENGTH', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.setFormation3D(${formation},${num},${length})\n`;
+	return code;
+};
+
+Blockly.Python['translate_formation'] = function(block) {
+	initSwarm()
+	var tx = Blockly.Python.valueToCode(block, 'TX', Blockly.Python.ORDER_ATOMIC);
+	var ty = Blockly.Python.valueToCode(block, 'TY', Blockly.Python.ORDER_ATOMIC);
+	var tz = Blockly.Python.valueToCode(block, 'TZ', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.translateFormation(${tx}, ${ty}, ${tz})\n`;
+	return code;
+};
+
+Blockly.Python['rotate_formation'] = function(block) {
+	initSwarm()
+	var anglex = Blockly.Python.valueToCode(block, 'ANGLEX', Blockly.Python.ORDER_ATOMIC);
+	var angley = Blockly.Python.valueToCode(block, 'ANGLEY', Blockly.Python.ORDER_ATOMIC);
+	var anglez = Blockly.Python.valueToCode(block, 'ANGLEZ', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.rotateFormation(${anglex}, ${angley}, ${anglez})\n`;
+	return code;
+};
+
+Blockly.Python['scale_formation'] = function(block) {
+	initSwarm()
+	var sx = Blockly.Python.valueToCode(block, 'SX', Blockly.Python.ORDER_ATOMIC);
+	var sy = Blockly.Python.valueToCode(block, 'SY', Blockly.Python.ORDER_ATOMIC);
+	var sz = Blockly.Python.valueToCode(block, 'SZ', Blockly.Python.ORDER_ATOMIC);
+	// TODO: Assemble Python into code variable.
+	var code = `swarm.scaleFormation(${sx}, ${sy}, ${sz})\n`;
+	return code;
+};
+
+Blockly.Python['apply_formation'] = function(block) {
+	initSwarm()
+	// TODO: Assemble Python into code variable.
+	var code = 'swarm.applyFormation()\n';
+	return code;
+};

@@ -37,7 +37,7 @@
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=false
+                                    main_camera:=true
                                     rangefinder:=false
                                     led:=true 
                                     gps:=true
@@ -127,6 +127,7 @@
         <!-- Initial position parameters (z initializes in 0.0, not 0.3 because of gazebo ground colision) -->
         <param name="initial_pose/x" value="$(arg x)"/>
         <param name="initial_pose/y" value="$(arg y)"/>
+        <param name="initial_pose/z" value="0"/>
         <!-- <param name="initial_pose/z" value="$(arg z)"/> -->
 
         <!-- simplified offboard control -->
