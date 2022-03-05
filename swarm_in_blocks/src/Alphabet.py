@@ -58,14 +58,14 @@ A = np.array([[0, 0, z, 1],
              [5, 4, z, 1],           				#	Mediun 16
              [6, 1, z, 1],
              [0, 1, z, 1],
-             [0, 2, z, 1],
              [0, 3, z, 1],
              [0, 5, z, 1],
-             [6, 2, z, 1],
              [6, 3, z, 1],
              [6, 5, z, 1],
-             [1, 7, z, 1],
-             [5, 7, z, 1]], dtype = float)  		#	Full 26
+             [0.65, 6.65, z, 1],
+             [1.35, 7.35, z, 1],
+             [4.85, 7.35, z, 1],
+             [5.45, 6.65, z, 1]], dtype = float)  		#	Full 26
 
 C =  np.array([[0, 2, z, 1],
               [0, 4, z, 1],
@@ -106,14 +106,14 @@ E = np.array([[0, 0, z, 1],
              [0, 3, z, 1],
              [0, 5, z, 1],
              [0, 7, z, 1],
-             [2, 4, z, 1],          				#	Midiun 18
-             [2, 0, z, 1],
-             [3, 0, z, 1],
-             [2, 8, z, 1],
-             [3, 8, z, 1],
+             [4, 4, z, 1],          				#	Midiun 18
+             [5, 0, z, 1],
+             [5, 8, z, 1],
+             #[2, 8, z, 1],
+             #[3, 8, z, 1],
              [4, 8, z, 1],
              [3, 4, z, 1],
-             [4, 0, z, 1],], dtype = float)    		#   Full 25 
+             [4, 0, z, 1],], dtype = float)    		#   Full 23 
 
 O = np.array([[0, 2, z, 1],
              [0, 4, z, 1],
@@ -253,7 +253,7 @@ def Letter_Verification(letter):
         cn = Type_Format(9, 13, 21, type)
 
     if(letter == 'E'):
-        cn = Type_Format(13, 18, 25, type)
+        cn = Type_Format(13, 18, 23, type)
 
     if(letter == 'O'):
         cn = Type_Format(10, 18, 28, type)
@@ -274,8 +274,9 @@ def Letters(letter):
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
     return letter_coord[:Letter_Verification(letter)]
 
-def Word(list_str):
-   i=6 
+def Word(str):
+   i=8 
+   list_str = list(str.upper())
    word_list = list(map(Letters, list_str))
    word_list_2=[]
 
@@ -291,10 +292,8 @@ def Word(list_str):
      
 if __name__ == "__main__":
     coord = np.empty((0,4))
-    #str = input(f"Please, enter cont word: ")
-    #list_str = list(str.upper())
-    #Word(list_str)
-    coord = Letters('SWARM_S')
+    str = input(f"Please, enter cont word: ")
+    coord = Word(str)
     plot_letter_preview(coord)
     
    

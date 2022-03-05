@@ -238,11 +238,15 @@ def pyramid(N, L):
             cpx+=1
             cpy+=1
             z+=1
+            
         if((idx-2)%3==0):
-            point=[h-x*cpx, L/2, z, 1]
+            point=[h-2*(L/Ld)*(cpy/2), L/2, z, 1]
         
         if((idx%3)==0):
-            point = [x*cpx, (L/Ld)*(cpy/2), z, 1]
+            point = [x*cpx,(L/Ld)*(cpy/2), z, 1]
+        
+        if(idx == N-1):
+            point=[h/2, L/2, z, 1]
         
 
         coord = np.concatenate((coord,[point]))
