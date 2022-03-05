@@ -7,15 +7,6 @@ import os
 import sys
 from PIL import ImageTk, Image
 
-'''
-IDEIA:
-Buttons:
-    prev
-    next
-    save
-    resume
-    cancel (just simulation)
-'''
 # Defining colors
 #background_color = '#9597bf' #roxo claro
 background_color = '#d4d4d4' #cinza claro
@@ -125,7 +116,7 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
         pass #Retornar código de erro depois
 
     # Setting the icon
-    icon_path = os.path.dirname(os.path.abspath(__file__))+"/images/icon.png"
+    icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
 
@@ -142,12 +133,12 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     # Creating buttons
     but_font = font.Font(family='Poppins', size=11, weight='bold')
 
-    path_1 = os.getcwd() + '/images/next.png'
-    right_arrow_res = Image.open(path_1).resize((50, 50))
+    right_arrow_path = os.path.dirname(os.path.abspath(__file__)) + '/images/next.png'
+    right_arrow_res = Image.open(right_arrow_path).resize((50, 50))
     right_arrow = ImageTk.PhotoImage(right_arrow_res)
 
-    path_2 = os.getcwd() + '/images/prev.png'
-    left_arrow_res = Image.open(path_2).resize((50, 50))
+    left_arrow_path = os.path.dirname(os.path.abspath(__file__)) + '/images/prev.png'
+    left_arrow_res = Image.open(left_arrow_path).resize((50, 50))
     left_arrow = ImageTk.PhotoImage(left_arrow_res) 
 
     if formation_count == len(self.formation_list)-1:
@@ -240,7 +231,7 @@ def plot_init(self):
     window.rowconfigure(0, weight=6)
 
     # Setting the icon
-    icon_path = os.path.dirname(os.path.abspath(__file__))+"/images/icon.png"
+    icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
 
@@ -261,7 +252,6 @@ def plot_init(self):
                                 height = 2, width = 20, 
                                 bg=button_color, fg=button_font_color, activebackground=active_button_color, 
                                 text = "Resume", font=but_font)
-
     resume_button.grid(row=1, column=0, pady = 10)
     resume_button.config(highlightthickness=0)
     
