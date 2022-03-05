@@ -1,20 +1,17 @@
+from calendar import c
+from ctypes import pointer
 from lib2to3.pgen2.literals import simple_escapes
 import string
 from tkinter.simpledialog import SimpleDialog
 from click import option
 from matplotlib import projections
-import mavros
-import rospy
-import mavros_msgs
-from mavros_msgs import srv
-from mavros_msgs.msg import State
 import time
-from clover import srv
 from std_srvs.srv import Trigger
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 import transform
+
 
 
 def plot_letter_preview(coord):
@@ -39,6 +36,7 @@ def plot_letter_preview(coord):
 # Cada array letra vai ler uma quantidade da matriz master
 
 z=1
+
 
 A = np.array([[0, 0, z, 1],
              [0, 2, z, 1],
@@ -289,7 +287,7 @@ def Word(str):
 
    word_coord = np.vstack((word_list_2))
    return word_coord
-     
+
 if __name__ == "__main__":
     coord = np.empty((0,4))
     str = input(f"Please, enter cont word: ")

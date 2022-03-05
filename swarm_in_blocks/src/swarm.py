@@ -336,15 +336,21 @@ class Swarm:
       self.op_num += 1
 
    def setAlphabet(self, z=1):
-      self.des_formation_coords = Alphabet.Letters("SWARM_S")
+      str = input(f"Please, enter word or a letter: ")
+     
+      if(str=="SWARM_S" or str=="swarm_s"):
+         self.des_formation_coords = Alphabet.Letters(str)
+      
+      else:
+         self.des_formation_coords = Alphabet.Word(str)
+      
       for idx in range(self.num_of_clovers):
-         #z = self.des_formation_coords[idx][2]
          if(idx%2==0):
-            z = 1.5
-            if((idx+1)%5==0 and (idx>5)):
+            z = 2
+            if((idx)%5==0 and (idx>5)):
                z += 1
                if(idx%2==0):
-                  z = z
+                  z = 2
          self.des_formation_coords[idx][2] = z
 
    def setFormation3DfromMesh(self, model_path):
@@ -511,7 +517,7 @@ if __name__ == "__main__":
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(2)
       
-      elif  (key == str('A')):
+      elif  (key == str('A') or key == str('a')):
          swarm.setAlphabet()
 
       elif (key == str('l') or key == str('L')):

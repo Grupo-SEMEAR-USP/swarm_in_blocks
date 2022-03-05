@@ -136,51 +136,39 @@ def triangle(N, L=2):
             c3 = L/p
 
     for l in range(0,N):
-        for c in range(0,4):  
-        #Define o x     
-            if(c==0): 
-                if(l<=id and (h/Ld)*l<=h):
-                    x=round((h/Ld)*l,2)
-                    if(l==id and N<5):
-                        x=round(h,2)
-                
-                else:
-                    x=round((h/Ld)*cx,2)
-                    cx+=1
-                    if(l==id and N<5):
-                        x=round(h,2)
-                
-                if(l>=S and S>2):
-                        x=0
-                    
-        #Define o y  
-            elif(c==1):
-                if(l<=id and (h/Ld)*l<=h):
-                    y=(L/Ld)*(l/2)
-                    cy=0
-                    if(l==id and N<5):
-                        y = L/2
-                
-                else:
-                    y = L - (L/Ld)*(cy/2)
-                    cy+=1
-                    if(l==id and N<5):
-                        y=L/2
+        z=1.0
+        if(l<=id and (h/Ld)*l<=h):
+            x=round((h/Ld)*l,2)
+            y=(L/Ld)*(l/2)
+            cy=0
 
-                if(l>=S):
-                    y=c3
-                    c3+=1
-        #Define o z  
-            elif(c==2):
-                z=1.0
-                if(l>=S and S!=N):
-                    z = 3.0
+            if(l==id and N<5):
+                x=round(h,2)
+                y = L/2
 
-        #Define o quarto parametro
+        else:
+            x=round((h/Ld)*cx,2)
+            y = L - (L/Ld)*(cy/2)
+            cx+=1
+            cy+=1
+            if(l==id and N<5):
+                x=round(h,2)
+                y=L/2
+        
+        if(l>=S):
+            y=c3
+            c3+=1
+            if(S>2):
+                x=0
+            if(S!=N):
+                z=3  
+
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))
-    return coord
-
+         
+    return coord             
+        
+   
 #---3D Formations---
 def cube(N, L):
     coord = np.empty((0,4))
@@ -234,19 +222,24 @@ def pyramid(N, L):
     x=h/Ld
     for idx in range(N):
         if((idx-1)%3==0):
-            point=[x*cpx, L - (L/Ld)*(cpy/2), z, 1]
+            point=[(L/Ld)*(cpy/2), L - (L/Ld)*(cpy/2), z, 1]
             cpx+=1
             cpy+=1
             z+=1
             
         if((idx-2)%3==0):
-            point=[h-2*(L/Ld)*(cpy/2), L/2, z, 1]
+            if(idx==1):
+                c=0
+            else:
+                c=1
+            point=[h-(L/Ld)*(cpy/2)+1*c, L/2, z, 1]
+            
         
         if((idx%3)==0):
-            point = [x*cpx,(L/Ld)*(cpy/2), z, 1]
+            point = [(L/Ld)*(cpy/2),(L/Ld)*(cpy/2), z, 1]
         
         if(idx == N-1):
-            point=[h/2, L/2, z, 1]
+            point=[1/4 + h/2, L/2, z, 1]
         
 
         coord = np.concatenate((coord,[point]))
