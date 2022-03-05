@@ -412,23 +412,30 @@ if __name__ == "__main__":
    #Menu 
    def menu():
       print("Press")
-      print("1 - takeoff all")
-      print("2 - line formation")
-      print("3 - triangle formation")
-      print("4e - empty square formation")
-      print("4f - full square formation")
-      print("5 - cube formation")
-      print("6 - sphere formation")
-      print("7 - pyramid formation")
-      print("O - circle formation")
-      print("0 - initial position")
+      print("\n-----Basic operations-----")
+      print("1 - Takeoff all")
+      print("0 - Initial position")
+      print("L - Land all")
+      print("\n-----Formations-----")
+      print("2 - Line formation")
+      print("3 - Triangle formation")
+      print("4e - Empty square formation")
+      print("4f - Full square formation")
+      print("O - Circle formation")
+      print("5 - Cube formation")
+      print("6 - Sphere formation")
+      print("7 - Pyramid formation")
       print("A - Alphabet formation")
-      print("ap - apply formation")
-      print("plt - plot preview")
-      print("plt3d - plot 3D preview")
-      print("fl - formation list")
-      print("L - land all")
-      print("E - exit")
+      print("\n-----Transformations-----")
+      print("TR - Rotate")
+      print("TS - Scale")
+      print("TT - Translate")
+      print("\n-----Plot and Apply-----")
+      print("AP - Apply formation")
+      print("PLT - Plot preview")
+      print("PLT3D - Plot 3D preview")
+      print("FL - Formation list")
+      print("\nE - Exit")
 
    swarm = Swarm(4)
 
@@ -522,7 +529,7 @@ if __name__ == "__main__":
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(2)
       
-      elif  (key == str('A') or key == str('a')):
+      elif  (key == str('a') or key == str('A')):
          swarm.setAlphabet()
 
       elif (key == str('l') or key == str('L')):
@@ -530,19 +537,19 @@ if __name__ == "__main__":
          print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(5)
 
-      elif (key == str('ms')):
+      elif (key == str('ts') or key == str('TS')):
          sx = int(input("Insert the x scale: "))
          sy = int(input("Insert the y scale: "))
          sz = int(input("Insert the z scale: "))
          swarm.scaleFormation(sx, sy, sz)
       
-      elif (key == str('mr')):
+      elif (key == str('tr') or key == str('TR')):
          anglex = float(input("Insert the x angle: "))
          angley = float(input("Insert the y angle: "))
          anglez = float(input("Insert the z angle: "))
          swarm.rotateFormation(anglex, angley, anglez)
 
-      elif (key == str('mt')):
+      elif (key == str('tt') or key == str('TT')):
          tx = int(input("Insert the x translation: "))
          ty = int(input("Insert the y translation: "))
          tz = int(input("Insert the z translation: "))
@@ -559,10 +566,10 @@ if __name__ == "__main__":
       elif (key == str('ap') or key == str('AP')):
          swarm.applyFormation()
 
-      elif (key == str('plt')):
+      elif (key == str('plt') or key == str('PLT')):
          plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='2D')
       
-      elif (key == str('plt3d')):
+      elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
          plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='3D')
 
       elif (key == str('fl') or key == str('FL')):
