@@ -125,7 +125,7 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
         pass #Retornar código de erro depois
 
     # Setting the icon
-    icon_path = os.getcwd() + '/images/Icon.png'
+    icon_path = os.path.dirname(os.path.abspath(__file__))+"/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
 
@@ -240,7 +240,7 @@ def plot_init(self):
     window.rowconfigure(0, weight=6)
 
     # Setting the icon
-    icon_path = os.getcwd() + '/images/Icon.png'
+    icon_path = os.path.dirname(os.path.abspath(__file__))+"/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
 

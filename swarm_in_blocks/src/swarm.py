@@ -196,6 +196,11 @@ class Swarm:
    def startPlanning(self):
       print("Starting planning mode...")
       self.mode = 'Planning'
+      # See if initial formation is [], then set default inital formation
+      if not self.init_formation_coords:
+         # Initial formation. By default on square formation with L = N//2 + 1.
+         # (Ex: N=5 -> L=3)
+         self.setInitialFormation('full_square', self.num_of_clovers//2+1)
       plot.plot_init(self)
 
    def startSimulation(self, launch=False):
@@ -208,7 +213,7 @@ class Swarm:
          if not self.init_formation_coords:
             # Initial formation. By default on square formation with L = N//2 + 1.
             # (Ex: N=5 -> L=3)
-            self.setInitialFormation('square', self.num_of_clovers//2+1)
+            self.setInitialFormation('full_square', self.num_of_clovers//2+1)
          print("Starting roscore, Gazebo and clovers...")
          self.__launchGazeboAndClovers()
       
@@ -425,7 +430,7 @@ if __name__ == "__main__":
       print("L - land all")
       print("E - exit")
 
-   swarm = Swarm(2)
+   swarm = Swarm(4)
 
    # Starts the Gazebo simulation and clovers ready to operate
    # swarm.startSimulation(launch=False)
