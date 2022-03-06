@@ -35,7 +35,7 @@ def prev(self, preview_type):
 
 # Plot functions
 def plot_preview2d(self, coord):
-    # Define the plot size
+    # Define the plot size and colors
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(1, 1, 1)
     fig.patch.set_facecolor(background_color)
@@ -44,7 +44,7 @@ def plot_preview2d(self, coord):
     # Recieves the plot
     plt.plot(coord[:,0], coord[:,1], color=points_color, marker='o', linestyle='')
 
-    # Set the axis and grid
+    # Set the axis, grid and colors
     max_point = int(np.amax(coord[:,0:2]))
     min_point = int(np.amin(coord[:,0:2]))
     if max_point <= 10: max_point=10
@@ -52,7 +52,7 @@ def plot_preview2d(self, coord):
     plt.axis([(min_point-1),(max_point+1),(min_point-1),(max_point+1)])
     plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
     plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
-    ax.tick_params(axis='both', colors=grid_color)    #setting up X-axis tick color to red
+    ax.tick_params(axis='both', colors=grid_color)
     for spine in ['top', 'right', 'left', 'bottom']:
         ax.spines[spine].set_color(grid_color)
         ax.spines[spine].set_linewidth(3)
@@ -60,12 +60,16 @@ def plot_preview2d(self, coord):
     return fig
 
 def plot_preview3d(self, coord): 
+    # Define the plot size and colors
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111,projection='3d')
     fig.patch.set_facecolor(background_color)
     ax.set_facecolor(background_color)
 
+    # Recieves the plot
     ax.plot(coord[:,0],coord[:,1],coord[:,2],'ro')
+
+    # Set the axis, grid and colors
     max_point = int(np.amax(coord[:,0:3]))
     min_point = int(np.amin(coord[:,0:3]))
     if max_point <= 10: max_point=10
@@ -89,23 +93,20 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.minsize(400, 300)     
-    window.maxsize(800, 700)                                                   # Set minimum dimension values
+    window.minsize(400, 300)                                                   # Set minimum dimension values
+    window.maxsize(800, 700)                                                   # Set maximum dimension values
     positionRight = int(window.winfo_screenwidth()/2 - 602/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
     window.geometry("600x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
-    # Setting the grid configuration
+    # Setting the grid and layout
     window.columnconfigure(0, weight=3)
     window.columnconfigure(1, weight=3)
-    #window.columnconfigure(2, weight=2)
     window.rowconfigure(0, weight=1)
     window.rowconfigure(1, weight=1)
     window.rowconfigure(2, weight=1)
     window.rowconfigure(3, weight=1)
     window.rowconfigure(4, weight=2)
-
-    # Setting the layout
     window.config(background=background_color)
 
     if preview_type=='2D':
@@ -115,22 +116,24 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     else: 
         pass #Retornar código de erro depois
 
-    # Setting the icon
+    # Setting the window icon
     icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
 
+    # Placing the logo
     logo_path = os.path.dirname(os.path.abspath(__file__)) + "/images/logo.png"
     logo = PhotoImage(file=logo_path)
     icon_label = Label(window, image=logo)
     #icon_label.place(relx=0.9,rely=0.0)
     icon_label.grid(row=0, column=2, padx=15)
 
-    # creating the Tkinter canvas containing the Matplotlib figure
+    # Creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
     canvas.draw()
     canvas.get_tk_widget().grid(rowspan=5, columnspan=2, row=0, column=0)
     
+    # Checking the first time ploting
     if first_run==True:
         global formation_count
         formation_count = len(self.formation_list)-1
@@ -147,7 +150,10 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     left_arrow_res = Image.open(left_arrow_path).resize((50, 50))
     left_arrow = ImageTk.PhotoImage(left_arrow_res) 
 
-    if formation_count == len(self.formation_list)-1:
+    if len(self.formation_list)-1 == 0:
+        pass
+
+    elif formation_count == len(self.formation_list)-1:
         prev_button = Button(master = window, 
                             command = lambda:[window.quit(), window.destroy(), 
                             prev(self,  preview_type)], 
@@ -212,8 +218,8 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     cancel_button.grid(row=3, column=2, padx=15, pady=10, sticky=S)
     cancel_button.config(highlightthickness=0)
 
+    # Configuring the close window protocol
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
-    # Run the gui
     window.mainloop()
 
 def plot_init(self):
@@ -230,13 +236,12 @@ def plot_init(self):
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
     window.geometry("500x550+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
-    window.config(background=background_color)
-
-    # Setting the grid configuration
+    # Setting the grid and layout
     window.columnconfigure(0, weight=6)
     window.rowconfigure(0, weight=6)
+    window.config(background=background_color)
 
-    # Setting the icon
+    # Setting the window icon
     icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
@@ -267,8 +272,8 @@ def plot_init(self):
     resume_button.grid(row=1, column=0, pady = 10)
     resume_button.config(highlightthickness=0)
     
+    # Configuring the close window protocol
     window.protocol('WM_DELETE_WINDOW', lambda: [window.quit(), window.destroy()])
-    # Run the gui
     window.mainloop()
 
 def other_ideas():

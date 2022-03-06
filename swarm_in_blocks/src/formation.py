@@ -50,7 +50,7 @@ def full_square(N, L=2):
         if (round(np.sqrt(N),2) == int(np.sqrt(N))):
             yi = yi + L/(n-1)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
-        elif (N%4 == 0):
+        elif (N%n == 0):
             yi = yi + L/n
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
         else:
