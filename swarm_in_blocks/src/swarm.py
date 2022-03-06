@@ -411,7 +411,7 @@ if __name__ == "__main__":
 
    #Menu 
    def menu():
-      print("Press")
+      print("Select")
       print("\n-----Basic operations-----")
       print("1 - Takeoff all")
       print("0 - Initial position")
@@ -437,7 +437,7 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(4)
+   swarm = Swarm(53)
 
    # Starts the Gazebo simulation and clovers ready to operate
    # swarm.startSimulation(launch=False)

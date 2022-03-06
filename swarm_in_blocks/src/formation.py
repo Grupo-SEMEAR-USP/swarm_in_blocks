@@ -44,17 +44,18 @@ def full_square(N, L=2):
     z0 = 1
     print("Beginning full square formation")
     yi = 0
-    n = int(1 + N/4)             
+    n = int(np.sqrt(N))             
     (q, coord) = square_side(N, L, q=0, n=n, yi=0, coord=coord)
     while (q<N):
-        if (round(np.sqrt(N),2) == int(np.sqrt(N)) or N%4==0):
+        if (round(np.sqrt(N),2) == int(np.sqrt(N))):
             yi = yi + L/(n-1)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
-        else:
+        elif (N%4 == 0):
             yi = yi + L/n
-            (q, coord) = square_side(N, L, q=q, n=(N%4), yi=yi, coord=coord)
-            if (N-q == n):
-                (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
+            (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
+        else:
+            yi = yi + L/(N//n)
+            (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
     print("Square done\n")
     return coord
 
