@@ -20,8 +20,18 @@ button_font_color = 'white'
 active_button_color = 'gray'
 
 # Buttons functions
-def save():
-    pass
+def save(self):
+    name = self.formation_list['formation {}'.format(len(self.formation_list)-1)]['name']
+    coord = self.formation_list['formation {}'.format(len(self.formation_list)-1)]['coord']
+    print("Your last formation was saved. \nType of the formation: {}".format(name))
+    # Create a file and save the last coordiante on it (Commented to not create the file everytime for now)
+    # with open('last_formation.npy', 'wb') as f:
+    #     np.save(f, coord)
+
+    # ESBOÇO PARA FUNÇÃO DE LOAD
+    # with open(os.path.dirname(os.path.abspath(__file__))+'/last_formation.npy', 'rb') as f:
+    #     loaded_formation = np.load(f)
+    # print(loaded_formation)
 
 def next(self, preview_type):
     global formation_count; formation_count += 1
@@ -95,7 +105,7 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     # Dimensions of the main window
     window.minsize(400, 300)                                                   # Set minimum dimension values
     window.maxsize(800, 700)                                                   # Set maximum dimension values
-    positionRight = int(window.winfo_screenwidth()/2 - 602/2)
+    positionRight = int(window.winfo_screenwidth()/2 - 600/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
     window.geometry("600x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
@@ -124,9 +134,9 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     # Placing the logo
     logo_path = os.path.dirname(os.path.abspath(__file__)) + "/images/logo.png"
     logo = PhotoImage(file=logo_path)
-    icon_label = Label(window, image=logo)
+    logo_label = Label(window, image=logo, background=background_color)
     #icon_label.place(relx=0.9,rely=0.0)
-    icon_label.grid(row=0, column=2, padx=15)
+    logo_label.grid(row=0, column=2, padx=15)
 
     # Creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
@@ -203,7 +213,7 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     resume_button.config(highlightthickness=0)
 
     save_button = Button(master = window, 
-                            command = lambda: [window.quit(), window.destroy()], 
+                            command = lambda: [save(self)], 
                             height = 2, width = 8, 
                             bg=button_color, fg=button_font_color, activebackground=active_button_color, 
                             text = "Save", font=but_font)

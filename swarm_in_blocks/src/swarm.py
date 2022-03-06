@@ -121,9 +121,6 @@ class Swarm:
       self.op_num = 0
       self.formation_list = {}
 
-      self.init_formation_coords = self.des_formation_coords
-      self.init_formation_name = self.des_formation_name
-
       # Leader id of the swarm
       self.leader_id = None
 
@@ -193,6 +190,7 @@ class Swarm:
          print(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed {len(initial_pose_failed)} clovers.")
 
    # Start pipeline
+   # Planning mode - Allows just to plot the formations preview and save its coordinates, don't use simulator
    def startPlanning(self):
       print("Starting planning mode...")
       self.mode = 'Planning'
@@ -207,6 +205,7 @@ class Swarm:
             self.setInitialFormation('full_square', int(np.sqrt(self.num_of_clovers)))
       plot.plot_init(self)
 
+   # Simulation mode - Allows to simulate the clovers on Gazebo and use all the developed features
    def startSimulation(self, launch=False):
       print("Starting simulation mode...")
       self.mode = 'Simulation'
@@ -238,24 +237,9 @@ class Swarm:
       self.curr_formation_coords = self.des_formation_coords
       print("Started simulation.")
 
+   # Navigation mode - Mode for those who want to fly with a real swarm
    def startNavigation(self):
       self.mode = 'Navigation'   
-   
-   def applyFormation(self):
-      
-      threads = []
-      for idx, clover in enumerate(self.swarm):
-         x = self.des_formation_coords[idx][0] - clover.init_coord[0]
-         y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
-         thrd.start()
-         threads.append(thrd)
-      
-      for thrd in threads:
-         thrd.join(timeout=1)
-      
-      self.curr_formation_coords =  self.des_formation_coords
 
    #Basic swarm operations
    def takeOffAll(self, z=1):
@@ -314,6 +298,22 @@ class Swarm:
       self.returnToHome()
       print("Landing...")
       self.landAll()
+
+   def applyFormation(self):
+         
+         threads = []
+         for idx, clover in enumerate(self.swarm):
+            x = self.des_formation_coords[idx][0] - clover.init_coord[0]
+            y = self.des_formation_coords[idx][1] - clover.init_coord[1]
+            z = self.des_formation_coords[idx][2]  
+            thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
+            thrd.start()
+            threads.append(thrd)
+         
+         for thrd in threads:
+            thrd.join(timeout=1)
+         
+         self.curr_formation_coords =  self.des_formation_coords
 
    #Formations
    def setFormation2D(self, shape, N, L):
