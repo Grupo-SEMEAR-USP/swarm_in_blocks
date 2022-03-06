@@ -89,11 +89,11 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.minsize(300, 300)     
-    window.maxsize(700, 700)                                                   # Set minimum dimension values
+    window.minsize(400, 300)     
+    window.maxsize(800, 700)                                                   # Set minimum dimension values
     positionRight = int(window.winfo_screenwidth()/2 - 602/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
-    window.geometry("602x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
+    window.geometry("600x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
     # Setting the grid configuration
     window.columnconfigure(0, weight=3)
@@ -119,6 +119,12 @@ def create_swarm_preview(self, coord,  preview_type='2D', first_run=True):
     icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
+
+    logo_path = os.path.dirname(os.path.abspath(__file__)) + "/images/logo.png"
+    logo = PhotoImage(file=logo_path)
+    icon_label = Label(window, image=logo)
+    #icon_label.place(relx=0.9,rely=0.0)
+    icon_label.grid(row=0, column=2, padx=15)
 
     # creating the Tkinter canvas containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig, master = window)  
@@ -218,11 +224,11 @@ def plot_init(self):
     window.title('Formation preview')
     
     # Dimensions of the main window
-    window.minsize(300, 300)     
-    window.maxsize(700, 700)                                                   # Set minimum dimension values
+    window.minsize(300, 350)     
+    window.maxsize(700, 750)                                                   # Set minimum dimension values
     positionRight = int(window.winfo_screenwidth()/2 - 500/2)
     positionDown = int(window.winfo_screenheight()/2 - 500/2)
-    window.geometry("500x500+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
+    window.geometry("500x550+{}+{}".format(positionRight, positionDown))         # Size and distance from top-left
 
     window.config(background=background_color)
 
@@ -234,6 +240,12 @@ def plot_init(self):
     icon_path = os.path.dirname(os.path.abspath(__file__)) + "/images/icon.png"
     icon = PhotoImage(file=icon_path)
     window.iconphoto(True, icon)
+
+    # logo_path = os.path.dirname(os.path.abspath(__file__)) + "/images/logo.png"
+    # logo = PhotoImage(file=logo_path)
+    # icon_label = Label(window, image=logo)
+    # #icon_label.place(relx=0.0,rely=0.0)
+    # icon_label.grid(row=0, column=0)
 
     # Recieves the plot
     coord = self.init_formation_coords
