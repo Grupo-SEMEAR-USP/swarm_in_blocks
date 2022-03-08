@@ -2,6 +2,7 @@ import logging
 from tkinter import * 
 import tkinter.font as font
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
 import os
@@ -73,7 +74,8 @@ def plot_preview2d(self, coord):
 def plot_preview3d(self, coord): 
     # Define the plot size and colors
     fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111,projection='3d')
+    #ax = fig.add_subplot(111,projection='3d')
+    ax = plt.axes(projection="3d")
     fig.patch.set_facecolor(background_color)
     ax.set_facecolor(background_color)
 
