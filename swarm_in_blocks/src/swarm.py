@@ -445,7 +445,7 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(9)
+   swarm = Swarm(34)
 
    # Starts the Gazebo simulation and clovers ready to operate
    # swarm.startSimulation(launch=False)
