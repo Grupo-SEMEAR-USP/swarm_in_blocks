@@ -73,7 +73,8 @@ def plot_preview2d(self, coord):
 def plot_preview3d(self, coord): 
     # Define the plot size and colors
     fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111,projection='3d')
+    #ax = fig.add_subplot(111,projection='3d')
+    ax = plt.axes(projection="3d")
     fig.patch.set_facecolor(background_color)
     ax.set_facecolor(background_color)
 

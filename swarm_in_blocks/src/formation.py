@@ -9,6 +9,7 @@ import time
 from clover import srv
 from std_srvs.srv import Trigger
 import numpy as np
+import random
 import Alphabet
 pi = np.pi
 
@@ -175,18 +176,22 @@ def cube(N, L):
     coord = np.empty((0,4))
     print("Beginning cube formation")
     n = np.cbrt(N)
+    drones_amount = N
     z = 1
+    # Increases the amount of clovers until be possible to make a complete cube
     while (round(n,2) != int(n)):
-        N +=1
-        n = np.cbrt(N)
+        drones_amount +=1
+        n = np.cbrt(drones_amount)
     q = 0
+    # Makes the cube layer by layer
     for i in range(0, int(n)):
         yi = 0
         for i in range(0,int(n)):
             (q, coord) = square_side(n**2, L, q, int(n), yi, z0=z, coord=coord)
             yi = yi + L/(n-1)
         z = z + L/(n-1)
-    return coord
+    selected_coords = partial_formation(N, coord)
+    return selected_coords
 
 def sphere(N, L=2):
     xc = yc = zc = 0
@@ -306,3 +311,12 @@ def square_side(N, L, q, n, yi, coord, z0=1):
             break
     return(q, coord)
 
+def partial_formation(N, coord):
+    random_coords = random.sample(range(0, len(coord)), N)
+    random_coords.sort()
+    selec_coords = coord[random_coords, :]
+    return selec_coords
+
+if __name__ == "__main__":
+    coord = np.array(([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]))
+    partial_formation(3, coord)
