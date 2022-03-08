@@ -1,6 +1,7 @@
 from tkinter import * 
 import tkinter.font as font
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
 import os
