@@ -1,3 +1,4 @@
+import logging
 from tkinter import * 
 import tkinter.font as font
 import matplotlib.pyplot as plt
@@ -23,7 +24,7 @@ active_button_color = 'gray'
 def save(self):
     name = self.formation_list['formation {}'.format(len(self.formation_list)-1)]['name']
     coord = self.formation_list['formation {}'.format(len(self.formation_list)-1)]['coord']
-    print("Your last formation was saved. \nType of the formation: {}".format(name))
+    logging.debug("Your last formation was saved. \nType of the formation: {}".format(name))
     # Create a file and save the last coordiante on it (Commented to not create the file everytime for now)
     # with open('last_formation.npy', 'wb') as f:
     #     np.save(f, coord)
