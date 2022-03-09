@@ -104,17 +104,12 @@ class ImageViewApp(wx.App):
         print('key down')
         key = event.GetKeyCode()
         keyU = event.GetUnicodeKey()
+        print(f'GetKeyCode: {key}; GetUnicodeKey: {keyU}')
 
-        # Keyboard input
-        if key in [wx.WXK_UP]:
-            print('UP')
-        if key in [wx.WXK_DOWN]:
-            print('DOWN')
-        if key in [wx.WXK_LEFT]:
-            print('LEFT')
-        if key in [wx.WXK_RIGHT]:
-            print('RIGHT')
+        mov_control(key)
         
+        
+
     def OneKeyUp(self, event=None):
         print('key released')
         if keyboard_clover:
@@ -177,17 +172,54 @@ def handle_image(ros_image):
 
 
 
-def main():
-    app = ImageViewApp()
-    rospy.init_node('ImageView')
-    #rospy.sleep(0.1)
-    
-    
-    # rospy.Subscriber(setID(id_ros), Image, handle_image)
-    #print(__doc__)
-    
-    app.MainLoop()
-    return 0
+
+# Key input analisys 
+def mov_control(key):
+    if True: # TROCAR PARA if keyboard_control
+            # Keyboard input for arrow keys
+            if key in [wx.WXK_UP]:
+                print('UP')
+                keyboard_clover[0].move('+x')
+                
+            if key in [wx.WXK_DOWN]:
+                print('DOWN')
+                keyboard_clover[0].move('-x')
+
+            if key in [wx.WXK_LEFT]:
+                print('LEFT')
+                keyboard_clover[0].move('+y')
+
+            if key in [wx.WXK_RIGHT]:
+                print('RIGHT')
+                keyboard_clover[0].move('-y')
+            
+            # Keyboard input for command letters
+            if key == 84: # t
+                #print('Taking off..')
+                keyboard_clover[0].takeoff()
+            
+            if key == 76: # l
+                print('Landing drone..')
+                keyboard_clover[0].land()
+
+            if key == 87: # w
+                print('Flying up')
+                keyboard_clover[0].move('up')
+            
+            if key == 65: # a
+                print('Turning left')
+                keyboard_clover[0].move('left')
+
+            if key == 83: # s
+                print('Flying down')
+                keyboard_clover[0].move('down')
+
+            if key == 68: # d
+                print('Turning right')
+                keyboard_clover[0].move('right')
+
+    else:
+        print('No drone has been initialized yet!')
 
 
 def topics_sorter():
@@ -200,6 +232,22 @@ def topics_sorter():
 
             clovers.append(f'{id_r}')
             id_r = id_r + 1
+
+
+
+
+def main():
+    app = ImageViewApp()
+    rospy.init_node('ImageView')
+    #rospy.sleep(0.1)
+    
+    
+    # rospy.Subscriber(setID(id_ros), Image, handle_image)
+    #print(__doc__)
+    
+    app.MainLoop()
+    return 0
+
 
 
 if __name__ == "__main__":
