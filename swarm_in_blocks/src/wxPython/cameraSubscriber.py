@@ -78,24 +78,25 @@ class ImageViewApp(wx.App):
 
 
 
-    def onChoice(self, event): # lida com os eventos de choice
-        choice = self.list.GetCurrentSelection() # retorna o id do topico a ser visualizado 
+    def onChoice(self, event): # Deals with Choice event
+        choice = self.list.GetCurrentSelection() # Return the wished id  
 
 
-        for subs in subscribers: # se desinscreve de todos os topicos para evitar sobreposição e acumulo
+        for subs in subscribers: # Unsubscribes all topics so it won't accumulate 
             subs.unregister()
 
         subscribers.append(rospy.Subscriber(f'/clover{choice}/main_camera/image_raw/compressed', CompressedImage, handle_image,queue_size=10)) # se inscreve no topico pedido e ativa handle_image
         print(choice)
         
 
-        # erases previous object
+        # Erases previous object so that only one drone is controlled at a time
         keyboard_clover.clear()
-        # (inicar a classe de funçoes e serviços de cada clover que foi escolhido aqui)
+        
+        # Creates a new drone object that contains controlling methods 
         drone = new_pynput.DroneKeyboard(choice)
         keyboard_clover.append(drone)
         print(keyboard_clover)
-        print(dir(drone))
+        # print(dir(drone))
 
 
 
@@ -106,15 +107,17 @@ class ImageViewApp(wx.App):
         keyU = event.GetUnicodeKey()
         print(f'GetKeyCode: {key}; GetUnicodeKey: {keyU}')
 
+        # Function that handles the key pressed
         mov_control(key)
         
         
 
     def OneKeyUp(self, event=None):
         print('key released')
+
+        # Stops all objects that are currently being used
         if keyboard_clover:
             for obj in keyboard_clover:
-                
                 obj.stop()
 
 
@@ -144,16 +147,18 @@ class ImageViewPanel(wx.Panel):
         # dc = wx.BufferedPaintDC(self)
         # dc.DrawBitmap(self.bmp, 0, 0)
 
+
+    # The following events were written in order to improve camera performance
     def OnPaint(self, evt):
         dc = wx.BufferedPaintDC(self)
         dc.DrawBitmap(self.staticbmp, 90, 30)
         
-
     def NextFrame(self, event):
         
         # self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
         self.staticbmp.CopyFromBuffer(self.img)
         self.Refresh()
+
 
 t0 = 0
 def handle_image(ros_image):
@@ -171,11 +176,9 @@ def handle_image(ros_image):
 
 
 
-
-
 # Key input analisys 
 def mov_control(key):
-    if True: # TROCAR PARA if keyboard_control
+    if keyboard_clover: 
             # Keyboard input for arrow keys
             if key in [wx.WXK_UP]:
                 print('UP')
@@ -222,6 +225,8 @@ def mov_control(key):
         print('No drone has been initialized yet!')
 
 
+# Filtrates all topics in order to find how many drones are publishing
+# It's only called once
 def topics_sorter():
     id_r = 0
     for str in rospy.get_published_topics():
@@ -234,20 +239,11 @@ def topics_sorter():
             id_r = id_r + 1
 
 
-
-
 def main():
     app = ImageViewApp()
     rospy.init_node('ImageView')
-    #rospy.sleep(0.1)
-    
-    
-    # rospy.Subscriber(setID(id_ros), Image, handle_image)
-    #print(__doc__)
-    
     app.MainLoop()
     return 0
-
 
 
 if __name__ == "__main__":
