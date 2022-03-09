@@ -64,9 +64,9 @@ class DroneKeyboard:
         elif axis == 'x-':
             self.set_velocity(vx=-sp, frame_id=self.body)
         elif axis == 'y+':
-            self.set_velocity(vy=-sp, frame_id=self.body)
-        elif axis == 'y-':
             self.set_velocity(vy=+sp, frame_id=self.body)
+        elif axis == 'y-':
+            self.set_velocity(vy=-sp, frame_id=self.body)
         elif axis == 'up':
             self.set_velocity(vz=sp, frame_id=self.body)
         elif axis == 'right':
