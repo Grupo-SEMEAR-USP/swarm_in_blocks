@@ -27,7 +27,7 @@ import os
 
 subscribers = [] # lista com o atual subscriber
 
-clovers = ['0', '1'] # lista com o numero em str dos topicos a serem inscritos
+clovers = [] # lista com o numero em str dos topicos a serem inscritos
 
 keyboard_clover = [] # list with drone objects for later control
 
@@ -204,6 +204,6 @@ def topics_sorter():
 
 if __name__ == "__main__":
     #threading.Thread(target=init_pynput).start()
-    #topics_sorter() # separa os topicos desejados
+    topics_sorter() # separa os topicos desejados
     print(clovers)
     main()
