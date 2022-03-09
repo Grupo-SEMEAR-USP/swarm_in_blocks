@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import logging
 import rospy
 import time
 from multiprocessing import Process
@@ -15,8 +16,7 @@ def startRoscore(verbose=False):
         returncode = p.wait()
     finally:
         if p.poll() is None:
-            print("Entrered if")
-            print(p.poll())
+            logging.debug(p.poll())
             p.terminate()
         p.terminate()
 
