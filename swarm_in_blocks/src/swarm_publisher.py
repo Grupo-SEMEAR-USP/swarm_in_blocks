@@ -41,6 +41,7 @@ class SwarmPublisher:
         swarm_state.status = swarm_obj.status
         swarm_state.mode = swarm_obj.mode
         swarm_state.connected_clovers = swarm_obj.connected_clovers
+        swarm_state.armed_clovers = swarm_obj.armed_clovers
         self.state_pub.publish(swarm_state)
     
     def publishStatusLoop(self, swarm_obj):

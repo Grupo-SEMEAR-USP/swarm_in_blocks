@@ -2,6 +2,7 @@
 import numpy as np
 import logging
 import alphabet
+import random
 
 pi = np.pi
 
@@ -191,7 +192,7 @@ def sphere(N, L=2):
     logging.debug("Beginning circle formation")
     theta = 2*pi/N
     phi = 2*pi/N
-    for i in range(0, int(2*pi)):
+    for i in range(0, N):
         xi = L*np.cos(i*theta)*np.sin(i*phi)
         yi = L*np.sin(i*theta)*np.sin(i*phi)
         zi = L*np.cos(i*phi)
