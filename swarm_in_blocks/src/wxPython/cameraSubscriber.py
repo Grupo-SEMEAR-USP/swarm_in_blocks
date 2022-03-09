@@ -10,8 +10,9 @@ image:=/clover0/main_camera/parameter_updates
 """
 
 
-
-
+from typing import NoReturn
+import new_pynput
+import threading
 import roslib
 roslib.load_manifest('rospy')
 roslib.load_manifest('sensor_msgs')
@@ -22,12 +23,17 @@ import wx
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
+import os
 
 subscribers = [] # lista com o atual subscriber
 
-clovers = [] # lista com o numero em str dos topicos a serem inscritos
+clovers = ['0', '1'] # lista com o numero em str dos topicos a serem inscritos
+
+keyboard_clover = [] # list with drone objects for later control
 
 bridge = CvBridge()
+
+
 class ImageViewApp(wx.App):
     def OnInit(self):
         self.frame = wx.Frame(None, title = "ROS Image View", size=(500, 560))
@@ -61,7 +67,16 @@ class ImageViewApp(wx.App):
         icon = wx.StaticBitmap(midp, bitmap=wx.Bitmap('verde-claro.png'))
         sizer.Add(icon, pos=(5, 6), flag=wx.BOTTOM|wx.ALIGN_BOTTOM,border=5)
 
+        # Keybidings events:
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP, self.OneKeyUp)
+        self.Bind(wx.EVT_CHAR, self.OnKeyDown)
+        #self.SetFocus()
+
+
         midp.SetSizer(sizer)
+
+
 
     def onChoice(self, event): # lida com os eventos de choice
         choice = self.list.GetCurrentSelection() # retorna o id do topico a ser visualizado 
@@ -72,7 +87,40 @@ class ImageViewApp(wx.App):
 
         subscribers.append(rospy.Subscriber(f'/clover{choice}/main_camera/image_raw/compressed', CompressedImage, handle_image,queue_size=10)) # se inscreve no topico pedido e ativa handle_image
         print(choice)
-        #print(rospy.get_published_topics())
+        
+
+        # erases previous object
+        keyboard_clover.clear()
+        # (inicar a classe de funçoes e serviços de cada clover que foi escolhido aqui)
+        drone = new_pynput.DroneKeyboard(choice)
+        keyboard_clover.append(drone)
+        print(keyboard_clover)
+        print(dir(drone))
+
+
+
+    def OnKeyDown(self, event=None):
+        #print(event.GetKeyCode())
+        print('key down')
+        key = event.GetKeyCode()
+        keyU = event.GetUnicodeKey()
+
+        # Keyboard input
+        if key in [wx.WXK_UP]:
+            print('UP')
+        if key in [wx.WXK_DOWN]:
+            print('DOWN')
+        if key in [wx.WXK_LEFT]:
+            print('LEFT')
+        if key in [wx.WXK_RIGHT]:
+            print('RIGHT')
+        
+    def OneKeyUp(self, event=None):
+        print('key released')
+        if keyboard_clover:
+            for obj in keyboard_clover:
+                
+                obj.stop()
 
 
 class ImageViewPanel(wx.Panel):
@@ -90,12 +138,7 @@ class ImageViewPanel(wx.Panel):
 
     """ class ImageViewPanel creates a panel with an image on it, inherits wx.Panel """
     def update(self, image):
-        # cria um tipo de "dado" bitmap caso nao fosse e seta de acordo com os canais
-        # a informação coletada nao entrava nos requisitos do if, portanto pus para serem executadas diretamente
         
-        # http://www.ros.org/doc/api/sensor_msgs/html/msg/Image.html
-     
-        # transforma o buffer em um bitmap e insere na gui no painel criado (self)
         
         self.img = image
         self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
@@ -126,7 +169,7 @@ def handle_image(ros_image):
     cv_image = bridge.compressed_imgmsg_to_cv2(ros_image)
     wx.CallAfter(wx.GetApp().panel.update, cv_image)
     global t0
-    print(time.perf_counter() - t0)
+    #print(time.perf_counter() - t0)
     t0 = time.perf_counter()
     #wx.GetApp().panel.update(image)
     # http://wiki.wxpython.org/LongRunningTasks
@@ -160,6 +203,7 @@ def topics_sorter():
 
 
 if __name__ == "__main__":
-    topics_sorter() # separa os topicos desejados
+    #threading.Thread(target=init_pynput).start()
+    #topics_sorter() # separa os topicos desejados
     print(clovers)
     main()
