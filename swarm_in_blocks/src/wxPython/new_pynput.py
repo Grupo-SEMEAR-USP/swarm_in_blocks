@@ -59,13 +59,14 @@ class DroneKeyboard:
     # Position control method
     def move(self, axis, sp=2, clover=1):
         if axis == 'x+':
+            print('indo para frente')
             self.set_velocity(vx=sp, frame_id=self.body)
         elif axis == 'x-':
             self.set_velocity(vx=-sp, frame_id=self.body)
         elif axis == 'y+':
-            self.set_velocity(vy=-sp, frame_id=self.body)
-        elif axis == 'y-':
             self.set_velocity(vy=+sp, frame_id=self.body)
+        elif axis == 'y-':
+            self.set_velocity(vy=-sp, frame_id=self.body)
         elif axis == 'up':
             self.set_velocity(vz=sp, frame_id=self.body)
         elif axis == 'right':

@@ -182,19 +182,19 @@ def mov_control(key):
             # Keyboard input for arrow keys
             if key in [wx.WXK_UP]:
                 print('UP')
-                keyboard_clover[0].move('+x')
+                keyboard_clover[0].move('x+')
                 
             if key in [wx.WXK_DOWN]:
                 print('DOWN')
-                keyboard_clover[0].move('-x')
+                keyboard_clover[0].move('x-')
 
             if key in [wx.WXK_LEFT]:
                 print('LEFT')
-                keyboard_clover[0].move('+y')
+                keyboard_clover[0].move('y+')
 
             if key in [wx.WXK_RIGHT]:
                 print('RIGHT')
-                keyboard_clover[0].move('-y')
+                keyboard_clover[0].move('y-')
             
             # Keyboard input for command letters
             if key == 84: # t
