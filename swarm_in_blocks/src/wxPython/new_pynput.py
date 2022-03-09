@@ -23,31 +23,31 @@ import time
 #sname = 'clover1'
 
 
-
+# Class created in order to facilitate the control of each drone individually
 class DroneKeyboard:
     def __init__(self, id):
-        #print('inicio  do init')
+        
         self.name = f'clover{id}'
         self.body = 'body' + str(id)
         self.id = id
-        #print(self.name)
+
         try:
             rospy.wait_for_service(f"{self.name}/get_telemetry")
             rospy.wait_for_service(f"{self.name}/navigate")
             rospy.wait_for_service(f"{self.name}/set_velocity")
             rospy.wait_for_service(f"{self.name}/land")
-            #print(self.name)
+           
             self.set_velocity = rospy.ServiceProxy(f"{self.name}/set_velocity", srv.SetVelocity)
             self.navigate = rospy.ServiceProxy(f"{self.name}/navigate", srv.Navigate)
             self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
             self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
-            #print('fim do init')
+      
         except:
             
             sys.exit('Connection not succeeded - Please check if you have a simulation going on')
 
             
-
+    # Takeoff method
     def takeoff(self, clover=1):
         #print(self.get_telemetry())
         if not self.get_telemetry().armed:
@@ -56,7 +56,7 @@ class DroneKeyboard:
         else:
             print('Drone already armed!')
 
-
+    # Position control method
     def move(self, axis, sp=2, clover=1):
         if axis == 'x+':
             self.set_velocity(vx=sp, frame_id=self.body)
@@ -80,6 +80,12 @@ class DroneKeyboard:
 
     def stop(self, clover=1):
         self.set_velocity(vx=0, vy=0, vz=0, yaw_rate=0, frame_id=self.body)
+
+
+
+# PREVIOUS METHOD OF HANDLING KEYBOARD INPUT - DO NOT ERASE YET (might be useful later)
+
+# VVV
 
 
 # def press(key):
