@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import math
 import mavros
 import rospy
 import mavros_msgs
@@ -206,11 +207,13 @@ def sphere(N, L=2):
 def pyramid(N, L):
     coord = np.empty((0,4))
     Ld=2
-    
+    c=1/2
     for index in range(N):
         if(index%3==0):
             if(index>3):
                 Ld += 1
+            if(index>10):
+                c+=1/3
     if(Ld>L):
         print("Side size is not enough")
         print(f"New Side = {Ld}")
@@ -229,66 +232,22 @@ def pyramid(N, L):
             z+=1
             
         if((idx-2)%3==0):
-            if(idx==1):
-                c=0
-            else:
-                c=1
-            point=[h - 2*(L/Ld)*(cpy/3) + 3*(L/Ld)*c, L/2, z, 1]
+            point=[h - 0.4*(L/Ld)*(cpy)*round(np.sqrt(3),2) + c*(L/Ld), L/2, z, 1]
             
         
         if((idx%3)==0):
             point = [(L/Ld)*(cpy/2),(L/Ld)*(cpy/2), z, 1]
         
         if(idx == N-1):
-            point=[(L/Ld)/3 + h/2, L/2, z, 1]
+            if(N<10):
+                point=[h/2, L/2, z, 1]
+            else:
+                point=[h - 0.4*(L/Ld)*(cpy)*round(np.sqrt(3),2) + c*(L/Ld), L/2, z, 1]
         
 
         coord = np.concatenate((coord,[point]))
     
-    return (coord)
-            
-    # for l in range(0,N):
-    #     for c in range(0,4): 
-    #         #Define o x
-    #             if(c==0):
-    #                 if((l-1)%3==0):
-    #                     x=h
-    #                     h-=1/2
-    #                 else:
-    #                     x=cpx
-
-    #                 if((l-2)%3==0):
-    #                     cpx+=1/2
-                        
-    #                 if(l==N-1):
-    #                     x=round(h/2, 2)
-                        
-    #         #Define o y
-    #             if(c==1):
-    #                 if(l%3==0 and l>0):
-    #                     L1 -= 1/2
-
-    #                 if((l-2)%3==0):
-    #                     y=L1
-    #                 elif((l-1)%3==0):
-    #                     y=L1/2
-    #                 else:
-    #                     y=cpy
-    #                     cpy+=1/2
-
-    #                 if(l==N-1):
-    #                     y=L/2
-            
-    #         #Define o z
-    #             if(c==2):
-    #                 if((l-2)%3==0):
-    #                     z+=1
-            
-    #     point=[x,y,z,1]
-    #     coord = np.concatenate((coord,[point]))      
-    # return coord         
-
-#---Support Functions---
+    return coord
 
 def square_side(N, L, q, n, yi, coord, z0=1):
     j = 0
