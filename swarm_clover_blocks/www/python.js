@@ -525,7 +525,7 @@ Blockly.Python['set_2d_formation'] = function(block) {
 	var num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
 	var length = Blockly.Python.valueToCode(block, 'LENGTH', Blockly.Python.ORDER_ATOMIC);
 	// TODO: Assemble Python into code variable.
-	var code = `swarm.setFormation2D(${formation},${num},${length})\n`;
+	var code = `swarm.setFormation2D('${formation.toLowerCase()}',${num},${length})\n`;
 	return code;
 };
 
@@ -535,7 +535,7 @@ Blockly.Python['set_3d_formation'] = function(block) {
 	var num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
 	var length = Blockly.Python.valueToCode(block, 'LENGTH', Blockly.Python.ORDER_ATOMIC);
 	// TODO: Assemble Python into code variable.
-	var code = `swarm.setFormation3D(${formation},${num},${length})\n`;
+	var code = `swarm.setFormation3D('${formation.toLowerCase()}',${num},${length})\n`;
 	return code;
 };
 

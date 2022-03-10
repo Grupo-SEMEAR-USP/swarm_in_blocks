@@ -11,6 +11,9 @@
     <arg name="verbose" default="false"/>
     <arg name="paused" default="false"/>
 
+    <!-- log formatting -->
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}]: ${logger}: ${message}"/>
+
      <!-- Update static directory -->
     <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
         <!-- <param name="default_package" value="clover"/> -->

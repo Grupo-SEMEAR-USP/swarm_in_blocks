@@ -1,16 +1,9 @@
 #!/usr/bin/python3
-
-import math
-import mavros
-import rospy
-import mavros_msgs
-from mavros_msgs import srv
-from mavros_msgs.msg import State
-import time
-from clover import srv
-from std_srvs.srv import Trigger
 import numpy as np
-import Alphabet
+import logging
+import alphabet
+import random
+
 pi = np.pi
 
 #---Formations---
@@ -19,31 +12,31 @@ def line(N, L=1):
     coord = np.empty((0,4))
     z0 = 1
     f = L/(N-1)
-    print("Beginning line formation")
+    logging.debug("Beginning line formation")
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
         coord = np.concatenate((coord,[point]))
-    print("Line done\n")
+    logging.debug("Line done\n")
     return coord
 
 def circle(N, L=2):
     xc = yc = 0
     coord = np.empty((0,4))
     z0 = 1
-    print("Beginning circle formation")
+    logging.debug("Beginning circle formation")
     angle = 2*pi/N
     for idx in range(N):
         xi = L*np.cos(idx*angle)
         yi = L*np.sin(idx*angle)
         point = [round(xc+xi,2), round(yc+yi,2), z0, 1]
         coord = np.concatenate((coord,[point]))
-    print("Circle done\n")
+    logging.debug("Circle done\n")
     return coord
 
 def full_square(N, L=2):
     coord = np.empty((0,4))
     z0 = 1
-    print("Beginning full square formation")
+    logging.debug("Beginning full square formation")
     yi = 0
     n = int(np.sqrt(N))             
     (q, coord) = square_side(N, L, q=0, n=n, yi=0, coord=coord)
@@ -57,13 +50,13 @@ def full_square(N, L=2):
         else:
             yi = yi + L/(N//n)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
-    print("Square done\n")
+    logging.debug("Square done\n")
     return coord
 
 def empty_square(N, L=2):
     coord = np.empty((0,4))
     z0 = 1
-    print("Beginning empty square formation")
+    logging.debug("Beginning empty square formation")
     yi = 0
     n = int(1 + N/4)
     if (N%4 == 0):
@@ -85,7 +78,7 @@ def empty_square(N, L=2):
             (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
         else:
             (q, coord) = square_side(N, L, q=q, n=n+1, yi=L, coord=coord)
-    print("Square done\n")
+    logging.debug("Square done\n")
     return coord
 
 def triangle(N, L=2):
@@ -113,8 +106,8 @@ def triangle(N, L=2):
             p+=1
     
     if(Ld>L):
-        print("Side size is not enough")
-        print(f"New Side = {Ld}")
+        logging.debug("Side size is not enough")
+        logging.debug(f"New Side = {Ld}")
         L=Ld
 
     
@@ -174,34 +167,38 @@ def triangle(N, L=2):
 #---3D Formations---
 def cube(N, L):
     coord = np.empty((0,4))
-    print("Beginning cube formation")
+    logging.debug("Beginning cube formation")
     n = np.cbrt(N)
+    drones_amount = N
     z = 1
+    # Increases the amount of clovers until be possible to make a complete cube
     while (round(n,2) != int(n)):
-        N +=1
-        n = np.cbrt(N)
+        drones_amount +=1
+        n = np.cbrt(drones_amount)
     q = 0
+    # Makes the cube layer by layer
     for i in range(0, int(n)):
         yi = 0
         for i in range(0,int(n)):
             (q, coord) = square_side(n**2, L, q, int(n), yi, z0=z, coord=coord)
             yi = yi + L/(n-1)
         z = z + L/(n-1)
-    return coord
+    selected_coords = partial_formation(N, coord)
+    return selected_coords
 
 def sphere(N, L=2):
     xc = yc = zc = 0
     coord = np.empty((0,4))
-    print("Beginning circle formation")
+    logging.debug("Beginning circle formation")
     theta = 2*pi/N
     phi = 2*pi/N
-    for i in range(0, int(2*pi)):
+    for i in range(0, N):
         xi = L*np.cos(i*theta)*np.sin(i*phi)
         yi = L*np.sin(i*theta)*np.sin(i*phi)
         zi = L*np.cos(i*phi)
         point = [round(xc+xi,2), round(yc+yi,2), round(zc+zi,2), 1]
         coord = np.concatenate((coord,[point]))
-    print("Circle done\n")
+    logging.debug("Circle done\n")
     return coord
 
 def pyramid(N, L):
@@ -215,8 +212,8 @@ def pyramid(N, L):
             if(index>10):
                 c+=1/3
     if(Ld>L):
-        print("Side size is not enough")
-        print(f"New Side = {Ld}")
+        logging.debug("Side size is not enough")
+        logging.debug(f"New Side = {Ld}")
         L=Ld    
     h = round(((np.sqrt(3)*L)/2),2)
     L1=L
@@ -265,3 +262,12 @@ def square_side(N, L, q, n, yi, coord, z0=1):
             break
     return(q, coord)
 
+def partial_formation(N, coord):
+    random_coords = random.sample(range(0, len(coord)), N)
+    random_coords.sort()
+    selec_coords = coord[random_coords, :]
+    return selec_coords
+
+if __name__ == "__main__":
+    coord = np.array(([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]))
+    partial_formation(3, coord)

@@ -12,9 +12,12 @@
     <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
     <!-- gazebo configs -->
     <arg name="gui" default="true"/>
-    <arg name="debug" default="false"/>
-    <arg name="verbose" default="false"/>
+    <arg name="debug" default="true"/>
+    <arg name="verbose" default="true"/>
     <arg name="paused" default="false"/>
+    
+    <!-- log formatting -->
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}]: ${logger}: ${message}"/>
 
      <!-- Update static directory -->
     <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
@@ -22,7 +25,9 @@
     </node>
 
     <!-- rosbridge -->
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+        <!-- <args name="output" value="log"/> -->
+    </include>
 
     <!-- swarm clover blocks-->
     <node pkg="swarm_clover_blocks" name="clover_blocks" type="clover_blocks"/>
