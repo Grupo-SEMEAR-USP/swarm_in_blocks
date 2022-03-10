@@ -8,7 +8,7 @@ from mavros_msgs import srv
 from mavros_msgs.msg import State
 
 # Clover services
-from clover import srv
+from clover import srv, SetLEDEffect
 from std_srvs.srv import Trigger
 
 # Other tools
@@ -78,6 +78,9 @@ class SingleClover:
       
       rospy.wait_for_service(f"{self.name}/land")
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
+
+      rospy.wait_for_service(f"{self.name}/set_effect")
+      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", SetLEDEffect)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
@@ -656,9 +659,9 @@ if __name__ == "__main__":
          swarm.scaleFormation(sx, sy, sz)
       
       elif (key == str('tr') or key == str('TR')):
-         anglex = float(input("Insert the x angle: "))
-         angley = float(input("Insert the y angle: "))
-         anglez = float(input("Insert the z angle: "))
+         anglex = float(input("Insert the x angle: "))*np.pi/180
+         angley = float(input("Insert the y angle: "))*np.pi/180
+         anglez = float(input("Insert the z angle: "))*np.pi/180
          swarm.rotateFormation(anglex, angley, anglez)
 
       elif (key == str('tt') or key == str('TT')):
