@@ -30,6 +30,7 @@ class DroneKeyboard:
         
         self.name = f'clover{id}'
         self.body = 'body' + str(id)
+        self.base_link = 'base_link' + str(id)
         self.id = id
 
         try:
@@ -49,7 +50,7 @@ class DroneKeyboard:
 
             
     # Takeoff method
-    def takeoff(self, clover=1):
+    def takeoff(self):
         #print(self.get_telemetry())
         if not self.get_telemetry().armed:
             self.navigate(y=2, frame_id=self.body, auto_arm=True)
@@ -58,7 +59,7 @@ class DroneKeyboard:
             print('Drone already armed!')
 
     # Position control method
-    def move(self, axis, sp=2, clover=1):
+    def move(self, axis, sp=1):
         if axis == 'x+':
             print('indo para frente')
             self.set_velocity(vx=sp, frame_id=self.body)
@@ -80,8 +81,12 @@ class DroneKeyboard:
             else:
                 print('Drone is too close to the ground!')
 
-    def stop(self, clover=1):
+    def stop(self):
+        telem = self.get_telemetry('odom')
         self.set_velocity(vx=0, vy=0, vz=0, yaw_rate=0, frame_id=self.body)
+        self.navigate(x=telem.x, y=telem.y, z=telem.z)
+        print()
+        
 
 
 

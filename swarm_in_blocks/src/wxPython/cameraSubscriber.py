@@ -102,18 +102,16 @@ class ImageViewApp(wx.App):
         print(keyboard_clover)
         # print(dir(drone))
 
-
-
     def OnKeyDown(self, event=None):
         #print(event.GetKeyCode())
         print('key down')
         key = event.GetKeyCode()
-        # keyU = event.GetUnicodeKey()
-        if self.last_key == key:
+        keyU = event.GetUnicodeKey()
+        if self.last_key == key or self.last_key == key + 32 or self.last_key == key - 32:
             event.Skip()
-        if self.last_key != key:
+        else:
             self.last_key = key
-            print(f'GetKeyCode: {key}')
+            print(f'GetKeyCode: {key} GetUnicodeKey: {keyU}')
 
             # Function that handles the key pressed
             if self.last_thrd.is_alive():
@@ -121,8 +119,6 @@ class ImageViewApp(wx.App):
             thrd = Thread(target=mov_control, args=(key,))
             thrd.start()
             self.last_thrd = thrd
-        
-        
 
     def OneKeyUp(self, event=None):
         print('key released')

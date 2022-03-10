@@ -53,6 +53,7 @@ message_generation
 add_message_files(
   FILES
   SwarmState.msg
+  SwarmApiState.msg
 )
 
 ## Generate services in the 'srv' folder

@@ -128,7 +128,8 @@ class Swarm:
       self.curr_formation_coords = []
       
       # X Y Z Roll Pitch Yaw format
-      self.curr_formation_pose = np.array([0,0,0,0,0,0])
+      self.curr_formation_pose = np.array([0,0,0])
+      self.des_formation_pose = np.array([0,0,0])
 
       # Desired formation
       self.des_formation_name = ''
@@ -412,6 +413,12 @@ class Swarm:
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
+
+      # Translate formation for current formation pose
+      tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
+      self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
+
+      # Update formation name
       self.des_formation_name = shape
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
@@ -426,6 +433,12 @@ class Swarm:
       else:
          raise Exception('Formation input doesn\'t match any built-in formations')
       self.des_formation_coords = coord
+
+      # Translate formation for current formation pose
+      tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
+      self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
+      
+      # Update formation name
       self.des_formation_name = shape
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
@@ -473,18 +486,27 @@ class Swarm:
 
    def scaleFormation(self, sx, sy, sz):
       self.des_formation_coords = transform.scaleFormation(self.des_formation_coords, sx, sy, sz)
+      self.des_formation_pose = np.array([self.des_formation_pose[0]*sx, self.des_formation_pose[1]*sy, self.des_formation_pose[2]*sz])
       self.des_formation_name = 'scale'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
    def translateFormation(self, tx, ty, tz):
       self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
+      self.des_formation_pose = np.array([self.des_formation_pose[0]+tx, self.des_formation_pose[1]+ty, self.des_formation_pose[2]+tz])
       self.des_formation_name = 'translate'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def rotateFormation(self, coord, anglex, angley, anglez):
-      self.des_formation_coords = transform.rotateFormation(self.des_formation_coords, anglex, angley, anglez)
+   def rotateFormation(self, anglex, angley, anglez):
+      # Get x, y, z of current formation
+      tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
+      # Translate back to the origin 
+      origin_coords = transform.translateFormation(self.des_formation_coords, -tx, -ty, -tz)
+      # Rotate formation on the origin
+      origin_coords = transform.rotateFormation(origin_coords, anglex, angley, anglez)
+      # Translate back to the current pose
+      self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
       self.des_formation_name = 'rotate'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
@@ -527,13 +549,13 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm()
+   swarm = Swarm(10)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=False)
+   # swarm.startSimulation(launch=False)
 
    # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
