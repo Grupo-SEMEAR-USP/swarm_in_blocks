@@ -24,6 +24,7 @@ from cv_bridge import CvBridge
 import cv2
 import numpy as np
 import os
+from threading import Thread
 
 subscribers = [] # lista com o atual subscriber
 
@@ -33,11 +34,17 @@ keyboard_clover = [] # list with drone objects for later control
 
 bridge = CvBridge()
 
+node_path = os.path.dirname(os.path.realpath(__file__))
 
 class ImageViewApp(wx.App):
     def OnInit(self):
+        # class vars
+        self.last_key = ''
+        self.last_thrd = Thread()
+        
+        # wx
         self.frame = wx.Frame(None, title = "ROS Image View", size=(500, 560))
-        self.frame.SetIcon(wx.Icon('logo.ico'))
+        self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'logo.ico')))
         self.panel = ImageViewPanel(self.frame)
         self.panel.setup()
         self.frame.Show(True)
@@ -64,7 +71,7 @@ class ImageViewApp(wx.App):
 
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
-        icon = wx.StaticBitmap(midp, bitmap=wx.Bitmap('verde-claro.png'))
+        icon = wx.StaticBitmap(midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
         sizer.Add(icon, pos=(5, 6), flag=wx.BOTTOM|wx.ALIGN_BOTTOM,border=5)
 
         # Keybidings events:
@@ -73,7 +80,6 @@ class ImageViewApp(wx.App):
         self.Bind(wx.EVT_CHAR, self.OnKeyDown)
         #self.SetFocus()
 
-
         midp.SetSizer(sizer)
 
 
@@ -81,13 +87,11 @@ class ImageViewApp(wx.App):
     def onChoice(self, event): # Deals with Choice event
         choice = self.list.GetCurrentSelection() # Return the wished id  
 
-
         for subs in subscribers: # Unsubscribes all topics so it won't accumulate 
             subs.unregister()
 
         subscribers.append(rospy.Subscriber(f'/clover{choice}/main_camera/image_raw/compressed', CompressedImage, handle_image,queue_size=10)) # se inscreve no topico pedido e ativa handle_image
-        print(choice)
-        
+        print(choice)        
 
         # Erases previous object so that only one drone is controlled at a time
         keyboard_clover.clear()
@@ -104,21 +108,33 @@ class ImageViewApp(wx.App):
         #print(event.GetKeyCode())
         print('key down')
         key = event.GetKeyCode()
-        keyU = event.GetUnicodeKey()
-        print(f'GetKeyCode: {key}; GetUnicodeKey: {keyU}')
+        # keyU = event.GetUnicodeKey()
+        if self.last_key == key:
+            event.Skip()
+        if self.last_key != key:
+            self.last_key = key
+            print(f'GetKeyCode: {key}')
 
-        # Function that handles the key pressed
-        mov_control(key)
+            # Function that handles the key pressed
+            if self.last_thrd.is_alive():
+                self.last_thrd.join()
+            thrd = Thread(target=mov_control, args=(key,))
+            thrd.start()
+            self.last_thrd = thrd
         
         
 
     def OneKeyUp(self, event=None):
         print('key released')
-
+        self.last_key = ''
         # Stops all objects that are currently being used
         if keyboard_clover:
             for obj in keyboard_clover:
-                obj.stop()
+                if self.last_thrd.is_alive():
+                    self.last_thrd.join()
+                thrd = Thread(target=obj.stop)
+                thrd.start()
+                self.last_thrd = thrd
 
 
 class ImageViewPanel(wx.Panel):
@@ -136,8 +152,6 @@ class ImageViewPanel(wx.Panel):
 
     """ class ImageViewPanel creates a panel with an image on it, inherits wx.Panel """
     def update(self, image):
-        
-        
         self.img = image
         self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
         self.staticbmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
