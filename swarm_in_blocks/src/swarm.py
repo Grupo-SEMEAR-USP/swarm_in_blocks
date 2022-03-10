@@ -8,7 +8,7 @@ from mavros_msgs import srv
 from mavros_msgs.msg import State
 
 # Clover services
-from clover import srv
+from clover import srv, SetLEDEffect
 from std_srvs.srv import Trigger
 
 # Other tools
@@ -78,6 +78,9 @@ class SingleClover:
       
       rospy.wait_for_service(f"{self.name}/land")
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
+
+      rospy.wait_for_service(f"{self.name}/set_effect")
+      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", SetLEDEffect)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
@@ -527,13 +530,13 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm()
+   swarm = Swarm(34)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=False)
+   #swarm.startSimulation(launch=False)
 
    # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
+   swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
