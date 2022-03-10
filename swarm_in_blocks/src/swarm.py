@@ -486,7 +486,7 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def rotateFormation(self, coord, anglex, angley, anglez):
+   def rotateFormation(self, anglex, angley, anglez):
       self.des_formation_coords = transform.rotateFormation(self.des_formation_coords, anglex, angley, anglez)
       self.des_formation_name = 'rotate'
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
@@ -530,7 +530,7 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(34)
+   swarm = Swarm(4)
 
    # Starts the Gazebo simulation and clovers ready to operate
    #swarm.startSimulation(launch=False)
@@ -637,9 +637,9 @@ if __name__ == "__main__":
          swarm.scaleFormation(sx, sy, sz)
       
       elif (key == str('tr') or key == str('TR')):
-         anglex = float(input("Insert the x angle: "))
-         angley = float(input("Insert the y angle: "))
-         anglez = float(input("Insert the z angle: "))
+         anglex = float(input("Insert the x angle: "))*np.pi/180
+         angley = float(input("Insert the y angle: "))*np.pi/180
+         anglez = float(input("Insert the z angle: "))*np.pi/180
          swarm.rotateFormation(anglex, angley, anglez)
 
       elif (key == str('tt') or key == str('TT')):
