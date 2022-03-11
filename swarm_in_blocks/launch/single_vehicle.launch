@@ -37,7 +37,7 @@
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=true
+                                    main_camera:=false
                                     rangefinder:=true
                                     led:=true 
                                     gps:=true

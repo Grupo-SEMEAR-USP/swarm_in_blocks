@@ -8,7 +8,7 @@ from mavros_msgs import srv
 from mavros_msgs.msg import State
 
 # Clover services
-from clover import srv, SetLEDEffect
+from clover import srv
 from std_srvs.srv import Trigger
 
 # Other tools
@@ -79,8 +79,8 @@ class SingleClover:
       rospy.wait_for_service(f"{self.name}/land", timeout=1)
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
 
-      rospy.wait_for_service(f"{self.name}/set_effect", timeout=1)
-      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", SetLEDEffect)
+      rospy.wait_for_service(f"{self.name}/led/set_effect", timeout=1)
+      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", srv.SetLEDEffect)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
@@ -365,6 +365,52 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
+   def ledAll(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting all drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledEven(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 == 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue   
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledOdd(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 != 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue
+               
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+   
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
@@ -524,6 +570,28 @@ class Swarm:
 
 if __name__ == "__main__":
 
+   
+   print("Select the operation mode:")
+   print("1 - Planning mode")
+   print("2 - Simulation mode")
+   print("3 - Navigation mode")
+   selec_mode = input('\n')
+   print("\nType the amount of clovers: ")
+   selec_amount = input()
+   swarm = Swarm(int(selec_amount))
+   if (selec_mode == str('1')):
+      # Starts the simulation just with the plots previews
+      swarm.startPlanning()
+   elif (selec_mode == str('2')):
+      # Starts the Gazebo simulation and clovers ready to operate
+      swarm.startSimulation(launch=True)
+   elif (selec_mode == str('3')):
+      pass
+   else:
+      logging.debug("There isn't this mode")
+      rospy.loginfo("There isn't this mode")
+
+   
    #Menu 
    def menu():
       print("Select")
@@ -531,6 +599,7 @@ if __name__ == "__main__":
       print("1 - Takeoff all")
       print("0 - Initial position")
       print("L - Land all")
+      print("led - Set Led for all drones")
       print("\n-----Formations-----")
       print("2 - Line formation")
       print("3 - Triangle formation")
@@ -551,14 +620,6 @@ if __name__ == "__main__":
       print("PLT3D - Plot 3D preview")
       print("FL - Formation list")
       print("\nE - Exit")
-
-   swarm = Swarm(2)
-
-   # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=True)
-
-   # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
@@ -689,6 +750,27 @@ if __name__ == "__main__":
 
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
+
+      elif (key == str('led')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledAll(effect, red, green, blue)
+
+      elif (key == str('led2')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledEven(effect, red, green, blue)
+
+      elif (key == str('led3')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledOdd(effect, red, green, blue)
 
       elif (key == str('e') or key == str('E')):
          break
