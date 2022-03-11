@@ -552,13 +552,13 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(10)
+   swarm = Swarm(2)
 
    # Starts the Gazebo simulation and clovers ready to operate
-   # swarm.startSimulation(launch=False)
+   swarm.startSimulation(launch=True)
 
    # Starts the simulation just with the plots previews
-   swarm.startPlanning()
+   # swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
