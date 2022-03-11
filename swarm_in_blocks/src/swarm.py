@@ -378,6 +378,39 @@ class Swarm:
       for thrd in threads:
          thrd.join(timeout=1)
 
+   def ledEven(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 == 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue   
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledOdd(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 != 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue
+               
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+   
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
@@ -710,6 +743,20 @@ if __name__ == "__main__":
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledAll(effect, red, green, blue)
+
+      elif (key == str('led2')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledEven(effect, red, green, blue)
+
+      elif (key == str('led3')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledOdd(effect, red, green, blue)
 
       elif (key == str('e') or key == str('E')):
          break
