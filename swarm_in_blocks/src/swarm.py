@@ -8,7 +8,7 @@ from mavros_msgs import srv
 from mavros_msgs.msg import State
 
 # Clover services
-from clover import srv, SetLEDEffect
+from clover import srv
 from std_srvs.srv import Trigger
 
 # Other tools
@@ -79,8 +79,8 @@ class SingleClover:
       rospy.wait_for_service(f"{self.name}/land", timeout=1)
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
 
-      rospy.wait_for_service(f"{self.name}/set_effect", timeout=1)
-      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", SetLEDEffect)
+      rospy.wait_for_service(f"{self.name}/led/set_effect", timeout=1)
+      self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", srv.SetLEDEffect)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):
       
