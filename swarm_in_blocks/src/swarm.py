@@ -55,31 +55,31 @@ class SingleClover:
 
       self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)
       
-      rospy.wait_for_service(f"{self.name}/get_telemetry")
+      rospy.wait_for_service(f"{self.name}/get_telemetry", timeout=1)
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
       
-      rospy.wait_for_service(f"{self.name}/navigate")
+      rospy.wait_for_service(f"{self.name}/navigate", timeout=1)
       self.navigate = rospy.ServiceProxy(f"{self.name}/navigate", srv.Navigate)
       
-      rospy.wait_for_service(f"{self.name}/navigate_global")
+      rospy.wait_for_service(f"{self.name}/navigate_global", timeout=1)
       self.navigate_global = rospy.ServiceProxy(f"{self.name}/navigate_global", srv.NavigateGlobal)
       
-      rospy.wait_for_service(f"{self.name}/set_position")
+      rospy.wait_for_service(f"{self.name}/set_position", timeout=1)
       self.set_position = rospy.ServiceProxy(f"{self.name}/set_position", srv.SetPosition)
       
-      rospy.wait_for_service(f"{self.name}/set_velocity")
+      rospy.wait_for_service(f"{self.name}/set_velocity", timeout=1)
       self.set_velocity = rospy.ServiceProxy(f"{self.name}/set_velocity", srv.SetVelocity)
       
-      rospy.wait_for_service(f"{self.name}/set_attitude")
+      rospy.wait_for_service(f"{self.name}/set_attitude", timeout=1)
       self.set_attitude = rospy.ServiceProxy(f"{self.name}/set_attitude", srv.SetAttitude)
       
-      rospy.wait_for_service(f"{self.name}/set_rates")
+      rospy.wait_for_service(f"{self.name}/set_rates", timeout=1)
       self.set_rates = rospy.ServiceProxy(f"{self.name}/set_rates", srv.SetRates)
       
-      rospy.wait_for_service(f"{self.name}/land")
+      rospy.wait_for_service(f"{self.name}/land", timeout=1)
       self.land = rospy.ServiceProxy(f"{self.name}/land", Trigger)
 
-      rospy.wait_for_service(f"{self.name}/set_effect")
+      rospy.wait_for_service(f"{self.name}/set_effect", timeout=1)
       self.set_effect = rospy.ServiceProxy(f"{self.name}/led/set_effect", SetLEDEffect)
    
    def navigateWait(self, x=0, y=0, z=0, yaw=float('nan'), speed=0.5, frame_id='', auto_arm=False, tolerance=0.2):

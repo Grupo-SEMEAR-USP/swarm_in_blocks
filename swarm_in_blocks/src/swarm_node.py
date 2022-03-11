@@ -3,6 +3,8 @@ import rosservice
 import rosnode
 import logging
 
+import numpy as np
+
 # Mavros msgs
 from mavros_msgs import srv
 from mavros_msgs.msg import State
@@ -62,19 +64,24 @@ class SingleClover:
 
 class SwarmChecker:
     def __init__(self):
-        self.clovers_list = []
+        
         self.connected_clovers = 0
         self.failed_clovers = 0
         self.armed_clovers = 0
         self.offboard_mode_clovers = 0
 
-        rospy.init_node("swarm_checker")
+        self.all_clovers_ids = []
+        self.ids_connected = []
+        self.ids_armed = []
+        self.ids_with_led = []
 
-        self.getNodes()
-        self.checkNumOfClovers()
-        self.checkNodes()
-        self.createCloversObjects()
-        self.checkServices()
+        # Private vars
+        self.__nodes_ok = []
+        self.__mavros_conn_ok = []
+        self.__offboard_ok = []
+        self.__armed_ok = []
+        self.__led_ok = []
+        rospy.init_node("swarm_checker")
 
     def createCloversObjects(self):
         for index in range(self.num_of_clovers):
@@ -106,6 +113,7 @@ class SwarmChecker:
                         passed = False
                         rospy.logerr(f"simple_offboard node missing on clover{clover_id}")
             nodes_ok.append(passed)
+        self.__nodes_ok = nodes_ok
     
     def checkServices(self):
         offboard_ok = []
@@ -118,6 +126,8 @@ class SwarmChecker:
             # Led services check
             res_led = clover.checkLedServices()
             led_ok.append(res_led)
+        
+        self.__led_ok = led_ok
 
     def checkStatusOfClovers(self):
         mavros_conn_ok = []
@@ -135,3 +145,38 @@ class SwarmChecker:
                 offboard_mode_ok.append(True)
             else:
                 offboard_mode_ok.append(False)
+        
+        self.__mavros_conn_ok = mavros_conn_ok
+        self.__offboard_ok = offboard_mode_ok
+        self.__armed_ok = armed_ok
+    
+    def checkLoop(self):
+
+        rospy.loginfo("swarm_checker is waiting for clovers...")
+        while not rospy.is_shutdown():
+            self.getNodes()
+            self.checkNumOfClovers()
+            if self.num_of_clovers != 0: 
+                rospy.loginfo(f"{self.num_of_clovers} clovers detected.")
+
+                rospy.loginfo("Analysing clovers nodes...")
+                self.checkNodes()
+                
+                rospy.loginfo("Analysing clovers services...")
+                self.createCloversObjects()
+                self.checkServices()
+            
+    def publishKNownClovers(self):
+
+        self.clovers_list = np.argwhere(self.__nodes_ok == True)
+        self.
+    def checkKnownCloversLoop(self):
+
+        rate = rospy.Rate(1)
+
+        while not rospy.is_shutdown():
+
+            self.checkStatusOfClovers()
+            self.checkServices()
+            self.publishKnowClovers
+
