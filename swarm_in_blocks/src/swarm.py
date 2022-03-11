@@ -570,6 +570,28 @@ class Swarm:
 
 if __name__ == "__main__":
 
+   
+   print("Select the operation mode:")
+   print("1 - Planning mode")
+   print("2 - Simulation mode")
+   print("3 - Navigation mode")
+   selec_mode = input('\n')
+   print("\nType the amount of clovers: ")
+   selec_amount = input()
+   swarm = Swarm(int(selec_amount))
+   if (selec_mode == str('1')):
+      # Starts the simulation just with the plots previews
+      swarm.startPlanning()
+   elif (selec_mode == str('2')):
+      # Starts the Gazebo simulation and clovers ready to operate
+      swarm.startSimulation(launch=True)
+   elif (selec_mode == str('3')):
+      pass
+   else:
+      logging.debug("There isn't this mode")
+      rospy.loginfo("There isn't this mode")
+
+   
    #Menu 
    def menu():
       print("Select")
@@ -598,14 +620,6 @@ if __name__ == "__main__":
       print("PLT3D - Plot 3D preview")
       print("FL - Formation list")
       print("\nE - Exit")
-
-   swarm = Swarm(4)
-
-   # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=True)
-
-   # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
 
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
