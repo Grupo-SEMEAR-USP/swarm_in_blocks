@@ -365,6 +365,19 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
+   def ledAll(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting all drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
@@ -531,6 +544,7 @@ if __name__ == "__main__":
       print("1 - Takeoff all")
       print("0 - Initial position")
       print("L - Land all")
+      print("led - Set Led for all drones")
       print("\n-----Formations-----")
       print("2 - Line formation")
       print("3 - Triangle formation")
@@ -552,7 +566,7 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(2)
+   swarm = Swarm(4)
 
    # Starts the Gazebo simulation and clovers ready to operate
    swarm.startSimulation(launch=True)
@@ -689,6 +703,13 @@ if __name__ == "__main__":
 
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
+
+      elif (key == str('led')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledAll(effect, red, green, blue)
 
       elif (key == str('e') or key == str('E')):
          break
