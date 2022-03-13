@@ -34,10 +34,20 @@
 
     <!-- UAV0 -->
     <group ns="clover$(arg ID)">
+
+        <!-- ID parameter -->
+        <param name="clover_id" value="$(arg ID)"/>
+        
+        <!-- Initial position parameters (z initializes in 0.0, not 0.3 because of gazebo ground colision) -->
+        <param name="initial_pose/x" value="$(arg x)"/>
+        <param name="initial_pose/y" value="$(arg y)"/>
+        <param name="initial_pose/z" value="0"/>
+        <!-- <param name="initial_pose/z" value="$(arg z)"/> -->
+
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=true
+                                    main_camera:=false
                                     rangefinder:=true
                                     led:=true 
                                     gps:=true
@@ -123,12 +133,6 @@
                 error: { effect: flash, r: 255, g: 0, b: 0, ignore: [ "[lpe] vision position timeout" ]}
             </rosparam>
         </node>
-
-        <!-- Initial position parameters (z initializes in 0.0, not 0.3 because of gazebo ground colision) -->
-        <param name="initial_pose/x" value="$(arg x)"/>
-        <param name="initial_pose/y" value="$(arg y)"/>
-        <param name="initial_pose/z" value="0"/>
-        <!-- <param name="initial_pose/z" value="$(arg z)"/> -->
 
         <!-- simplified offboard control -->
         <node name="simple_offboard" pkg="clover" type="simple_offboard" output="$(arg output)" clear_params="true">

@@ -21,17 +21,16 @@ import traceback
 import logging
 
 # Local modules
-import formation
-import launch
-import transform
-import alphabet
-import plot
-import formation3D
-from swarm_publisher import SwarmPublisher
+from . import formation
+from . import launch
+from . import transform
+from . import alphabet
+from . import plot
+from . import formation3D
+from .swarm_publisher import SwarmPublisher
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
-
    def __init__(self, name, id):
       self.name = name
       self.id = id
@@ -97,7 +96,8 @@ class Swarm:
    def __init__(self, num_of_clovers=None, swarm_name=None):
 
       # Set logging level if it doesn't exist
-      logging.basicConfig(level=logging.DEBUG)
+      # logging.basicConfig(level=logging.INFO)
+      logging.getLogger('rosout')
       
       # Basic parameters of the swarm
       # Configure swarm_name
@@ -210,9 +210,9 @@ class Swarm:
 
       for idx in range(self.num_of_clovers):
          try:
-            x = rospy.get_param(f"clover{idx}/initial_pose/x")
-            y = rospy.get_param(f"clover{idx}/initial_pose/y")
-            z = rospy.get_param(f"clover{idx}/initial_pose/z")
+            x = rospy.get_param(f"/clover{idx}/initial_pose/x")
+            y = rospy.get_param(f"/clover{idx}/initial_pose/y")
+            z = rospy.get_param(f"/clover{idx}/initial_pose/z")
             coords[idx] = [x, y, z, 1]
          except Exception:
             print(traceback.format_exc())
@@ -289,6 +289,8 @@ class Swarm:
       # Create clover python objects
       logging.debug("Starting swarm node and listening to clover services...")
       rospy.loginfo("Starting swarm node and listening to clover services...")
+
+      # Init rosnode
       rospy.init_node('swarm_api')
       self.__createCloversObjects()
 
@@ -318,7 +320,6 @@ class Swarm:
 
    #Basic swarm operations
    def takeOffAll(self, z=1):
-
       logging.debug(f"{self.num_of_clovers} drones taking off")
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
       self.des_formation_coords = self.init_formation_coords
@@ -329,12 +330,12 @@ class Swarm:
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z, auto_arm=True))
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.05, auto_arm=True))
          thrd.start()
          threads.append(thrd)
       
       for thrd in threads:
-         thrd.join(timeout=1)
+         thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
    
@@ -361,7 +362,7 @@ class Swarm:
          threads.append(thrd)
       
       for thrd in threads:
-         thrd.join(timeout=1)
+         thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
 
@@ -380,7 +381,6 @@ class Swarm:
       self.landAll()
 
    def applyFormation(self):
-      
       logging.debug(f"Applying formation to {self.num_of_clovers}")
       rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
       threads = []
@@ -552,10 +552,10 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-   swarm = Swarm(2)
+   swarm = Swarm()
 
    # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=True)
+   swarm.startSimulation(launch=False)
 
    # Starts the simulation just with the plots previews
    # swarm.startPlanning()
