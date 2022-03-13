@@ -7,17 +7,26 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/index.html')
-def index():
+import matplotlib
+
+@app.route('/launch', methods=['POST'])
+def launch():
+    # exemplo com args
+    # a = request.args.get('a', 0, type=float)
+    # b = request.args.get('b', 0, type=float)
+    # return jsonify(result=a + b)
+    x, y = koch_snowflake(order=5)
+    plt.figure(figsize=(8, 8))
+    plt.axis('equal')
+    plt.fill(x, y)
+    plt.show()
     return render_template('index.html')
 
 
-@app.route('/addnumber')
-def add():
-    a = request.args.get('a', 0, type=float)
-    b = request.args.get('b', 0, type=float)
-    return jsonify(result=a + b)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 
 #* Launch part of code (ROS communication with the launch) 
 import logging
@@ -102,6 +111,7 @@ def spawnGazeboAndVehicles(num_of_clovers, init_formation_coords):
 
 
 if __name__ == '__main__':
+    print("\nRUNINING\n\n")
     num_of_clovers = 2
     spawnGazeboAndVehicles(num_of_clovers,[[0,0,0.3,1],[0,1,0.3,1]])
     app.run()

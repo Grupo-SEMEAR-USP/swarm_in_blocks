@@ -24,19 +24,20 @@
 	<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script>
 		function launch(){
-			$.ajax({
-					type: 'POST',
-					url: "launch.py",
-					// datatype: "html",
-					// data: { var1: "foo", var2: "foo" },
-					success: function(response){
-						output = response;
-						alert('sucess ' + output);
-					}
-			}).done(function(data){
-				console.log(data);
-				alert('FINISHED: ' + data);
-			});
+		// 	$.ajax({
+		// 			type: 'POST',
+		// 			url: "/launch",
+		// 			// datatype: "html",
+		// 			// data: { var1: "foo", var2: "foo" },
+		// 			success: function(response){
+		// 				output = response;
+		// 				alert('sucess ' + output);
+		// 			}
+		// 	}).done(function(data){
+		// 		console.log(data);
+		// 		alert('FINISHED: ' + data);
+		// 	});
+
 		}
     </script>
 	<!-- Pop up of "Launch clover" Range Enforced feature -->
@@ -177,7 +178,7 @@
 			<span>Launch</span>
 			<div class="close"><i class="uil uil-times"></i></div>
 		</header>
-		<div class="content-modal">
+		<form class="content-modal">
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
@@ -207,16 +208,17 @@
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
+
 			<div class="ready">
-				<button onclick="launch()"> Ready </button>
+				<button onclick="launch()"> Launch </button>
 			</div>
-		</div>
+		</form>
 	</div>
 
 	<div id="notifications"></div>
 
 	<div id="blockly" class="content"></div>
-	<pre id="python" class="content" contenteditable oncut="return false" onpaste="return false" onkeydown="if(!event.metaKey) return false" spellcheck="false"></pre> -->
+	<pre id="python" class="content" contenteditable oncut="return false" onpaste="return false" onkeydown="if(!event.metaKey) return false" spellcheck="false"></pre>
 
 	<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
 		<!-- Categoria Swarm com os blocos LED_HEIGHT e FORMS -->

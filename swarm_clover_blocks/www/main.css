@@ -312,6 +312,8 @@ input:checked + .slider:before {
 	transition: top 0s 0.2s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
+	z-index: 10;
+
 }
 .popup.show{
 	top: 50%;
@@ -328,10 +330,12 @@ input:checked + .slider:before {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	z-index: 10;
 }
 .popup header{
 	padding-bottom: 15px;
 	border-bottom: 1px solid #ebedf9;
+	z-index: 10;
 }
 header span{
 	font-size: 21px;
@@ -351,9 +355,11 @@ header .close{
 	height: 33px;
 	width: 33px;
 	cursor: pointer;
+	z-index: 10;
 }
 header .close:hover{
 	background: #ebedf9;
+	z-index: 10;
 }
 .popup .content-modal{
 	margin: 20px 0;
