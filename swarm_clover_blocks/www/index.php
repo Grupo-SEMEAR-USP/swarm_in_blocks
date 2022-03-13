@@ -208,10 +208,14 @@
 			<?php
 				if(isset($_POST['launch'])) {
 					echo 'hello world';
-					$command = escapeshellcmd('python3 launch.py');
-					$output = shell_exec($command);
+					$command = escapeshellcmd('php launch.php');
+					$output = shell_exec('echo hello_parsa');
 					echo $output;
 				}
+			?>
+			<?php
+				$output = shell_exec('echo hello_parsa');
+				echo $output;
 			?>
 		</form>
 	</div>
