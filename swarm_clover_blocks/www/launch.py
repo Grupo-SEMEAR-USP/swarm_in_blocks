@@ -1,33 +1,5 @@
 #!/usr/bin/python3
 
-#* Communication with index.html
-# onclick of the index.html button "ready" and the AJAX script
-
-from flask import Flask, render_template, request, jsonify
-
-app = Flask(__name__)
-
-import matplotlib
-
-@app.route('/launch', methods=['POST'])
-def launch():
-    # exemplo com args
-    # a = request.args.get('a', 0, type=float)
-    # b = request.args.get('b', 0, type=float)
-    # return jsonify(result=a + b)
-    x, y = koch_snowflake(order=5)
-    plt.figure(figsize=(8, 8))
-    plt.axis('equal')
-    plt.fill(x, y)
-    plt.show()
-    return render_template('index.html')
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
 #* Launch part of code (ROS communication with the launch) 
 import logging
 import rospy

@@ -1,7 +1,5 @@
 <?php
-    function php_func(){
-    $command = escapeshellcmd('launch.py');
+    $command = escapeshellcmd('python3 launch.py');
     $output = shell_exec($command);
     echo $output;
-    }
 ?>

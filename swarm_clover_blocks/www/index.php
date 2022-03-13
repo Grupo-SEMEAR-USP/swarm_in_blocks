@@ -24,19 +24,7 @@
 	<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script>
 		function launch(){
-		// 	$.ajax({
-		// 			type: 'POST',
-		// 			url: "/launch",
-		// 			// datatype: "html",
-		// 			// data: { var1: "foo", var2: "foo" },
-		// 			success: function(response){
-		// 				output = response;
-		// 				alert('sucess ' + output);
-		// 			}
-		// 	}).done(function(data){
-		// 		console.log(data);
-		// 		alert('FINISHED: ' + data);
-		// 	});
+			alert('running');
 
 		}
     </script>
@@ -208,10 +196,23 @@
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
-
-			<div class="ready">
-				<button onclick="launch()"> Launch </button>
-			</div>
+			
+			<form class="launch" method="post">
+				<!-- <a href="?run=true"><button onclick="launch()"> Launch </button></a> -->
+				<input type="submit" name="launch" value="launch" id="launch">
+			</form>
+			
+			<script>
+				document.getElementById("launch").addEventListener("click", e=>{e.preventDefault();console.log("hello")})
+			</script>
+			<?php
+				if(isset($_POST['launch'])) {
+					echo 'hello world';
+					$command = escapeshellcmd('python3 launch.py');
+					$output = shell_exec($command);
+					echo $output;
+				}
+			?>
 		</form>
 	</div>
 
