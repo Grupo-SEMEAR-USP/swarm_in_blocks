@@ -11,7 +11,6 @@ from mavros_msgs.msg import State
 # Clover services
 from clover import srv
 from std_srvs.srv import Trigger
-from clover.srv import SetLEDEffect
 
 # Other tools
 import numpy as np
@@ -699,17 +698,6 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
-<<<<<<< HEAD:swarm_in_blocks/src/swarm_in_blocks/swarm.py
-   swarm = Swarm()
-
-   # Starts the Gazebo simulation and clovers ready to operate
-   swarm.startSimulation(launch=False)
-
-   # Starts the simulation just with the plots previews
-   # swarm.startPlanning()
-
-=======
->>>>>>> 1aea34b35b4dbcd7875ef8cde67b9e77aa7e789c:swarm_in_blocks/src/swarm.py
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
    
