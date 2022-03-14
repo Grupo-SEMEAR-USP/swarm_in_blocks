@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
-	<script src="highlight/highlight.pack.js"></script> 
+	<script src="highlight/highlight.pack.js"></script>
 	<script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 	<script src="roslib.js"></script>
 	<script src="blockly/blockly_compressed.js"></script>
@@ -20,12 +20,20 @@
 	<script src="blockly/blocks_compressed.js"></script>
 	<script src="blockly/msg/js/en.js"></script>
 	<script type="module" src="main.js"></script>
-	<!-- launch clover Range Enforced -->
+	<!-- launch with ajax and Launch.py -->
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+		function launch(){
+			alert('running');
+
+		}
+    </script>
+	<!-- Pop up of "Launch clover" Range Enforced feature -->
 	<script type="text/javascript">
 		function rage_enforced() {
 			var min = 0;
 			var max = 20;
-			
+
 			var inputRef = document.getElementById("txt");
 			var txtValue = inputRef.value;
 			if(isNaN(parseFloat(txtValue))){
@@ -40,7 +48,7 @@
 				inputRef.classList.add("apply-shake");
 				setTimeout(function(){
 					inputRef.classList.remove("apply-shake");
-				}, 500);	
+				}, 500);
 			}
 		}
 	</script>
@@ -74,8 +82,8 @@
 			<img	src="./blockly/media/Swarm_in_Blocks.svg"
 					alt="Swarm in Blocks"
 					width="100"
-					height="100" 
-					title="Swarm in Blocks" 
+					height="100"
+					title="Swarm in Blocks"
 					style="margin-right: 40px;"
 					class="Swarm_svg"
 			/></a>
@@ -84,8 +92,8 @@
 			<img    src="./blockly/media/blockly.svg"
 					alt="Blockly"
 					width="26"
-					height="26" 
-					title="blockly" 
+					height="26"
+					title="blockly"
 			/>
 		</li>
 		<li style="text-align:center; margin: 10px 0;" data-tab="python" class="w3-bar-item">
@@ -93,8 +101,8 @@
 			<img    src="./blockly/media/python.svg"
 					alt="Python"
 					width="21"
-					height="21" 
-					title="python" 
+					height="21"
+					title="python"
 			/>
 		</li>
 		<div style="margin-left: 15px; display:inline-block">
@@ -123,7 +131,7 @@
 						alt="Launch"
 						width="38"
 						height="38"
-						class="Swarm_svg" 
+						class="Swarm_svg"
 			/>
 		</button>
 		<button onclick="runProgram()" disabled id="run" disabled title="Run" style="margin-bottom: 0px; margin-right: 6px;">
@@ -131,7 +139,7 @@
 					alt="Run"
 					width="23"
 					height="23"
-					class="Swarm_svg" 
+					class="Swarm_svg"
 			/>
 		</button>
 		<button onclick="stopProgram()" title="Stop" style="margin-bottom: 0px; margin-right: 6px;">
@@ -139,7 +147,7 @@
 					alt="Stop"
 					width="26"
 					height="26"
-					class="Swarm_svg" 
+					class="Swarm_svg"
 			/>
 		</button>
 		<button onclick="land()" title="Stop and Land" style="margin-bottom: 0px;margin-right: 10px;">
@@ -147,7 +155,7 @@
 					alt="Land"
 					width="35"
 					height="35"
-					class="Swarm_svg" 
+					class="Swarm_svg"
 			/>
 		</button>
 	</div>
@@ -158,7 +166,7 @@
 			<span>Launch</span>
 			<div class="close"><i class="uil uil-times"></i></div>
 		</header>
-		<div class="content-modal">
+		<form class="content-modal">
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
@@ -188,10 +196,31 @@
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
-			<div class="ready">
-				<button > Ready </button>
-			</div>
-		</div>
+			
+			<!-- <form action="theSamePage.php" class="launch" method="post">
+				<a href="?run=true"><button onclick="launch()"> Launch </button></a> 
+				<input type="submit" name="launch" value="launch">
+			</form> -->
+			<button><a href="launch.php" target="_blank">Launch</a></button>
+ 
+<!-- 			
+	
+			<script>
+				document.getElementById("launch").addEventListener("click", e=>{e.preventDefault();console.log("hello")})
+			</script> -->
+			<?php
+				if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['launch']))
+				{
+					func();
+				}
+				function func()
+				{	
+					echo 'hello world from func';
+					// $output = shell_exec('gazebo');
+					// echo $output;  
+				}
+			?>
+		</form>
 	</div>
 
 	<div id="notifications"></div>
@@ -206,7 +235,7 @@
 				<value name="Z"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
 				<value name="X"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
 				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
-				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>				
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="take_off_all"></block>
 			<block type="land_all"></block>
@@ -297,7 +326,7 @@
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<block type="led_count">
-				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>	
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 		</category>
 		<!-- <category name="GPIO" colour="#5b97cc">
@@ -677,7 +706,7 @@
 	</xml>
 
 <!-- modal overlay -->
-	
+
 </body>
 
 </html>

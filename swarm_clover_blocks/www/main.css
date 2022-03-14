@@ -215,10 +215,9 @@ input:checked + .slider:before {
 
 .disconnected {
 	font-size: 16px;
-	color: red;
+	color: rgb(255, 108, 108);
 	display:inline;
 	margin-right: 110px;
-	text-shadow: 1px 1px 1px rgba(212, 212, 212, 0.918);
 }
 
 .disconnected-light {
@@ -312,6 +311,8 @@ input:checked + .slider:before {
 	transition: top 0s 0.2s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
+	z-index: 10;
+
 }
 .popup.show{
 	top: 50%;
@@ -328,10 +329,12 @@ input:checked + .slider:before {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	z-index: 10;
 }
 .popup header{
 	padding-bottom: 15px;
 	border-bottom: 1px solid #ebedf9;
+	z-index: 10;
 }
 header span{
 	font-size: 21px;
@@ -351,9 +354,11 @@ header .close{
 	height: 33px;
 	width: 33px;
 	cursor: pointer;
+	z-index: 10;
 }
 header .close:hover{
 	background: #ebedf9;
+	z-index: 10;
 }
 .popup .content-modal{
 	margin: 20px 0;
@@ -413,16 +418,15 @@ header .close:hover{
 .field button:hover{
 	background: #8d39fa;
 }
-.ready button{
+.launch button{
 	color: #fff; 
 	padding: 5px 18px; 
 	background: #8d39fa;
 	position: absolute;
 	top: 87%;
 	left: 70%;
-
 }
-.ready button:hover{
+.launch button:hover{
 	background-color: rgb(154, 91, 212);
 }
 

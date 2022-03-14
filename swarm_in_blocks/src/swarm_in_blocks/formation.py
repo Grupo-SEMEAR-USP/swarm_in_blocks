@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import numpy as np
 import logging
+from . import transform
 import random
 
 pi = np.pi
@@ -15,6 +16,7 @@ def line(N, L=1):
     for idx in range(N):
         point = [round(f*(N-1-idx),2), 0, z0, 1]
         coord = np.concatenate((coord,[point]))
+    coord = transform.translateFormation(coord, -L/2, 0, 0)
     logging.debug("Line done\n")
     return coord
 
@@ -49,6 +51,7 @@ def full_square(N, L=2):
         else:
             yi = yi + L/(N//n)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
+    coord = transform.translateFormation(coord, -L/2, -L/2, 0)
     logging.debug("Square done\n")
     return coord
 
@@ -77,10 +80,12 @@ def empty_square(N, L=2):
             (q, coord) = square_side(N, L, q=q, n=n, yi=L, coord=coord)
         else:
             (q, coord) = square_side(N, L, q=q, n=n+1, yi=L, coord=coord)
+    coord = transform.translateFormation(coord, -L/2, -L/2, 0)
     logging.debug("Square done\n")
     return coord
 
 def triangle(N, L=2):
+    logging.debug("Beginning triangle formation")
     coord = np.empty((0,4))
     Ld = 2
     #Variáveis contadoras
@@ -159,7 +164,8 @@ def triangle(N, L=2):
 
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))
-         
+    coord = transform.translateFormation(coord, -L*np.sqrt(3)/6, -L/2, 0)
+    logging.debug("Triangle done\n")
     return coord             
         
    
@@ -183,6 +189,7 @@ def cube(N, L):
             yi = yi + L/(n-1)
         z = z + L/(n-1)
     selected_coords = partial_formation(N, coord)
+    selected_coords = transform.translateFormation(selected_coords, -L/2, -L/2, 0)
     return selected_coords
 
 def sphere(N, L=2):

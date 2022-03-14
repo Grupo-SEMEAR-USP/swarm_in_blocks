@@ -1,3 +1,4 @@
+
 #!/usr/bin/python3
 
 # ROS modedules
@@ -10,6 +11,7 @@ from mavros_msgs.msg import State
 # Clover services
 from clover import srv
 from std_srvs.srv import Trigger
+from clover.srv import SetLEDEffect
 
 # Other tools
 import numpy as np
@@ -366,6 +368,129 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
+   def ledAll(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting all drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledEven(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if (idx%2 == 0):
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue   
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledOdd(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 != 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue
+               
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def led_One_by_One(self):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+         thrd.start()
+         threads.append(thrd)
+
+      for thrd in threads:
+         thrd.join(timeout=1)
+   
+   def support_led_formation_2D(self, shape):
+      color = np.empty((0,3))
+      
+      if(shape == "square" or shape == "circle"):
+         side = 4
+
+      if(shape == "triangle"):
+         side = 3
+
+      for i in range (side):
+            red = int(input(f"Insert the red color {i+1} (0-255): "))
+            green = int(input(f"Insert the green color {i+1} (0-255): "))
+            blue = int(input(f"Insert the blue color {i+1} (0-255): "))
+            list_color = [red, green, blue]
+            color = np.concatenate((color,[list_color]))
+      
+      return color
+
+   def led_formation_2D(self, effect, str, L):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+      threads = []
+      color = self.support_led_formation_2D(str)
+
+      for idx, clover in enumerate(self.swarm):
+         if(str == "triangle"):
+            coord = self.des_formation_coords
+            if((L/2) - coord[idx][1]>=0 and coord[idx][0]>0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            elif((L/2) - coord[idx][1]<0 and coord[idx][0]>0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+            elif(coord[idx][0]==0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+         
+         if(str == "square"):
+            coord = self.des_formation_coords
+
+         if(str == "circle"):        
+            coord = self.des_formation_coords
+            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]<=0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]>0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+            if((L/2) - coord[idx][1]<0 and (L/2)-coord[idx][0]<=0):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+            
+            else:
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[3][0], g=color[3][1], b=color[3][2]))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
@@ -524,6 +649,27 @@ class Swarm:
 
 if __name__ == "__main__":
 
+   
+   print("Select the operation mode:")
+   print("1 - Planning mode")
+   print("2 - Simulation mode")
+   print("3 - Navigation mode")
+   selec_mode = input('\n')
+   selec_amount = int(input(f"\nType the amount of clovers: "))
+   swarm = Swarm(int(selec_amount))
+   if (selec_mode == str('1')):
+      # Starts the simulation just with the plots previews
+      swarm.startPlanning()
+   elif (selec_mode == str('2')):
+      # Starts the Gazebo simulation and clovers ready to operate
+      swarm.startSimulation(launch=True)
+   elif (selec_mode == str('3')):
+      pass
+   else:
+      logging.debug("There isn't this mode")
+      rospy.loginfo("There isn't this mode")
+
+   
    #Menu 
    def menu():
       print("Select")
@@ -531,6 +677,7 @@ if __name__ == "__main__":
       print("1 - Takeoff all")
       print("0 - Initial position")
       print("L - Land all")
+      print("led - Set Led for all drones")
       print("\n-----Formations-----")
       print("2 - Line formation")
       print("3 - Triangle formation")
@@ -552,6 +699,7 @@ if __name__ == "__main__":
       print("FL - Formation list")
       print("\nE - Exit")
 
+<<<<<<< HEAD:swarm_in_blocks/src/swarm_in_blocks/swarm.py
    swarm = Swarm()
 
    # Starts the Gazebo simulation and clovers ready to operate
@@ -560,6 +708,8 @@ if __name__ == "__main__":
    # Starts the simulation just with the plots previews
    # swarm.startPlanning()
 
+=======
+>>>>>>> 1aea34b35b4dbcd7875ef8cde67b9e77aa7e789c:swarm_in_blocks/src/swarm.py
    N = swarm.num_of_clovers
    #init_form = swarm.setInitialPosition()
    
@@ -690,5 +840,26 @@ if __name__ == "__main__":
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
 
+      elif (key == str('led')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledAll(effect, red, green, blue)
+
+      elif (key == str('led2')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledEven(effect, red, green, blue)
+
+      elif (key == str('led3')):
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+         swarm.ledOdd(effect, red, green, blue)
+      
       elif (key == str('e') or key == str('E')):
          break
