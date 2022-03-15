@@ -12,7 +12,6 @@ image:=/clover0/main_camera/parameter_updates
 
 from typing import NoReturn
 import new_pynput
-import threading
 import roslib
 roslib.load_manifest('rospy')
 roslib.load_manifest('sensor_msgs')
@@ -42,50 +41,74 @@ class ImageViewApp(wx.App):
         self.last_key = ''
         self.last_thrd = Thread()
         
+        max_width_x, max_width_y = wx.DisplaySize()
+        self.window_size = (max_width_x*2//3, max_width_y*5//6)
         # wx
-        self.frame = wx.Frame(None, title = "ROS Image View", size=(500, 560))
+        self.frame = wx.Frame(None, title = "First Person View - Swarm In Blocks",  style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, size=self.window_size)
+        # self.frame = wx.Frame(None, title = "ROS Image View", size=self.window_size)
         self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'logo.ico')))
         self.panel = ImageViewPanel(self.frame)
-        self.panel.setup()
-        self.frame.Show(True)
         self.InitUI()
+        self.panel.setup(self)
+        # self.frame.Maximize(True)
+        self.frame.Centre()
+        self.frame.Show(True)
         
         return True
 
     def InitUI(self):
-        midp = wx.Panel(self.panel, pos = (0, 310), size = (500, 600))
-        midp.SetBackgroundColour("#616161")
-        sizer = wx.GridBagSizer(5, 5)
-        # http://www.ros.org/doc/api/sensor_msgs/html/msg/Image.html
+        self.panel_div_y = int(3/5*self.window_size[1])
+        self.initial_panel_pos = (0, self.panel_div_y)
+        panel_size_y = int(1/3*self.window_size[1])
+        self.initial_panel_size = (self.window_size[0], panel_size_y)
+        
+        self.midp = wx.Panel(self.panel, pos = self.initial_panel_pos, size=self.initial_panel_size)
+        self.midp.SetBackgroundColour("#000000")
+        sizer = wx.GridBagSizer(4,2)
 
         # configuraçao da GUI (parte interativa)
         font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
         font.SetPointSize(14)
         
-        text = wx.StaticText(midp, label="Topic:")
-        text.SetFont(font)
-        sizer.Add(text, pos=(1, 1), flag=wx.EXPAND, border = 30)
+        # text = wx.StaticText(self.midp, label="Clover:")
+        # text.SetFont(font)
+        # sizer.Add(text, (0,0), (1,1), wx.ALIGN_CENTER, 0)
         
-        self.list = wx.Choice(midp, choices=clovers)
-        sizer.Add(self.list, pos=(1, 3), span=(2, 14), flag=wx.ALIGN_CENTER|wx.EXPAND)
+        self.list = wx.Choice(self.midp, choices=clovers)
+        sizer.Add(self.list, (1,0), (1,1), wx.ALIGN_CENTER, 10)
 
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
-        icon = wx.StaticBitmap(midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
-        sizer.Add(icon, pos=(5, 6), flag=wx.BOTTOM|wx.ALIGN_BOTTOM,border=5)
+        self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
+        sizer.Add(self.toggle, (2,1), (1,1),  wx.ALIGN_CENTER, 10)
 
+        icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        sizer.Add(icon, (3,0), (1,1), wx.ALIGN_CENTER, 10)
+        icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
+        
+        sizer.AddGrowableRow(0)
+        sizer.AddGrowableRow(1)
+        sizer.AddGrowableRow(2)
+        sizer.AddGrowableCol(0)
+        sizer.AddGrowableCol(1)
+        self.midp.SetSizer(sizer)
+        
         # Keybidings events:
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_KEY_UP, self.OneKeyUp)
         self.Bind(wx.EVT_CHAR, self.OnKeyDown)
-        #self.SetFocus()
+        # self.Bind(wx.EVT_SIZE, self.OnResizeWindow)
+        self.toggle.SetFocus()
 
-        midp.SetSizer(sizer)
-
-
-
+    def OnResizeWindow(self, event):
+        pass
+        # self.frame.Maximize(True)
+        # event.Skip()
+    
     def onChoice(self, event): # Deals with Choice event
         choice = self.list.GetCurrentSelection() # Return the wished id  
+        self.toggle.SetFocus()
 
         for subs in subscribers: # Unsubscribes all topics so it won't accumulate 
             subs.unregister()
@@ -105,45 +128,62 @@ class ImageViewApp(wx.App):
     def OnKeyDown(self, event=None):
         #print(event.GetKeyCode())
         print('key down')
+        self.toggle.SetFocus()
         key = event.GetKeyCode()
-        keyU = event.GetUnicodeKey()
+        # keyU = event.GetUnicodeKey()
         if self.last_key == key or self.last_key == key + 32 or self.last_key == key - 32:
             event.Skip()
+            return
         else:
             self.last_key = key
-            print(f'GetKeyCode: {key} GetUnicodeKey: {keyU}')
+            print(f'GetKeyCode: {key}')
 
             # Function that handles the key pressed
             if self.last_thrd.is_alive():
-                self.last_thrd.join()
+                # self.last_thrd.join()
+                event.Skip()
+                return
             thrd = Thread(target=mov_control, args=(key,))
             thrd.start()
             self.last_thrd = thrd
 
     def OneKeyUp(self, event=None):
         print('key released')
+        print(len(keyboard_clover))
         self.last_key = ''
+        self.toggle.SetFocus()
         # Stops all objects that are currently being used
         if keyboard_clover:
             for obj in keyboard_clover:
-                if self.last_thrd.is_alive():
-                    self.last_thrd.join()
+                print("Waiting for clover response...")
+                tick = time.time()
+                while self.last_thrd.is_alive():
+                    if time.time()-tick > 5:
+                        print("Clover do not respond! Waiting...")
+                    if time.time()-tick > 10:
+                        print("Clover might be disconnected. Stop waiting")
+                        break
+                    # self.last_thrd.join()
+                    
                 thrd = Thread(target=obj.stop)
                 thrd.start()
                 self.last_thrd = thrd
+                event.Skip()
 
 
 class ImageViewPanel(wx.Panel):
-    def setup(self):
+    def setup(self, parent):
+        self.img = np.zeros((480, 640,3))
         self.SetBackgroundColour("#bdbdbd")
-        self.staticbmp = wx.StaticBitmap(self, pos=(90, 30)) #, , pos=(90, 50)
+        self.bmp_size = (parent.window_size[0]//2 - self.img.shape[1]//2, parent.panel_div_y//2 - self.img.shape[0]//2)
+        self.staticbmp = wx.StaticBitmap(self, pos=self.bmp_size) #, , pos=(90, 50)
         self.timer = wx.Timer(self)
-        self.timer.Start(1000./60)
+        self.timer.Start(1000//60)
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_TIMER, self.NextFrame)
 
-        self.img = np.zeros((640,480,3))
+        
         self.staticbmp = wx.Bitmap.FromBuffer(self.img.shape[1], self.img.shape[0], self.img)
 
     """ class ImageViewPanel creates a panel with an image on it, inherits wx.Panel """
@@ -161,7 +201,7 @@ class ImageViewPanel(wx.Panel):
     # The following events were written in order to improve camera performance
     def OnPaint(self, evt):
         dc = wx.BufferedPaintDC(self)
-        dc.DrawBitmap(self.staticbmp, 90, 30)
+        dc.DrawBitmap(self.staticbmp, self.bmp_size[0], self.bmp_size[1])
         
     def NextFrame(self, event):
         
@@ -177,6 +217,7 @@ def handle_image(ros_image):
     # encoded = np.frombuffer(image.data, np.uint32)
     # image = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
     cv_image = bridge.compressed_imgmsg_to_cv2(ros_image)
+    cv_image = cv2.resize(cv_image, (640,480))
     wx.CallAfter(wx.GetApp().panel.update, cv_image)
     global t0
     #print(time.perf_counter() - t0)
@@ -245,7 +286,7 @@ def topics_sorter():
         reft = '/main_camera/image_raw/t'
         if  ref in str[0] and refc not in str[0] and reft not in str[0]: # faz a filtragem correta
 
-            clovers.append(f'{id_r}')
+            clovers.append(f'clover{id_r}')
             id_r = id_r + 1
 
 

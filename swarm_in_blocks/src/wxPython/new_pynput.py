@@ -84,7 +84,7 @@ class DroneKeyboard:
     def stop(self):
         telem = self.get_telemetry('odom')
         self.set_velocity(vx=0, vy=0, vz=0, yaw_rate=0, frame_id=self.body)
-        self.navigate(x=telem.x, y=telem.y, z=telem.z)
+        # self.navigate(x=telem.x, y=telem.y, z=telem.z, yaw=float('nan'))
         print()
         
 

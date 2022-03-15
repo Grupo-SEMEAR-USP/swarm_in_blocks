@@ -139,6 +139,10 @@ class Swarm:
       self.des_formation_name = ''
       self.des_formation_coords = []
 
+      # Led matrix
+      self.led_effects_name = ''
+      self.led_effects = []
+
       # Mode selected upon start
       self.mode = ''
       
@@ -450,7 +454,7 @@ class Swarm:
       
       return color
 
-   def led_formation_2D(self, effect, str, L):
+   def ledFormation2D(self, effect, str, L):
       logging.debug(f"{self.num_of_clovers} setting odd number drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
       threads = []
@@ -459,10 +463,10 @@ class Swarm:
       for idx, clover in enumerate(self.swarm):
          if(str == "triangle"):
             coord = self.des_formation_coords
-            if((L/2) - coord[idx][1]>=0 and coord[idx][0]>0):
+            if(((L/2) - coord[idx][1]>=0) and (coord[idx][0]>0)):
                thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
             
-            elif((L/2) - coord[idx][1]<0 and coord[idx][0]>0):
+            elif(((L/2) - coord[idx][1]<0) and (coord[idx][0]>0)):
                thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
             
             elif(coord[idx][0]==0):
