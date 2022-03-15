@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+import os
 
-from . import transform
+sys.path.insert(0, os.path.dirname(__file__))
+import transform
 
 def plot_letter_preview(coord):
     plt.figure(figsize=(8, 8))
