@@ -1,7 +1,10 @@
+import rospy
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import os
+import traceback
+import logging
 
 sys.path.insert(0, os.path.dirname(__file__))
 import transform
@@ -46,7 +49,7 @@ A = np.array([[0, 0, z, 1],
              [3, 8, z, 1],
              [1, 4, z, 1],
              [3, 4, z, 1],
-             [5, 4, z, 1],  # Mediun 16
+             [5, 4, z, 1],  # Medium 16
              [6, 1, z, 1],
              [0, 1, z, 1],
              [0, 3, z, 1],
@@ -57,6 +60,7 @@ A = np.array([[0, 0, z, 1],
              [1.35, 7.35, z, 1],
              [4.85, 7.35, z, 1],
              [5.45, 6.65, z, 1]], dtype=float)  # Full 26
+A_size = [12, 16, 26]
 
 C = np.array([[0, 2, z, 1],
               [0, 4, z, 1],
@@ -70,7 +74,7 @@ C = np.array([[0, 2, z, 1],
               [6, 0, z, 1],
               [6, 8, z, 1],
               [0, 5, z, 1],
-              [0, 3, z, 1],  # Mediun 13
+              [0, 3, z, 1],  # Medium 13
               [3, 8, z, 1],
               [5, 8, z, 1],
               [3, 0, z, 1],
@@ -79,6 +83,7 @@ C = np.array([[0, 2, z, 1],
               [0.5, 1.5, z, 1],
               [1.5, 0.5, z, 1],
               [1.5, 7.5, z, 1]], dtype=float)  # Full 21
+C_size = [9, 13, 21]
 
 E = np.array([[0, 0, z, 1],
              [0, 2, z, 1],
@@ -97,7 +102,7 @@ E = np.array([[0, 0, z, 1],
              [0, 3, z, 1],
              [0, 5, z, 1],
              [0, 7, z, 1],
-             [4, 4, z, 1],  # Midiun 18
+             [4, 4, z, 1],  # Medium 18
              [5, 0, z, 1],
              [5, 8, z, 1],
              #[2, 8, z, 1],
@@ -105,6 +110,7 @@ E = np.array([[0, 0, z, 1],
               [4, 8, z, 1],
               [3, 4, z, 1],
               [4, 0, z, 1], ], dtype=float)  # Full 23
+E_size = [13, 18, 23]
 
 O = np.array([[0, 2, z, 1],
              [0, 4, z, 1],
@@ -123,7 +129,7 @@ O = np.array([[0, 2, z, 1],
              [5, 1, z, 1],
              [1, 1, z, 1],
              [5, 7, z, 1],
-             [1, 7, z, 1],  # Mediun 18
+             [1, 7, z, 1],  # Medium 18
              [3, 0, z, 1],
              [3, 8, z, 1],
              [0.5, 6.5, z, 1],
@@ -134,6 +140,7 @@ O = np.array([[0, 2, z, 1],
              [1.5, 7.5, z, 1],
              [4.5, 7.5, z, 1],
              [5.5, 6.5, z, 1]], dtype=float)  # Full 28
+O_size = [10, 18, 28]
 
 S = np.array([[1, 0, z, 1],
              [4, 0, z, 1],
@@ -151,7 +158,7 @@ S = np.array([[1, 0, z, 1],
              [5.7, 3, z, 1],
              [4, 4, z, 1],
              [0.3, 5, z, 1],
-             [0.3, 7, z, 1],  # Mediun 17
+             [0.3, 7, z, 1],  # Medium 17
              [0, 0.5, z, 1],
              [0, 0, z, 1],
              [2, 0, z, 1],
@@ -159,6 +166,7 @@ S = np.array([[1, 0, z, 1],
              [3, 8, z, 1],
              [5, 8, z, 1],
              [5, 7.5, z, 1]], dtype=float)  # Full 24
+S_size = [11, 17, 24]
 
 X = np.array([[0, 0, z, 1],
              [0, 8, z, 1],
@@ -176,11 +184,12 @@ X = np.array([[0, 0, z, 1],
              [3, 3, z, 1],
              [1, 1, z, 1],
              [7, 1, z, 1],
-             [5, 3, z, 1],  # Mediun 17
+             [5, 3, z, 1],  # Medium 17
              [3.5, 4.5, z, 1],
              [4.5, 3.5, z, 1],
              [4.5, 4.5, z, 1],
              [3.5, 3.5, z, 1]], dtype=float)  # Full 21
+X_size = [9, 17, 21]
 
 SWARM_S = np.array([[1, 1, z, 1],
                     [4.5, 1, z, 1],
@@ -199,7 +208,7 @@ SWARM_S = np.array([[1, 1, z, 1],
                     [5, 4, z, 1],
                     [4, 5, z, 1],
                     [0, 6, z, 1],
-                    [0, 8, z, 1],  # Mediun 17
+                    [0, 8, z, 1],  # Medium 17
                     [0, 1.5, z, 1],
                     [0, 1, z, 1],
                     [2.25, 1, z, 1],
@@ -215,6 +224,7 @@ SWARM_S = np.array([[1, 1, z, 1],
                     [2.25, 0.5, z, 1],
                     #[0, 9, z, 1],
                     [0, 5, z, 1]], dtype=float)  # Full 31)
+SWARM_S_size = [11, 17, 31]
 
 Alphabet_dictionary = {
     "A": A,
@@ -226,52 +236,35 @@ Alphabet_dictionary = {
     "SWARM_S": SWARM_S
 }
 
-def Type_Format(simple, mediun, full, type="S"):
-    if(type == "S" or type == "s"):
-        return (simple)
-    if(type == "M" or type == "m"):
-        return (mediun)
-    if(type == "F" or type == "f"):
-        return full
+def Letter_Verification(letter, N):
+    letter_sizes = eval(letter+'_size')
+    print("S - Simple type (Need {} clovers)".format(letter_sizes[0]))
+    print("M - Medium type (Need {} clovers)".format(letter_sizes[1]))
+    print("F - Full type (Need {} clovers)".format(letter_sizes[2]))
+    print("You have {} clovers".format(N))
+    type = input(f"Select your type:")
+    if((type == "S" or type == "s") and (N == letter_sizes[0])):
+        return letter_sizes[0]
+    elif((type == "M" or type == "m") and (N == letter_sizes[1])):
+        return letter_sizes[1]
+    elif((type == "F" or type == "f") and (N == letter_sizes[2])):
+        return letter_sizes[2]
+    else:
+        logging.debug("Invalid type or size")
+        rospy.loginfo("Invalid type or size")
+        sys.exit()
 
-
-def Letter_Verification(letter):
-    type = input(f"Please press the type: ")
-
-    if(letter == 'A'):
-        cn = Type_Format(12, 16, 26, type)
-
-    if(letter == 'C'):
-        cn = Type_Format(9, 13, 21, type)
-
-    if(letter == 'E'):
-        cn = Type_Format(13, 18, 23, type)
-
-    if(letter == 'O'):
-        cn = Type_Format(10, 18, 28, type)
-
-    if(letter == 'S'):
-        cn = Type_Format(11, 17, 24, type)
-
-    if(letter == 'X'):
-        cn = Type_Format(9, 17, 21, type)
-
-    if(letter == "SWARM_S"):
-        cn = Type_Format(11, 17, 31, type)
-
-    return cn
-
-
-def Letters(letter):
+def Letters(letter, N):
     letter_coord = Alphabet_dictionary[letter]
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
-    return letter_coord[:Letter_Verification(letter)]
+    return letter_coord[:Letter_Verification(letter, N)]
 
 
-def Word(str):
+def Word(word, N):
     i = 8
-    list_str = list(str.upper())
-    word_list = list(map(Letters, list_str))
+    list_str = list(word.upper())
+    list_N = np.full(len(list_str), N, dtype=int)
+    word_list = list(map(Letters, list_str, list_N))
     word_list_2 = []
 
     for index in range(len(word_list)):
@@ -287,7 +280,9 @@ def Word(str):
 
 
 if __name__ == "__main__":
-    coord = np.empty((0, 4))
-    str = input(f"Please, enter cont word: ")
-    coord = Word(str)
-    plot_letter_preview(coord)
+    # coord = np.empty((0, 4))
+    # str = input(f"Please, enter cont word: ")
+    # coord = Word(str)
+
+    x = Letters('C', 9)
+    plot_letter_preview(x)
