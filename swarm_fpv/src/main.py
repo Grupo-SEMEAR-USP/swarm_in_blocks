@@ -1,22 +1,6 @@
 #!/usr/bin/python3
-#/clover0/main_camera/image_raw   #  <--- topic to be subscribed
 
-
-"""
-usage:
-rosrun proteus_demo ImageView.py image:=/ATRV/CameraMain
-image:=/clover0/main_camera/image_raw
-image:=/clover0/main_camera/parameter_updates
-"""
-
-
-from typing import NoReturn
-import new_pynput
-import roslib
-roslib.load_manifest('rospy')
-roslib.load_manifest('sensor_msgs')
-import rospy
-from sensor_msgs.msg import CompressedImage
+# Tools
 import time
 import wx
 from cv_bridge import CvBridge
@@ -24,6 +8,17 @@ import cv2
 import numpy as np
 import os
 from threading import Thread
+
+# ROS imports
+import roslib
+roslib.load_manifest('rospy')
+roslib.load_manifest('sensor_msgs')
+import rospy
+from sensor_msgs.msg import CompressedImage
+
+# Local import
+from cloverKeyboard import DroneKeyboard
+
 
 subscribers = [] # lista com o atual subscriber
 
@@ -46,7 +41,7 @@ class ImageViewApp(wx.App):
         # wx
         self.frame = wx.Frame(None, title = "First Person View - Swarm In Blocks",  style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, size=self.window_size)
         # self.frame = wx.Frame(None, title = "ROS Image View", size=self.window_size)
-        self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'logo.ico')))
+        self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'assets', 'logo.ico')))
         self.panel = ImageViewPanel(self.frame)
         self.InitUI()
         self.panel.setup(self)
@@ -80,11 +75,11 @@ class ImageViewApp(wx.App):
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
         self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
-        sizer.Add(self.toggle, (2,1), (1,1),  wx.ALIGN_CENTER, 10)
+        sizer.Add(self.toggle, (2,0), (1,1),  wx.ALIGN_CENTER, 10)
 
-        icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
         sizer.Add(icon, (3,0), (1,1), wx.ALIGN_CENTER, 10)
-        icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
         sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
         
         sizer.AddGrowableRow(0)
@@ -100,7 +95,7 @@ class ImageViewApp(wx.App):
         self.Bind(wx.EVT_CHAR, self.OnKeyDown)
         # self.Bind(wx.EVT_SIZE, self.OnResizeWindow)
         self.toggle.SetFocus()
-
+    
     def OnResizeWindow(self, event):
         pass
         # self.frame.Maximize(True)
@@ -120,7 +115,7 @@ class ImageViewApp(wx.App):
         keyboard_clover.clear()
         
         # Creates a new drone object that contains controlling methods 
-        drone = new_pynput.DroneKeyboard(choice)
+        drone = DroneKeyboard(choice)
         keyboard_clover.append(drone)
         print(keyboard_clover)
         # print(dir(drone))
@@ -209,23 +204,11 @@ class ImageViewPanel(wx.Panel):
         self.staticbmp.CopyFromBuffer(self.img)
         self.Refresh()
 
-
-t0 = 0
 def handle_image(ros_image):
     # make sure we update in the UI thread
-    
-    # encoded = np.frombuffer(image.data, np.uint32)
-    # image = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
     cv_image = bridge.compressed_imgmsg_to_cv2(ros_image)
     cv_image = cv2.resize(cv_image, (640,480))
     wx.CallAfter(wx.GetApp().panel.update, cv_image)
-    global t0
-    #print(time.perf_counter() - t0)
-    t0 = time.perf_counter()
-    #wx.GetApp().panel.update(image)
-    # http://wiki.wxpython.org/LongRunningTasks
-
-
 
 # Key input analisys 
 def mov_control(key):
@@ -278,9 +261,12 @@ def mov_control(key):
 
 # Filtrates all topics in order to find how many drones are publishing
 # It's only called once
+#/clover0/main_camera/image_raw   #  <--- topic to be subscribed
 def topics_sorter():
     id_r = 0
-    for str in rospy.get_published_topics():
+    topic_list = rospy.get_published_topics()
+    topic_list.sort()
+    for str in topic_list:
         ref = '/main_camera/image_raw'
         refc = '/main_camera/image_raw/c'
         reft = '/main_camera/image_raw/t'
@@ -289,13 +275,11 @@ def topics_sorter():
             clovers.append(f'clover{id_r}')
             id_r = id_r + 1
 
-
 def main():
     app = ImageViewApp()
     rospy.init_node('ImageView')
     app.MainLoop()
     return 0
-
 
 if __name__ == "__main__":
     #threading.Thread(target=init_pynput).start()
