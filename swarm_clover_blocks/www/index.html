@@ -197,29 +197,12 @@
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- <form action="theSamePage.php" class="launch" method="post">
-				<a href="?run=true"><button onclick="launch()"> Launch </button></a> 
-				<input type="submit" name="launch" value="launch">
-			</form> -->
-			<button><a href="launch.php" target="_blank">Launch</a></button>
- 
-<!-- 			
-	
-			<script>
-				document.getElementById("launch").addEventListener("click", e=>{e.preventDefault();console.log("hello")})
-			</script> -->
-			<?php
-				if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['launch']))
-				{
-					func();
-				}
-				function func()
-				{	
-					echo 'hello world from func';
-					// $output = shell_exec('gazebo');
-					// echo $output;  
-				}
-			?>
+			<!-- tentando Jinja2, não ta indo -->
+			<div>
+				{ % if True % }
+					test
+				{ % endif % }
+			</div>
 		</form>
 	</div>
 
