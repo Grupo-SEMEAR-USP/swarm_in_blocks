@@ -220,14 +220,34 @@
 				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
-			<block type="take_off_all"></block>
+			<block type="take_off_all">
+				<value name="Z"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
 			<block type="land_all"></block>
 			<block type="return_and_land"></block>
-			<block type="set_2d_formation"></block>
-			<block type="set_3d_formation"></block>
-			<block type="translate_formation"></block>
-			<block type="rotate_formation"></block>
-			<block type="scale_formation"></block>
+			<block type="set_2d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="set_3d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="translate_formation">
+				<value name="TX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="rotate_formation">
+				<value name="ANGLEX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="scale_formation">
+				<value name="SX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
 			<block type="apply_formation"></block>
 		</category>
 		<category name="Flight" colour="#870b99">

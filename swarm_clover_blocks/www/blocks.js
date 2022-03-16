@@ -691,7 +691,7 @@ Blockly.Blocks['take_off_all'] = {
 			.appendField("Take off all");
 		this.appendValueInput("Z")
 			.setCheck("Number")
-			.appendField("heigth");
+			.appendField("height");
 		this.setColour(COLOR_SWARM);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
