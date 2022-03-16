@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import rospy
 import rosservice
 import rosnode
@@ -7,12 +8,7 @@ from multiprocessing import Process
 import numpy as np
 
 # Mavros msgs
-from mavros_msgs import srv
 from mavros_msgs.msg import State
-
-# Clover services
-from clover import srv
-from std_srvs.srv import Trigger
 
 # Swarm msg 
 from swarm_checker.msg import SwarmState
@@ -140,27 +136,34 @@ class SwarmChecker:
     def checkNodes(self):
         nodes = rosnode.get_node_names()
         nodes_ok = [False]*self.all_clovers
+
+        # Analyse all clovers
         for clover in self.clovers_obj_list:
             passed = False
+            passed_mavros = False
+            passed_off = False
+            # Analyse all nodes
             for node in nodes:
                 if f"clover{clover.id}" in node:
                     if 'mavros' in node:
                         passed_mavros = True
-                        rospy.logerr(f"mavros node missing on clover{clover.id}")
                     if 'simple_offboard' in node:
                         passed_off = True
-                        rospy.logerr(f"simple_offboard node missing on clover{clover.id}")
+            # Log the missing clover
+            if not passed_off:
+                rospy.logerr(f"simple_offboard node missing on clover{clover.id}")
+            if not passed_mavros:
+                rospy.logerr(f"mavros node missing on clover{clover.id}")
+            passed = passed_off and passed_mavros
             nodes_ok[clover.id] = passed
         
+        # for node in nodes:
+        #     if ('clover' in node) and (('mavros' in node) or ('simple_offboard' in node)):
+        #         for clover in self.clovers_obj_list:
+        #             if f"clover{clover.id}" in node:
+        #                 pass
+        self.__nodes_ok = np.array(nodes_ok)
 
-        for node in nodes:
-            if ('clover' in node) and (('mavros' in node) or ('simple_offboard' in node)):
-                for clover in self.clovers_obj_list:
-                    if f"clover{clover.id}" in node:
-
-
-        self.__nodes_ok = nodes_ok
-    
     def checkServices(self):
         offboard_ok = [False]*self.all_clovers
         led_ok = [False]*self.all_clovers
@@ -193,14 +196,14 @@ class SwarmChecker:
             else:
                 offboard_mode_ok[clover.id] = False
         
-        self.__mavros_conn_ok = mavros_conn_ok
-        self.__offboard_ok = offboard_mode_ok
-        self.__armed_ok = armed_ok
+        self.__mavros_conn_ok = np.array(mavros_conn_ok)
+        self.__offboard_ok = np.array(offboard_mode_ok)
+        self.__armed_ok = np.array(armed_ok)
             
     def publishKnownClovers(self):
         # self.all_clovers_ids = np.where(self.__nodes_ok == True)
         self.connected_ids = np.argwhere(self.__mavros_conn_ok == True).ravel()
-        self.failed_ids = np.argwhere((self.__mavros_conn_ok == False) or (self.__nodes_ok == False)).ravel()
+        self.failed_ids = np.argwhere(((self.__mavros_conn_ok == False) + (self.__nodes_ok == False)).any()).ravel()
         self.armed_ids = np.argwhere(self.__armed_ok == True).ravel()
         
         # self.all_clovers = len(self.all_clovers_ids)

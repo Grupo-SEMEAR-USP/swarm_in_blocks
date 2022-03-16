@@ -16,19 +16,20 @@ from std_srvs.srv import Trigger
 import numpy as np
 from threading import Thread
 import time
-# import sys
-# import os
+import sys
+import os
 import traceback
 import logging
 
 # Local modules
-from . import formation
-from . import launch
-from . import transform
-from . import alphabet
-from . import plot
-from . import formation3D
-from .swarm_publisher import SwarmPublisher
+sys.path.insert(0, os.path.dirname(__file__))
+import formation
+import launch
+import transform
+import alphabet
+import plot
+import formation3D
+from swarm_publisher import SwarmPublisher
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics

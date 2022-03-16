@@ -1,28 +1,7 @@
-from turtle import down
-# from pynput.keyboard import Key, Listener, KeyCode
-
 import rospy 
-
 from clover import srv
 from std_srvs.srv import Trigger
-
 import sys
-import time
-import threading
-# name = '/clover'
-# rospy.wait_for_service(f"{name}/get_telemetry")
-# rospy.wait_for_service(f"{name}/navigate")
-# rospy.wait_for_service(f"{name}/set_velocity")
-# rospy.wait_for_service(f"{name}/land")
-
-# set_velocity = rospy.ServiceProxy("set_velocity", srv.SetVelocity)
-# navigate = rospy.ServiceProxy("navigate", srv.Navigate)
-# get_telemetry = rospy.ServiceProxy("get_telemetry", srv.GetTelemetry)
-# land = rospy.ServiceProxy("land", Trigger)
-
-
-#sname = 'clover1'
-
 
 # Class created in order to facilitate the control of each drone individually
 class DroneKeyboard:
@@ -86,81 +65,3 @@ class DroneKeyboard:
         self.set_velocity(vx=0, vy=0, vz=0, yaw_rate=0, frame_id=self.body)
         # self.navigate(x=telem.x, y=telem.y, z=telem.z, yaw=float('nan'))
         print()
-        
-
-
-
-# PREVIOUS METHOD OF HANDLING KEYBOARD INPUT - DO NOT ERASE YET (might be useful later)
-
-# VVV
-
-
-# def press(key):
-    
-#     #print(key)
-#     if key == KeyCode.from_char('t'):
-#         drone.takeoff()
-#     elif key == KeyCode.from_char('w'):
-#         drone.move('up')
-#     elif key == KeyCode.from_char('s'):
-#         drone.move('down')
-#     elif key == KeyCode.from_char('a'):
-#         drone.move('left')
-#     elif key == KeyCode.from_char('d'):
-#         drone.move('right')
-#     elif key == KeyCode.from_char('l'):
-#         drone.land()
-#     elif key == KeyCode.from_char('g'):
-#         print(drone.get_telemetry())
-#     elif key == KeyCode.from_char('q'):
-#         print('Quitting..')
-#         return False
-
-#     if key == Key.up:
-#         drone.move('x+')
-        
-#     if key == Key.right:
-#         drone.move('y+')
-
-#     if key == Key.left:
-#         drone.move('y-')
-#     if key == Key.down:
-#         drone.move('x-')
-        
-# def release(key):
-#         # if key == Key.space:
-#         #     return False
-#     drone.stop()
-
-
-
-# print("Drone ID:")
-# #id_drone = input()
-# id_drone = 0
-
-# drone = DroneKeyboard(id_drone)
-# print('Successfully initiaded! The following keys are accepted as commands:')
-# print('''
-# Navigation:
-# Keyarrows - (standart navigation keys)
-# W - Up (increases altitude)
-# S - Down (decreases altitude)
-# D - Turn right in rotation
-# A - Turn left in rotation
-# L - Land
-# ===============
-# Utilities:
-# G - Get drone info (uses get_telemetry method)
-# ''')
-
-# with Listener(
-#     on_press=press,
-#     on_release=release) as listener:
-#     time.sleep(0.5)
-#     listener.join()
-
-#drone = DroneKeyboard(1)
-
-
-# if __name__ == "__main__":
-#     main()
