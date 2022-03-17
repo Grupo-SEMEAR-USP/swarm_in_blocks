@@ -199,14 +199,19 @@
 			<center style="font-size: 16px;"><i class="url-icon uil uil-link"></i> Run this command <i class="url-icon uil uil-link"></i></center>
 			<textarea readonly class="output_box" value="" id="output_box" rows="3" disabled></textarea>
 			
-			<center>
-				<button class="copy-button" style="	padding: 5px 160px">
-					<span class="iconify" data-icon="ep:copy-document"></span>
-				</button>
-			</center>
+			<div class="tooltip">
+				<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+				<center>
+					<button class="copy-button" onclick="copytoclipboard()" onmouseout="outtooltip()">
+						<span class="iconify" data-icon="ep:copy-document"></span>
+					</button>
+				</center>
+			</div>
 
 				<script>
 				function setOutput(){
+
+					// command create
 					var num = document.getElementById("number");
 					var mode = document.getElementById("mode");
 					var form = document.getElementById("formation");
@@ -218,6 +223,20 @@
 
 					var out = document.getElementById("output_box");
 					out.value = output;
+				}
+				function copytoclipboard() {
+					var copyText = document.getElementById("output_box");
+					copyText.select();
+					copyText.setSelectionRange(0, 99999);
+					navigator.clipboard.writeText(copyText.value);
+					
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copied: " + copyText.value;
+				}
+				
+				function outtooltip() {
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copy to clipboard";
 				}
 
 			</script>
