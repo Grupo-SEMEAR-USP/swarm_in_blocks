@@ -317,6 +317,7 @@ input:checked + .slider:before {
 .popup.show{
 	top: 50%;
 	opacity: 1;
+	padding-bottom: 5px;
 	pointer-events: auto;
 	transform:translate(-50%, -50%) scale(1);
 	transition: top 0s 0s ease-in-out,
@@ -410,25 +411,27 @@ header .close:hover{
 	background-color: transparent;
 }
 
-.field button{
-	color: #fff;
-	padding: 5px 18px;
-	background: #7d2ae8;
+.output_box{
+	max-width: 100%;
+	width: 100%;
+	max-height: 200px;
+	height: 100%;
+	resize: none;
+	border: 1px solid #727070;
+	font-size: 15px;
+	border-radius: 4px;
+	padding: 0 5px;
 }
-.field button:hover{
-	background: #8d39fa;
+
+.copy-button{
+	background: transparent;
+	border: none;
 }
-.launch button{
-	color: #fff; 
-	padding: 5px 18px; 
-	background: #8d39fa;
-	position: absolute;
-	top: 87%;
-	left: 70%;
+.copy-button:hover{
+	background: #9b6ad4;
+	border-radius:5px;
 }
-.launch button:hover{
-	background-color: rgb(154, 91, 212);
-}
+
 
 /* python/blockly switch */
 #tabs li {
@@ -513,10 +516,3 @@ body[data-tab="python"] #python { display: block !important; }
 	fill-opacity: .8;
 }
 
-.output_box{
-	max-width: 100%;
-	width: 100%;
-	max-height: 200px;
-	height: 100%;
-	resize: none;
-}

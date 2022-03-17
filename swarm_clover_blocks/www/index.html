@@ -176,7 +176,7 @@
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>Launch mode </p>
 			<div class="field">
-				<i class="url-icon uil uil-link"></i>
+				<span class="iconify" data-icon="akar-icons:settings-horizontal"></span>
 				<select name="Launch mode" id="mode" onchange="setOutput()">
 					<option value="planning"> Planning </option>
 					<option value="simulation"> Simulation </option>
@@ -195,10 +195,17 @@
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- <input class="output_box" value="" id="output_box" disabled> -->
+			<!-- "Run this command" -->
+			<center style="font-size: 16px;"><i class="url-icon uil uil-link"></i> Run this command <i class="url-icon uil uil-link"></i></center>
+			<textarea readonly class="output_box" value="" id="output_box" rows="3" disabled></textarea>
 			
-			<textarea class="output_box" value="" id="output_box" rows="3" disabled></textarea>
-			<script>
+			<center>
+				<button class="copy-button" style="	padding: 5px 160px">
+					<span class="iconify" data-icon="ep:copy-document"></span>
+				</button>
+			</center>
+
+				<script>
 				function setOutput(){
 					var num = document.getElementById("number");
 					var mode = document.getElementById("mode");
@@ -212,13 +219,8 @@
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
+
 			</script>
-			<!-- tentando Jinja2, não ta indo -->
-			<!-- <div>
-				{ % if True % }
-					test
-				{ % endif % }
-			</div> -->
 		</form>
 	</div>
 
