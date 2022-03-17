@@ -50,7 +50,7 @@ def full_square(N, L=2):
             yi = yi + L/(n-1)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
         elif (N%n == 0):
-            yi = yi + L/n
+            yi = yi + L/((N//n)-1)
             (q, coord) = square_side(N, L, q=q, n=n, yi=yi, coord=coord)
         else:
             yi = yi + L/(N//n)
@@ -277,7 +277,3 @@ def partial_formation(N, coord):
     random_coords.sort()
     selec_coords = coord[random_coords, :]
     return selec_coords
-
-if __name__ == "__main__":
-    coord = np.array(([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]))
-    partial_formation(3, coord)

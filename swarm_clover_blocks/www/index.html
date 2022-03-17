@@ -170,14 +170,14 @@
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
-				<input type="number" id="txt" onkeyup="rage_enforced()" min="0" max="20" stpe="1">
+				<input type="number" id="number" onkeyup="rage_enforced()" onchange="setOutput()" min="0" max="20" stpe="1">
 				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>Launch mode </p>
 			<div class="field">
 				<i class="url-icon uil uil-link"></i>
-				<select name="Launch mode">
+				<select name="Launch mode" id="mode" onchange="setOutput()">
 					<option value="planning"> Planning </option>
 					<option value="simulation"> Simulation </option>
 					<option value="navigation"> Navigation </option>
@@ -188,7 +188,7 @@
 			<p>initial formation </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
-				<select name="Initial formation">
+				<select name="Initial formation" id="formation" onchange="setOutput()">
 					<option value="Line"> Line </option>
 					<option value="Square"> Square </option>
 					<option value="Other"> Other </option>
@@ -197,29 +197,30 @@
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- <form action="theSamePage.php" class="launch" method="post">
-				<a href="?run=true"><button onclick="launch()"> Launch </button></a> 
-				<input type="submit" name="launch" value="launch">
-			</form> -->
-			<!-- <button><a href="launch.php" target="_blank">Launch</a></button> -->
- 
-<!-- 			
-	
+			<!-- <input class="output_box" value="" id="output_box" disabled> -->
+			
+			<textarea class="output_box" value="" id="output_box" rows="3" disabled></textarea>
 			<script>
-				document.getElementById("launch").addEventListener("click", e=>{e.preventDefault();console.log("hello")})
-			</script> -->
-			<?php
-				if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['launch']))
-				{
-					func();
+				function setOutput(){
+					var num = document.getElementById("number");
+					var mode = document.getElementById("mode");
+					var form = document.getElementById("formation");
+					
+					mode_value = mode.value;
+					num_value = num.value;
+					form_value = form.value;
+					output = `rosrun swarm_in_blocks swarm.py -mode=${mode_value} -num=${num_value} -initial_formation=${form_value}`;
+
+					var out = document.getElementById("output_box");
+					out.value = output;
 				}
-				function func()
-				{	
-					echo 'hello world from func';
-					// $output = shell_exec('gazebo');
-					// echo $output;  
-				}
-			?>
+			</script>
+			<!-- tentando Jinja2, não ta indo -->
+			<!-- <div>
+				{ % if True % }
+					test
+				{ % endif % }
+			</div> -->
 		</form>
 	</div>
 

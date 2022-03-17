@@ -59,11 +59,11 @@ def plot_preview2d(self, coord):
     # Set the axis, grid and colors
     max_point = int(np.amax(coord[:,0:2]))
     min_point = int(np.amin(coord[:,0:2]))
-    if max_point <= 10: max_point=10
+    if max_point <= 10: max_point=11
     if min_point >= 0: min_point=0
-    plt.axis([(min_point-1),(max_point+1),(min_point-1),(max_point+1)])
-    plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
-    plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
+    plt.axis([(min_point-1),(max_point),(min_point-1),(max_point)])
+    plt.xticks(np.linspace(min_point, max_point, (max_point+1-min_point)))
+    plt.yticks(np.linspace(min_point, max_point, (max_point+1-min_point)))
     ax.tick_params(axis='both', colors=grid_color)
     for spine in ['top', 'right', 'left', 'bottom']:
         ax.spines[spine].set_color(grid_color)
@@ -85,11 +85,11 @@ def plot_preview3d(self, coord):
     # Set the axis, grid and colors
     max_point = int(np.amax(coord[:,0:3]))
     min_point = int(np.amin(coord[:,0:3]))
-    if max_point <= 10: max_point=10
+    if max_point <= 10: max_point=11
     if min_point >= 0: min_point=0
-    ax.set(xlim=((min_point-1),(max_point+1)), ylim=((min_point-1),(max_point+1)), zlim=((min_point-1),(max_point+1)))
-    plt.xticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
-    plt.yticks(np.linspace(min_point,(max_point-min_point),(max_point+1)))
+    ax.set(xlim = ((min_point-1), max_point), ylim = ((min_point-1), max_point), zlim = ((min_point-1), max_point))
+    plt.xticks(np.linspace(min_point, max_point, (max_point+1-min_point)))
+    plt.yticks(np.linspace(min_point, max_point, (max_point+1-min_point)))
     ax.tick_params(axis='both', colors=grid_color) 
     for spine in ['top', 'right', 'left', 'bottom']:
         ax.spines[spine].set_color(grid_color)

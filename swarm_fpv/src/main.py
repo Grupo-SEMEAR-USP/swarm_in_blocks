@@ -96,10 +96,10 @@ class ImageViewApp(wx.App):
         # self.Bind(wx.EVT_SIZE, self.OnResizeWindow)
         self.toggle.SetFocus()
     
-    def OnResizeWindow(self, event):
-        pass
-        # self.frame.Maximize(True)
-        # event.Skip()
+    # def OnResizeWindow(self, event):
+    #     pass
+    #     # self.frame.Maximize(True)
+    #     # event.Skip()
     
     def onChoice(self, event): # Deals with Choice event
         choice = self.list.GetCurrentSelection() # Return the wished id  
@@ -120,7 +120,7 @@ class ImageViewApp(wx.App):
         print(keyboard_clover)
         # print(dir(drone))
 
-    def OnKeyDown(self, event=None):
+    def OnKeyDown(self, event):
         #print(event.GetKeyCode())
         print('key down')
         self.toggle.SetFocus()
@@ -142,7 +142,7 @@ class ImageViewApp(wx.App):
             thrd.start()
             self.last_thrd = thrd
 
-    def OneKeyUp(self, event=None):
+    def OneKeyUp(self, event):
         print('key released')
         print(len(keyboard_clover))
         self.last_key = ''
@@ -150,14 +150,17 @@ class ImageViewApp(wx.App):
         # Stops all objects that are currently being used
         if keyboard_clover:
             for obj in keyboard_clover:
-                print("Waiting for clover response...")
                 tick = time.time()
-                while self.last_thrd.is_alive():
-                    if time.time()-tick > 5:
-                        print("Clover do not respond! Waiting...")
-                    if time.time()-tick > 10:
-                        print("Clover might be disconnected. Stop waiting")
-                        break
+                if self.last_thrd.is_alive():
+                    event.Skip()
+                    return
+                # while self.last_thrd.is_alive():
+                    
+                #     if time.time()-tick > 5:
+                #         print("Clover do not respond! Waiting...")
+                #     if time.time()-tick > 10:
+                #         print("Clover might be disconnected. Stop waiting")
+                #         break
                     # self.last_thrd.join()
                     
                 thrd = Thread(target=obj.stop)

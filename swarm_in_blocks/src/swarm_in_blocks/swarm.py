@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 
 # ROS modedules
@@ -324,7 +323,7 @@ class Swarm:
    def startNavigation(self):
       self.mode = 'Navigation'   
 
-   #Basic swarm operations
+   # Basic swarm operations
    def takeOffAll(self, z=1):
       logging.debug(f"{self.num_of_clovers} drones taking off")
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
@@ -372,6 +371,42 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
 
+   def returnToHome(self):
+      logging.debug(f"{self.num_of_clovers} drones returning")
+      rospy.loginfo(f"{self.num_of_clovers} drones returning")
+      self.des_formation_coords = self.init_formation_coords
+      self.applyFormation()   
+
+   def returnAndLand(self):
+      logging.debug("Return to home...")
+      rospy.loginfo("Return to home...")
+      self.returnToHome()
+      logging.debug("Landing...")
+      rospy.loginfo("Landing...")
+      self.landAll()
+
+   def applyFormation(self):
+      logging.debug(f"Applying formation to {self.num_of_clovers}")
+      rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         x = self.des_formation_coords[idx][0] - clover.init_coord[0]
+         y = self.des_formation_coords[idx][1] - clover.init_coord[1]
+         z = self.des_formation_coords[idx][2]  
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
+         threads.append(thrd)
+      
+      # Start all threads with the minimum latency possible
+      for thrd in threads:
+         thrd.start()
+      
+      # Wait for all threads
+      for thrd in threads:
+         thrd.join()
+      
+      self.curr_formation_coords =  self.des_formation_coords
+
+   # LED Operations
    def ledAll(self, effect, red, green, blue):
       logging.debug(f"{self.num_of_clovers} setting all drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting all drones led")
@@ -495,41 +530,6 @@ class Swarm:
       for thrd in threads:
          thrd.join(timeout=1)
 
-   def returnToHome(self):
-      logging.debug(f"{self.num_of_clovers} drones returning")
-      rospy.loginfo(f"{self.num_of_clovers} drones returning")
-      self.des_formation_coords = self.init_formation_coords
-      self.applyFormation()   
-
-   def returnAndLand(self):
-      logging.debug("Return to home...")
-      rospy.loginfo("Return to home...")
-      self.returnToHome()
-      logging.debug("Landing...")
-      rospy.loginfo("Landing...")
-      self.landAll()
-
-   def applyFormation(self):
-      logging.debug(f"Applying formation to {self.num_of_clovers}")
-      rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
-      threads = []
-      for idx, clover in enumerate(self.swarm):
-         x = self.des_formation_coords[idx][0] - clover.init_coord[0]
-         y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
-         threads.append(thrd)
-      
-      # Start all threads with the minimum latency possible
-      for thrd in threads:
-         thrd.start()
-      
-      # Wait for all threads
-      for thrd in threads:
-         thrd.join()
-      
-      self.curr_formation_coords =  self.des_formation_coords
-
    #Formations
    def setFormation2D(self, shape, N, L):
       if (shape=='line'):
@@ -575,14 +575,13 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def setAlphabet(self, z=1):
-      str = input(f"Please, enter word or a letter: ")
-     
-      if(str=="SWARM_S" or str=="swarm_s"):
-         self.des_formation_coords = alphabet.Letters(str)
+   def setAlphabet(self, user_input, N):
+      z = 1
+      if(user_input=="SWARM_S" or user_input=="swarm_s"):
+         self.des_formation_coords = alphabet.Letters(user_input, N)
       
       else:
-         self.des_formation_coords = alphabet.Word(str)
+         self.des_formation_coords = alphabet.Word(user_input, N)
       
       for idx in range(self.num_of_clovers):
          if(idx%2==0):
@@ -592,6 +591,15 @@ class Swarm:
                if(idx%2==0):
                   z = 2
          self.des_formation_coords[idx][2] = z
+      
+      # Translate formation for current formation pose
+      tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
+      self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
+
+      # Update formation name
+      self.des_formation_name = "Text: '{}'".format(user_input)
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+      self.op_num += 1
 
    def setFormation3DfromMesh(self, model_path):
       self.des_formation_coords,self.__mesh,self.__pcd = formation3D.formation3DFromMesh(model_path, self.num_of_clovers)
@@ -672,6 +680,7 @@ if __name__ == "__main__":
    else:
       logging.debug("There isn't this mode")
       rospy.loginfo("There isn't this mode")
+      sys.exit()
 
    
    #Menu 
@@ -712,7 +721,6 @@ if __name__ == "__main__":
       key = input('\n')
       if (key == str('1')):
          swarm.takeOffAll()
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(2)
 
       elif (key == str('2')):
@@ -721,7 +729,6 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired length: "))
             swarm.setFormation2D('line', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('3')):
@@ -730,7 +737,6 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation2D('triangle', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                #rospy.sleep(5)
 
       elif (key == str('4f') or key == str('4F')):
@@ -739,7 +745,6 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired side length: "))
             swarm.setFormation2D('full_square', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('4e') or key == str('4E')):
@@ -748,13 +753,11 @@ if __name__ == "__main__":
          else:
             L = int(input("Insert the desired side length: "))
             swarm.setFormation2D('empty_square', N, L)
-            print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
             #rospy.sleep(5)
 
       elif (key == str('o') or key == str('O')):
          L = int(input("Insert the desired ratio: "))
          swarm.setFormation2D('circle', N, L)
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(2)
 
       elif (key == str('5')):
@@ -764,13 +767,11 @@ if __name__ == "__main__":
                #type = input("Insert full or empty: ")
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('cube', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                #rospy.sleep(5)
 
       elif (key == str('6')):
          L = int(input("Insert the desired ratio: "))
          swarm.setFormation3D('sphere', N, L)
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          #rospy.sleep(5)
 
       elif (key == str('7')):
@@ -779,20 +780,18 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('pyramid', N, L)
-               print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
                rospy.sleep(5)
 
       elif (key == str('0')):
          swarm.returnToHome()
-         print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(2)
       
       elif  (key == str('a') or key == str('A')):
-         swarm.setAlphabet()
+         user_input = input(f"Please, enter word or a letter: ")
+         swarm.setAlphabet(user_input, N)
 
       elif (key == str('l') or key == str('L')):
          swarm.landAll()
-         print("Drones coordinates: \n{}\n".format(swarm.curr_formation_coords))
          rospy.sleep(5)
 
       elif (key == str('ts') or key == str('TS')):
