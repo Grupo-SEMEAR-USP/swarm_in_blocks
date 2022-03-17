@@ -19,6 +19,7 @@ import sys
 import os
 import traceback
 import logging
+import math
 
 # Local modules
 sys.path.insert(0, os.path.dirname(__file__))
@@ -476,7 +477,7 @@ class Swarm:
       color = np.empty((0,3))
       
       if(shape == "square" or shape == "circle"):
-         side = 4
+         side = 2
 
       if(shape == "triangle"):
          side = 3
@@ -509,7 +510,12 @@ class Swarm:
                thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
          
          if(str == "square"):
-            coord = self.des_formation_coords
+            if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+               
+            else:
+               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               
 
          if(str == "circle"):        
             coord = self.des_formation_coords
