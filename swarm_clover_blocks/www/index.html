@@ -170,13 +170,14 @@
 			<p>Number of clovers </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
-				<input type="number" id="txt" onkeyup="rage_enforced()" min="0" max="20" stpe="1">
+				<input type="number" id="number" onkeyup="rage_enforced()" onchange="setOutput()" min="0" max="20" stpe="1">
+				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>Launch mode </p>
 			<div class="field">
 				<i class="url-icon uil uil-link"></i>
-				<select name="Launch mode">
+				<select name="Launch mode" id="mode" onchange="setOutput()">
 					<option value="planning"> Planning </option>
 					<option value="simulation"> Simulation </option>
 					<option value="navigation"> Navigation </option>
@@ -186,7 +187,7 @@
 			<p>initial formation </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
-				<select name="Initial formation">
+				<select name="Initial formation" id="formation" onchange="setOutput()">
 					<option value="Line"> Line </option>
 					<option value="Square"> Square </option>
 					<option value="Other"> Other </option>
@@ -194,19 +195,30 @@
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- tentando Jinja2, mas não ta indo legal -->
+			<!-- <input class="output_box" value="" id="output_box" disabled> -->
+			
+			<textarea class="output_box" value="" id="output_box" rows="3" disabled></textarea>
+			<script>
+				function setOutput(){
+					var num = document.getElementById("number");
+					var mode = document.getElementById("mode");
+					var form = document.getElementById("formation");
+					
+					mode_value = mode.value;
+					num_value = num.value;
+					form_value = form.value;
+					output = `rosrun swarm_in_blocks swarm.py -mode=${mode_value} -num=${num_value} -initial_formation=${form_value}`;
+
+					var out = document.getElementById("output_box");
+					out.value = output;
+				}
+			</script>
+			<!-- tentando Jinja2, não ta indo -->
 			<!-- <div>
 				{ % if True % }
 					test
 				{ % endif % }
 			</div> -->
-
-			<div class="field" style="width: auto;">
-				<i class="url-icon uil uil-link"></i>
-				<input type="text">
-				<!-- pegar botão bonito -->
-				<button> copy </button>
-			</div>
 		</form>
 	</div>
 
@@ -224,14 +236,34 @@
 				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
-			<block type="take_off_all"></block>
+			<block type="take_off_all">
+				<value name="Z"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
 			<block type="land_all"></block>
 			<block type="return_and_land"></block>
-			<block type="set_2d_formation"></block>
-			<block type="set_3d_formation"></block>
-			<block type="translate_formation"></block>
-			<block type="rotate_formation"></block>
-			<block type="scale_formation"></block>
+			<block type="set_2d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="set_3d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="translate_formation">
+				<value name="TX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="rotate_formation">
+				<value name="ANGLEX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="scale_formation">
+				<value name="SX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
 			<block type="apply_formation"></block>
 		</category>
 		<category name="Flight" colour="#870b99">

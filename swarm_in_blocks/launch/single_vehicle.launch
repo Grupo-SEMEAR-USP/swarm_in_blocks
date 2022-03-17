@@ -47,7 +47,7 @@
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=false
+                                    main_camera:=true
                                     rangefinder:=false
                                     led:=true 
                                     gps:=true
@@ -69,7 +69,7 @@
 
         <!-- spawn vehicle -->
         <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
-        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="$(arg output)" args="-b -urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="$(arg output)" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 
         <!-- MAVROS -->
         <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="$(arg output)">
