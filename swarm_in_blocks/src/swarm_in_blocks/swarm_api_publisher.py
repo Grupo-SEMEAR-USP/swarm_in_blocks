@@ -35,13 +35,12 @@ class SwarmPublisher:
 
     def publishSwarmStatus(self, swarm_obj):
         
-        swarm_state = SwarmState()
+        swarm_state = SwarmApiState()
         swarm_state.header.stamp = rospy.Time.now()
         swarm_state.name = swarm_obj.swarm_name
         swarm_state.status = swarm_obj.status
         swarm_state.mode = swarm_obj.mode
-        swarm_state.connected_clovers = swarm_obj.connected_clovers
-        swarm_state.armed_clovers = swarm_obj.armed_clovers
+        swarm_state.number_of_clovers = swarm_obj.num_of_clovers
         self.state_pub.publish(swarm_state)
     
     def publishStatusLoop(self, swarm_obj):

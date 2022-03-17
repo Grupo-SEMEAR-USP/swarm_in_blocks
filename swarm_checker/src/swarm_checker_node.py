@@ -89,7 +89,7 @@ class SwarmChecker:
         self.setPublisher()
     
     def setPublisher(self):
-        self.pub = rospy.Publisher("~state", SwarmState, queue_size=10)
+        self.pub = rospy.Publisher("/swarm_checker/state", SwarmState, queue_size=10)
 
     def updateCloversObjects(self):
         for clover_id in self.all_clovers_ids:

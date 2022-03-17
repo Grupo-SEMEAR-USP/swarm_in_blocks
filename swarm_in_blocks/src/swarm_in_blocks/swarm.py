@@ -3,9 +3,7 @@
 # ROS modedules
 from matplotlib.pyplot import connect
 import rospy
-import rosnode
 from mavros_msgs import srv
-from mavros_msgs.msg import State
 
 # Clover services
 from clover import srv
@@ -29,7 +27,8 @@ import transform
 import alphabet
 import plot
 import formation3D
-from swarm_publisher import SwarmPublisher
+from swarm_api_publisher import SwarmPublisher
+from swarm_checker.msg import SwarmState
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
@@ -38,24 +37,14 @@ class SingleClover:
       self.id = id
       self.init_coord = []
 
-      self.current_state = State()
-
       # Configure clover services and topics
       self.configure()
-
-   def stateCb(self, msg_cb):
-      self.current_state = msg_cb
-      self.connected = msg_cb.connected
-      self.armed = msg_cb.armed
-      self.mode = msg_cb.mode
 
    def configure(self):
 
       logging.debug("Waiting clover services...")
       rospy.loginfo("Waiting clover services...")
 
-      self.state = rospy.Subscriber(f"{self.name}/mavros/state", State, self.stateCb, queue_size=10)
-      
       rospy.wait_for_service(f"{self.name}/get_telemetry", timeout=1)
       self.get_telemetry = rospy.ServiceProxy(f"{self.name}/get_telemetry", srv.GetTelemetry)
       
@@ -98,31 +87,34 @@ class Swarm:
    def __init__(self, num_of_clovers=None, swarm_name=None):
 
       # Set logging level if it doesn't exist
-      # logging.basicConfig(level=logging.INFO)
-      logging.getLogger('rosout')
-      
+      logging.basicConfig(level=logging.INFO)
+      # logging.getLogger('rosout')
+
       # Basic parameters of the swarm
+      self.swarm = []
+      self.swarm_state = SwarmState()
+      # Swarm infos
+      self.num_of_clovers = None
+      if num_of_clovers != None:
+         if num_of_clovers == 0:
+            logging.error('Input num_of_clover need to be greater than zero.')
+         else:
+            self.num_of_clovers = num_of_clovers
+      
+      self.all_of_clovers = 0
+      self.connected_clovers = 0
+      self.armed_clovers = 0
+      self.offboard_mode_clovers = 0
+      # Ids
+      self.all_clovers_ids = []
+      self.connected_ids = []
+
       # Configure swarm_name
       if swarm_name is None:
          self.swarm_name = "CloverBlockingSquad!"
       else:
          self.swarm_name = swarm_name
       
-      # Configure num_of_clovers
-      if num_of_clovers is None:
-         self.num_of_clovers = self.__checkNumOfClovers()
-         if self.num_of_clovers == 0:
-            raise Exception("Failed to init swarm object. Have you launched the swarm?")
-      else:
-         self.num_of_clovers = num_of_clovers
-      self.swarm = []
-      self.id_clover = []
-
-      # Swarm infos
-      self.connected_clovers = 0
-      self.armed_clovers = 0
-      self.offboard_mode_clovers = 0
-
       # Initial formation
       self.init_formation_name = ''
       self.init_formation_coords = []
@@ -169,42 +161,34 @@ class Swarm:
          clover_object.init_coord = self.init_formation_coords[index]
          self.swarm.append(clover_object)
    
-   def __checkNumOfClovers(self):
-      node_list = rosnode.get_node_names()
+   def __subscribeSwarmChecker(self):
+      rospy.loginfo("Trying to connect to SwarmChecker node...")
+      try:
+         first_msg = rospy.wait_for_message("swarm_checker/state", SwarmState, timeout=5)
+         self.swarm_checker_sub = rospy.Subscriber("swarm_checker/state", SwarmState, self.__swarmStateCallback)
+      except Exception as e:
+         rospy.logerr(e.__str__() + "\n Have you launched the simulation or the base control?")
+         exit()
+         
+      rospy.loginfo("SwarmApi connected to SwarmChecker.")
 
-      num_of_clovers = 0
-      for node in node_list:
-         if ('clover' in node) and ('mavros' in node):
-            num_of_clovers += 1
-      
-      return num_of_clovers
-   
-   def __checkStatusOfClovers(self):
-      connected_clovers = 0
-      offboard_mode_clovers = 0
-      armed_clovers = 0
-      
-      for clover in self.swarm:
-         connected = clover.connected
-         mode = clover.mode
-         armed = clover.armed
+      # Configure first time
+      self.swarm_state = first_msg
+      self.all_of_clovers = self.swarm_state.all_clovers
+      self.connected_clovers =self.swarm_state.connected_clovers
+      self.armed_clovers = self.swarm_state.armed_clovers
 
-         if connected:
-            connected_clovers+=1
-         if mode.lower() == 'offboard':
-            offboard_mode_clovers+=1
-         if armed:
-            armed_clovers+=1
+      self.all_clovers_ids = self.swarm_state.all_clovers_ids
+      self.connected_ids = self.swarm_state.connected_ids
 
-      self.connected_clovers = connected_clovers
-      self.armed_clovers = armed_clovers
-      self.offboard_mode_clovers = offboard_mode_clovers
-   
-   def __checkStatusOfCloversLoop(self):
-      rate = rospy.Rate(5)
-      while not rospy.is_shutdown():
-         self.__checkStatusOfClovers()
-         rate.sleep()
+   def __swarmStateCallback(self, msg):
+      self.swarm_state = msg
+      self.all_of_clovers = self.swarm_state.all_clovers
+      self.connected_clovers =self.swarm_state.connected_clovers
+      self.armed_clovers = self.swarm_state.armed_clovers
+
+      self.all_clovers_ids = self.swarm_state.all_clovers_ids
+      self.connected_ids = self.swarm_state.connected_ids
 
    def setInitialFormation(self, formation_str, L):
       self.setFormation2D(formation_str, self.num_of_clovers, L)
@@ -237,18 +221,18 @@ class Swarm:
       # Log the result
       if not initial_pose_failed.size:
          logging.debug(f"{self.num_of_clovers} retrieved their initial pose.")
-         logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed {len(initial_pose_failed)} clovers.")
+         logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
       else:
          logging.debug(f"Initial Formation: {self.num_of_clovers} retrieved their initial pose.")
          for clover_id in initial_pose_failed:
             logging.debug(f"Initial Formation: failed to get initial pose from clover {clover_id}")
-         logging.debug(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed {len(initial_pose_failed)} clovers.")
+         logging.debug(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
 
    # Start pipeline
    # Planning mode - Allows just to plot the formations preview and save its coordinates, don't use simulator
    def startPlanning(self):
       logging.debug("Starting planning mode...")
-      rospy.loginfo("Starting planning mode...")
+      # rospy.loginfo("Starting planning mode...")
       self.mode = 'Planning'
       # See if initial formation is [], then set default inital formation
       if not self.init_formation_coords:
@@ -272,9 +256,11 @@ class Swarm:
       logging.debug("Starting simulation mode...")
       rospy.loginfo("Starting simulation mode...")
       self.mode = 'Simulation'
-
+      
       # Launch Gazebo and clover. Wait some time to all get
       if launch:
+         if self.num_of_clovers == None:
+            raise Exception("Attribute num_of_clovers wasn't specified to launch the simulation properly.")
          # See if initial formation is [], then set default inital formation
          if not self.init_formation_coords:
             # Initial formation for 3 or less clovers. By default on line formation.
@@ -288,6 +274,18 @@ class Swarm:
          rospy.loginfo("Starting roscore, Gazebo and clovers...")
          self.__launchGazeboAndClovers()
       
+      # Init rosnode
+      rospy.init_node('swarm_api')
+
+      # Connecting to swarm_checker node
+      self.__subscribeSwarmChecker()
+
+      # Configure num_of_clovers
+      if self.num_of_clovers is None:
+         self.num_of_clovers = self.connected_clovers
+         if self.num_of_clovers == 0:
+            raise Exception("Failed to init swarm object. Have you launched the simulation or the navigation?")
+
       if not launch:
          # self.checkClovers()
          self.getInitialFormation()
@@ -296,12 +294,8 @@ class Swarm:
       logging.debug("Starting swarm node and listening to clover services...")
       rospy.loginfo("Starting swarm node and listening to clover services...")
 
-      # Init rosnode
-      rospy.init_node('swarm_api')
+      # Create clover objects for Swarm class
       self.__createCloversObjects()
-
-      # Check clovers
-      self.__checkStatusOfClovers()
 
       # All done. Updating current formation
       self.status = 'Connected'
@@ -309,14 +303,9 @@ class Swarm:
 
       # Set up SwarmPublisher to publish swarm informations
       swarm_pub = SwarmPublisher()
-      Thread(target=self.__checkStatusOfCloversLoop).start()
       Thread(target=swarm_pub.publishStatusLoop, args=(self,)).start()
       Thread(target=swarm_pub.publishAssetsLoop, args=(self,)).start()
-      # rospy.Timer(rospy.Duration(1.0),
-                  # swarm_pub.publishSwarmStatus, args=(self.swarm_name, self.status, self.mode, self.connected_clovers))
-      
-      # rospy.Timer(rospy.Duration(0.1),
-                  # swarm_pub.publishSwarmAssets, args=(self.curr_formation_name, self.curr_formation_pose, self.curr_formation_coords))
+
       logging.debug("Started simulation.")
       rospy.loginfo("Started simulation.")
 
@@ -631,16 +620,29 @@ class Swarm:
       self.op_num += 1
 
    def scaleFormation(self, sx, sy, sz):
-      self.des_formation_coords = transform.scaleFormation(self.des_formation_coords, sx, sy, sz)
-      self.des_formation_pose = np.array([self.des_formation_pose[0]*sx, self.des_formation_pose[1]*sy, self.des_formation_pose[2]*sz])
+      # Get x, y, z of current formation
+      tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
+      # Translate back to the origin 
+      origin_coords = transform.translateFormation(self.des_formation_coords, -tx, -ty, -tz)
+      # Scale formation
+      origin_coords = transform.scaleFormation(origin_coords, sx, sy, sz)
+      # Translate back to the current pose
+      self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
+      # Update formation pose (stays the same in this case)
+      self.des_formation_pose = np.array([self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]])
       self.des_formation_name = 'scale'
+      # Append to formation list
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
    def translateFormation(self, tx, ty, tz):
+      # Translate formation
       self.des_formation_coords = transform.translateFormation(self.des_formation_coords, tx, ty, tz)
+      # Update formation pose 
       self.des_formation_pose = np.array([self.des_formation_pose[0]+tx, self.des_formation_pose[1]+ty, self.des_formation_pose[2]+tz])
+      # Update formation name
       self.des_formation_name = 'translate'
+      # Append to formation list
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
@@ -653,7 +655,11 @@ class Swarm:
       origin_coords = transform.rotateFormation(origin_coords, anglex, angley, anglez)
       # Translate back to the current pose
       self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
+      # Update formation pose (stays the same in this case)
+      self.des_formation_pose = np.array([self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]])
+      # Update formation name
       self.des_formation_name = 'rotate'
+      # Append to formation list
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
@@ -667,28 +673,36 @@ class Swarm:
 
 if __name__ == "__main__":
 
-   
    print("Select the operation mode:")
    print("1 - Planning mode")
    print("2 - Simulation mode")
    print("3 - Navigation mode")
    selec_mode = input('\n')
-   selec_amount = int(input(f"\nType the amount of clovers: "))
-   swarm = Swarm(int(selec_amount))
+   
    if (selec_mode == str('1')):
       # Starts the simulation just with the plots previews
+      selec_amount = int(input(f"\nType the amount of clovers: "))
+      swarm = Swarm(selec_amount)
       swarm.startPlanning()
    elif (selec_mode == str('2')):
+      print("1 - Launch simulation")
+      print("2 - Simulation is already launched")
+      selec_launch = int(input('\n'))
       # Starts the Gazebo simulation and clovers ready to operate
-      swarm.startSimulation(launch=True)
+      if selec_launch == 1:
+         selec_amount = int(input(f"\nType the amount of clovers: "))
+         swarm = Swarm(selec_amount)
+         swarm.startSimulation(launch=True)
+      elif selec_launch == 2:
+         swarm = Swarm()
+         swarm.startSimulation()
    elif (selec_mode == str('3')):
       pass
    else:
       logging.debug("There isn't this mode")
       rospy.loginfo("There isn't this mode")
-      sys.exit()
+      exit()
 
-   
    #Menu 
    def menu():
       print("Select")
