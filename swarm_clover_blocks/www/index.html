@@ -171,7 +171,6 @@
 			<div class="field">
 				<span class="iconify" data-icon="bi:boxes"></span>
 				<input type="number" id="txt" onkeyup="rage_enforced()" min="0" max="20" stpe="1">
-				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>Launch mode </p>
@@ -182,7 +181,6 @@
 					<option value="simulation"> Simulation </option>
 					<option value="navigation"> Navigation </option>
 				</select>
-				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>initial formation </p>
@@ -193,15 +191,21 @@
 					<option value="Square"> Square </option>
 					<option value="Other"> Other </option>
 				</select>
-				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- tentando Jinja2, não ta indo -->
-			<div>
+			<!-- tentando Jinja2, mas não ta indo legal -->
+			<!-- <div>
 				{ % if True % }
 					test
 				{ % endif % }
+			</div> -->
+
+			<div class="field" style="width: auto;">
+				<i class="url-icon uil uil-link"></i>
+				<input type="text">
+				<!-- pegar botão bonito -->
+				<button> copy </button>
 			</div>
 		</form>
 	</div>
