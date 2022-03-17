@@ -2,11 +2,11 @@ import logging
 import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseArray, Pose
-from swarm_in_blocks.msg import SwarmState
+from swarm_in_blocks.msg import SwarmApiState
 
 class SwarmPublisher:
     def __init__(self):
-        self.state_pub = rospy.Publisher("~state", SwarmState, queue_size=10)
+        self.state_pub = rospy.Publisher("~state", SwarmApiState, queue_size=10)
         self.formation_name_pub = rospy.Publisher("~formation/name", String, queue_size=10)
         self.formation_pose_pub = rospy.Publisher("~formation/pose", Pose, queue_size=10)
         self.formation_coords_pub = rospy.Publisher("~formation/coordinates", PoseArray, queue_size=10)
