@@ -44,6 +44,7 @@ class ImageViewApp(wx.App):
         
         _, _, max_width_x, max_width_y = display.GetGeometry()
         self.window_size = (max_width_x*2//3, max_width_y*5//6)
+        print(self.window_size)
         # wx
         self.frame = wx.Frame(None, title = "First Person View - Swarm In Blocks",  style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, size=self.window_size)
         # self.frame = wx.Frame(None, title = "ROS Image View", size=self.window_size)
@@ -60,11 +61,11 @@ class ImageViewApp(wx.App):
     def InitUI(self):
         self.panel_div_y = int(3/5*self.window_size[1])
         self.initial_panel_pos = (0, self.panel_div_y)
-        panel_size_y = int(1/3*self.window_size[1])
+        panel_size_y = int(2/3*self.window_size[1])
         self.initial_panel_size = (self.window_size[0], panel_size_y)
         
         self.midp = wx.Panel(self.panel, pos = self.initial_panel_pos, size=self.initial_panel_size)
-        self.midp.SetBackgroundColour("#000000")
+        self.midp.SetBackgroundColour("black")
         sizer = wx.GridBagSizer(4,2)
 
         # configuraçao da GUI (parte interativa)
@@ -76,23 +77,38 @@ class ImageViewApp(wx.App):
         # sizer.Add(text, (0,0), (1,1), wx.ALIGN_CENTER, 0)
         
         self.list = wx.Choice(self.midp, choices=clovers)
-        sizer.Add(self.list, (1,0), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(self.list, (1,5), (1,1), wx.ALIGN_CENTER, 10)
 
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
         self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
-        sizer.Add(self.toggle, (2,0), (1,1),  wx.ALIGN_CENTER, 10)
+        sizer.Add(self.toggle, (2,5), (1,1),  wx.ALIGN_CENTER, 10)
 
         icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        sizer.Add(icon, (3,0), (1,1), wx.ALIGN_CENTER, 10)
-        icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(icon, (3,5), (1,1), wx.ALIGN_CENTER, 10)
+        # icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
+        # sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
+
+        # line
+        line = wx.StaticLine(self.midp)
+        sizer.Add(line, pos=(1, 6), span=(7, 1),
+            flag=wx.EXPAND|wx.BOTTOM, border=50)
+
+        control_text = wx.StaticText(self.midp)
+        control_text.SetFont(font)
+        # sizer.Add(control_text, pos=(3, 8), flag=wx.ALIGN_CENTER)
+
+        # joystick addition
+        joystick = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'joy.jpg')))
+        # sizer.Add(joystick, (3, 1), (1, 1), wx.ALIGN_CENTER, 10)
         
-        sizer.AddGrowableRow(0)
-        sizer.AddGrowableRow(1)
-        sizer.AddGrowableRow(2)
-        sizer.AddGrowableCol(0)
-        sizer.AddGrowableCol(1)
+        joystick.SetPosition((self.window_size[0] - 300, 30))
+
+        # sizer.AddGrowableRow(0)
+        # sizer.AddGrowableRow(1)
+        # sizer.AddGrowableRow(2)
+        # sizer.AddGrowableCol(0)
+        # sizer.AddGrowableCol(1)
         self.midp.SetSizer(sizer)
         
         # Keybidings events:
