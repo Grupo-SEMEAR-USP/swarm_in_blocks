@@ -201,7 +201,7 @@
 			
 			<div class="tooltip">
 				<center>
-					<button class="copy-button" onclick="myFunction()" onmouseout="outFunc()">
+					<button class="copy-button" type="button" onclick="copy()" onmouseout="outTooltip()">
 						<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
 						<span class="iconify" data-icon="ep:copy-document"></span>
 					</button>
@@ -224,7 +224,7 @@
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
-				function myFunction() {
+				function copy() {
 					var copyText = document.getElementById("output_box");
 					copyText.select();
 					copyText.setSelectionRange(0, 99999);
@@ -233,7 +233,7 @@
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copied: " + copyText.value;
 				}
-				function outFunc() {
+				function outTooltip() {
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copy to clipboard";
 				}
