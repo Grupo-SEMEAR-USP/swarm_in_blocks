@@ -489,7 +489,7 @@ class Swarm:
       for idx, clover in enumerate(self.swarm):
          if(str == "triangle"):
             coord = self.des_formation_coords
-            if(((L/2) - coord[idx][1]>=0) and (coord[idx][0]>0)):
+            if((L/2)>=coord[idx][1] and coord[idx][0]>0):
                thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
             
             elif(((L/2) - coord[idx][1]<0) and (coord[idx][0]>0)):
