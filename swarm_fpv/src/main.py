@@ -94,6 +94,11 @@ class ImageViewApp(wx.App):
         sizer.Add(line, pos=(1, 6), span=(7, 1),
             flag=wx.EXPAND|wx.BOTTOM, border=50)
 
+        # line2 = wx.StaticLine(self.midp)
+        # sizer.Add(line2, pos=(0, 1), span=(1, 5),
+        #     flag=wx.EXPAND|wx.BOTTOM, border=50)
+
+        # text
         control_text = wx.StaticText(self.midp)
         control_text.SetFont(font)
         # sizer.Add(control_text, pos=(3, 8), flag=wx.ALIGN_CENTER)
