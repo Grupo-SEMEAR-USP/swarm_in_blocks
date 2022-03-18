@@ -334,32 +334,152 @@ class Swarm:
       
       self.curr_formation_coords =  self.des_formation_coords
    
-   def landAll(self):
-      coord = np.empty((0,4))
-      logging.debug(f"{self.num_of_clovers} drones landing")
-      rospy.loginfo(f"{self.num_of_clovers} drones landing")
-      for clover in self.swarm:
-         clover.land()
-         point = [clover.init_coord[0], clover.init_coord[1],0,1]
-         coord = np.concatenate((coord,[point]))
-      self.curr_formation_coords = coord
-
-      self.des_formation_coords = self.init_formation_coords
-      self.des_formation_coords[:,2] = 0
+   def ledAll(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting all drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones led")
 
       threads = []
       for idx, clover in enumerate(self.swarm):
-         x = self.des_formation_coords[idx][0] - clover.init_coord[0]
-         y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.land, kwargs=dict(x=x,y=y,z=z))
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
          thrd.start()
          threads.append(thrd)
       
       for thrd in threads:
-         thrd.join()
+         thrd.join(timeout=1)
+
+   def ledEven(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if (idx%2 == 0):
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue   
       
-      self.curr_formation_coords =  self.des_formation_coords
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def ledOdd(self, effect, red, green, blue):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         if idx%2 != 0:
+            thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+            thrd.start()
+            threads.append(thrd)
+         else:
+            continue
+               
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
+   def led_One_by_One(self):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+
+         effect = str(input("input led effect: "))
+         red = int(input("Insert the red color (0-255): "))
+         green = int(input("Insert the green color (0-255): "))
+         blue = int(input("Insert the blue color (0-255): "))
+
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
+         thrd.start()
+         threads.append(thrd)
+
+      for thrd in threads:
+         thrd.join(timeout=1)
+   
+   def support_led_formation_2D(self, shape, N):
+      color = np.empty((0,3), dtype=int)
+
+      if(shape == "square" or shape == "circle"):
+         side = 2
+
+      if(shape == "triangle"):
+         side = 3
+
+      if(shape == "cube"):
+         side = int(np.cbrt(N))
+
+      for i in range (side):
+            red = int(input(f"Insert the red color {i+1} (0-255): "))
+            green = int(input(f"Insert the green color {i+1} (0-255): "))
+            blue = int(input(f"Insert the blue color {i+1} (0-255): "))
+            list_color = [red, green, blue]
+            color = np.concatenate((color,[list_color]))
+      
+      return color
+
+   def ledFormation2D(self, effect, str, L, N):
+      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
+      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
+      threads = []
+      color = self.support_led_formation_2D(str, N)
+      n = np.cbrt(N)
+      z = 1
+      coord = self.des_formation_coords
+      lista = [None] * N
+      listaz = [None] * int(n)
+
+      for i in range(0, int(n)):
+         listaz[i] = z
+         z = z + L/(n-1)
+
+      for idx, clover in enumerate(self.swarm):
+         if(str == "triangle"):
+            if(((L/2) - coord[idx][1]>=0) and (coord[idx][0]>0)):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            elif(((L/2) - coord[idx][1]<0) and (coord[idx][0]>0)):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+            elif(coord[idx][0]==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+         
+         if(str == "square"):
+            if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+               
+            else:
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               
+
+         if(str == "circle"):        
+            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]<=0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]>0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+            if((L/2) - coord[idx][1]<0 and (L/2)-coord[idx][0]<=0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+            
+            else:
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[3][0], g=color[3][1], b=color[3][2]))
+         
+         if(str == "cube"):
+            for i in range(0, int(n)):
+               if (coord[idx][2] == float(listaz[i])):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[i][0], g=color[i][1], b=color[i][2]))
+
+         
+      for idx, clover in enumerate(self.swarm):
+         thrd = lista[idx] 
+         thrd.start()
+         threads.append(thrd) 
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
 
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
@@ -867,6 +987,13 @@ if __name__ == "__main__":
          swarm.ledEven(effect, red, green, blue)
 
       elif (key == str('led3')):
+         strg = str(input("input formation type: "))
+         L = int(input("input formation length: "))
+         effect = str(input("input led effect: "))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
+         swarm.ledFormation2D(effect,strg,L,N)
+
+      elif (key == str('led4')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
          green = int(input("Insert the green color (0-255): "))
