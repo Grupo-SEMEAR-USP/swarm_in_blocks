@@ -200,15 +200,15 @@
 			<textarea readonly class="output_box" value="" id="output_box" rows="3" disabled></textarea>
 			
 			<div class="tooltip">
-				<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
 				<center>
-					<button class="copy-button" onclick="copytoclipboard()" onmouseout="outtooltip()">
+					<button class="copy-button" onclick="myFunction()" onmouseout="outFunc()">
+						<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
 						<span class="iconify" data-icon="ep:copy-document"></span>
 					</button>
 				</center>
 			</div>
 
-				<script>
+			<script>
 				function setOutput(){
 
 					// command create
@@ -224,7 +224,7 @@
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
-				function copytoclipboard() {
+				function myFunction() {
 					var copyText = document.getElementById("output_box");
 					copyText.select();
 					copyText.setSelectionRange(0, 99999);
@@ -233,12 +233,10 @@
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copied: " + copyText.value;
 				}
-				
-				function outtooltip() {
+				function outFunc() {
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copy to clipboard";
 				}
-
 			</script>
 		</form>
 	</div>
