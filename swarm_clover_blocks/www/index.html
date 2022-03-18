@@ -188,9 +188,11 @@
 			<div class="field">
 				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
 				<select name="Initial formation" id="formation" onchange="setOutput()">
-					<option value="Line"> Line </option>
-					<option value="Square"> Square </option>
-					<option value="Other"> Other </option>
+					<option value="line"> Line </option>
+					<option value="circle"> Circle </option>
+					<option value="full_square"> Full Square </option>
+					<option value="empty_square"> Empty Square </option>
+
 				</select>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
@@ -201,7 +203,7 @@
 			
 			<div class="tooltip">
 				<center>
-					<button class="copy-button" onclick="myFunction()" onmouseout="outFunc()">
+					<button class="copy-button" type="button" onclick="copy()" onmouseout="outTooltip()">
 						<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
 						<span class="iconify" data-icon="ep:copy-document"></span>
 					</button>
@@ -224,7 +226,7 @@
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
-				function myFunction() {
+				function copy() {
 					var copyText = document.getElementById("output_box");
 					copyText.select();
 					copyText.setSelectionRange(0, 99999);
@@ -233,7 +235,7 @@
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copied: " + copyText.value;
 				}
-				function outFunc() {
+				function outTooltip() {
 					var tooltip = document.getElementById("myTooltip");
 					tooltip.innerHTML = "Copy to clipboard";
 				}
