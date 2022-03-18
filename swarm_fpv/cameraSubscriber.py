@@ -26,7 +26,7 @@ import os
 from threading import Thread
 
 # Local imports
-from cloverKeyboard import
+# import 
 
 subscribers = [] # lista com o atual subscriber
 
