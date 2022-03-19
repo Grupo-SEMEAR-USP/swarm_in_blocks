@@ -15,6 +15,7 @@ from threading import Thread
 import time
 import sys
 import os
+import json
 import traceback
 import logging
 import math
@@ -613,6 +614,27 @@ class Swarm:
    def visualizeMesh(self):
       formation3D.visualizeMesh(self.__mesh)
    
+   def loadFormation(self):
+      # with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.npy', 'rb') as f:
+      #    self.des_formation_coords = np.load(f)
+      # print(self.des_formation_coords)
+
+      with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.json') as json_file:
+         loaded_list = json.load(json_file)
+      for i in loaded_list:
+        loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
+      name = loaded_list['formation {}'.format(len(loaded_list)-1)]['name']
+      coord = loaded_list['formation {}'.format(len(loaded_list)-1)]['coord']
+
+      # Update formation name
+      loaded_formation_coords = coord
+      loaded_formation_name = name
+      self.des_formation_coords = coord
+      self.des_formation_name = name
+      #self.formation_list['formation {}'.format(self.op_num)] = {'name':loaded_formation_name, 'coord':loaded_formation_coords}
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+      self.op_num += 1
+
    #Transformations
    def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
@@ -853,6 +875,9 @@ if __name__ == "__main__":
 
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
+
+      elif (key == str('Ld') or key == str('load')):
+         swarm.loadFormation()
 
       elif (key == str('led')):
          effect = str(input("input led effect: "))

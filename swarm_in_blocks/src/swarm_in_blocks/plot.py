@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
 import os
 import sys
+import json
 from PIL import ImageTk, Image
 
 # Defining colors
@@ -27,8 +28,14 @@ def save(self):
     coord = self.formation_list['formation {}'.format(len(self.formation_list)-1)]['coord']
     logging.debug("Your last formation was saved. \nType of the formation: {}".format(name))
     # Create a file and save the last coordiante on it (Commented to not create the file everytime for now)
-    # with open('last_formation.npy', 'wb') as f:
+    # with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.npy', 'wb') as f:
     #     np.save(f, coord)
+    
+    for i in self.formation_list:
+        self.formation_list[i]['coord'] = self.formation_list[i]['coord'].tolist()
+    with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.json', 'w', encoding='utf-8') as f:
+        print(type(self.formation_list))
+        json.dump(self.formation_list, f, ensure_ascii=False, indent=4)
 
     # ESBOÇO PARA FUNÇÃO DE LOAD
     # with open(os.path.dirname(os.path.abspath(__file__))+'/last_formation.npy', 'rb') as f:
