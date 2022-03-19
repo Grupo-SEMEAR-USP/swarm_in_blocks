@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # ROS modedules
+from re import A
 from matplotlib.pyplot import connect
 import rospy
 from mavros_msgs import srv
@@ -326,7 +327,34 @@ class Swarm:
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.05, auto_arm=True))
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, auto_arm=True))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join()
+      
+      self.curr_formation_coords =  self.des_formation_coords
+
+   def landAll(self):
+      coord = np.empty((0,4))
+      logging.debug(f"{self.num_of_clovers} drones landing")
+      rospy.loginfo(f"{self.num_of_clovers} drones landing")
+      for clover in self.swarm:
+         clover.land()
+         point = [clover.init_coord[0], clover.init_coord[1],0,1]
+         coord = np.concatenate((coord,[point]))
+      self.curr_formation_coords = coord
+
+      self.des_formation_coords = self.init_formation_coords
+      self.des_formation_coords[:,2] = 0
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         x = self.des_formation_coords[idx][0] - clover.init_coord[0]
+         y = self.des_formation_coords[idx][1] - clover.init_coord[1]
+         z = self.des_formation_coords[idx][2]  
+         thrd = Thread(target=clover.land, kwargs=dict(x=x,y=y,z=z))
          thrd.start()
          threads.append(thrd)
       
@@ -445,11 +473,11 @@ class Swarm:
       if(shape == "triangle"):
          side = 3
 
-      if(shape == "circle" & (N%2) == 1):
+      if((shape == "circle") & ((N%2) == 0)):
          side = 2
 
-      if(shape == "circle" & (N%2) != 1):
-         side = 2
+      if((shape == "circle") & ((N%2) != 0)):
+         side = 3
 
       if(shape == "cube"):
          side = int(np.cbrt(N))
@@ -473,10 +501,29 @@ class Swarm:
       coord = self.des_formation_coords
       lista = [None] * N
       listaz = [None] * int(n)
+      lista0 = [None] * N
+      lista1 = [None] * N
+      lista2 = [None] * N
+
+      a = 0
+      b = 1
+      c = 2
 
       for i in range(0, int(n)):
          listaz[i] = z
          z = z + L/(n-1)
+
+      for i in range(0, N):
+         lista0[i] = a
+         a += 3
+
+      for i in range(0, N):
+         lista1[i] = b
+         b += 3      
+
+      for i in range(0, N):
+         lista2[i] = c
+         c += 3
 
       for idx, clover in enumerate(self.swarm):
          if(str == "triangle"):
@@ -497,22 +544,23 @@ class Swarm:
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
                
 
-         if(str == "circle" & (N%2) == 1):        
+         if((str == "circle") and ((N%2) == 0)):        
             if(idx%2 == 0):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2])) 
             
             else:
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
 
-         if(str == "circle" & (N%2) != 1):        
-            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]<=0):
-               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+         if((str == "circle") and ((N%2) != 0)):        
+            for i in range(0, N):
+               if(idx == lista0[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
             
-            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]>0):
-               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               if(idx == lista1[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
             
-            else((L/2) - coord[idx][1]<0 and (L/2)-coord[idx][0]<=0):
-               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))      
+               if(idx == lista2[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))      
          
          if(str == "cube"):
             for i in range(0, int(n)):
