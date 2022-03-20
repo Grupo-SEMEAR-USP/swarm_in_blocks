@@ -160,11 +160,11 @@ def triangle(N, L=2):
         
         if(l>=S):
             y=c3
-            c3+=1
+            c3+=L/Ld
             if(S>2):
                 x=0
             if(S!=N):
-                z=3  
+                z=1.5  
 
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))

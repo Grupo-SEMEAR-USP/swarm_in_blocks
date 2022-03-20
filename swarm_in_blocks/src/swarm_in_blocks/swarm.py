@@ -444,25 +444,6 @@ class Swarm:
       
       for thrd in threads:
          thrd.join(timeout=1)
-
-   def led_One_by_One(self):
-      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
-      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
-
-      threads = []
-      for idx, clover in enumerate(self.swarm):
-
-         effect = str(input("input led effect: "))
-         red = int(input("Insert the red color (0-255): "))
-         green = int(input("Insert the green color (0-255): "))
-         blue = int(input("Insert the blue color (0-255): "))
-
-         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
-         thrd.start()
-         threads.append(thrd)
-
-      for thrd in threads:
-         thrd.join(timeout=1)
    
    def support_led_formation_2D(self, shape, N):
       color = np.empty((0,3), dtype=int)
@@ -491,11 +472,11 @@ class Swarm:
       
       return color
 
-   def ledFormation2D(self, effect, str, L, N):
+   def ledFormation2D(self, effect, shape, L, N):
       logging.debug(f"{self.num_of_clovers} setting odd number drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
       threads = []
-      color = self.support_led_formation_2D(str, N)
+      color = self.support_led_formation_2D(shape, N)
       n = np.cbrt(N)
       z = 1
       coord = self.des_formation_coords
@@ -508,7 +489,7 @@ class Swarm:
       a = 0
       b = 1
       c = 2
-
+      print(coord)
       for i in range(0, int(n)):
          listaz[i] = z
          z = z + L/(n-1)
@@ -526,17 +507,18 @@ class Swarm:
          c += 3
 
       for idx, clover in enumerate(self.swarm):
-         if(str == "triangle"):
-            if(((L/2) - coord[idx][1]>=0) and (coord[idx][0]>0)):
+         if(shape == "triangle"):
+            if(coord[idx][1]<=0 and coord[idx][0]>0):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
-            
-            elif(((L/2) - coord[idx][1]<0) and (coord[idx][0]>0)):
+               print("teste1")
+               
+            elif(coord[idx][1]>0 and coord[idx][0]>0):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
             
             elif(coord[idx][0]==0):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
          
-         if(str == "square"):
+         if(shape == "square"):
             if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
                
@@ -544,14 +526,14 @@ class Swarm:
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
                
 
-         if((str == "circle") and ((N%2) == 0)):        
+         if((shape == "circle") and ((N%2) == 0)):        
             if(idx%2 == 0):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2])) 
             
             else:
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
 
-         if((str == "circle") and ((N%2) != 0)):        
+         if((shape == "circle") and ((N%2) != 0)):        
             for i in range(0, N):
                if(idx == lista0[i]):
                   lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
@@ -562,7 +544,7 @@ class Swarm:
                if(idx == lista2[i]):
                   lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))      
          
-         if(str == "cube"):
+         if(shape == "cube"):
             for i in range(0, int(n)):
                if (coord[idx][2] == float(listaz[i])):
                   lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[i][0], g=color[i][1], b=color[i][2]))
