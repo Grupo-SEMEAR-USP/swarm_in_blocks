@@ -82,10 +82,10 @@ class ImageViewApp(wx.App):
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
         self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
-        sizer.Add(self.toggle, (2,5), (1,1),  wx.ALIGN_CENTER, 10)
+        sizer.Add(self.toggle, (3,9), (1,1),  wx.ALIGN_CENTER, 10)
 
         icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        sizer.Add(icon, (3,5), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(icon, (2,5), (1,1), wx.ALIGN_CENTER, 10)
         # icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
         # sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
 
