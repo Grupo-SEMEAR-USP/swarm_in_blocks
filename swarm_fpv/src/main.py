@@ -36,7 +36,8 @@ class ImageViewApp(wx.App):
         self.last_key = ''
         self.last_thrd = Thread()
         
-        max_width_x, max_width_y = wx.DisplaySize()
+        displays = (wx.Display(i) for i in range(wx.Display.GetCount()))
+        sizes = [display.GetGeometry().GetSize() for display in displays]
         self.window_size = (max_width_x*2//3, max_width_y*5//6)
         # wx
         self.frame = wx.Frame(None, title = "First Person View - Swarm In Blocks",  style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, size=self.window_size)

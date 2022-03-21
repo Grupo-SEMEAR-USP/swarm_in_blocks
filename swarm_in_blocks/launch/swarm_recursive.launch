@@ -1,35 +1,64 @@
 <?xml version="1.0"?>
 
 <launch>
-    <arg name="num" default="1"/>
-    <arg name="ID" default="0"/> 
-    
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
-        <arg name="x" value="0"/>
-        <arg name="y" value="$(arg ID)"/>
-        <arg name="z" value="0.3"/>
-        <arg name="R" value="0"/>
-        <arg name="P" value="0"/>
-        <arg name="Y" value="0"/>
-        <arg name="ID" value="$(arg ID)"/>
-    </include>
-        
-    <!-- chamar outros includes recursivamente -->
-    
-    <include file="$(find swarm_in_blocks)/launch/swarm_recursive.launch" if="$(eval arg('num') - 1 > 0)">
-	    <arg name="num" value="$(eval arg('num')-1)"/>
+    <!-- MAVROS posix SITL environment launch script -->
+    <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->
+    <!-- vehicle model and world -->
 
-        <arg name="ID" value="$(eval arg('ID')+1)" unless="$(eval arg('ID') - 9 == 0)"/>
-        <arg name="ID" value="$(eval arg('ID')+2)" if="$(eval arg('ID') - 9 == 0)"/>
+    <!-- number of clovers / Number of iterations -->
+    <arg name="num" default="2"/>
+    <arg name="led" default="true"/>
+    <arg name="camera" default="false"/>
+    <arg name="rangefinder" default="true"/>
+    <arg name="flashlight" default="false"/>
+
+    <!-- px4 configs -->
+    <arg name="est" default="ekf2"/>
+    <arg name="vehicle" default="clover"/>
+    
+    <!-- gazebo configs -->
+    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="true"/>
+    <arg name="paused" default="false"/>
+    
+    <!-- log formatting -->
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}]: ${logger}: ${message}"/>
+
+     <!-- Update static directory -->
+    <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
+        <!-- <param name="default_package" value="clover"/> -->
+    </node>
+
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+        <!-- <args name="output" value="log"/> -->
     </include>
 
+    <!-- swarm clover blocks-->
+    <node pkg="swarm_clover_blocks" name="clover_blocks" type="clover_blocks"/>
+
+    <!-- swarm checker node -->
+    <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
+
+    <!-- Gazebo sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+        <arg name="paused" value="$(arg paused)"/>
+    </include>
+
+    <!-- Start calling with recursion -->
+    <include file="$(find swarm_in_blocks)/launch/include/single_vehicle_recursive.launch">
+        <arg name="num" value="$(arg num)"/>
+        <arg name="ID" value="0"/>
+        <arg name="led" value="$(arg led)"/>
+        <arg name="camera" value="$(arg camera)"/>
+        <arg name="rangefinder" value="$(arg rangefinder)"/>
+        <arg name="flashlight" value="$(arg flashlight)"/>
+    </include>
     
 </launch>
-
-
-
-<!-- to add more UAVs (up to 10):
-Increase the id
-Change the name space
-Set the FCU to default="udp://:14540+id@localhost:14550+id"
-Set the malink_udp_port to 14560+id) -->

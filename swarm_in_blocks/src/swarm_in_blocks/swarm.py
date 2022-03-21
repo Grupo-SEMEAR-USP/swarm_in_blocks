@@ -152,7 +152,7 @@ class Swarm:
       self.__meshzoo_names = ['christ_the_redeemer','motherland_calls']
 
    def __launchGazeboAndClovers(self):
-      launch.spawnGazeboAndVehicles(self.num_of_clovers, self.init_formation_coords)
+      launch.simulation(self.num_of_clovers, self.init_formation_coords)
    
    # Create clover objects and append to clover object list
    def __createCloversObjects(self):

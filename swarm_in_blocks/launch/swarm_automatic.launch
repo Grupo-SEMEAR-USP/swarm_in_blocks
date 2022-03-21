@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- mode -->
+    <arg name="mode" default="simulation"/>
+    <!-- number of clovers / Number of iterations -->
+    <arg name="num" default="2"/>
+    <arg name="formation" default="full_square"/>
+    <arg name="led" default="true"/>
+    <arg name="camera" default="false"/>
+    <arg name="rangefinder" default="true"/>
+    <arg name="flashlight" default="false"/>
+    
+    <node name="launch" pkg="swarm_in_blocks" type="launch.py" 
+            args="--mode $(arg mode)
+                --num $(arg num)
+                --formation $(arg formation)
+                --led $(arg led)
+                --camera $(arg camera)
+                --rangefinder $(arg rangefinder)" />
+
+</launch>

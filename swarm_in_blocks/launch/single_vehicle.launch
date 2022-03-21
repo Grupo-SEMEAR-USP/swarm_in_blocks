@@ -4,6 +4,12 @@
 <launch>
     <!-- Posix SITL environment launch script -->
     <!-- launchs PX4 SITL and spawns vehicle -->
+    <!-- led, camera, rangefinder and flashlight  -->
+    <arg name="led" default="true"/>
+    <arg name="camera" default="false"/>
+    <arg name="rangefinder" default="true"/>
+    <arg name="flashlight" default="false"/>
+
     <!-- vehicle pose -->
     <arg name="ID" default="0"/>
     <arg name="x" default="0"/>
@@ -47,9 +53,9 @@
         <!-- generate urdf vehicle model -->
         <arg name="cmd" default="$(find xacro)/xacro 
                                     $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=true
-                                    rangefinder:=false
-                                    led:=true 
+                                    main_camera:=$(arg camera)
+                                    rangefinder:=$(arg rangefinder)
+                                    led:=$(arg led) 
                                     gps:=true
                                     maintain_camera_rate:=false
                                     use_clover_physics:=false 
