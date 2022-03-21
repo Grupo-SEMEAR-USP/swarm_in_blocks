@@ -20,6 +20,7 @@ import json
 import traceback
 import logging
 import math
+import random
 
 # Local modules
 sys.path.insert(0, os.path.dirname(__file__))
@@ -136,7 +137,7 @@ class Swarm:
 
       # Led matrix
       self.led_effects_name = ''
-      self.led_effects = np.empty((0,3), dtype=int)
+      self.led_effects = []
 
       # Mode selected upon start
       self.mode = ''
@@ -412,6 +413,20 @@ class Swarm:
       for thrd in threads:
          thrd.join(timeout=1)
 
+   def ledRandom(self, effect):
+
+      logging.debug(f"{self.num_of_clovers} setting all drones random led color")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones random led color")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=random.randint(0, 255), g=random.randint(0, 255), b=random.randint(0, 255)))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
    def ledEven(self, effect, red, green, blue):
       logging.debug(f"{self.num_of_clovers} setting odd number drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
@@ -452,6 +467,9 @@ class Swarm:
          side = 2
 
       if(shape == "triangle"):
+         side = 2
+
+      if(shape == "pyramid"):
          side = 3
 
       if((shape == "circle") & ((N%2) == 0)):
@@ -485,10 +503,11 @@ class Swarm:
       lista0 = [None] * N
       lista1 = [None] * N
       lista2 = [None] * N
-
+      h = (np.sqrt(3)*L)/2
       a = 0
       b = 1
       c = 2
+      
       print(coord)
       for i in range(0, int(n)):
          listaz[i] = z
@@ -496,27 +515,21 @@ class Swarm:
 
       for i in range(0, N):
          lista0[i] = a
-         a += 3
-
-      for i in range(0, N):
          lista1[i] = b
-         b += 3      
-
-      for i in range(0, N):
          lista2[i] = c
+         a += 3
+         b += 3        
          c += 3
 
       for idx, clover in enumerate(self.swarm):
          if(shape == "triangle"):
-            if(coord[idx][1]<=0 and coord[idx][0]>0):
+            if(round(np.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2)))) == round(h*(2/3))):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
                print("teste1")
-               
-            elif(coord[idx][1]>0 and coord[idx][0]>0):
-               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
             
-            elif(coord[idx][0]==0):
-               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+            else:
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               print("teste2")
          
          if(shape == "square"):
             if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
@@ -548,8 +561,23 @@ class Swarm:
             for i in range(0, int(n)):
                if (coord[idx][2] == float(listaz[i])):
                   lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[i][0], g=color[i][1], b=color[i][2]))
+                  
+         if(shape == "pyramid"):
+            
+            if((idx-1)%3==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            
+            if((idx-2)%3==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+        
+            if((idx%3)==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
 
-         
+
+      print(lista)
+
       for idx, clover in enumerate(self.swarm):
          thrd = lista[idx] 
          thrd.start()
@@ -854,7 +882,7 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('pyramid', N, L)
-               rospy.sleep(5)
+               #rospy.sleep(5)
 
       elif (key == str('0')):
          swarm.returnToHome()
@@ -935,6 +963,13 @@ if __name__ == "__main__":
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledOdd(effect, red, green, blue)
+
+      elif (key == str('led5')):
+         #effect = str(input("input led effect: "))
+         effects_list = ['fill', 'fade', 'flash', 'blink', 'blink_fast', 'wipe', 'rainbow', 'rainbow_fill']
+         
+         effect = effects_list[random.randint(0, 7)]
+         swarm.ledRandom(effect)
       
       elif (key == str('e') or key == str('E')):
          break
