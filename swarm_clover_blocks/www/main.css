@@ -317,6 +317,7 @@ input:checked + .slider:before {
 .popup.show{
 	top: 50%;
 	opacity: 1;
+	padding-bottom: 5px;
 	pointer-events: auto;
 	transform:translate(-50%, -50%) scale(1);
 	transition: top 0s 0s ease-in-out,
@@ -410,25 +411,66 @@ header .close:hover{
 	background-color: transparent;
 }
 
-.field button{
+.output_box{
+	max-width: 100%;
+	width: 100%;
+	max-height: 200px;
+	height: 100%;
+	resize: none;
+	border: 1px solid #727070;
+	font-size: 15px;
+	border-radius: 4px;
+	padding: 0 5px;
+}
+
+.copy-button{
+	background: transparent;
+	border: none;
+	padding: 5px 160px;
+}
+.copy-button:hover{
+	background: #9b6ad4;
+	border-radius:5px;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 180px;
+	background-color: #555;
 	color: #fff;
-	padding: 5px 18px;
-	background: #7d2ae8;
-}
-.field button:hover{
-	background: #8d39fa;
-}
-.launch button{
-	color: #fff; 
-	padding: 5px 18px; 
-	background: #8d39fa;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px;
 	position: absolute;
-	top: 87%;
-	left: 70%;
+	z-index: 1;
+	bottom: 150%;
+	left: 50%;
+	margin-left: -75px;
+	opacity: 0;
+	transition: opacity 0.3s;
 }
-.launch button:hover{
-	background-color: rgb(154, 91, 212);
+
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
 }
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
 
 /* python/blockly switch */
 #tabs li {
@@ -513,10 +555,3 @@ body[data-tab="python"] #python { display: block !important; }
 	fill-opacity: .8;
 }
 
-.output_box{
-	max-width: 100%;
-	width: 100%;
-	max-height: 200px;
-	height: 100%;
-	resize: none;
-}

@@ -160,11 +160,11 @@ def triangle(N, L=2):
         
         if(l>=S):
             y=c3
-            c3+=1
+            c3+=L/Ld
             if(S>2):
                 x=0
             if(S!=N):
-                z=3  
+                z=1.5  
 
         point=[x,y,z,1]
         coord = np.concatenate((coord,[point]))
@@ -214,7 +214,7 @@ def sphere(N, L=2):
 def pyramid(N, L):
     coord = np.empty((0,4))
     Ld=2
-    c=1/2
+    c=1
     for index in range(N):
         if(index%3==0):
             if(index>3):
@@ -226,30 +226,21 @@ def pyramid(N, L):
         logging.debug(f"New Side = {Ld}")
         L=Ld    
     h = round(((np.sqrt(3)*L)/2),2)
-    L1=L
-    cpx=0
     cpy=0
     z=1
-    x=h/Ld
     for idx in range(N):
         if((idx-1)%3==0):
             point=[(L/Ld)*(cpy/2), L - (L/Ld)*(cpy/2), z, 1]
-            cpx+=1
             cpy+=1
-            z+=1
+            
             
         if((idx-2)%3==0):
-            point=[h - 0.4*(L/Ld)*(cpy)*round(np.sqrt(3),2) + c*(L/Ld), L/2, z, 1]
+            point=[h - 0.7*(L/Ld)*(cpy/2)*round(np.sqrt(3),2) + c*(L/Ld), L/2, z, 1]
+            z+=1
             
         
         if((idx%3)==0):
             point = [(L/Ld)*(cpy/2),(L/Ld)*(cpy/2), z, 1]
-        
-        if(idx == N-1):
-            if(N<10):
-                point=[h/2, L/2, z, 1]
-            else:
-                point=[h - 0.4*(L/Ld)*(cpy)*round(np.sqrt(3),2) + c*(L/Ld), L/2, z, 1]
         
 
         coord = np.concatenate((coord,[point]))

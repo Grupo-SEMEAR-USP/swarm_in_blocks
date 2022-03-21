@@ -1,13 +1,13 @@
 #!/usr/bin/python3
+#/clover0/main_camera/image_raw   #  <--- topic to be subscribed
 
-# Tools
-import time
-import wx
-from cv_bridge import CvBridge
-import cv2
-import numpy as np
-import os
-from threading import Thread
+
+"""
+usage:
+rosrun proteus_demo ImageView.py image:=/ATRV/CameraMain
+image:=/clover0/main_camera/image_raw
+image:=/clover0/main_camera/parameter_updates
+"""
 
 # ROS imports
 import roslib
@@ -15,10 +15,18 @@ roslib.load_manifest('rospy')
 roslib.load_manifest('sensor_msgs')
 import rospy
 from sensor_msgs.msg import CompressedImage
+from cv_bridge import CvBridge
 
-# Local import
-from cloverKeyboard import DroneKeyboard
+# Tools
+import time
+import wx
+import cv2
+import numpy as np
+import os
+from threading import Thread
 
+# Local imports
+# import 
 
 subscribers = [] # lista com o atual subscriber
 
@@ -36,24 +44,12 @@ class ImageViewApp(wx.App):
         self.last_key = ''
         self.last_thrd = Thread()
         
-<<<<<<< HEAD
-        displays = (wx.Display(i) for i in range(wx.Display.GetCount()))
-        sizes = [display.GetGeometry().GetSize() for display in displays]
-=======
-        # max_width_x, max_width_y = wx.DisplaySize()
-        # self.window_size = (max_width_x*2//3, max_width_y*5//6)
-
-        index = 0
-        display = wx.Display(index)
-        
-        _, _, max_width_x, max_width_y = display.GetGeometry()
->>>>>>> da4a1b4f9aefdc2c784afbaa31d0c8d4aad1e730
+        max_width_x, max_width_y = wx.DisplaySize()
         self.window_size = (max_width_x*2//3, max_width_y*5//6)
-        print(self.window_size)
         # wx
         self.frame = wx.Frame(None, title = "First Person View - Swarm In Blocks",  style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, size=self.window_size)
         # self.frame = wx.Frame(None, title = "ROS Image View", size=self.window_size)
-        self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'assets', 'logo.ico')))
+        self.frame.SetIcon(wx.Icon(os.path.join(node_path, 'logo.ico')))
         self.panel = ImageViewPanel(self.frame)
         self.InitUI()
         self.panel.setup(self)
@@ -66,11 +62,11 @@ class ImageViewApp(wx.App):
     def InitUI(self):
         self.panel_div_y = int(3/5*self.window_size[1])
         self.initial_panel_pos = (0, self.panel_div_y)
-        panel_size_y = int(2/3*self.window_size[1])
+        panel_size_y = int(1/3*self.window_size[1])
         self.initial_panel_size = (self.window_size[0], panel_size_y)
         
         self.midp = wx.Panel(self.panel, pos = self.initial_panel_pos, size=self.initial_panel_size)
-        self.midp.SetBackgroundColour("black")
+        self.midp.SetBackgroundColour("#000000")
         sizer = wx.GridBagSizer(4,2)
 
         # configuraçao da GUI (parte interativa)
@@ -82,43 +78,23 @@ class ImageViewApp(wx.App):
         # sizer.Add(text, (0,0), (1,1), wx.ALIGN_CENTER, 0)
         
         self.list = wx.Choice(self.midp, choices=clovers)
-        sizer.Add(self.list, (1,5), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(self.list, (1,0), (1,1), wx.ALIGN_CENTER, 10)
 
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
         self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
-        sizer.Add(self.toggle, (3,9), (1,1),  wx.ALIGN_CENTER, 10)
+        sizer.Add(self.toggle, (2,1), (1,1),  wx.ALIGN_CENTER, 10)
 
-        icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        sizer.Add(icon, (2,5), (1,1), wx.ALIGN_CENTER, 10)
-        # icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        # sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
-
-        # line
-        line = wx.StaticLine(self.midp)
-        sizer.Add(line, pos=(1, 6), span=(7, 1),
-            flag=wx.EXPAND|wx.BOTTOM, border=50)
-
-        # line2 = wx.StaticLine(self.midp)
-        # sizer.Add(line2, pos=(0, 1), span=(1, 5),
-        #     flag=wx.EXPAND|wx.BOTTOM, border=50)
-
-        # text
-        control_text = wx.StaticText(self.midp)
-        control_text.SetFont(font)
-        # sizer.Add(control_text, pos=(3, 8), flag=wx.ALIGN_CENTER)
-
-        # joystick addition
-        joystick = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'joy.jpg')))
-        # sizer.Add(joystick, (3, 1), (1, 1), wx.ALIGN_CENTER, 10)
+        icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        sizer.Add(icon, (3,0), (1,1), wx.ALIGN_CENTER, 10)
+        icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'verde-claro.png')))
+        sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
         
-        joystick.SetPosition((self.window_size[0] - 300, 30))
-
-        # sizer.AddGrowableRow(0)
-        # sizer.AddGrowableRow(1)
-        # sizer.AddGrowableRow(2)
-        # sizer.AddGrowableCol(0)
-        # sizer.AddGrowableCol(1)
+        sizer.AddGrowableRow(0)
+        sizer.AddGrowableRow(1)
+        sizer.AddGrowableRow(2)
+        sizer.AddGrowableCol(0)
+        sizer.AddGrowableCol(1)
         self.midp.SetSizer(sizer)
         
         # Keybidings events:
@@ -127,11 +103,11 @@ class ImageViewApp(wx.App):
         self.Bind(wx.EVT_CHAR, self.OnKeyDown)
         # self.Bind(wx.EVT_SIZE, self.OnResizeWindow)
         self.toggle.SetFocus()
-    
-    # def OnResizeWindow(self, event):
-    #     pass
-    #     # self.frame.Maximize(True)
-    #     # event.Skip()
+
+    def OnResizeWindow(self, event):
+        pass
+        # self.frame.Maximize(True)
+        # event.Skip()
     
     def onChoice(self, event): # Deals with Choice event
         choice = self.list.GetCurrentSelection() # Return the wished id  
@@ -147,12 +123,12 @@ class ImageViewApp(wx.App):
         keyboard_clover.clear()
         
         # Creates a new drone object that contains controlling methods 
-        drone = DroneKeyboard(choice)
+        drone = new_pynput.DroneKeyboard(choice)
         keyboard_clover.append(drone)
         print(keyboard_clover)
         # print(dir(drone))
 
-    def OnKeyDown(self, event):
+    def OnKeyDown(self, event=None):
         #print(event.GetKeyCode())
         print('key down')
         self.toggle.SetFocus()
@@ -174,7 +150,7 @@ class ImageViewApp(wx.App):
             thrd.start()
             self.last_thrd = thrd
 
-    def OneKeyUp(self, event):
+    def OneKeyUp(self, event=None):
         print('key released')
         print(len(keyboard_clover))
         self.last_key = ''
@@ -182,17 +158,14 @@ class ImageViewApp(wx.App):
         # Stops all objects that are currently being used
         if keyboard_clover:
             for obj in keyboard_clover:
+                print("Waiting for clover response...")
                 tick = time.time()
-                if self.last_thrd.is_alive():
-                    event.Skip()
-                    return
-                # while self.last_thrd.is_alive():
-                    
-                #     if time.time()-tick > 5:
-                #         print("Clover do not respond! Waiting...")
-                #     if time.time()-tick > 10:
-                #         print("Clover might be disconnected. Stop waiting")
-                #         break
+                while self.last_thrd.is_alive():
+                    if time.time()-tick > 5:
+                        print("Clover do not respond! Waiting...")
+                    if time.time()-tick > 10:
+                        print("Clover might be disconnected. Stop waiting")
+                        break
                     # self.last_thrd.join()
                     
                 thrd = Thread(target=obj.stop)
@@ -239,11 +212,23 @@ class ImageViewPanel(wx.Panel):
         self.staticbmp.CopyFromBuffer(self.img)
         self.Refresh()
 
+
+t0 = 0
 def handle_image(ros_image):
     # make sure we update in the UI thread
+    
+    # encoded = np.frombuffer(image.data, np.uint32)
+    # image = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
     cv_image = bridge.compressed_imgmsg_to_cv2(ros_image)
     cv_image = cv2.resize(cv_image, (640,480))
     wx.CallAfter(wx.GetApp().panel.update, cv_image)
+    global t0
+    #print(time.perf_counter() - t0)
+    t0 = time.perf_counter()
+    #wx.GetApp().panel.update(image)
+    # http://wiki.wxpython.org/LongRunningTasks
+
+
 
 # Key input analisys 
 def mov_control(key):
@@ -296,12 +281,9 @@ def mov_control(key):
 
 # Filtrates all topics in order to find how many drones are publishing
 # It's only called once
-#/clover0/main_camera/image_raw   #  <--- topic to be subscribed
 def topics_sorter():
     id_r = 0
-    topic_list = rospy.get_published_topics()
-    topic_list.sort()
-    for str in topic_list:
+    for str in rospy.get_published_topics():
         ref = '/main_camera/image_raw'
         refc = '/main_camera/image_raw/c'
         reft = '/main_camera/image_raw/t'
@@ -310,11 +292,13 @@ def topics_sorter():
             clovers.append(f'clover{id_r}')
             id_r = id_r + 1
 
+
 def main():
     app = ImageViewApp()
     rospy.init_node('ImageView')
     app.MainLoop()
     return 0
+
 
 if __name__ == "__main__":
     #threading.Thread(target=init_pynput).start()

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # ROS modedules
+from re import A
 from matplotlib.pyplot import connect
 import rospy
 from mavros_msgs import srv
@@ -15,9 +16,11 @@ from threading import Thread
 import time
 import sys
 import os
+import json
 import traceback
 import logging
 import math
+import random
 
 # Local modules
 sys.path.insert(0, os.path.dirname(__file__))
@@ -122,7 +125,7 @@ class Swarm:
       # Current formation name and coord in homogeneous line vector type 
       # Ex of self.curr_form_coords: [[x0,y0,z0,1],[x1,y1,z1,1], [x2,y2,z2,1], ...]
       self.curr_formation_name = ''
-      self.curr_formation_coords = []
+      self.curr_formation_coords = np.empty((0,4))
       
       # X Y Z Roll Pitch Yaw format
       self.curr_formation_pose = np.array([0,0,0])
@@ -325,7 +328,7 @@ class Swarm:
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.05, auto_arm=True))
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, auto_arm=True))
          thrd.start()
          threads.append(thrd)
       
@@ -333,7 +336,7 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
-   
+
    def landAll(self):
       coord = np.empty((0,4))
       logging.debug(f"{self.num_of_clovers} drones landing")
@@ -359,7 +362,7 @@ class Swarm:
       for thrd in threads:
          thrd.join()
       
-      self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_coords = self.des_formation_coords
 
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
@@ -410,6 +413,20 @@ class Swarm:
       for thrd in threads:
          thrd.join(timeout=1)
 
+   def ledRandom(self, effect):
+
+      logging.debug(f"{self.num_of_clovers} setting all drones random led color")
+      rospy.loginfo(f"{self.num_of_clovers} setting all drones random led color")
+
+      threads = []
+      for idx, clover in enumerate(self.swarm):
+         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=random.randint(0, 255), g=random.randint(0, 255), b=random.randint(0, 255)))
+         thrd.start()
+         threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.join(timeout=1)
+
    def ledEven(self, effect, red, green, blue):
       logging.debug(f"{self.num_of_clovers} setting odd number drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
@@ -432,7 +449,7 @@ class Swarm:
 
       threads = []
       for idx, clover in enumerate(self.swarm):
-         if idx%2 != 0:
+         if (idx%2 != 0):
             thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
             thrd.start()
             threads.append(thrd)
@@ -442,34 +459,27 @@ class Swarm:
       
       for thrd in threads:
          thrd.join(timeout=1)
-
-   def led_One_by_One(self):
-      logging.debug(f"{self.num_of_clovers} setting odd number drones led")
-      rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
-
-      threads = []
-      for idx, clover in enumerate(self.swarm):
-
-         effect = str(input("input led effect: "))
-         red = int(input("Insert the red color (0-255): "))
-         green = int(input("Insert the green color (0-255): "))
-         blue = int(input("Insert the blue color (0-255): "))
-
-         thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=red, g=green, b=blue))
-         thrd.start()
-         threads.append(thrd)
-
-      for thrd in threads:
-         thrd.join(timeout=1)
    
-   def support_led_formation_2D(self, shape):
-      color = np.empty((0,3))
-      
-      if(shape == "square" or shape == "circle"):
+   def support_led_formation_2D(self, shape, N):
+      color = np.empty((0,3), dtype=int)
+
+      if(shape == "square"):
          side = 2
 
       if(shape == "triangle"):
+         side = 2
+
+      if(shape == "pyramid"):
          side = 3
+
+      if((shape == "circle") & ((N%2) == 0)):
+         side = 2
+
+      if((shape == "circle") & ((N%2) != 0)):
+         side = 3
+
+      if(shape == "cube"):
+         side = int(np.cbrt(N))
 
       for i in range (side):
             red = int(input(f"Insert the red color {i+1} (0-255): "))
@@ -480,47 +490,98 @@ class Swarm:
       
       return color
 
-   def ledFormation2D(self, effect, str, L):
+   def ledFormation2D(self, effect, shape, L, N):
       logging.debug(f"{self.num_of_clovers} setting odd number drones led")
       rospy.loginfo(f"{self.num_of_clovers} setting odd number drones led")
       threads = []
-      color = self.support_led_formation_2D(str)
+      color = self.support_led_formation_2D(shape, N)
+      n = np.cbrt(N)
+      z = 1
+      coord = self.des_formation_coords
+      lista = [None] * N
+      listaz = [None] * int(n)
+      lista0 = [None] * N
+      lista1 = [None] * N
+      lista2 = [None] * N
+      h = (np.sqrt(3)*L)/2
+      a = 0
+      b = 1
+      c = 2
+      
+      print(coord)
+      for i in range(0, int(n)):
+         listaz[i] = z
+         z = z + L/(n-1)
+
+      for i in range(0, N):
+         lista0[i] = a
+         lista1[i] = b
+         lista2[i] = c
+         a += 3
+         b += 3        
+         c += 3
 
       for idx, clover in enumerate(self.swarm):
-         if(str == "triangle"):
-            coord = self.des_formation_coords
-            if(((L/2) - coord[idx][1]>=0) and (coord[idx][0]>0)):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+         if(shape == "triangle"):
+            if(round(np.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2)))) == round(h*(2/3))):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+               print("teste1")
             
-            elif(((L/2) - coord[idx][1]<0) and (coord[idx][0]>0)):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
-            
-            elif(coord[idx][0]==0):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+            else:
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               print("teste2")
          
-         if(str == "square"):
+         if(shape == "square"):
             if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
                
             else:
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
                
 
-         if(str == "circle"):        
-            coord = self.des_formation_coords
-            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]<=0):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
-            
-            if((L/2) - coord[idx][1]>=0 and (L/2)-coord[idx][0]>0):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
-            
-            if((L/2) - coord[idx][1]<0 and (L/2)-coord[idx][0]<=0):
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+         if((shape == "circle") and ((N%2) == 0)):        
+            if(idx%2 == 0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2])) 
             
             else:
-               thrd = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[3][0], g=color[3][1], b=color[3][2]))
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+
+         if((shape == "circle") and ((N%2) != 0)):        
+            for i in range(0, N):
+               if(idx == lista0[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+               if(idx == lista1[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+               if(idx == lista2[i]):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))      
+         
+         if(shape == "cube"):
+            for i in range(0, int(n)):
+               if (coord[idx][2] == float(listaz[i])):
+                  lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[i][0], g=color[i][1], b=color[i][2]))
+                  
+         if(shape == "pyramid"):
+            
+            if((idx-1)%3==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
+            
+            
+            if((idx-2)%3==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[1][0], g=color[1][1], b=color[1][2]))
+            
+        
+            if((idx%3)==0):
+               lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[2][0], g=color[2][1], b=color[2][2]))
+
+
+      print(lista)
+
+      for idx, clover in enumerate(self.swarm):
+         thrd = lista[idx] 
          thrd.start()
-         threads.append(thrd)
+         threads.append(thrd) 
       
       for thrd in threads:
          thrd.join(timeout=1)
@@ -611,6 +672,27 @@ class Swarm:
    def visualizeMesh(self):
       formation3D.visualizeMesh(self.__mesh)
    
+   def loadFormation(self):
+      # with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.npy', 'rb') as f:
+      #    self.des_formation_coords = np.load(f)
+      # print(self.des_formation_coords)
+
+      with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.json') as json_file:
+         loaded_list = json.load(json_file)
+      for i in loaded_list:
+        loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
+      name = loaded_list['formation {}'.format(len(loaded_list)-1)]['name']
+      coord = loaded_list['formation {}'.format(len(loaded_list)-1)]['coord']
+
+      # Update formation name
+      loaded_formation_coords = coord
+      loaded_formation_name = name
+      self.des_formation_coords = coord
+      self.des_formation_name = name
+      #self.formation_list['formation {}'.format(self.op_num)] = {'name':loaded_formation_name, 'coord':loaded_formation_coords}
+      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+      self.op_num += 1
+
    #Transformations
    def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
       new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
@@ -800,7 +882,7 @@ if __name__ == "__main__":
          else:
                L = int(input("Insert the desired side length: "))
                swarm.setFormation3D('pyramid', N, L)
-               rospy.sleep(5)
+               #rospy.sleep(5)
 
       elif (key == str('0')):
          swarm.returnToHome()
@@ -852,6 +934,9 @@ if __name__ == "__main__":
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
 
+      elif (key == str('Ld') or key == str('load')):
+         swarm.loadFormation()
+
       elif (key == str('led')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
@@ -867,11 +952,24 @@ if __name__ == "__main__":
          swarm.ledEven(effect, red, green, blue)
 
       elif (key == str('led3')):
+         strg = str(input("input formation type: "))
+         effect = str(input("input led effect: "))
+         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
+         swarm.ledFormation2D(effect,strg,L,N)
+
+      elif (key == str('led4')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledOdd(effect, red, green, blue)
+
+      elif (key == str('led5')):
+         #effect = str(input("input led effect: "))
+         effects_list = ['fill', 'fade', 'flash', 'blink', 'blink_fast', 'wipe', 'rainbow', 'rainbow_fill']
+         
+         effect = effects_list[random.randint(0, 7)]
+         swarm.ledRandom(effect)
       
       elif (key == str('e') or key == str('E')):
          break

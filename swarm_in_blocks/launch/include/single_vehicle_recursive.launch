@@ -27,8 +27,7 @@
     <include file="$(find swarm_in_blocks)/launch/include/single_vehicle_recursive.launch" if="$(eval arg('num') - 1 > 0)">
 	    <arg name="num" value="$(eval arg('num')-1)"/>
 
-        <arg name="ID" value="$(eval arg('ID')+1)" unless="$(eval arg('ID') - 9 == 0)"/>
-        <arg name="ID" value="$(eval arg('ID')+2)" if="$(eval arg('ID') - 9 == 0)"/>
+        <arg name="ID" value="$(eval arg('ID')+1)"/>
         <arg name="led" value="$(arg led)"/>
         <arg name="camera" value="$(arg camera)"/>
         <arg name="rangefinder" value="$(arg rangefinder)"/>

@@ -176,32 +176,44 @@
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>Launch mode </p>
 			<div class="field">
-				<i class="url-icon uil uil-link"></i>
+				<span class="iconify" data-icon="akar-icons:settings-horizontal"></span>
 				<select name="Launch mode" id="mode" onchange="setOutput()">
 					<option value="planning"> Planning </option>
 					<option value="simulation"> Simulation </option>
 					<option value="navigation"> Navigation </option>
 				</select>
-				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			<p>initial formation </p>
 			<div class="field">
 				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
 				<select name="Initial formation" id="formation" onchange="setOutput()">
-					<option value="Line"> Line </option>
-					<option value="Square"> Square </option>
-					<option value="Other"> Other </option>
+					<option value="line"> Line </option>
+					<option value="circle"> Circle </option>
+					<option value="full_square"> Full Square </option>
+					<option value="empty_square"> Empty Square </option>
+
 				</select>
-				<button style="display: none;">Ready</button>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
 			
-			<!-- <input class="output_box" value="" id="output_box" disabled> -->
+			<!-- "Run this command" -->
+			<center style="font-size: 16px;"><i class="url-icon uil uil-link"></i> Run this command <i class="url-icon uil uil-link"></i></center>
+			<textarea readonly class="output_box" value="" id="output_box" rows="3" disabled></textarea>
 			
-			<textarea class="output_box" value="" id="output_box" rows="3" disabled></textarea>
+			<div class="tooltip">
+				<center>
+					<button class="copy-button" type="button" onclick="copy()" onmouseout="outTooltip()">
+						<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+						<span class="iconify" data-icon="ep:copy-document"></span>
+					</button>
+				</center>
+			</div>
+
 			<script>
 				function setOutput(){
+
+					// command create
 					var num = document.getElementById("number");
 					var mode = document.getElementById("mode");
 					var form = document.getElementById("formation");
@@ -214,13 +226,20 @@
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
+				function copy() {
+					var copyText = document.getElementById("output_box");
+					copyText.select();
+					copyText.setSelectionRange(0, 99999);
+					navigator.clipboard.writeText(copyText.value);
+					
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copied: " + copyText.value;
+				}
+				function outTooltip() {
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copy to clipboard";
+				}
 			</script>
-			<!-- tentando Jinja2, não ta indo -->
-			<!-- <div>
-				{ % if True % }
-					test
-				{ % endif % }
-			</div> -->
 		</form>
 	</div>
 
