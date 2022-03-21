@@ -77,21 +77,21 @@ class ImageViewApp(wx.App):
         # sizer.Add(text, (0,0), (1,1), wx.ALIGN_CENTER, 0)
         
         self.list = wx.Choice(self.midp, choices=clovers)
-        sizer.Add(self.list, (1,5), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(self.list, (2,5), (1,1), wx.ALIGN_CENTER, 10)
 
         self.list.Bind(wx.EVT_CHOICE, self.onChoice)
         
         self.toggle = wx.ToggleButton(self.midp, -1, label='Active')
-        sizer.Add(self.toggle, (3,9), (1,1),  wx.ALIGN_CENTER, 10)
+        sizer.Add(self.toggle, (2,6), (1,1),  wx.ALIGN_CENTER, 10)
 
         icon = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
-        sizer.Add(icon, (2,5), (1,1), wx.ALIGN_CENTER, 10)
+        sizer.Add(icon, (4,5), span=(1,2))
         # icon2 = wx.StaticBitmap(self.midp, bitmap=wx.Bitmap(os.path.join(node_path, 'assets', 'logomark.png')))
         # sizer.Add(icon2, (3,1), (1,1), wx.ALIGN_CENTER, 10)
 
         # line
         line = wx.StaticLine(self.midp)
-        sizer.Add(line, pos=(1, 6), span=(7, 1),
+        sizer.Add(line, pos=(1, 7), span=(7, 1),
             flag=wx.EXPAND|wx.BOTTOM, border=50)
 
         # line2 = wx.StaticLine(self.midp)
