@@ -295,6 +295,7 @@ input:checked + .slider:before {
 .popup{
 	position: absolute;
 	left: 50%;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
 }
 
 .popup{
@@ -311,7 +312,7 @@ input:checked + .slider:before {
 	transition: top 0s 0.2s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
-	z-index: 10;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
 
 }
 .popup.show{
@@ -323,19 +324,19 @@ input:checked + .slider:before {
 	transition: top 0s 0s ease-in-out,
 				opacity 0.2s 0s ease-in-out,
 				transform 0.2s 0s ease-in-out;
-	z-index: 10;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
 
 }
 .popup :is(header, .icons, .field, .ready){
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 10;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
 }
 .popup header{
 	padding-bottom: 15px;
 	border-bottom: 1px solid #ebedf9;
-	z-index: 10;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
 }
 header span{
 	font-size: 21px;
@@ -521,6 +522,7 @@ header .close:hover{
 .content {
 	display: none !important;
 	grid-area: content;
+	z-index: 1;
 }
 
 body[data-tab="blocks"] #blockly { display: block !important; }
