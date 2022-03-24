@@ -1,14 +1,6 @@
 <?xml version="1.0"?>
 
 <launch>
-
-    <!-- number of clovers / Number of iterations -->
-    <arg name="num" default="2"/>
-    <arg name="formation" default="full_square"/>
-    <arg name="led" default="true"/>
-    <arg name="camera" default="false"/>
-    <arg name="rangefinder" default="true"/>
-    <arg name="flashlight" default="false"/>
     <arg name="new_blocks_page" default="false"/>
     <arg name="quiet" default="false"/>
 
@@ -16,28 +8,4 @@
     <include file="$(find swarm_in_blocks)/launch/singles/blocks.launch">
         <arg name="newpage" value="$(arg new_blocks_page)"/>
     </include>
-
-    <!-- gazebo with ROS api -->
-    <include file="$(find swarm_in_blocks)/launch/singles/gazebo.launch">
-        <arg name="paused" default="false"/>
-        <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
-    </include>
-    
-    <!-- swarm checker node -->
-    <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
-
-    <!-- lauch.py launch each vehicle on the right coordinate based on the formation -->
-    <!-- it uses internally single_vehicle.launch file inside this folder -->
-    <node name="launch" pkg="swarm_in_blocks" type="launch.py"
-            args=" simulation
-                --num $(arg num)
-                --formation $(arg formation)
-                --led $(arg led)
-                --rangefinder $(arg rangefinder)
-                --camera $(arg camera)
-                --flashlight $(arg flashlight)
-                --new_blocks_page $(arg new_blocks_page)
-                --quiet $(arg quiet)" 
-            output="screen"
-            />
 </launch>
