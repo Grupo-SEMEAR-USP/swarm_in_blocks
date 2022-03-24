@@ -84,7 +84,7 @@ def launchSingleVehicle(idx, x=0, y=0, z=0.3, roll=0, pitch=0, yaw=0, led=True, 
     camera = boolToStrLower(camera)
     rangefinder = boolToStrLower(rangefinder)
     flashlight = boolToStrLower(flashlight)
-    cmd = ['roslaunch','--wait', 'swarm_in_blocks', 'simulate_vehicle.launch',
+    cmd = ['roslaunch','--wait', 'swarm_in_blocks', 'clover_simulated.launch',
             f'ID:={idx}', f'x:={x}', f'y:={y}', f'z:={z}',
             f'R:={roll}', f'P:={pitch}', f'Y:={yaw}', f'led:={led}', f'camera:={camera}', f'rangefinder:={rangefinder}', f'flashlight:={flashlight}']
 
