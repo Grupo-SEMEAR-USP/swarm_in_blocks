@@ -192,7 +192,6 @@
 					<option value="circle"> Circle </option>
 					<option value="full_square"> Full Square </option>
 					<option value="empty_square"> Empty Square </option>
-
 				</select>
 			</div>
 			<div style="clear:both;">&nbsp;</div><br>
@@ -221,7 +220,7 @@
 					mode_value = mode.value;
 					num_value = num.value;
 					form_value = form.value;
-					output = `rosrun swarm_in_blocks swarm.py -mode=${mode_value} -num=${num_value} -initial_formation=${form_value}`;
+					output = `roslaunch swarm_in_blocks swarm_automatic.launch mode:=${mode_value} num:=${num_value} formation:=${form_value}`;
 
 					var out = document.getElementById("output_box");
 					out.value = output;

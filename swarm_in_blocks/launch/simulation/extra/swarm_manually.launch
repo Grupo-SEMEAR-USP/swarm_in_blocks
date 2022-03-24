@@ -25,6 +25,7 @@
     <!-- swarm clover blocks-->
     <node pkg="swarm_clover_blocks" name="clover_blocks" type="clover_blocks"/>
 
+    <!-- swarm checker node -->
     <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
 
     <!-- Gazebo sim -->
@@ -37,7 +38,7 @@
     </include>
     
     <!-- UAV0 -->
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/clover_simulated.launch">
         <arg name="ID" value="0"/>
         <arg name="x" value="0"/>
         <arg name="y" value="0"/>
@@ -48,7 +49,7 @@
     </include>
     
     <!-- UAV1 -->
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/clover_simulated.launch">
         <arg name="ID" value="1"/>
         <arg name="x" value="0"/>
         <arg name="y" value="1"/>
@@ -59,7 +60,7 @@
     </include>
 
     <!-- UAV2 -->
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/clover_simulated.launch">
         <arg name="ID" value="2"/>
         <arg name="x" value="0"/>
         <arg name="y" value="2"/>
@@ -70,7 +71,7 @@
     </include>
 
     <!-- UAV3 -->
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/clover_simulated.launch">
         <arg name="ID" value="3"/>
         <arg name="x" value="0"/>
         <arg name="y" value="3"/>

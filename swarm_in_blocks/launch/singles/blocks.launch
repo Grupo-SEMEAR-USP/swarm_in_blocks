@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 
 <launch>
+    <arg name="newpage" default="false"/>
+
+    <arg name="clover_blocks_arg" value="--newpage" if="$(arg newpage)"/>
+    <arg name="clover_blocks_arg" value="" unless="$(arg newpage)"/>
+
     <!-- Update static directory -->
     <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
         <!-- <param name="default_package" value="clover"/> -->
@@ -10,5 +15,5 @@
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 
     <!-- swarm clover blocks-->
-    <node pkg="swarm_clover_blocks" name="clover_blocks" type="clover_blocks"/>
+    <node pkg="swarm_clover_blocks" name="clover_blocks" type="clover_blocks" args="$(arg clover_blocks_arg)"/>
 </launch>

@@ -131,13 +131,13 @@ class Swarm:
       self.curr_formation_pose = np.array([0,0,0])
       self.des_formation_pose = np.array([0,0,0])
 
-      # Desired formation
+      # Desired formation coords
       self.des_formation_name = ''
       self.des_formation_coords = []
 
       # Led matrix
-      self.led_effects_name = ''
-      self.led_effects = []
+      self.des_led_effects_name = ''
+      self.des_led_effects = []
 
       # Mode selected upon start
       self.mode = ''

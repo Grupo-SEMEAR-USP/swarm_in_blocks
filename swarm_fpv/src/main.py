@@ -36,10 +36,6 @@ class ImageViewApp(wx.App):
         self.last_key = ''
         self.last_thrd = Thread()
         
-<<<<<<< HEAD
-        displays = (wx.Display(i) for i in range(wx.Display.GetCount()))
-        sizes = [display.GetGeometry().GetSize() for display in displays]
-=======
         # max_width_x, max_width_y = wx.DisplaySize()
         # self.window_size = (max_width_x*2//3, max_width_y*5//6)
 
@@ -47,7 +43,6 @@ class ImageViewApp(wx.App):
         display = wx.Display(index)
         
         _, _, max_width_x, max_width_y = display.GetGeometry()
->>>>>>> da4a1b4f9aefdc2c784afbaa31d0c8d4aad1e730
         self.window_size = (max_width_x*2//3, max_width_y*5//6)
         print(self.window_size)
         # wx

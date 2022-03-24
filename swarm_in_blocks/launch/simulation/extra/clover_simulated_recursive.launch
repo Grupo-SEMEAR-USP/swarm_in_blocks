@@ -8,7 +8,7 @@
     <arg name="rangefinder" default="true"/>
     <arg name="flashlight" default="false"/>
     
-    <include file="$(find swarm_in_blocks)/launch/single_vehicle.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/clover_simulated.launch">
         <arg name="x" value="0"/>
         <arg name="y" value="$(arg ID)"/>
         <arg name="z" value="0.3"/>
@@ -24,7 +24,7 @@
         
     <!-- chamar outros includes recursivamente -->
     
-    <include file="$(find swarm_in_blocks)/launch/include/single_vehicle_recursive.launch" if="$(eval arg('num') - 1 > 0)">
+    <include file="$(find swarm_in_blocks)/launch/simulation/extra/clover_simulated_recursive.launch" if="$(eval arg('num') - 1 > 0)">
 	    <arg name="num" value="$(eval arg('num')-1)"/>
 
         <arg name="ID" value="$(eval arg('ID')+1)"/>

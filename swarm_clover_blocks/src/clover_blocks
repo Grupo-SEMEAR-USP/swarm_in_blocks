@@ -17,12 +17,19 @@ import threading
 import re
 import uuid
 import webbrowser
+import argparse
 from std_msgs.msg import Bool, String
 from std_srvs.srv import Trigger
 from clover_blocks.msg import Prompt
 from clover_blocks.srv import Run, Load, Store
 
-webbrowser.open("localhost") #opens localhost automatically
+parser = argparse.ArgumentParser("Blockly back-end of Swarm in Blocks project.")
+parser.add_argument("--newpage", '-n', action="store_true", required=False, help="Open new page of Swarm In Blocks project to acess the programming in blocks interface.")
+args, _ = parser.parse_known_args()
+
+if args.newpage: 
+    # webbrowser.
+    webbrowser.open("localhost") #opens localhost automatically
 
 #insert Swarm In Blocks path to the sys path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, 'swarm_in_blocks', 'src'))

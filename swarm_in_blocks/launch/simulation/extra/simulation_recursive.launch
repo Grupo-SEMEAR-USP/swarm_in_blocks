@@ -52,7 +52,7 @@
     </include>
 
     <!-- Start calling with recursion -->
-    <include file="$(find swarm_in_blocks)/launch/include/single_vehicle_recursive.launch">
+    <include file="$(find swarm_in_blocks)/launch/simulation/extra/clover_simulated_recursive.launch">
         <arg name="num" value="$(arg num)"/>
         <arg name="ID" value="0"/>
         <arg name="led" value="$(arg led)"/>
