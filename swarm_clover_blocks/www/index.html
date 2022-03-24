@@ -220,11 +220,20 @@
 					mode_value = mode.value;
 					num_value = num.value;
 					form_value = form.value;
-					output = `roslaunch swarm_in_blocks swarm_automatic.launch mode:=${mode_value} num:=${num_value} formation:=${form_value}`;
-
+					output = ''
+					if(mode_value == 'simulation'){
+						output = `roslaunch swarm_in_blocks simulation.launch num:=${num_value} formation:=${form_value}`;
+					}
+					if(mode_value == 'navigation'){
+						output = `roslaunch swarm_in_blocks navigation.launch`;
+					}
+					if(mode_value == 'planning'){
+						output = `roslaunch swarm_in_blocks planning.launch`;
+					}
 					var out = document.getElementById("output_box");
 					out.value = output;
 				}
+
 				function copy() {
 					var copyText = document.getElementById("output_box");
 					copyText.select();
