@@ -92,6 +92,7 @@ class SwarmChecker:
         self.pub = rospy.Publisher("/swarm_checker/state", SwarmState, queue_size=10)
 
     def updateCloversObjects(self):
+        self.clovers_obj_list = []
         for clover_id in self.all_clovers_ids:
             clover_object = SingleClover(f"clover{clover_id}", clover_id)
             self.clovers_obj_list.append(clover_object)
@@ -106,7 +107,7 @@ class SwarmChecker:
                 clover_id = rospy.get_param(param)
                 clovers_ids_list.append(clover_id)
 
-        #Sort clover ids list for better processing
+        #Sort clover ids list for better processing #IMPORTANT
         clovers_ids_list.sort()
 
         # Analyse num of clovers
@@ -136,7 +137,8 @@ class SwarmChecker:
     def checkNodes(self):
         nodes = rosnode.get_node_names()
         nodes_ok = [False]*self.all_clovers
-
+        print(f"All clovers: {self.all_clovers}")
+        print(f"Len clover obj list: {len(self.clovers_obj_list)}")
         # Analyse all clovers
         for idx, clover in enumerate(self.clovers_obj_list):
             passed = False
@@ -168,14 +170,14 @@ class SwarmChecker:
         offboard_ok = [False]*self.all_clovers
         led_ok = [False]*self.all_clovers
 
-        for clover in self.clovers_obj_list:
+        for idx, clover in enumerate(self.clovers_obj_list):
             # Simple offboard services check
             res_off = clover.checkSimpleOffboardServices()
-            offboard_ok[clover.id] = res_off
+            offboard_ok[idx] = res_off
             
             # Led services check
             res_led = clover.checkLedServices()
-            led_ok[clover.id] = res_led
+            led_ok[idx] = res_led
         
         self.__led_ok = led_ok
 
@@ -184,17 +186,17 @@ class SwarmChecker:
         offboard_mode_ok = [False]*self.all_clovers
         armed_ok = [False]*self.all_clovers
         
-        for clover in self.clovers_obj_list:
+        for idx, clover in enumerate(self.clovers_obj_list):
             connected = clover.connected
             mode = clover.mode
             armed = clover.armed
 
-            mavros_conn_ok[clover.id] = connected
-            armed_ok[clover.id] = armed
+            mavros_conn_ok[idx] = connected
+            armed_ok[idx] = armed
             if (not mode is None) and mode.lower() == 'offboard':
-                offboard_mode_ok[clover.id] = True
+                offboard_mode_ok[idx] = True
             else:
-                offboard_mode_ok[clover.id] = False
+                offboard_mode_ok[idx] = False
         
         self.__mavros_conn_ok = np.array(mavros_conn_ok)
         self.__offboard_ok = np.array(offboard_mode_ok)
@@ -202,9 +204,13 @@ class SwarmChecker:
             
     def publishKnownClovers(self):
         # self.all_clovers_ids = np.where(self.__nodes_ok == True)
-        self.connected_ids = np.argwhere(self.__mavros_conn_ok == True).ravel()
-        self.failed_ids = np.argwhere(((self.__mavros_conn_ok == False) + (self.__nodes_ok == False)).any()).ravel()
-        self.armed_ids = np.argwhere(self.__armed_ok == True).ravel()
+        connected_idx = np.argwhere(self.__mavros_conn_ok == True).ravel()
+        failed_idx = np.argwhere(((self.__mavros_conn_ok == False) + (self.__nodes_ok == False)).any()).ravel()
+        armed_idx = np.argwhere(self.__armed_ok == True).ravel()
+
+        self.connected_ids = [self.clovers_obj_list[idx].id for idx in connected_idx]
+        self.failed_ids = [self.clovers_obj_list[idx].id for idx in failed_idx]
+        self.armed_ids = [self.clovers_obj_list[idx].id for idx in armed_idx]
         
         # self.all_clovers = len(self.all_clovers_ids)
         self.connected_clovers = len(self.connected_ids)
@@ -236,13 +242,13 @@ class SwarmChecker:
             self.publishKnownClovers()
             rate.sleep()
 
-    def checkNewCloversLoop(self):
-        rate = rospy.Rate(1)
+    # def checkNewCloversLoop(self):
+    #     rate = rospy.Rate(1)
 
-        while not rospy.is_shutdown():
-            self.checkNumOfClovers()
-            self.updateCloversObjects()
-            rate.sleep()
+    #     while not rospy.is_shutdown():
+    #         self.checkNumOfClovers()
+    #         self.updateCloversObjects()
+    #         rate.sleep()
 
 if __name__ == '__main__':
     swarm_checker = SwarmChecker()
