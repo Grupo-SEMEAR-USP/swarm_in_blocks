@@ -138,7 +138,7 @@ class SwarmChecker:
         nodes_ok = [False]*self.all_clovers
 
         # Analyse all clovers
-        for clover in self.clovers_obj_list:
+        for idx, clover in enumerate(self.clovers_obj_list):
             passed = False
             passed_mavros = False
             passed_off = False
@@ -155,7 +155,7 @@ class SwarmChecker:
             if not passed_mavros:
                 rospy.logerr(f"mavros node missing on clover{clover.id}")
             passed = passed_off and passed_mavros
-            nodes_ok[clover.id] = passed
+            nodes_ok[idx] = passed
         
         # for node in nodes:
         #     if ('clover' in node) and (('mavros' in node) or ('simple_offboard' in node)):

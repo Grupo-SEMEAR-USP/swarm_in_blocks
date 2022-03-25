@@ -23,9 +23,6 @@
         <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
     </include>
     
-    <!-- swarm checker node -->
-    <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
-
     <!-- lauch.py launch each vehicle on the right coordinate based on the formation -->
     <!-- it uses internally single_vehicle.launch file inside this folder -->
     <node name="launch" pkg="swarm_in_blocks" type="launch.py"
@@ -40,4 +37,8 @@
                 --quiet $(arg quiet)" 
             output="screen"
             />
+
+    <!-- swarm checker node -->
+    <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
+
 </launch>
