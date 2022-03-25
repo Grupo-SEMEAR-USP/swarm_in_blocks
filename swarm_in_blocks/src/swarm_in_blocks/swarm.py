@@ -159,9 +159,9 @@ class Swarm:
    
    # Create clover objects and append to clover object list
    def __createCloversObjects(self):
-      for index in range(self.num_of_clovers):
-         clover_object = SingleClover(f"clover{index}", index)
-         clover_object.init_coord = self.init_formation_coords[index]
+      for idx, clover_id in enumerate(self.connected_ids):
+         clover_object = SingleClover(f"clover{clover_id}", clover_id)
+         clover_object.init_coord = self.init_formation_coords[idx]
          self.swarm.append(clover_object)
    
    def __subscribeSwarmChecker(self):
@@ -201,11 +201,11 @@ class Swarm:
       coords = np.zeros((self.num_of_clovers, 4))
       coords[:] = np.NaN
 
-      for idx in range(self.num_of_clovers):
+      for idx, clover_id in enumerate(self.connected_ids):
          try:
-            x = rospy.get_param(f"/clover{idx}/initial_pose/x")
-            y = rospy.get_param(f"/clover{idx}/initial_pose/y")
-            z = rospy.get_param(f"/clover{idx}/initial_pose/z")
+            x = rospy.get_param(f"/clover{clover_id}/initial_pose/x")
+            y = rospy.get_param(f"/clover{clover_id}/initial_pose/y")
+            z = rospy.get_param(f"/clover{clover_id}/initial_pose/z")
             coords[idx] = [x, y, z, 1]
          except Exception:
             print(traceback.format_exc())
