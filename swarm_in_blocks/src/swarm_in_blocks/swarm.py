@@ -13,6 +13,7 @@ from std_srvs.srv import Trigger
 # Other tools
 import numpy as np
 from threading import Thread
+from multiprocessing import Process
 import time
 import sys
 import os
@@ -35,9 +36,9 @@ from swarm_checker.msg import SwarmState
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
-   def __init__(self, name, id):
+   def __init__(self, name, clover_id):
       self.name = name
-      self.id = id
+      self.id = clover_id
       self.init_coord = []
 
       # Configure clover services and topics
@@ -170,7 +171,7 @@ class Swarm:
          first_msg = rospy.wait_for_message("swarm_checker/state", SwarmState, timeout=5)
          self.swarm_checker_sub = rospy.Subscriber("swarm_checker/state", SwarmState, self.__swarmStateCallback)
       except Exception as e:
-         rospy.logerr(e.__str__() + "\n Have you launched the simulation or the base control?")
+         rospy.logerr(e.__str__() + "\n Have you launched the simulation or the  swarm_checker node?")
          exit()
          
       rospy.loginfo("SwarmApi connected to SwarmChecker.")
@@ -222,14 +223,10 @@ class Swarm:
          self.des_formation_coords = self.init_formation_coords
 
       # Log the result
-      if not initial_pose_failed.size:
-         logging.debug(f"{self.num_of_clovers} retrieved their initial pose.")
-         logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
-      else:
-         logging.debug(f"Initial Formation: {self.num_of_clovers} retrieved their initial pose.")
-         for clover_id in initial_pose_failed:
-            logging.debug(f"Initial Formation: failed to get initial pose from clover {clover_id}")
-         logging.debug(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
+      logging.debug(f"{self.num_of_clovers} retrieved their initial pose.")
+      for clover_id in initial_pose_failed:
+         logging.debug(f"Failed to get initial pose from clover {clover_id}")
+      logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
 
    # Start pipeline
    # Planning mode - Allows just to plot the formations preview and save its coordinates, don't use simulator
@@ -355,7 +352,7 @@ class Swarm:
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.land, kwargs=dict(x=x,y=y,z=z))
+         thrd = Thread(target=clover.land)
          thrd.start()
          threads.append(thrd)
       
@@ -746,12 +743,30 @@ class Swarm:
       self.op_num += 1
 
    #Leader operations
-   def setLeader(self, id):
+   def setChief(self, id):
       assert type(id)==int, "Input 'id' must be an integer."
       self.leader_id = id
    
-   def followLeader():
+   def followChiefThread(self):
       pass
+
+   def followChief(self):
+      self.stop_follow_chief = True
+
+      if self.leader_id is None:
+         pass
+      
+      # instanciate a process
+      self.follow_chief_prcs = Process(target=self.followChiefThread)
+      self.follow_chief_prcs.start()
+
+      # terminate process when stopFollowingChief method is called
+      while self.follow_chief_prcs.is_alive():
+         if self.stop_follow_chief:
+            self.follow_chief_prcs.terminate()
+
+   def stopFollowingChief(self):
+      self.stop_follow_chief = True
 
 if __name__ == "__main__":
 

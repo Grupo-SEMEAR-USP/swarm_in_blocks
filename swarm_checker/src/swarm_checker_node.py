@@ -137,8 +137,7 @@ class SwarmChecker:
     def checkNodes(self):
         nodes = rosnode.get_node_names()
         nodes_ok = [False]*self.all_clovers
-        print(f"All clovers: {self.all_clovers}")
-        print(f"Len clover obj list: {len(self.clovers_obj_list)}")
+    
         # Analyse all clovers
         for idx, clover in enumerate(self.clovers_obj_list):
             passed = False
