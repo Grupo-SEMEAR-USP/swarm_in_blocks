@@ -807,6 +807,7 @@ if __name__ == "__main__":
       print("1 - Takeoff all")
       print("0 - Initial position")
       print("L - Land all")
+      print("RL - Return and Land")
       print("led - Set Led for all drones")
       print("\n-----Formations-----")
       print("2 - Line formation")
@@ -909,6 +910,10 @@ if __name__ == "__main__":
 
       elif (key == str('l') or key == str('L')):
          swarm.landAll()
+         rospy.sleep(5)
+      
+      elif (key == str('rl') or key == str('RL')):
+         swarm.returnAndLand()
          rospy.sleep(5)
 
       elif (key == str('ts') or key == str('TS')):
