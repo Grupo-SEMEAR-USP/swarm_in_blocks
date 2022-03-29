@@ -12,9 +12,8 @@ sudo apt install build-essential git python3-pip python3-rosdep
 echo "--- Installing ROS"
 sleep 1
 sudo apt-get install -y curl
-sudo echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
-curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-sudo -E sh -c 'apt-get update; apt-get install -y python3-pip python3-rosdep python3-rosinstall-generator python3-wstool build-essential ros-noetic-desktop'
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-get update; apt-get install -y python3-pip python3-rosdep python3-rosinstall-generator python3-wstool build-essential ros-noetic-desktop
 
 
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
@@ -33,10 +32,14 @@ catkin_make
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 source ~/catkin_ws/devel/setup.bash
 
-echo "--- Getting Clover sources"
+echo "--- Getting Swarm In Blocks sources ---"
 sleep 1
 cd ~/catkin_ws/src
 git clone https://github.com/Grupo-SEMEAR-USP/swarm_in_blocks.git
+
+echo "--- Getting Clover sources"
+sleep 1
+cd ~/catkin_ws/src
 git clone --depth 1 https://github.com/Grupo-SEMEAR-USP/clover.git
 git clone --depth 1 https://github.com/CopterExpress/ros_led
 git clone --depth 1 https://github.com/ethz-asl/mav_comm
@@ -63,7 +66,6 @@ echo "--- Installing PX4 dependencies"
 sleep 1
 ~/PX4-Autopilot/Tools/setup/ubuntu.sh
 pip3 install --user toml
-sudo apt-get install -y ant openjdk-11-jdk # Additional packages for jMAVSim
 
 echo "--- Addding Clover airframe"
 sleep 1
@@ -139,4 +141,4 @@ rosversion web_video_server
 rosversion nodelet
 
 echo "Trying running the Gazebo simulator, check the output"
-timeout --preserve-status 30 roslaunch swarm_in_blocks simulation.launch num:=2
+timeout --preserve-status 30 roslaunch swarm_in_blocks simulation.launch num:=2 new_blocks_page:=true
