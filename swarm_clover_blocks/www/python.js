@@ -579,3 +579,11 @@ Blockly.Python['apply_formation'] = function(block) {
 	var code = 'swarm.applyFormation()\n';
 	return code;
 };
+
+Blockly.Python['plot_formation'] = function(block) {
+	initSwarm()
+	// TODO: Assemble Python into code variable.
+	var formation = block.getFieldValue('PLOT_TYPE');
+	var code = plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type=formation);
+	return code;
+};

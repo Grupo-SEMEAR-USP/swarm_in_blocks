@@ -846,3 +846,18 @@ this.setTooltip("Apply desired formation");
 this.setHelpUrl("");
 	}
 };
+
+Blockly.Blocks['plot_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("plot formation");
+	this.appendDummyInput()
+		.appendField("Plot type")
+		.appendField(new Blockly.FieldDropdown([["2D", "2D"], ["3D", "3D"]]), "PLOT_TYPE");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Plot desired formation");
+this.setHelpUrl("");
+	}
+};
