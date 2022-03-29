@@ -78,7 +78,7 @@ Blockly.Blocks['navigate'] = {
 			.appendField("with speed");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID");
+			.appendField("Clover ID");
 		this.appendDummyInput()
 			.appendField("wait")
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
@@ -110,7 +110,7 @@ Blockly.Blocks['set_velocity'] = {
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID");
+			.appendField("Clover ID");
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -157,7 +157,7 @@ Blockly.Blocks['setpoint'] = {
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -188,7 +188,7 @@ Blockly.Blocks['get_position'] = {
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current position or velocity in meters or meters per second.");
@@ -204,7 +204,7 @@ Blockly.Blocks['get_yaw'] = {
 			.appendField(new Blockly.FieldDropdown(frameIds), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current yaw in degree (not radian).");
@@ -220,7 +220,7 @@ Blockly.Blocks['get_attitude'] = {
 			.appendField(new Blockly.FieldDropdown([["pitch", "PITCH"], ["roll", "ROLL"], ["pitch rate", "PITCH_RATE"], ["roll rate", "ROLL_RATE"], ["yaw rate", "YAW_RATE"]]), "FIELD");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current orientation or angle rates in degree or degree per second (not radian).");
@@ -236,7 +236,7 @@ Blockly.Blocks['voltage'] = {
 			.appendField("voltage");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current battery voltage in volts.");
@@ -251,7 +251,7 @@ Blockly.Blocks['armed'] = {
 			.appendField("armed?");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Boolean");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns if the drone armed.");
@@ -266,7 +266,7 @@ Blockly.Blocks['mode'] = {
 			.appendField("current flight mode");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "String");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current flight mode (POSCTL, OFFBOARD, etc).");
@@ -281,7 +281,7 @@ Blockly.Blocks['wait_arrival'] = {
 			.appendField("wait arrival");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(COLOR_FLIGHT);
@@ -307,7 +307,7 @@ Blockly.Blocks['arrived'] = {
 			.appendField("arrived?");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Boolean");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns if the drone arrived to the navigation target.");
@@ -326,7 +326,7 @@ Blockly.Blocks['set_led'] = {
 			.appendField("to color");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -346,7 +346,7 @@ Blockly.Blocks['set_effect'] = {
 			.appendField("with color");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -372,7 +372,7 @@ Blockly.Blocks['led_count'] = {
 			.appendField("LED count");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_LED);
 		this.setTooltip("Returns the number of LEDs (configured in led.launch).");
@@ -390,7 +390,7 @@ Blockly.Blocks['take_off'] = {
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID");
+			.appendField("Clover ID");
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -409,7 +409,7 @@ Blockly.Blocks['land'] = {
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID");
+			.appendField("Clover ID");
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -426,7 +426,7 @@ Blockly.Blocks['global_position'] = {
 			.appendField(new Blockly.FieldDropdown([["latitude", "LAT"], ["longitude", "LON"], ["altitude", "ALT"]]), "FIELD");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
 		this.setTooltip("Returns current global position (latitude, longitude, altitude above the WGS 84 ellipsoid).");
@@ -441,7 +441,7 @@ Blockly.Blocks['on_take_off'] = {
 			.appendField("When took off");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setColour(230);
 		this.setTooltip("");
 		this.setHelpUrl(DOCS_URL + '#' + this.type);
@@ -455,7 +455,7 @@ Blockly.Blocks['on_landing'] = {
 			.appendField("When landed");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setColour(230);
 		this.setTooltip("");
 		this.setHelpUrl(DOCS_URL + '#' + this.type);
@@ -469,7 +469,7 @@ Blockly.Blocks['on_armed'] = {
 			.appendField("when armed");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setColour(230);
 		this.setTooltip("");
 		this.setHelpUrl(DOCS_URL + '#' + this.type);
@@ -503,7 +503,7 @@ Blockly.Blocks['set_yaw'] = {
 			.appendField(new Blockly.FieldCheckbox("TRUE"), "WAIT");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID");
+			.appendField("Clover ID");
 		this.setInputsInline(false);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -531,7 +531,7 @@ Blockly.Blocks['distance'] = {
 			.appendField(new Blockly.FieldDropdown([["body", "body"], ["last navigate target", "NAVIGATE_TARGET"]]), "FRAME_ID");
 		this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		this.setInputsInline(false);
 		this.setOutput(true, "Number");
 		this.setColour(COLOR_STATE);
@@ -670,7 +670,7 @@ Blockly.Blocks['forms'] = {
 		// mesmo para o ID do bloco, mas ele fica invisível para quem está vendo
 			this.appendValueInput("ID")
 			.setCheck("Number")
-			.appendField("with ID")
+			.appendField("Clover ID")
 		// com esse parametros falso o bloco fica com a estrutura verticalizada com espaços entre os parametros
 		// com ele true, o bloco fica uma unica linha horizontal (muito feio)
 		this.setInputsInline(false);
@@ -843,6 +843,21 @@ Blockly.Blocks['apply_formation'] = {
 	this.setNextStatement(true, null);
 	this.setColour(COLOR_SWARM);
 this.setTooltip("Apply desired formation");
+this.setHelpUrl("");
+	}
+};
+
+Blockly.Blocks['plot_formation'] = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField("plot formation");
+	this.appendDummyInput()
+		.appendField("Plot type")
+		.appendField(new Blockly.FieldDropdown([["2D", "2D"], ["3D", "3D"]]), "PLOT_TYPE");
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+	this.setColour(COLOR_SWARM);
+this.setTooltip("Plot desired formation");
 this.setHelpUrl("");
 	}
 };
