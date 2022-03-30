@@ -21,6 +21,8 @@
     
     <!-- Gazebo server IP -->
     <arg name="simulator_ip" default="127.0.0.1"/>
+
+    <!-- Output type -->
     <arg name="output" default="screen"/>
 
     <!-- PX4 simulator IP, vehicle model and config-->
