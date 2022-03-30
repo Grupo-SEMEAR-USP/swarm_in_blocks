@@ -259,12 +259,6 @@
 	<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
 		<!-- Categoria Swarm com os blocos LED_HEIGHT e FORMS -->
 		<category name="Swarm" colour="#cf0173">
-			<block type="forms">
-				<value name="Z"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
-				<value name="X"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
-				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
-				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
-			</block>
 			<block type="take_off_all">
 				<value name="Z"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
 			</block>
@@ -294,6 +288,7 @@
 				<value name="SZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
 			</block>
 			<block type="apply_formation"></block>
+			<block type="plot_formation"></block>
 		</category>
 		<category name="Flight" colour="#870b99">
 			<block type="navigate">
@@ -328,6 +323,13 @@
 				<value name="ROLL"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="YAW"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 				<value name="THRUST"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+
+			<block type="forms">
+				<value name="Z"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="X"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
 				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
 			</block>
 			<!-- <block type="key_pressed"></block> -->

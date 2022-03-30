@@ -13,6 +13,7 @@ from std_srvs.srv import Trigger
 # Other tools
 import numpy as np
 from threading import Thread
+from multiprocessing import Process
 import time
 import sys
 import os
@@ -35,9 +36,9 @@ from swarm_checker.msg import SwarmState
 
 class SingleClover: 
 #Create and call all servicers, subscribers and clover topics
-   def __init__(self, name, id):
+   def __init__(self, name, clover_id):
       self.name = name
-      self.id = id
+      self.id = clover_id
       self.init_coord = []
 
       # Configure clover services and topics
@@ -96,6 +97,7 @@ class Swarm:
       # Basic parameters of the swarm
       self.swarm = []
       self.swarm_state = SwarmState()
+
       # Swarm infos
       self.num_of_clovers = None
       if num_of_clovers != None:
@@ -170,7 +172,7 @@ class Swarm:
          first_msg = rospy.wait_for_message("swarm_checker/state", SwarmState, timeout=5)
          self.swarm_checker_sub = rospy.Subscriber("swarm_checker/state", SwarmState, self.__swarmStateCallback)
       except Exception as e:
-         rospy.logerr(e.__str__() + "\n Have you launched the simulation or the base control?")
+         rospy.logerr(e.__str__() + "\n Have you launched the simulation or the  swarm_checker node?")
          exit()
          
       rospy.loginfo("SwarmApi connected to SwarmChecker.")
@@ -222,14 +224,10 @@ class Swarm:
          self.des_formation_coords = self.init_formation_coords
 
       # Log the result
-      if not initial_pose_failed.size:
-         logging.debug(f"{self.num_of_clovers} retrieved their initial pose.")
-         logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
-      else:
-         logging.debug(f"Initial Formation: {self.num_of_clovers} retrieved their initial pose.")
-         for clover_id in initial_pose_failed:
-            logging.debug(f"Initial Formation: failed to get initial pose from clover {clover_id}")
-         logging.debug(f"Initial formation: sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
+      logging.debug(f"{self.num_of_clovers} retrieved their initial pose.")
+      for clover_id in initial_pose_failed:
+         logging.debug(f"Failed to get initial pose from clover {clover_id}")
+      logging.debug(f"Sucessfully got initial pose from {self.num_of_clovers-len(initial_pose_failed)} clovers, failed with {len(initial_pose_failed)} clovers.")
 
    # Start pipeline
    # Planning mode - Allows just to plot the formations preview and save its coordinates, don't use simulator
@@ -322,6 +320,7 @@ class Swarm:
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = z
+      self.des_formation_pose = np.array([0,0,z])
       
       threads = []
       for idx, clover in enumerate(self.swarm):
@@ -336,6 +335,7 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def landAll(self):
       coord = np.empty((0,4))
@@ -349,13 +349,14 @@ class Swarm:
 
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = 0
+      self.des_formation_pose = np.array([0,0,0])
 
       threads = []
       for idx, clover in enumerate(self.swarm):
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.land, kwargs=dict(x=x,y=y,z=z))
+         thrd = Thread(target=clover.land)
          thrd.start()
          threads.append(thrd)
       
@@ -363,11 +364,13 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords = self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
       self.des_formation_coords = self.init_formation_coords
+      self.des_formation_pose = np.array([0, 0, 0])
       self.applyFormation()   
 
    def returnAndLand(self):
@@ -378,15 +381,18 @@ class Swarm:
       rospy.loginfo("Landing...")
       self.landAll()
 
-   def applyFormation(self):
+   def applyFormation(self, speed=1, tolerance=0.2, wait=True):
       logging.debug(f"Applying formation to {self.num_of_clovers}")
       rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
       threads = []
       for idx, clover in enumerate(self.swarm):
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
+         z = self.des_formation_coords[idx][2]
+         if wait:
+            thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z, speed=speed, tolerance=0.2))
+         else:
+            thrd = Thread(target=clover.navigate, kwargs=dict(x=x,y=y,z=z, speed=speed))
          threads.append(thrd)
       
       # Start all threads with the minimum latency possible
@@ -398,6 +404,15 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
+
+   def plot_preview(self, plot_type='2D'):
+      if plot_type == '2D':
+         plot.create_swarm_preview(self, self.des_formation_coords, preview_type='2D')
+      elif plot_type == '3D':
+         plot.create_swarm_preview(self, self.des_formation_coords, preview_type='3D')
+      else:
+         raise Exception("Type isn't allowed, select between '2D' or '3D'")
 
    # LED Operations
    def ledAll(self, effect, red, green, blue):
@@ -694,12 +709,12 @@ class Swarm:
       self.op_num += 1
 
    #Transformations
-   def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
-      new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
-      self.des_formation_coords = new_coord
-      self.des_formation_name = 'transform'
-      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
-      self.op_num += 1
+   # def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
+   #    new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
+   #    self.des_formation_coords = new_coord
+   #    self.des_formation_name = 'transform'
+   #    self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+   #    self.op_num += 1
 
    def scaleFormation(self, sx, sy, sz):
       # Get x, y, z of current formation
@@ -728,13 +743,16 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def rotateFormation(self, anglex, angley, anglez):
+   def rotateFormation(self, anglex_deg, angley_deg, anglez_deg):
+      anglex_rad = anglex_deg*np.pi/180
+      angley_rad = angley_deg*np.pi/180
+      anglez_rad = anglez_deg*np.pi/180
       # Get x, y, z of current formation
       tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
       # Translate back to the origin 
       origin_coords = transform.translateFormation(self.des_formation_coords, -tx, -ty, -tz)
       # Rotate formation on the origin
-      origin_coords = transform.rotateFormation(origin_coords, anglex, angley, anglez)
+      origin_coords = transform.rotateFormation(origin_coords, anglex_rad, angley_rad, anglez_rad)
       # Translate back to the current pose
       self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
       # Update formation pose (stays the same in this case)
@@ -746,12 +764,30 @@ class Swarm:
       self.op_num += 1
 
    #Leader operations
-   def setLeader(self, id):
+   def setChief(self, id):
       assert type(id)==int, "Input 'id' must be an integer."
       self.leader_id = id
    
-   def followLeader():
+   def followChiefThread(self):
       pass
+
+   def followChief(self):
+      self.stop_follow_chief = True
+
+      if self.leader_id is None:
+         pass
+      
+      # instanciate a process
+      self.follow_chief_prcs = Process(target=self.followChiefThread)
+      self.follow_chief_prcs.start()
+
+      # terminate process when stopFollowingChief method is called
+      while self.follow_chief_prcs.is_alive():
+         if self.stop_follow_chief:
+            self.follow_chief_prcs.terminate()
+
+   def stopFollowingChief(self):
+      self.stop_follow_chief = True
 
 if __name__ == "__main__":
 
@@ -920,9 +956,9 @@ if __name__ == "__main__":
          swarm.scaleFormation(sx, sy, sz)
       
       elif (key == str('tr') or key == str('TR')):
-         anglex = float(input("Insert the x angle: "))*np.pi/180
-         angley = float(input("Insert the y angle: "))*np.pi/180
-         anglez = float(input("Insert the z angle: "))*np.pi/180
+         anglex = float(input("Insert the x angle: "))
+         angley = float(input("Insert the y angle: "))
+         anglez = float(input("Insert the z angle: "))
          swarm.rotateFormation(anglex, angley, anglez)
 
       elif (key == str('tt') or key == str('TT')):
@@ -943,10 +979,10 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt') or key == str('PLT')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='2D')
+         swarm.plot_preview(plot_type='2D')
       
       elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='3D')
+         swarm.plot_preview(plot_type='3D')
 
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)

@@ -158,7 +158,11 @@ export function generateCode(workspace) {
 function buildFrameId(block) {
 	let frame = block.getFieldValue('FRAME_ID').toLowerCase();
 	let id = Blockly.Python.valueToCode(block, 'ID', Blockly.Python.ORDER_NONE);
-	return `'${frame}${id}'`;
+	if(frame == 'map'){
+		return `'${frame}'`}
+	else{
+		return `'${frame}${id}'`;
+	}
 }
 
 Blockly.Python.navigate = function(block) {
@@ -493,8 +497,8 @@ Blockly.Python.forms = function(block) {
 // Swarm blocks
 
 function initSwarm(){
-	Blockly.Python.definitions_['import_swarm'] = 'from swarm import Swarm'
-	Blockly.Python.definitions_['init_swarm'] = 'swarm = Swarm()\nswarm.startSimulation(launch=False)'
+	Blockly.Python.definitions_['import_swarm'] = 'from swarm_in_blocks import swarm as sw'
+	Blockly.Python.definitions_['init_swarm'] = 'swarm = sw.Swarm()\nswarm.startSimulation()'
 }
 
 Blockly.Python['take_off_all'] = function(block) {
@@ -573,5 +577,13 @@ Blockly.Python['apply_formation'] = function(block) {
 	initSwarm()
 	// TODO: Assemble Python into code variable.
 	var code = 'swarm.applyFormation()\n';
+	return code;
+};
+
+Blockly.Python['plot_formation'] = function(block) {
+	initSwarm()
+	// TODO: Assemble Python into code variable.
+	var formation = block.getFieldValue('PLOT_TYPE');
+	var code = plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type=formation);
 	return code;
 };
