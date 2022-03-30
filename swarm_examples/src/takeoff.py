@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from swarm_in_blocks import swarm as sw
 
 # creating myswarm object
