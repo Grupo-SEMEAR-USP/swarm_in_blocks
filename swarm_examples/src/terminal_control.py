@@ -126,7 +126,7 @@ while not rospy.is_shutdown():
         if (N < 2):
             print("You need at least 2 clovers!\n")
         else:
-            L = int(input("Insert the desired length: "))
+            L = float(input("Insert the desired length: "))
             swarm.setFormation2D('line', N, L)
             # rospy.sleep(5)
 
@@ -134,7 +134,7 @@ while not rospy.is_shutdown():
         if (N < 3):
             print("You need at least 3 clovers!\n")
         else:
-            L = int(input("Insert the desired side length: "))
+            L = float(input("Insert the desired side length: "))
             swarm.setFormation2D('triangle', N, L)
             # rospy.sleep(5)
 
@@ -142,7 +142,7 @@ while not rospy.is_shutdown():
         if (N < 4):
             print("You need at least 4 clovers!\n")
         else:
-            L = int(input("Insert the desired side length: "))
+            L = float(input("Insert the desired side length: "))
             swarm.setFormation2D('full_square', N, L)
             # rospy.sleep(5)
 
@@ -150,12 +150,12 @@ while not rospy.is_shutdown():
         if (N < 4):
             print("You need at least 4 clovers!\n")
         else:
-            L = int(input("Insert the desired side length: "))
+            L = float(input("Insert the desired side length: "))
             swarm.setFormation2D('empty_square', N, L)
             # rospy.sleep(5)
 
     elif (key == str('o') or key == str('O')):
-        L = int(input("Insert the desired ratio: "))
+        L = float(input("Insert the desired ratio: "))
         swarm.setFormation2D('circle', N, L)
         # rospy.sleep(2)
 
@@ -164,12 +164,12 @@ while not rospy.is_shutdown():
             print("You need at least 8 clovers!\n")
         else:
             #type = input("Insert full or empty: ")
-            L = int(input("Insert the desired side length: "))
+            L = float(input("Insert the desired side length: "))
             swarm.setFormation3D('cube', N, L)
             # rospy.sleep(5)
 
     elif (key == str('6')):
-        L = int(input("Insert the desired ratio: "))
+        L = float(input("Insert the desired ratio: "))
         swarm.setFormation3D('sphere', N, L)
         # rospy.sleep(5)
 
@@ -177,7 +177,7 @@ while not rospy.is_shutdown():
         if (N < 3):
             print("You need at least 3 clovers!\n")
         else:
-            L = int(input("Insert the desired side length: "))
+            L = float(input("Insert the desired side length: "))
             swarm.setFormation3D('pyramid', N, L)
             # rospy.sleep(5)
 
@@ -198,9 +198,9 @@ while not rospy.is_shutdown():
         rospy.sleep(5)
 
     elif (key == str('ts') or key == str('TS')):
-        sx = int(input("Insert the x scale: "))
-        sy = int(input("Insert the y scale: "))
-        sz = int(input("Insert the z scale: "))
+        sx = float(input("Insert the x scale: "))
+        sy = float(input("Insert the y scale: "))
+        sz = float(input("Insert the z scale: "))
         swarm.scaleFormation(sx, sy, sz)
 
     elif (key == str('tr') or key == str('TR')):
@@ -210,29 +210,19 @@ while not rospy.is_shutdown():
         swarm.rotateFormation(anglex, angley, anglez)
 
     elif (key == str('tt') or key == str('TT')):
-        tx = int(input("Insert the x translation: "))
-        ty = int(input("Insert the y translation: "))
-        tz = int(input("Insert the z translation: "))
+        tx = float(input("Insert the x translation: "))
+        ty = float(input("Insert the y translation: "))
+        tz = float(input("Insert the z translation: "))
         swarm.translateFormation(tx, ty, tz)
-
-    elif (key == str('ciranda')):
-        ang = 0
-        while(ang < 4*np.pi):
-            swarm.rotateFormation(0, 0, ang)
-            rospy.sleep(2)
-            swarm.applyFormation()
-            rospy.sleep(3)
 
     elif (key == str('ap') or key == str('AP')):
         swarm.applyFormation()
 
     elif (key == str('plt') or key == str('PLT')):
-        swarm.create_swarm_preview(
-            swarm, swarm.des_formation_coords, preview_type='2D')
+        swarm.plot_preview(plot_type='2D')
 
     elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
-        swarm.create_swarm_preview(
-            swarm, swarm.des_formation_coords, preview_type='3D')
+        swarm.plot_preview(plot_type='3D')
 
     elif (key == str('fl') or key == str('FL')):
         print(swarm.formation_list)
