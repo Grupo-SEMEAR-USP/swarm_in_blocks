@@ -315,7 +315,7 @@ class Swarm:
       self.mode = 'Navigation'   
 
    # Basic swarm operations
-   def takeOffAll(self, z=1):
+   def takeOffAll(self, z=1, speed=0.5):
       logging.debug(f"{self.num_of_clovers} drones taking off")
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
       self.des_formation_coords = self.init_formation_coords
@@ -327,9 +327,11 @@ class Swarm:
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, auto_arm=True))
-         thrd.start()
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, speed=speed, auto_arm=True))
          threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.start()
       
       for thrd in threads:
          thrd.join()
@@ -357,9 +359,11 @@ class Swarm:
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
          thrd = Thread(target=clover.land)
-         thrd.start()
          threads.append(thrd)
       
+      for thrd in threads:
+         thrd.start()
+
       for thrd in threads:
          thrd.join()
       
