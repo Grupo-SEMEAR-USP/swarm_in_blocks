@@ -7,8 +7,8 @@
     <arg name="verbose" default="false"/>
     <arg name="paused" default="false"/>
 
-    <arg name="world" default="$(find swarm_examples)/worlds/box.world"/>
-    <!-- <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/> -->
+    <!-- <arg name="world" default="$(find swarm_examples)/worlds/box.world"/> -->
+    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
     <!-- <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/yosemite.world"/> -->
     
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
