@@ -406,6 +406,14 @@ class Swarm:
       self.curr_formation_coords =  self.des_formation_coords
       self.curr_formation_pose = self.des_formation_pose
 
+   def plot_preview(self, plot_type='2D'):
+      if plot_type == '2D':
+         plot.create_swarm_preview(self, self.des_formation_coords, preview_type='2D')
+      elif plot_type == '3D':
+         plot.create_swarm_preview(self, self.des_formation_coords, preview_type='3D')
+      else:
+         raise Exception("Type isn't allowed, select between '2D' or '3D'")
+
    # LED Operations
    def ledAll(self, effect, red, green, blue):
       logging.debug(f"{self.num_of_clovers} setting all drones led")
@@ -959,10 +967,10 @@ if __name__ == "__main__":
          swarm.applyFormation()
 
       elif (key == str('plt') or key == str('PLT')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='2D')
+         swarm.plot_preview(plot_type='2D')
       
       elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
-         plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type='3D')
+         swarm.plot_preview(plot_type='3D')
 
       elif (key == str('fl') or key == str('FL')):
          print(swarm.formation_list)
