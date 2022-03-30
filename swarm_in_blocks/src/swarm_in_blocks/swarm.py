@@ -804,10 +804,17 @@ if __name__ == "__main__":
       print("6 - Sphere formation")
       print("7 - Pyramid formation")
       print("A - Alphabet formation")
+      print("3D - Formation 3D")
       print("\n-----Transformations-----")
       print("TR - Rotate")
       print("TS - Scale")
       print("TT - Translate")
+      print("\n-----LED EFFECT-----")
+      print("LED1 - Led All")
+      print("LED2 - Led Even")
+      print("LED3 - Led Formation")
+      print("LED4 - Led Odd")
+      print("LED5 - Led Random")
       print("\n-----Plot and Apply-----")
       print("AP - Apply formation")
       print("PLT - Plot preview")
@@ -893,6 +900,11 @@ if __name__ == "__main__":
          user_input = input(f"Please, enter word or a letter: ")
          swarm.setAlphabet(user_input, N)
 
+      elif  (key == str('3d') or key == str('3D')):
+         path = input(f"Path to find the file, like the example:\n/home/guisoares/Downloads/output (1).stl\n: ")
+         swarm.setFormation3DfromMesh(path)
+         rospy.sleep(5)
+
       elif (key == str('l') or key == str('L')):
          swarm.landAll()
          rospy.sleep(5)
@@ -942,34 +954,34 @@ if __name__ == "__main__":
       elif (key == str('Ld') or key == str('load')):
          swarm.loadFormation()
 
-      elif (key == str('led')):
+      elif (key == str('led1') or key == str('LED1')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledAll(effect, red, green, blue)
 
-      elif (key == str('led2')):
+      elif (key == str('led2') or key == str('LED2')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledEven(effect, red, green, blue)
 
-      elif (key == str('led3')):
+      elif (key == str('led3') or key == str('LED3')):
          strg = str(input("input formation type: "))
          effect = str(input("input led effect: "))
          print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
          swarm.ledFormation2D(effect,strg,L,N)
 
-      elif (key == str('led4')):
+      elif (key == str('led4') or key == str('LED4')):
          effect = str(input("input led effect: "))
          red = int(input("Insert the red color (0-255): "))
          green = int(input("Insert the green color (0-255): "))
          blue = int(input("Insert the blue color (0-255): "))
          swarm.ledOdd(effect, red, green, blue)
 
-      elif (key == str('led5')):
+      elif (key == str('led5') or key == str('LED5')):
          #effect = str(input("input led effect: "))
          effects_list = ['fill', 'fade', 'flash', 'blink', 'blink_fast', 'wipe', 'rainbow', 'rainbow_fill']
          
