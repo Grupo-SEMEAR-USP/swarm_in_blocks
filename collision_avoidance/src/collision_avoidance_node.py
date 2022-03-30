@@ -266,6 +266,15 @@ class SwarmInternalCollisionAvoidance():
 
         # Dont use navigateWait because another clover has to see it position while this clover is navigating
         self.swarm[clover_id].navigate(x=x, y=y, z=z, yaw=float('nan'), frame_id='map')
+    
+    def __checkTrajectories(self, clover_id_i, clover_id_j):
+        trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
+        trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
+
+        traj_vec_i = [trans_target_i.transform.translation.x, trans_target_i.transform.translation.y, trans_target_i.transform.translation.z]
+        traj_vec_j = [trans_target_j.transform.translation.x, trans_target_j.transform.translation.y, trans_target_j.transform.translation.z]
+
+        
 
     def __handleNonParallelClovers(self,  clover_id_i, clover_id_j):
         trans_target_i = self.tfBuffer.lookup_transform('map', f'navigate_target{clover_id_i}', rospy.Time())
@@ -300,8 +309,8 @@ class SwarmInternalCollisionAvoidance():
 
             dist = self.__getDistance(pose_i, pose_j)
 
-            trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
-            trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
+            # trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
+            # trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
 
             # if distance is more than 1 times the clover distance thresh
             # go ahead and continue the last trajectory
