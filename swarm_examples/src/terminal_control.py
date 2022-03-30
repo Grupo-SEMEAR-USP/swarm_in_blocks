@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from time import sleep
 import numpy as np
 from swarm_in_blocks.swarm import Swarm

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- number of clovers / Number of iterations -->
+    <arg name="num" default="2"/>
+    <arg name="formation" default="full_square"/>
+    <arg name="led" default="true"/>
+    <arg name="camera" default="false"/>
+    <arg name="rangefinder" default="true"/>
+    <arg name="flashlight" default="false"/>
+    <arg name="new_blocks_page" default="false"/>
+    <arg name="quiet" default="false"/>
+
+    <include file="$(find swarm_in_blocks/launch/simulation/simulation.launch)">
+        <!-- number of clovers / Number of iterations -->
+        <arg name="num" value="$(arg num)"/>
+        <arg name="formation" value="$(arg formation)"/>
+        <arg name="led" value="$(arg led)"/>
+        <arg name="camera" value="$(arg camera)"/>
+        <arg name="rangefinder" value="$(arg rangefinder)"/>
+        <arg name="flashlight" value="$(arg flashlight)"/>
+        <arg name="new_blocks_page" value="$(arg new_blocks_page)"/>
+        <arg name="quiet" value="$(arg quiet)"/>
+    </include>
+
+    <node pkg="gazebo_ros" type="spawn_model" name="box_spawn" output="screen" args="-urdf -param box_xacro -model box -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+
+    <node pkg="gazebo_ros" type="spawn_model" name="box_spawn" output="screen" args="-urdf -param box_xacro -model box -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+</launch>

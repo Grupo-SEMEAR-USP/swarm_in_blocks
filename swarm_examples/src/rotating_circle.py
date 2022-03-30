@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import time
 from swarm_in_blocks.swarm import Swarm
 import rospy
