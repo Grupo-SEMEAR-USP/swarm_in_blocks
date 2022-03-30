@@ -1,11 +1,26 @@
-from swarm_in_blocks import swarm as sw
+import time
+from swarm_in_blocks.swarm import Swarm
+import rospy
 
 # Create my swarm
-myswarm = sw.Swarm()
+myswarm = Swarm()
 # Init simulation mode
 myswarm.startSimulation()
 
-# Take off all drones and wait 
-myswarm.takeOffAll(z=10)
+# get N
+N = myswarm.connected_clovers
 
-myswarm.setFormation('circle', )
+# Take off all drones and wait 
+myswarm.takeOffAll(z=5)
+
+myswarm.setFormation2D('circle', N, 2)
+myswarm.applyFormation()
+
+dtheta = 10
+dt = 0.5
+while not rospy.is_shutdown():
+    myswarm.rotateFormation(dtheta, 0, 0)
+    time.sleep(dt)
+    myswarm.applyFormation(speed=10, wait=False)
+
+

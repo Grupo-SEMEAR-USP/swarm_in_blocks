@@ -97,6 +97,7 @@ class Swarm:
       # Basic parameters of the swarm
       self.swarm = []
       self.swarm_state = SwarmState()
+
       # Swarm infos
       self.num_of_clovers = None
       if num_of_clovers != None:
@@ -319,6 +320,7 @@ class Swarm:
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = z
+      self.des_formation_pose = np.array([0,0,z])
       
       threads = []
       for idx, clover in enumerate(self.swarm):
@@ -333,6 +335,7 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def landAll(self):
       coord = np.empty((0,4))
@@ -346,6 +349,7 @@ class Swarm:
 
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = 0
+      self.des_formation_pose = np.array([0,0,0])
 
       threads = []
       for idx, clover in enumerate(self.swarm):
@@ -360,11 +364,13 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords = self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
       self.des_formation_coords = self.init_formation_coords
+      self.des_formation_pose = np.array([0, 0, 0])
       self.applyFormation()   
 
    def returnAndLand(self):
@@ -375,15 +381,18 @@ class Swarm:
       rospy.loginfo("Landing...")
       self.landAll()
 
-   def applyFormation(self):
+   def applyFormation(self, speed=1, tolerance=0.2, wait=True):
       logging.debug(f"Applying formation to {self.num_of_clovers}")
       rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
       threads = []
       for idx, clover in enumerate(self.swarm):
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
+         z = self.des_formation_coords[idx][2]
+         if wait:
+            thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z, speed=speed, tolerance=0.2))
+         else:
+            thrd = Thread(target=clover.navigate, kwargs=dict(x=x,y=y,z=z, speed=speed))
          threads.append(thrd)
       
       # Start all threads with the minimum latency possible
@@ -395,6 +404,7 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    # LED Operations
    def ledAll(self, effect, red, green, blue):
@@ -691,12 +701,12 @@ class Swarm:
       self.op_num += 1
 
    #Transformations
-   def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
-      new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
-      self.des_formation_coords = new_coord
-      self.des_formation_name = 'transform'
-      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
-      self.op_num += 1
+   # def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
+   #    new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
+   #    self.des_formation_coords = new_coord
+   #    self.des_formation_name = 'transform'
+   #    self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+   #    self.op_num += 1
 
    def scaleFormation(self, sx, sy, sz):
       # Get x, y, z of current formation
@@ -725,13 +735,16 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def rotateFormation(self, anglex, angley, anglez):
+   def rotateFormation(self, anglex_deg, angley_deg, anglez_deg):
+      anglex_rad = anglex_deg*np.pi/180
+      angley_rad = angley_deg*np.pi/180
+      anglez_rad = anglez_deg*np.pi/180
       # Get x, y, z of current formation
       tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
       # Translate back to the origin 
       origin_coords = transform.translateFormation(self.des_formation_coords, -tx, -ty, -tz)
       # Rotate formation on the origin
-      origin_coords = transform.rotateFormation(origin_coords, anglex, angley, anglez)
+      origin_coords = transform.rotateFormation(origin_coords, anglex_rad, angley_rad, anglez_rad)
       # Translate back to the current pose
       self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
       # Update formation pose (stays the same in this case)
@@ -923,9 +936,9 @@ if __name__ == "__main__":
          swarm.scaleFormation(sx, sy, sz)
       
       elif (key == str('tr') or key == str('TR')):
-         anglex = float(input("Insert the x angle: "))*np.pi/180
-         angley = float(input("Insert the y angle: "))*np.pi/180
-         anglez = float(input("Insert the z angle: "))*np.pi/180
+         anglex = float(input("Insert the x angle: "))
+         angley = float(input("Insert the y angle: "))
+         anglez = float(input("Insert the z angle: "))
          swarm.rotateFormation(anglex, angley, anglez)
 
       elif (key == str('tt') or key == str('TT')):
