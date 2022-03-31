@@ -20,9 +20,9 @@ from sensor_msgs.msg import CompressedImage
 from cloverKeyboard import DroneKeyboard
 
 
-subscribers = [] # lista com o atual subscriber
+subscribers = [] # list that will hold subscribers
 
-clovers = [] # lista com o numero em str dos topicos a serem inscritos
+clovers = [] # list with string of topics to be read 
 
 keyboard_clover = [] # list with drone objects for later control
 
