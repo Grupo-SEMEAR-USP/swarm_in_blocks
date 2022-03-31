@@ -111,7 +111,7 @@ class SwarmInternalCollisionAvoidance():
         self.swarm = []
 
         # init node
-        rospy.init_node("collision_avoidance")
+        rospy.init_node("swarm_collision_avoidance")
         # subscribe swarm checker to get clovers on network
         self.__subscribeSwarmChecker()
         # listen transformation to analyse clovers targets

@@ -732,7 +732,7 @@ Blockly.Blocks['set_2d_formation'] = {
 		.appendField("set 2D formation");
 	this.appendDummyInput()
 		.appendField("formation")
-		.appendField(new Blockly.FieldDropdown([["line","LINE"], ["full square","FULL_SQUARE"], ["empty square","EMPTY_SQUARE"]]), "2D formation");
+		.appendField(new Blockly.FieldDropdown([["line","LINE"], ["full square","FULL_SQUARE"], ["empty square","EMPTY_SQUARE"],["circle","CIRCLE"]]), "2D formation");
 	this.appendValueInput("NUM")
 		.setCheck("Number")
 		.appendField("number of clovers");

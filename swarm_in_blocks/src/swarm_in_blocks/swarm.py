@@ -122,7 +122,7 @@ class Swarm:
       
       # Initial formation
       self.init_formation_name = ''
-      self.init_formation_coords = []
+      self.init_formation_coords = np.array([])
 
       # Current formation name and coord in homogeneous line vector type 
       # Ex of self.curr_form_coords: [[x0,y0,z0,1],[x1,y1,z1,1], [x2,y2,z2,1], ...]
@@ -135,11 +135,11 @@ class Swarm:
 
       # Desired formation coords
       self.des_formation_name = ''
-      self.des_formation_coords = []
+      self.des_formation_coords = np.array([])
 
       # Led matrix
       self.des_led_effects_name = ''
-      self.des_led_effects = []
+      self.des_led_effects = np.array([])
 
       # Mode selected upon start
       self.mode = ''
@@ -236,7 +236,7 @@ class Swarm:
       # rospy.loginfo("Starting planning mode...")
       self.mode = 'Planning'
       # See if initial formation is [], then set default inital formation
-      if not self.init_formation_coords:
+      if not self.init_formation_coords.any():
          # Initial formation for 3 or less clovers. By default on line formation.
          if self.num_of_clovers < 4:
             self.setInitialFormation('line', self.num_of_clovers-1)
@@ -410,7 +410,7 @@ class Swarm:
       self.curr_formation_coords =  self.des_formation_coords
       self.curr_formation_pose = self.des_formation_pose
 
-   def plot_preview(self, plot_type='2D'):
+   def plotPreview(self, plot_type='2D'):
       if plot_type == '2D':
          plot.create_swarm_preview(self, self.des_formation_coords, preview_type='2D')
       elif plot_type == '3D':

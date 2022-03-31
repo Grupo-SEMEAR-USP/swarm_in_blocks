@@ -24,6 +24,8 @@ sudo -E sh -c 'rosdep init'
 rosdep update
 
 echo "--- Configuring Gazebo Envs"
+#  . /usr/share/gazebo-11/setup.bash 
+
 echo "--- Creating Catkin workspace"
 sleep 1
 mkdir -p ~/catkin_ws/src
@@ -37,24 +39,12 @@ sleep 1
 cd ~/catkin_ws/src
 git clone https://github.com/Grupo-SEMEAR-USP/swarm_in_blocks.git
 
-echo "--- Installing Swarm in Blocks dependencies"
-/usr/bin/python3 -m pip install -r ~/catkin_ws/src/swarm_in_blocks/requirements.txt
-# principal libraries for wxPython
-sudo apt install -y freeglut3 freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev \
-    libjpeg-dev libnotify-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev python3-dev libhdf5-dev build-essential \
-    python3-venv python3-wxgtk4.0
-
-
 echo "--- Getting Clover sources"
 sleep 1
 cd ~/catkin_ws/src
 git clone --depth 1 https://github.com/Grupo-SEMEAR-USP/clover.git
 git clone --depth 1 https://github.com/CopterExpress/ros_led
 git clone --depth 1 https://github.com/ethz-asl/mav_comm
-
-echo "--- Installing Clover's Python dependencies"
-sleep 1
-/usr/bin/python3 -m pip install -r ~/catkin_ws/src/clover/clover/requirements.txt
 
 echo "--- Downloading PX4"
 sleep 1
@@ -63,15 +53,28 @@ ln -s ~/PX4-Autopilot ~/catkin_ws/src/
 ln -s ~/PX4-Autopilot/Tools/sitl_gazebo ~/catkin_ws/src/
 ln -s ~/PX4-Autopilot/mavlink ~/catkin_ws/src/
 
-echo "--- Installing PX4 dependencies"
-sleep 1
-~/PX4-Autopilot/Tools/setup/ubuntu.sh
-pip3 install --user toml
-
 echo "--- Installing dependencies with rosdep"
 sleep 1
 cd ~/catkin_ws
 rosdep install --from-paths src --ignore-src -y
+
+echo "--- Installing Swarm in Blocks dependencies"
+/usr/bin/python3 -m pip install -r ~/catkin_ws/src/swarm_in_blocks/requirements.txt
+# principal libraries for wxPython
+sudo apt install -y freeglut3 freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev \
+    libjpeg-dev libnotify-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev python3-dev libhdf5-dev build-essential \
+    python3-venv python3-wxgtk4.0
+
+echo "--- Installing Clover's Python dependencies"
+sleep 1
+/usr/bin/python3 -m pip install -r ~/catkin_ws/src/
+
+clover/clover/requirements.txt
+
+echo "--- Installing PX4 dependencies"
+sleep 1
+~/PX4-Autopilot/Tools/setup/ubuntu.sh
+pip3 install --user toml
 
 echo "--- Addding Clover airframe"
 sleep 1

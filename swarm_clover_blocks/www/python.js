@@ -585,6 +585,6 @@ Blockly.Python['plot_formation'] = function(block) {
 	initSwarm()
 	// TODO: Assemble Python into code variable.
 	var type = block.getFieldValue('PLOT_TYPE');
-	var code = `swarm.plotPreview(plot_type='${type}')`;
+	var code = `swarm.plotPreview(plot_type='${type}')\n`;
 	return code;
 };

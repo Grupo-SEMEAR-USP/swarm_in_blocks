@@ -307,7 +307,7 @@ def topics_sorter():
 
 def main():
     app = ImageViewApp()
-    rospy.init_node('ImageView')
+    rospy.init_node('swarm_fpv')
     app.MainLoop()
     return 0
 
