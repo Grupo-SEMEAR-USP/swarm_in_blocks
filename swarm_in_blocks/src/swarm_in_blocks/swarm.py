@@ -20,7 +20,6 @@ import os
 import json
 import traceback
 import logging
-import math
 import random
 
 # Local modules
@@ -97,6 +96,7 @@ class Swarm:
       # Basic parameters of the swarm
       self.swarm = []
       self.swarm_state = SwarmState()
+
       # Swarm infos
       self.num_of_clovers = None
       if num_of_clovers != None:
@@ -314,25 +314,29 @@ class Swarm:
       self.mode = 'Navigation'   
 
    # Basic swarm operations
-   def takeOffAll(self, z=1):
+   def takeOffAll(self, z=1, speed=0.5):
       logging.debug(f"{self.num_of_clovers} drones taking off")
       rospy.loginfo(f"{self.num_of_clovers} drones taking off")
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = z
+      self.des_formation_pose = np.array([0,0,z])
       
       threads = []
       for idx, clover in enumerate(self.swarm):
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, auto_arm=True))
-         thrd.start()
+         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x, y=y, z=z, tolerance=0.2, speed=speed, auto_arm=True))
          threads.append(thrd)
+      
+      for thrd in threads:
+         thrd.start()
       
       for thrd in threads:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def landAll(self):
       coord = np.empty((0,4))
@@ -346,6 +350,7 @@ class Swarm:
 
       self.des_formation_coords = self.init_formation_coords
       self.des_formation_coords[:,2] = 0
+      self.des_formation_pose = np.array([0,0,0])
 
       threads = []
       for idx, clover in enumerate(self.swarm):
@@ -353,18 +358,22 @@ class Swarm:
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
          z = self.des_formation_coords[idx][2]  
          thrd = Thread(target=clover.land)
-         thrd.start()
          threads.append(thrd)
       
+      for thrd in threads:
+         thrd.start()
+
       for thrd in threads:
          thrd.join()
       
       self.curr_formation_coords = self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
    def returnToHome(self):
       logging.debug(f"{self.num_of_clovers} drones returning")
       rospy.loginfo(f"{self.num_of_clovers} drones returning")
       self.des_formation_coords = self.init_formation_coords
+      self.des_formation_pose = np.array([0, 0, 0])
       self.applyFormation()   
 
    def returnAndLand(self):
@@ -375,15 +384,18 @@ class Swarm:
       rospy.loginfo("Landing...")
       self.landAll()
 
-   def applyFormation(self):
+   def applyFormation(self, speed=1, tolerance=0.2, wait=True):
       logging.debug(f"Applying formation to {self.num_of_clovers}")
       rospy.loginfo(f"Applying formation to {self.num_of_clovers}")
       threads = []
       for idx, clover in enumerate(self.swarm):
          x = self.des_formation_coords[idx][0] - clover.init_coord[0]
          y = self.des_formation_coords[idx][1] - clover.init_coord[1]
-         z = self.des_formation_coords[idx][2]  
-         thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z))
+         z = self.des_formation_coords[idx][2]
+         if wait:
+            thrd = Thread(target=clover.navigateWait, kwargs=dict(x=x,y=y,z=z, speed=speed, tolerance=0.2))
+         else:
+            thrd = Thread(target=clover.navigate, kwargs=dict(x=x,y=y,z=z, speed=speed))
          threads.append(thrd)
       
       # Start all threads with the minimum latency possible
@@ -395,8 +407,9 @@ class Swarm:
          thrd.join()
       
       self.curr_formation_coords =  self.des_formation_coords
+      self.curr_formation_pose = self.des_formation_pose
 
-   def plot_preview(self, plot_type='2D'):
+   def plotPreview(self, plot_type='2D'):
       if plot_type == '2D':
          plot.create_swarm_preview(self, self.des_formation_coords, preview_type='2D')
       elif plot_type == '3D':
@@ -537,7 +550,7 @@ class Swarm:
                print("teste2")
          
          if(shape == "square"):
-            if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
+            if(np.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (np.sqrt(((L/2)**2)+((L/2)**2)))):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
                
             else:
@@ -678,33 +691,26 @@ class Swarm:
       formation3D.visualizeMesh(self.__mesh)
    
    def loadFormation(self):
-      # with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.npy', 'rb') as f:
-      #    self.des_formation_coords = np.load(f)
-      # print(self.des_formation_coords)
-
       with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.json') as json_file:
          loaded_list = json.load(json_file)
       for i in loaded_list:
-        loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
+         loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
       name = loaded_list['formation {}'.format(len(loaded_list)-1)]['name']
       coord = loaded_list['formation {}'.format(len(loaded_list)-1)]['coord']
 
       # Update formation name
-      loaded_formation_coords = coord
-      loaded_formation_name = name
       self.des_formation_coords = coord
       self.des_formation_name = name
-      #self.formation_list['formation {}'.format(self.op_num)] = {'name':loaded_formation_name, 'coord':loaded_formation_coords}
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
    #Transformations
-   def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
-      new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
-      self.des_formation_coords = new_coord
-      self.des_formation_name = 'transform'
-      self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
-      self.op_num += 1
+   # def transformFormation(self, sx, sy, sz, anglex, angley, anglez, tx, ty, tz):
+   #    new_coord = transform.transformFormation(self.des_formation_coords, sx, sy, sz, anglex, angley, anglez, tx, ty, tz)
+   #    self.des_formation_coords = new_coord
+   #    self.des_formation_name = 'transform'
+   #    self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
+   #    self.op_num += 1
 
    def scaleFormation(self, sx, sy, sz):
       # Get x, y, z of current formation
@@ -733,13 +739,16 @@ class Swarm:
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 
-   def rotateFormation(self, anglex, angley, anglez):
+   def rotateFormation(self, anglex_deg, angley_deg, anglez_deg):
+      anglex_rad = anglex_deg*np.pi/180
+      angley_rad = angley_deg*np.pi/180
+      anglez_rad = anglez_deg*np.pi/180
       # Get x, y, z of current formation
       tx, ty, tz = self.des_formation_pose[0], self.des_formation_pose[1], self.des_formation_pose[2]
       # Translate back to the origin 
       origin_coords = transform.translateFormation(self.des_formation_coords, -tx, -ty, -tz)
       # Rotate formation on the origin
-      origin_coords = transform.rotateFormation(origin_coords, anglex, angley, anglez)
+      origin_coords = transform.rotateFormation(origin_coords, anglex_rad, angley_rad, anglez_rad)
       # Translate back to the current pose
       self.des_formation_coords = transform.translateFormation(origin_coords, tx, ty, tz)
       # Update formation pose (stays the same in this case)
@@ -775,229 +784,3 @@ class Swarm:
 
    def stopFollowingChief(self):
       self.stop_follow_chief = True
-
-if __name__ == "__main__":
-
-   print("Select the operation mode:")
-   print("1 - Planning mode")
-   print("2 - Simulation mode")
-   print("3 - Navigation mode")
-   selec_mode = input('\n')
-   
-   if (selec_mode == str('1')):
-      # Starts the simulation just with the plots previews
-      selec_amount = int(input(f"\nType the amount of clovers: "))
-      swarm = Swarm(selec_amount)
-      swarm.startPlanning()
-   elif (selec_mode == str('2')):
-      print("1 - Launch simulation")
-      print("2 - Simulation is already launched")
-      selec_launch = int(input('\n'))
-      # Starts the Gazebo simulation and clovers ready to operate
-      if selec_launch == 1:
-         selec_amount = int(input(f"\nType the amount of clovers: "))
-         swarm = Swarm(selec_amount)
-         swarm.startSimulation(launch=True)
-      elif selec_launch == 2:
-         swarm = Swarm()
-         swarm.startSimulation()
-   elif (selec_mode == str('3')):
-      pass
-   else:
-      logging.debug("There isn't this mode")
-      rospy.loginfo("There isn't this mode")
-      exit()
-
-   #Menu 
-   def menu():
-      print("Select")
-      print("\n-----Basic operations-----")
-      print("1 - Takeoff all")
-      print("0 - Initial position")
-      print("L - Land all")
-      print("RL - Return and Land")
-      print("led - Set Led for all drones")
-      print("\n-----Formations-----")
-      print("2 - Line formation")
-      print("3 - Triangle formation")
-      print("4e - Empty square formation")
-      print("4f - Full square formation")
-      print("O - Circle formation")
-      print("5 - Cube formation")
-      print("6 - Sphere formation")
-      print("7 - Pyramid formation")
-      print("A - Alphabet formation")
-      print("\n-----Transformations-----")
-      print("TR - Rotate")
-      print("TS - Scale")
-      print("TT - Translate")
-      print("\n-----Plot and Apply-----")
-      print("AP - Apply formation")
-      print("PLT - Plot preview")
-      print("PLT3D - Plot 3D preview")
-      print("FL - Formation list")
-      print("\nE - Exit")
-
-   N = swarm.num_of_clovers
-   #init_form = swarm.setInitialPosition()
-   
-   while not rospy.is_shutdown():
-      coord = swarm.des_formation_coords
-      menu()
-      key = input('\n')
-      if (key == str('1')):
-         swarm.takeOffAll()
-         #rospy.sleep(2)
-
-      elif (key == str('2')):
-         if (N < 2):
-            print("You need at least 2 clovers!\n")
-         else:
-            L = int(input("Insert the desired length: "))
-            swarm.setFormation2D('line', N, L)
-            #rospy.sleep(5)
-
-      elif (key == str('3')):
-         if (N < 3):
-            print("You need at least 3 clovers!\n")
-         else:
-               L = int(input("Insert the desired side length: "))
-               swarm.setFormation2D('triangle', N, L)
-               #rospy.sleep(5)
-
-      elif (key == str('4f') or key == str('4F')):
-         if (N < 4):
-            print("You need at least 4 clovers!\n")
-         else:
-            L = int(input("Insert the desired side length: "))
-            swarm.setFormation2D('full_square', N, L)
-            #rospy.sleep(5)
-
-      elif (key == str('4e') or key == str('4E')):
-         if (N < 4):
-            print("You need at least 4 clovers!\n")
-         else:
-            L = int(input("Insert the desired side length: "))
-            swarm.setFormation2D('empty_square', N, L)
-            #rospy.sleep(5)
-
-      elif (key == str('o') or key == str('O')):
-         L = int(input("Insert the desired ratio: "))
-         swarm.setFormation2D('circle', N, L)
-         #rospy.sleep(2)
-
-      elif (key == str('5')):
-         if (N < 8):
-               print("You need at least 8 clovers!\n")
-         else:
-               #type = input("Insert full or empty: ")
-               L = int(input("Insert the desired side length: "))
-               swarm.setFormation3D('cube', N, L)
-               #rospy.sleep(5)
-
-      elif (key == str('6')):
-         L = int(input("Insert the desired ratio: "))
-         swarm.setFormation3D('sphere', N, L)
-         #rospy.sleep(5)
-
-      elif (key == str('7')):
-         if (N < 3):
-               print("You need at least 3 clovers!\n")
-         else:
-               L = int(input("Insert the desired side length: "))
-               swarm.setFormation3D('pyramid', N, L)
-               #rospy.sleep(5)
-
-      elif (key == str('0')):
-         swarm.returnToHome()
-         rospy.sleep(2)
-      
-      elif  (key == str('a') or key == str('A')):
-         user_input = input(f"Please, enter word or a letter: ")
-         swarm.setAlphabet(user_input, N)
-
-      elif (key == str('l') or key == str('L')):
-         swarm.landAll()
-         rospy.sleep(5)
-      
-      elif (key == str('rl') or key == str('RL')):
-         swarm.returnAndLand()
-         rospy.sleep(5)
-
-      elif (key == str('ts') or key == str('TS')):
-         sx = int(input("Insert the x scale: "))
-         sy = int(input("Insert the y scale: "))
-         sz = int(input("Insert the z scale: "))
-         swarm.scaleFormation(sx, sy, sz)
-      
-      elif (key == str('tr') or key == str('TR')):
-         anglex = float(input("Insert the x angle: "))*np.pi/180
-         angley = float(input("Insert the y angle: "))*np.pi/180
-         anglez = float(input("Insert the z angle: "))*np.pi/180
-         swarm.rotateFormation(anglex, angley, anglez)
-
-      elif (key == str('tt') or key == str('TT')):
-         tx = int(input("Insert the x translation: "))
-         ty = int(input("Insert the y translation: "))
-         tz = int(input("Insert the z translation: "))
-         swarm.translateFormation(tx, ty, tz)
-
-      elif (key == str('ciranda')):
-         ang=0
-         while(ang < 4*np.pi):
-            swarm.rotateFormation(0, 0, ang)
-            rospy.sleep(2)
-            swarm.applyFormation()
-            rospy.sleep(3)
-
-      elif (key == str('ap') or key == str('AP')):
-         swarm.applyFormation()
-
-      elif (key == str('plt') or key == str('PLT')):
-         swarm.plot_preview(plot_type='2D')
-      
-      elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
-         swarm.plot_preview(plot_type='3D')
-
-      elif (key == str('fl') or key == str('FL')):
-         print(swarm.formation_list)
-
-      elif (key == str('Ld') or key == str('load')):
-         swarm.loadFormation()
-
-      elif (key == str('led')):
-         effect = str(input("input led effect: "))
-         red = int(input("Insert the red color (0-255): "))
-         green = int(input("Insert the green color (0-255): "))
-         blue = int(input("Insert the blue color (0-255): "))
-         swarm.ledAll(effect, red, green, blue)
-
-      elif (key == str('led2')):
-         effect = str(input("input led effect: "))
-         red = int(input("Insert the red color (0-255): "))
-         green = int(input("Insert the green color (0-255): "))
-         blue = int(input("Insert the blue color (0-255): "))
-         swarm.ledEven(effect, red, green, blue)
-
-      elif (key == str('led3')):
-         strg = str(input("input formation type: "))
-         effect = str(input("input led effect: "))
-         print("Drones coordinates: \n{}\n".format(swarm.des_formation_coords))
-         swarm.ledFormation2D(effect,strg,L,N)
-
-      elif (key == str('led4')):
-         effect = str(input("input led effect: "))
-         red = int(input("Insert the red color (0-255): "))
-         green = int(input("Insert the green color (0-255): "))
-         blue = int(input("Insert the blue color (0-255): "))
-         swarm.ledOdd(effect, red, green, blue)
-
-      elif (key == str('led5')):
-         #effect = str(input("input led effect: "))
-         effects_list = ['fill', 'fade', 'flash', 'blink', 'blink_fast', 'wipe', 'rainbow', 'rainbow_fill']
-         
-         effect = effects_list[random.randint(0, 7)]
-         swarm.ledRandom(effect)
-      
-      elif (key == str('e') or key == str('E')):
-         break

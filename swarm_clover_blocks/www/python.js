@@ -498,7 +498,8 @@ Blockly.Python.forms = function(block) {
 
 function initSwarm(){
 	Blockly.Python.definitions_['import_swarm'] = 'from swarm_in_blocks import swarm as sw'
-	Blockly.Python.definitions_['init_swarm'] = 'swarm = sw.Swarm()\nswarm.startSimulation()'
+	Blockly.Python.definitions_['init_swarm'] = 'swarm = sw.Swarm()\n'
+	Blockly.Python.definitions_['init_mode']= 'swarm.startSimulation()\n'
 }
 
 Blockly.Python['take_off_all'] = function(block) {
@@ -583,7 +584,7 @@ Blockly.Python['apply_formation'] = function(block) {
 Blockly.Python['plot_formation'] = function(block) {
 	initSwarm()
 	// TODO: Assemble Python into code variable.
-	var formation = block.getFieldValue('PLOT_TYPE');
-	var code = plot.create_swarm_preview(swarm, swarm.des_formation_coords, preview_type=formation);
+	var type = block.getFieldValue('PLOT_TYPE');
+	var code = `swarm.plotPreview(plot_type='${type}')`;
 	return code;
 };

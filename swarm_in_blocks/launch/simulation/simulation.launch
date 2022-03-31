@@ -2,6 +2,7 @@
 
 <launch>
 
+    <!-- Swarm configs -->
     <!-- number of clovers / Number of iterations -->
     <arg name="num" default="2"/>
     <arg name="formation" default="full_square"/>
@@ -12,6 +13,15 @@
     <arg name="new_blocks_page" default="false"/>
     <arg name="quiet" default="false"/>
 
+    <!-- Gazebo configs -->
+    <env name="GAZEBO_MODEL_PATH" value="$(find swarm_in_blocks)/models:$GAZEBO_MODEL_PATH"/>
+    <!-- <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/> -->
+    <arg name="world" default="$(find swarm_in_blocks)/worlds/race.world"/>
+    <arg name="paused" default="false"/>
+    
+    <!-- Gazebo server IP -->
+    <arg name="simulator_ip" default="127.0.0.1"/>
+
     <!-- blocks Backend -->
     <include file="$(find swarm_in_blocks)/launch/singles/blocks.launch">
         <arg name="newpage" value="$(arg new_blocks_page)"/>
@@ -19,8 +29,8 @@
 
     <!-- gazebo with ROS api -->
     <include file="$(find swarm_in_blocks)/launch/singles/gazebo.launch">
-        <arg name="paused" default="false"/>
-        <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="world" value="$(arg world)"/>
     </include>
     
     <!-- lauch.py launch each vehicle on the right coordinate based on the formation -->

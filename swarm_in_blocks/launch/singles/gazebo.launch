@@ -6,8 +6,12 @@
     <arg name="debug" default="false"/>
     <arg name="verbose" default="false"/>
     <arg name="paused" default="false"/>
-    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_aruco.world"/>
+
+    <!-- <arg name="world" default="$(find swarm_examples)/worlds/box.world"/> -->
+    <!-- <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_a ruco.world"/> -->
     <!-- <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/yosemite.world"/> -->
+    <env name="GAZEBO_MODEL_PATH" value="$(find swarm_in_blocks)/models:$GAZEBO_MODEL_PATH"/>
+    <arg name="world" default="$(find swarm_in_blocks)/worlds/race.world"/>    
     
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="gui" value="$(arg gui)"/>

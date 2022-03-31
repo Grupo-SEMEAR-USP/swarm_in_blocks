@@ -13,6 +13,9 @@ pi = np.pi
 #---Formations---
 
 def line(N, L=1):
+    if L/N < 1:
+        L = N-1
+        print("Distance between drones is too short\nSetting new length as {}".format(L))
     coord = np.empty((0,4))
     z0 = 1
     f = L/(N-1)
@@ -26,6 +29,9 @@ def line(N, L=1):
 
 def circle(N, L=2):
     xc = yc = 0
+    if 2*pi*L < N:
+        L = round(N/(2*pi),2)
+        print("Distance between drones is too short\nSetting new length as {}".format(L))
     coord = np.empty((0,4))
     z0 = 1
     logging.debug("Beginning circle formation")
@@ -39,11 +45,14 @@ def circle(N, L=2):
     return coord
 
 def full_square(N, L=2):
+    n = int(np.sqrt(N)) 
+    if L/np.ceil(N/n) < 1:
+        L = np.ceil(N/n)
+        print("Distance between drones is too short\nSetting new length as {}".format(L))
     coord = np.empty((0,4))
     z0 = 1
     logging.debug("Beginning full square formation")
-    yi = 0
-    n = int(np.sqrt(N))             
+    yi = 0            
     (q, coord) = square_side(N, L, q=0, n=n, yi=0, coord=coord)
     while (q<N):
         if (round(np.sqrt(N),2) == int(np.sqrt(N))):
@@ -60,6 +69,9 @@ def full_square(N, L=2):
     return coord
 
 def empty_square(N, L=2):
+    if L/np.ceil((N/4)+1) < 1:
+        L = np.ceil((N/4)+1)
+        print("Distance between drones is too short\nSetting new length as {}".format(L))
     coord = np.empty((0,4))
     z0 = 1
     logging.debug("Beginning empty square formation")
@@ -91,19 +103,15 @@ def empty_square(N, L=2):
 def triangle(N, L=2):
     logging.debug("Beginning triangle formation")
     coord = np.empty((0,4))
-    Ld = 2
+    Ld = 2                  #Ld is the default size for the side
     #Variáveis contadoras
-    if(N<5):
-        c1=1                #variável independente
-    else:
-        c1=1/2
-    cx=0                    #variável contadora para o x
-    cy=0                    #variável contadora para o y 
-    p=1                     #Parametro de subtração
+    cx=0                    #counter variable for x
+    cy=0                    #counter variable for y 
+    p=1                     #Subtraction Parameter
     id_list = []
     reta = np.sqrt(3)       #Coeficiente angular
 
-    #Laço que define as variáveis a partir do numero de drones
+    #Loop that sets the variables from the number of drones
     for index in range(N):
         id_list.append(index)
         if(index%3==0):
@@ -119,13 +127,14 @@ def triangle(N, L=2):
         L=Ld
 
     
-    c3=L/2                     #Parametro para base do triângulo
-    id=int(np.median(id_list)) #Mediana dos ids
-    h = (np.sqrt(3)*L)/2       #Altura do triângulo 
+    c3=L/2                     #Parameter for the base of the triangle
+    id=int(np.median(id_list)) #Median of ids
+    h = (np.sqrt(3)*L)/2       #Height of the triangle 
     
-    #Verificações
+    #Checks
+
     if(N%2==0 and N%3!=0):
-        S=N-p
+        S=N-p                  # p are drones base 
     elif(N%2!=0 and N>7):
         S=N-p
     elif(N%3==0 and N>3):
@@ -134,7 +143,7 @@ def triangle(N, L=2):
         S=N
     if(N>7):
         if(N%2!=0 or N%3==0):
-            c3 = L/(p+1)
+            c3 = L/(p+1)      # c3 is the pose to drones base
         if(N%2==0 and N>12):
             c3 = L/p
 
@@ -246,6 +255,9 @@ def pyramid(N, L):
         coord = np.concatenate((coord,[point]))
     
     return coord
+
+
+#---Support Functions---
 
 def square_side(N, L, q, n, yi, coord, z0=1):
     j = 0

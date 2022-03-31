@@ -36,6 +36,7 @@ def visualizePointCloud(pcd):
 if __name__ == '__main__':
 
     # path = '/home/guisoares/.ros/swarm_models/christ-the-redeemer/Christ the Redeemer.obj'
-    path = '/home/guisoares/Downloads/output (1).stl'
+    path = input(f"Path to find the file, like the example:\n/home/guisoares/Downloads/output (1).stl\n: ")
+    
     coords, mesh, pcd = formation3DFromMesh(path, 100)
     visualizePointCloud(pcd)
