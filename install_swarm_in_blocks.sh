@@ -23,6 +23,7 @@ sleep 1
 sudo -E sh -c 'rosdep init'
 rosdep update
 
+echo "--- Configuring Gazebo Envs"
 echo "--- Creating Catkin workspace"
 sleep 1
 mkdir -p ~/catkin_ws/src
@@ -41,7 +42,7 @@ echo "--- Installing Swarm in Blocks dependencies"
 # principal libraries for wxPython
 sudo apt install -y freeglut3 freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev \
     libjpeg-dev libnotify-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev python3-dev libhdf5-dev build-essential \
-    python3-venv
+    python3-venv python3-wxgtk4.0
 
 
 echo "--- Getting Clover sources"
