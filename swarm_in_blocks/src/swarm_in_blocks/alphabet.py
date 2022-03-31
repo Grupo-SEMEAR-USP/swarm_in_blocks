@@ -247,43 +247,41 @@ def Letter_Verification(letter, N):
         rospy.loginfo("Invalid type or size")
         sys.exit()
 
-def Letters(letter, N):
+def Letters(letter, type_number):
     letter_coord = Alphabet_dictionary[letter]
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
-    return letter_coord[:Letter_Verification(letter, N)]
+    return letter_coord[:type_number]
 
 
 def Word(word, N):
     i = 8
     list_str = list(word.upper())
     list_N = np.full(len(list_str),0, dtype=int)
-    size=0
 
     for i in range(len(list_str)):
         print(N)
         if (N>0):
-            list_N[i] = N
-            size = Letter_Verification(list_str[i], N)
-            N-= size
+            list_N[i] = Letter_Verification(list_str[i], N)
+            N-= list_N[i]
             
     print(list_N)
-    # word_list = list(map(Letters, list_str, list_N))
-    # word_list_2 = []
+    word_list = list(map(Letters, list_str, list_N))
+    word_list_2 = []
 
-    # for index in range(len(word_list)):
-    #     if(index == 0):
-    #         word_list_2.append(word_list[index])
-    #     else:
-    #         word_list_2.append(transform.translateFormation(
-    #             word_list[index], i, 0, 0))
-    #         i += 8
+    for index in range(len(word_list)):
+        if(index == 0):
+            word_list_2.append(word_list[index])
+        else:
+            word_list_2.append(transform.translateFormation(
+                word_list[index], i, 0, 0))
+            i += 8
 
-    # word_coord = np.vstack((word_list_2))
-    # return word_coord
+    word_coord = np.vstack((word_list_2))
+    return word_coord
 
 
 if __name__ == "__main__":
     coord = np.empty((0, 4))
     letter_word = input(f"Please, enter cont word: ")
     coord = Word(letter_word,90)
-    #plot_letter_preview(coord)
+    plot_letter_preview(coord)
