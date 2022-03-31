@@ -43,6 +43,7 @@ sudo apt install -y freeglut3 freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev lib
     libjpeg-dev libnotify-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev python3-dev libhdf5-dev build-essential \
     python3-venv
 
+
 echo "--- Getting Clover sources"
 sleep 1
 cd ~/catkin_ws/src

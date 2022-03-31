@@ -34,8 +34,8 @@
     <env name="PX4_SIM_HOST_ADDR" value="$(arg simulator_ip)"/>
 
     <!-- Connect to ros master -->
-    <env name="ROS_MASTER_URI" value="http://$(arg simulator_ip):11311"/>
-    <env name="ROS_IP" value="$(arg client_ip)"/>
+    <!-- <env name="ROS_MASTER_URI" value="http://$(arg simulator_ip):11311"/>
+    <env name="ROS_IP" value="$(arg client_ip)"/> -->
 
     <!-- Gazebo -->
     <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
