@@ -25,13 +25,6 @@ def plot_letter_preview(coord):
     plt.grid(True)
     plt.show()
 
-# Ideia:
-# fazer um dicionário com todos os arrays das coordenadas de cada Letra
-# como o dicionário associa uma chave para cada tipo de dado vai facilitar para cont busca.
-# Cada letra vai ter um numero associado e para isso serão necessárias várias verificações
-# para ver quantos drones serão chamados.
-# Cada array letra vai ler uma quantidade da matriz master
-
 z = 1
 
 A = np.array([[0, 0, z, 1],
@@ -238,32 +231,40 @@ Alphabet_dictionary = {
 
 def Letter_Verification(letter, N):
     letter_sizes = eval(letter+'_size')
-    print("S - Simple type (Need {} clovers)".format(letter_sizes[0]))
-    print("M - Medium type (Need {} clovers)".format(letter_sizes[1]))
-    print("F - Full type (Need {} clovers)".format(letter_sizes[2]))
-    print("You have {} clovers".format(N))
+    print(f"S - Simple type for {letter} (Need {letter_sizes[0]} clovers)")
+    print(f"M - Medium type for {letter} (Need {letter_sizes[1]} clovers)")
+    print(f"F - Full type for {letter} (Need {letter_sizes[2]} clovers)")
+    print("You have {} clovers\n".format(N))
     type = input(f"Select your type:")
-    if((type == "S" or type == "s") and (N == letter_sizes[0])):
+    if((type == "S" or type == "s") and (N >= letter_sizes[0])):
         return letter_sizes[0]
-    elif((type == "M" or type == "m") and (N == letter_sizes[1])):
+    elif((type == "M" or type == "m") and (N >= letter_sizes[1])):
         return letter_sizes[1]
-    elif((type == "F" or type == "f") and (N == letter_sizes[2])):
+    elif((type == "F" or type == "f") and (N >= letter_sizes[2])):
         return letter_sizes[2]
     else:
         logging.debug("Invalid type or size")
         rospy.loginfo("Invalid type or size")
         sys.exit()
 
-def Letters(letter, N):
+def Letters(letter, type_number):
     letter_coord = Alphabet_dictionary[letter]
     #plot_letter_preview(letter_coord[:Letter_Verification(letter, type)])
-    return letter_coord[:Letter_Verification(letter, N)]
+    return letter_coord[:type_number]
 
 
 def Word(word, N):
     i = 8
     list_str = list(word.upper())
-    list_N = np.full(len(list_str), N, dtype=int)
+    list_N = np.full(len(list_str),0, dtype=int)
+
+    for i in range(len(list_str)):
+        print(N)
+        if (N>0):
+            list_N[i] = Letter_Verification(list_str[i], N)
+            N-= list_N[i]
+            
+    print(list_N)
     word_list = list(map(Letters, list_str, list_N))
     word_list_2 = []
 
@@ -280,9 +281,7 @@ def Word(word, N):
 
 
 if __name__ == "__main__":
-    # coord = np.empty((0, 4))
-    # str = input(f"Please, enter cont word: ")
-    # coord = Word(str)
-
-    x = Letters('C', 9)
-    plot_letter_preview(x)
+    coord = np.empty((0, 4))
+    letter_word = input(f"Please, enter cont word: ")
+    coord = Word(letter_word,90)
+    plot_letter_preview(coord)

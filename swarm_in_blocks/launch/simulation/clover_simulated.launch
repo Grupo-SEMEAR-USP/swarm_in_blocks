@@ -43,7 +43,7 @@
     <!-- MAVROS -->
     <arg name="remote" value="$(eval 14800 + arg('ID'))"/>
     <arg name="local" value="$(eval 15000 + arg('ID'))"/>
-    <arg name="fcu_url" default="udp://:$(arg remote)@localhost:$(arg local)"/>
+    <arg name="fcu_url" default="udp://:$(arg remote)@$(arg simulator_ip):$(arg local)"/>
 
     <!-- PX4 configs -->
     <arg name="daemon" default="true"/>
