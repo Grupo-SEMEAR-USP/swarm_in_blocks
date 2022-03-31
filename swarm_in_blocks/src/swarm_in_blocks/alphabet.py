@@ -194,7 +194,7 @@ SWARM_S = np.array([[1, 1, z, 1],
                     [0, 7, z, 1],
                     [0.5, 9, z, 1],
                     [1.5, 9, z, 1],
-                    [1.5, 9, z, 1],
+                    #[1.5, 9, z, 1],
                     [4, 9, z, 1],  # Simple 11
                     [3.5, 1, z, 1],
                     [5, 2, z, 1],
@@ -216,7 +216,7 @@ SWARM_S = np.array([[1, 1, z, 1],
                     [3.375, 8.5, z, 1],
                     [2.25, 0.5, z, 1],
                     #[0, 9, z, 1],
-                    [0, 5, z, 1]], dtype=float)  # Full 31)
+                    [0, 5, z, 1]], dtype=float)  # Full 30)
 SWARM_S_size = [11, 17, 31]
 
 Alphabet_dictionary = {

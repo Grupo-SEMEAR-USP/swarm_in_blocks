@@ -20,7 +20,6 @@ import os
 import json
 import traceback
 import logging
-import math
 import random
 
 # Local modules
@@ -551,7 +550,7 @@ class Swarm:
                print("teste2")
          
          if(shape == "square"):
-            if(math.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (math.sqrt(((L/2)**2)+((L/2)**2)))):
+            if(np.sqrt((((coord[idx][1])**2) + ((coord[idx][0])**2))) == (np.sqrt(((L/2)**2)+((L/2)**2)))):
                lista[idx] = Thread(target=clover.set_effect, kwargs=dict(effect=effect, r=color[0][0], g=color[0][1], b=color[0][2]))
                
             else:
@@ -692,23 +691,16 @@ class Swarm:
       formation3D.visualizeMesh(self.__mesh)
    
    def loadFormation(self):
-      # with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.npy', 'rb') as f:
-      #    self.des_formation_coords = np.load(f)
-      # print(self.des_formation_coords)
-
       with open(os.path.dirname(os.path.abspath(__file__))+'/saved_files/last_formation.json') as json_file:
          loaded_list = json.load(json_file)
       for i in loaded_list:
-        loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
+         loaded_list[i]['coord'] = np.array(loaded_list[i]['coord'])
       name = loaded_list['formation {}'.format(len(loaded_list)-1)]['name']
       coord = loaded_list['formation {}'.format(len(loaded_list)-1)]['coord']
 
       # Update formation name
-      loaded_formation_coords = coord
-      loaded_formation_name = name
       self.des_formation_coords = coord
       self.des_formation_name = name
-      #self.formation_list['formation {}'.format(self.op_num)] = {'name':loaded_formation_name, 'coord':loaded_formation_coords}
       self.formation_list['formation {}'.format(self.op_num)] = {'name':self.des_formation_name, 'coord':self.des_formation_coords}
       self.op_num += 1
 

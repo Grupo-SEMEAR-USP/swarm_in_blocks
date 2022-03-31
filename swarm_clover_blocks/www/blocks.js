@@ -643,7 +643,7 @@ Blockly.Blocks['forms'] = {
 	init: function() {
 		// adiciona o input vazio, ou seja, será só um texto, no caso o nome do bloco
 		this.appendDummyInput()
-			.appendField("Forms");		
+			.appendField("geometry navigation");		
 		// adiciona um input varzio também em um primeiro momento, porém, em baixo ele abre uma caixa de seleção.
 		// são feitos dois ".appendField", no segundo é adiciona por meio de um mini bloco uma caixa de seleção.
 		// passa-se por meio do FieldDropdown, em pares, primeiro o nome (minpusculo) que aparecerá no bloco e
@@ -677,7 +677,7 @@ Blockly.Blocks['forms'] = {
 		
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(COLOR_SWARM);
+		this.setColour(COLOR_FLIGHT);
 		this.setTooltip("");
 		this.setHelpUrl("");
 		}
@@ -688,7 +688,7 @@ Blockly.Blocks['forms'] = {
 Blockly.Blocks['take_off_all'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField("Take off all");
+			.appendField("take off all");
 		this.appendValueInput("Z")
 			.setCheck("Number")
 			.appendField("height");
@@ -803,7 +803,7 @@ Blockly.Blocks['rotate_formation'] = {
 		.setCheck("Number")
 		.appendField("angle in z");
 	this.appendDummyInput()
-		.appendField("in radians");
+		.appendField("in degrees");
 	this.setInputsInline(false);
 	this.setPreviousStatement(true, null);
 	this.setNextStatement(true, null);
