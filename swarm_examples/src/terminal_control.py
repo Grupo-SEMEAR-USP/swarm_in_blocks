@@ -216,9 +216,9 @@ while not rospy.is_shutdown():
         swarm.scaleFormation(sx, sy, sz)
 
     elif (key == str('tr') or key == str('TR')):
-        anglex = float(input("Insert the x angle: "))*np.pi/180
-        angley = float(input("Insert the y angle: "))*np.pi/180
-        anglez = float(input("Insert the z angle: "))*np.pi/180
+        anglex = float(input("Insert the x angle: "))
+        angley = float(input("Insert the y angle: "))
+        anglez = float(input("Insert the z angle: "))
         swarm.rotateFormation(anglex, angley, anglez)
 
     elif (key == str('tt') or key == str('TT')):
@@ -231,10 +231,10 @@ while not rospy.is_shutdown():
         swarm.applyFormation()
 
     elif (key == str('plt') or key == str('PLT')):
-        swarm.plot_preview(plot_type='2D')
+        swarm.plotPreview(plot_type='2D')
 
     elif (key == str('plt3d') or key == str('PLT3D') or key == str('plt3D')):
-        swarm.plot_preview(plot_type='3D')
+        swarm.plotPreview(plot_type='3D')
 
     elif (key == str('fl') or key == str('FL')):
         print(swarm.formation_list)
