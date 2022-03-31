@@ -21,8 +21,6 @@
     
     <!-- Gazebo server IP -->
     <arg name="simulator_ip" default="127.0.0.1"/>
-    <env name="ROS_MASTER_URI" value="http://$(arg simulator_ip):11311"/>
-    <env name="ROS_IP" value="$(arg simulator_ip)"/>
 
     <!-- blocks Backend -->
     <include file="$(find swarm_in_blocks)/launch/singles/blocks.launch">
