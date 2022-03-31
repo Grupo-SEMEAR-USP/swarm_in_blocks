@@ -89,7 +89,6 @@ def menu():
     print("0 - Initial position")
     print("L - Land all")
     print("RL - Return and Land")
-    print("led - Set Led for all drones")
     print("\n-----Formations-----")
     print("2 - Line formation")
     print("3 - Triangle formation")

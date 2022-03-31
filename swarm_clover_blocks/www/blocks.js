@@ -803,7 +803,7 @@ Blockly.Blocks['rotate_formation'] = {
 		.setCheck("Number")
 		.appendField("angle in z");
 	this.appendDummyInput()
-		.appendField("in radians");
+		.appendField("in degrees");
 	this.setInputsInline(false);
 	this.setPreviousStatement(true, null);
 	this.setNextStatement(true, null);
