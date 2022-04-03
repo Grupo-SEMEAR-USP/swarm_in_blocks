@@ -108,7 +108,7 @@ echo "--- Configure apache webserver to serve .ros"
 sleep 1
 sudo sed -i 's@/var/www/html@'"${HOME}"'/.ros/www@' /etc/apache2/sites-available/000-default.conf
 sudo sed -i 's@/var/www/@'"${HOME}"'/.ros/www/@' /etc/apache2/apache2.conf
-sudo 000-default.conf
+sudo a2ensite 000-default.conf
 service apache2 reload
 
 echo "--- Cleaning up"
