@@ -7,8 +7,8 @@ def formation3DFromMesh(model_path, number_of_points):
 
     if mesh.is_empty():
         raise Exception("Mesh is empty.")
-    
-    pcd = mesh.sample_points_poisson_disk(number_of_points=number_of_points, init_factor=5)
+
+    pcd = mesh.sample_points_poisson_disk(number_of_points=number_of_points, init_factor=8)
     
     # Line vectors
     coords = np.array(pcd.points)
@@ -36,7 +36,9 @@ def visualizePointCloud(pcd):
 if __name__ == '__main__':
 
     # path = '/home/guisoares/.ros/swarm_models/christ-the-redeemer/Christ the Redeemer.obj'
-    path = input(f"Path to find the file, like the example:\n/home/guisoares/Downloads/output (1).stl\n: ")
-    
-    coords, mesh, pcd = formation3DFromMesh(path, 100)
+    name = input(f"Path name: ")
+    path = f"/home/eduardo/catkin_ws/src/swarm_in_blocks/swarm_in_blocks/src/stl_letters/{name}.stl"
+    print(path)
+    coords, mesh, pcd = formation3DFromMesh(path, 20)
+    print(coords)
     visualizePointCloud(pcd)
