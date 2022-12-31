@@ -15,7 +15,7 @@
 
     <!-- Gazebo configs -->
     <env name="GAZEBO_MODEL_PATH" value="$(find swarm_in_blocks)/models:$GAZEBO_MODEL_PATH"/>
-    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover_light.world"/>
+    <arg name="world" default="$(find clover_simulation)/resources/worlds/clover.world"/>
     <!-- <arg name="world" default="$(find swarm_in_blocks)/worlds/race_simple.world"/> -->
     <arg name="paused" default="false"/>
     

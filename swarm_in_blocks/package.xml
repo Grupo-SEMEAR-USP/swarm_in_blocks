@@ -59,7 +59,6 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>mavros_msgs</exec_depend>
-  <exec_depend>module</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
