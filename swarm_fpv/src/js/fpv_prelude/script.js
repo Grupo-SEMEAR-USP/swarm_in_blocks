@@ -18,18 +18,20 @@ function Drone(id, name) {
     // movement methods
     // left joystick
         this.KeyW =  function () {
-            updateContent("up")
-            console.log("aa");
+            updateContent("up");
             pubMsg("W FOI PRESSIONADO")
         };
         this.KeyA = () => {
-            updateContent("yaw+")
+            updateContent("yaw+");
+            pubMsg("A FOI PRESSIONADO")
         },
         this.KeyS = () => {
-            updateContent("down")
+            updateContent("down");
+            pubMsg("S FOI PRESSIONADO")
         },
         this.KeyD = () => {
-            updateContent("yaw-")
+            updateContent("yaw-");
+            pubMsg("D FOI PRESSIONADO")
         },
 
         // right joystick
