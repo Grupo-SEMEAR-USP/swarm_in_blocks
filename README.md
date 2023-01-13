@@ -7,7 +7,7 @@
 
 ## Detailed Gitbook
 
-Check our Gitbook, with the detailed information about all that was developed by Atena Team during CopterHack 2022: https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks
+Check our Gitbook, with the detailed information about all that was developed by Atena Team: https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks
 
 ## Introduction
 
