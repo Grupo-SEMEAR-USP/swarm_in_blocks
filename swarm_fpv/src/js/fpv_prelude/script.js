@@ -20,6 +20,7 @@ function Drone(id, name) {
         this.KeyW =  function () {
             updateContent("up")
             console.log("aa");
+            pubMsg("W FOI PRESSIONADO")
         };
         this.KeyA = () => {
             updateContent("yaw+")
