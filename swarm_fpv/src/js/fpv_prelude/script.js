@@ -64,7 +64,8 @@ window.addEventListener("keydown",  // TO DO => Array of elements that accepts m
     
     console.log(key)
     drone[String(key)]();
-    }
+    
+}
 }
 ,true)
 

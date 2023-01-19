@@ -22,6 +22,8 @@ var topic = new ROSLIB.Topic({
     messageType : 'std_msgs/String'
 });
 
+
+
 topic.subscribe( (message) => {
     console.log("Received on " + topic.name + " the message: " + message.data);
     //listener.unsubscribe();
