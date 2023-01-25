@@ -23,18 +23,18 @@ var topic = new ROSLIB.Topic({
 });
 
 
+// topic.subscribe( (message) => {
+//     console.log("Received on " + topic.name + " the message: " + message.data);
+//     //listener.unsubscribe();
+// })
 
-topic.subscribe( (message) => {
-    console.log("Received on " + topic.name + " the message: " + message.data);
-    //listener.unsubscribe();
-})
 
+// function pubMsg(message) {
+//     var msg = new ROSLIB.Message({
+//         data : message
+//     });
 
-function pubMsg(message) {
-    var msg = new ROSLIB.Message({
-        data : message
-    });
+//     topic.publish(msg);
+// }
 
-    topic.publish(msg);
-}
 

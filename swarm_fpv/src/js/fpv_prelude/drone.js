@@ -1,7 +1,7 @@
-//client
-var addTwoIntsClient = new ROSLIB.Service({
+// services set velocity
+var setVelocity = new ROSLIB.Service({
     ros : ros,
-    name : '/add_two_ints',
+    name : `/clover${id}/add_two_ints`,
     serviceType : 'ros_js_tests/multiplier'
   });
 
@@ -16,5 +16,3 @@ console.log('Result for service call on '
 + ': '
 + result.result);
 });
-
-
