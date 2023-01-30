@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<style>
+    .select-center{
+  padding-left: 25%;
+  padding-right: 25%;
+}
+</style>
+</head>
+<body>
+
+<h1>Robot's perspective</h1>
+<p>Looking through the eyes of a robot.</p>
+<img id="image_sub" 
+width="850" height="850" 
+onclick="aumentaImagem(logo);" 
+ondblclick="tamanhoNormal(logo);"
+style="cursor:pointer"/>
+
+<select id="dropdown" name = "teste" onchange = "javascript:reload_subscriber(this);"
+class="select-center">
+                <option value = null> Select am id</option>
+</select>
+</body>
+<script src="fpv_script.js">
+</script>
+</html>
