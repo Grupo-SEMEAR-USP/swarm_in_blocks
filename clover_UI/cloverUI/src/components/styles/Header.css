@@ -1,0 +1,16 @@
+#Header{
+    display: flex;
+    padding: 2em 2em 2em 2em;
+}
+
+#he_2{
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+    font-size: 18px;
+    padding-left: 550px;
+}
+
+#he_links{
+    padding-left: 50px;
+}
+
