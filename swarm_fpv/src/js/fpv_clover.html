@@ -16,17 +16,22 @@
 
 <h1>Robot's perspective</h1>
 <p>Looking through the eyes of a robot.</p>
+<p id="output"></p>
 <img id="image_sub" 
-width="850" height="850" 
+width="320" height="240" 
 onclick="aumentaImagem(logo);" 
 ondblclick="tamanhoNormal(logo);"
 style="cursor:pointer"/>
 
+
 <select id="dropdown" name = "teste" onchange = "javascript:reload_subscriber(this);"
-class="select-center">
-                <option value = null> Select am id</option>
+class="select-center" style="display:block">
+                <option value = null> Select an id</option>
 </select>
+
+<button id="increase" onclick="increaseImageSize();">Size +</button>
+<button id="decrease" onclick="decreaseImageSize();">Size -</button>
 </body>
-<script src="fpv_script.js">
-</script>
+<script src="fpv_script.js"></script>
+<script src="fpv_key_listener.js"></script>
 </html>

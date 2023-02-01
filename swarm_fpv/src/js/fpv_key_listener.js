@@ -28,12 +28,12 @@ function Drone(id, name) {
         // };
 
         // protopipo de request
-        this.setRequest = (vz=0, vy=0, vx=0, yr=0) => {
+        this.setRequest = (vz=0, vy=0, vx=0, yr=0, yaw=0) => {
             let request = new ROSLIB.ServiceRequest({
                 vx : vx,
                 vy : vy,
                 vz : vz,
-                yaw : 0,
+                yaw : yaw,
                 yaw_rate : yr,
                 frame_id : this.body,
                 auto_arm : true
@@ -57,7 +57,7 @@ function Drone(id, name) {
         };
         this.KeyA = () => {
             updateContent("yaw+");
-            this.setVelocity.callService(this.setRequest(vz=0, vy=0, vx=0, yr=vel), function (result) {
+            this.setVelocity.callService(this.setRequest(vz=0, vy=0, vx=0, yr=vel, yaw=NaN), function (result) {
                 console.log(result)
             });
             // pubMsg("A FOI PRESSIONADO")
@@ -71,7 +71,7 @@ function Drone(id, name) {
         },
         this.KeyD = () => {
             updateContent("yaw-");
-            this.setVelocity.callService(this.setRequest(vz=0, vy=0, vx=0, yr=-vel), function (result) {
+            this.setVelocity.callService(this.setRequest(vz=0, vy=0, vx=0, yr=-vel, yaw=NaN), function (result) {
                 console.log(result)
             });
             // pubMsg("D FOI PRESSIONADO")
@@ -111,7 +111,7 @@ function Drone(id, name) {
         }
 }
 
-var drone = new Drone(0, "clover0");
+// var drone = new Drone(0, "clover0");
 //drone['KeyW']()
 
 window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time

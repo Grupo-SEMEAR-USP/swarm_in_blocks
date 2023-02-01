@@ -16,11 +16,11 @@ ros.on('close', () => {
 });
 
 // communication
-var topic = new ROSLIB.Topic({
-    ros : ros,
-    name : '/listener',
-    messageType : 'std_msgs/String'
-});
+// var topic = new ROSLIB.Topic({
+//     ros : ros,
+//     name : '/listener',
+//     messageType : 'std_msgs/String'
+// });
 
 
 // topic.subscribe( (message) => {

@@ -1,5 +1,5 @@
 var ros = new ROSLIB.Ros({
-    url: 'ws://localhost:9099'
+    url: 'ws://localhost:9090'
   });
   ros.on('connection', function() {
     console.log('Connected to websocket server.');
@@ -13,6 +13,10 @@ var ros = new ROSLIB.Ros({
   // ----------------------
   // var lista = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   var list = [];
+  var width, height;
+  width = 320;
+  height = 240; // standart sizes (may change)
+  var drone;
   
   function define_id(id_c) {
     id = id_c;
@@ -22,13 +26,30 @@ var ros = new ROSLIB.Ros({
     update_listener(elemento.value);
   }
   
-  function aumentaImagem(nome) {
-    nome.width = nome.width + 850;
-    nome.height = nome.height + 850;
+  function increaseImageSize() {
+    let img = document.getElementById("image_sub")
+    
+    width *= 1.1
+    height *= 1.1
+
+    img.setAttribute('width', `${width}`)
+    img.setAttribute('height', `${height}`)
+
+    // nome.width = nome.width + 850;
+    // nome.height = nome.height + 850;
   }
-  function tamanhoNormal(nome) {
-    nome.width = 850;
-    nome.height = 850;
+  function decreaseImageSize() {
+    let img = document.getElementById("image_sub")
+    
+    width *= 0.9
+    height *= 0.9
+
+    img.setAttribute('width', `${width}`)
+    img.setAttribute('height', `${height}`)
+
+    
+    // nome.width = 850
+    // nome.height = 850;
   }
   
   
@@ -40,14 +61,16 @@ var ros = new ROSLIB.Ros({
     if (listener) {
       listener.unsubscribe();
     }
-  
+    
+    drone = new Drone(id, `clover${id}`);
+
     listener = new ROSLIB.Topic({
       ros: ros,
       name: `clover${id}/main_camera/image_raw/compressed`,
       messageType: 'sensor_msgs/CompressedImage'
     });
     listener.subscribe(function(message) {
-      console.log('Received message on ' + listener.name);
+      // console.log('Received message on ' + listener.name);
       document.getElementById('image_sub').src = "data:image/jpeg;base64," + message.data;
     });
   }
