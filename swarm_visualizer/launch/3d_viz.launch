@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="sep" default="true"/>
+
+    <node pkg="swarm_visualizer" type="markers.py" name="markers" />
+    <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
+
+    <group if="$(arg sep)">
+        <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+            <arg name="port" value="9090"/>
+        </include>
+    </group>
+
+</launch>
