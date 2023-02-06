@@ -7,31 +7,39 @@
 
 <style>
     .select-center{
-  padding-left: 25%;
-  padding-right: 25%;
+  padding-left: 10%;
+  padding-right: 10%;
+  
 }
 </style>
 </head>
 <body>
 
-<h1>Robot's perspective</h1>
-<p>Looking through the eyes of a robot.</p>
-<p id="output"></p>
-<img id="image_sub" 
-width="320" height="240" 
-onclick="aumentaImagem(logo);" 
-ondblclick="tamanhoNormal(logo);"
-style="cursor:pointer"/>
+  <h1>Robot's perspective</h1>
+  <p>Looking through the eyes of a robot.</p>
+  <p id="output"></p>
+  <img id="image_sub" 
+  width="320" height="240" 
+  onclick="aumentaImagem(logo);" 
+  ondblclick="tamanhoNormal(logo);"
+  style="cursor:pointer"/>
 
+  <div class="data" style="display: inline-block;">
+    <p id="battery">Battery</p>
+    <p id="telemetry">Telemetry</p>
+    <p id="state">State</p>
+    <p id="cpu">CPU Data</p>
+  </div>
 
-<select id="dropdown" name = "teste" onchange = "javascript:reload_subscriber(this);"
-class="select-center" style="display:block">
-                <option value = null> Select an id</option>
-</select>
+  <select id="dropdown" name = "teste" onchange = "javascript:reload_subscriber(this);"
+  class="select-center" style="display:block">
+                  <option value = null> Select an id</option>
+  </select>
 
-<button id="increase" onclick="increaseImageSize();">Size +</button>
-<button id="decrease" onclick="decreaseImageSize();">Size -</button>
+    <button id="increase" onclick="increaseImageSize();">Size +</button>
+    <button id="decrease" onclick="decreaseImageSize();">Size -</button>
 </body>
 <script src="fpv_script.js"></script>
 <script src="fpv_key_listener.js"></script>
+<script src="fpv_data.js"></script>
 </html>
