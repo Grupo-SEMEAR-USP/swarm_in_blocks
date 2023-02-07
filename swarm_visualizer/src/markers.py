@@ -18,7 +18,7 @@ def show_marker(marker_array_, pos, ori, scale, color, lifetime):
     marker = Marker()
     
     
-    marker.header.frame_id = "/table_top"
+    marker.header.frame_id = "base_link"
     # marker_.header.stamp = rospy.Time.now()
     marker.type = marker.CUBE
     marker.action = marker.ADD # eq a 0 - criar
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         
         publisher.publish(array)
-        rospy.sleep(1)
+        rate.sleep()
