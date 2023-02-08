@@ -6,6 +6,7 @@ function Clover_tools() {
     return (
       <div id="Clover_tools">
         <div class='container'>
+            <div id='c_green_gradient'></div>
             <div id='sub_text'>
                 Clover kit
                 <p />
