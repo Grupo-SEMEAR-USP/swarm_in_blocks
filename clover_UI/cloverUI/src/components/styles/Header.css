@@ -14,3 +14,15 @@
     padding-left: 50px;
 }
 
+#h_purple_gradient {
+    position: absolute;
+    width: 200px;
+    height: 500px;
+    background: linear-gradient(90deg, #9C1DE8 0%, #571B97 100%);
+    filter: blur(500px);
+    border-radius: 200px;
+    transform: rotate(90deg);
+    margin-left: -23%;
+    margin-top: -5%;
+}
+

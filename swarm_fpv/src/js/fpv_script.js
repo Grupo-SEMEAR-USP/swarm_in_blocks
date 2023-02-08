@@ -22,8 +22,13 @@ var ros = new ROSLIB.Ros({
     id = id_c;
   }
   
-  function reload_subscriber(elemento) {
-    update_listener(elemento.value);
+  function reload_subscriber(element) {
+    update_ImageListener(element.value); // updates the visualization of the camera and the control services
+
+    // update_BatteryStatus(element.value); // battery status
+    // update_Telemetry(element.value); // position and velocity
+    // update_CPU(element.value)
+
   }
   
   function increaseImageSize() {
@@ -54,7 +59,7 @@ var ros = new ROSLIB.Ros({
   
   
   var listener;
-  function update_listener(id) {
+  function update_ImageListener(id) {
     if(id == null){
         return
     }
@@ -62,7 +67,7 @@ var ros = new ROSLIB.Ros({
       listener.unsubscribe();
     }
     
-    drone = new Drone(id, `clover${id}`);
+    drone = new Drone(id, `clover${id}`); // drone obj that initializes navigate services
 
     listener = new ROSLIB.Topic({
       ros: ros,
@@ -73,6 +78,10 @@ var ros = new ROSLIB.Ros({
       // console.log('Received message on ' + listener.name);
       document.getElementById('image_sub').src = "data:image/jpeg;base64," + message.data;
     });
+
+    update_BatteryStatus(id)
+    update_Telemetry(id)
+    update_CPU(id)
   }
   
   //update_listener(0);
@@ -122,3 +131,15 @@ var ros = new ROSLIB.Ros({
   //   name: 'swarm_checker/state'`
   // })
   
+
+// function update_BatteryStatus(id) {
+//   return 
+// } 
+
+// function update_Telemetry(id){
+//   return
+// }
+
+// function update_CPU(id) {
+//   return
+// }

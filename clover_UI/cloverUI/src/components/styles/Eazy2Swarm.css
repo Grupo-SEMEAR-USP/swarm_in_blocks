@@ -32,3 +32,16 @@
     margin-top: 40px;
     padding-left: 315px;
 }
+
+
+#e_purple_gradient {
+    position: absolute;
+    width: 500px;
+    height: 600px;
+    background: linear-gradient(90deg, #9C1DE8 0%, #571B97 100%);
+    filter: blur(450px);
+    border-radius: 200px;
+    transform: rotate(94.82deg);
+    margin-top: -28%;
+    margin-left: 90%;
+}
