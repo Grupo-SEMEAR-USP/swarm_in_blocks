@@ -20,8 +20,24 @@ class MarkerObj:
     def setPublishers(self):
         self.markerPublisher = rospy.Publisher("/vehicle_marker", MarkerArray, queue_size=10)
 
+
     def setSubscribers(self):
         rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
+
+
+    def waitMessage(self, lista_id):
+        for id in lista_id:
+            message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
+
+            # cur_pose = message.pose
+            # cur_pose.position.x += 1
+            self.marker_array.markers[id].pose = message.pose
+            # self.marker_array.markers[id].pose.position.x += 1
+            self.marker_array.markers[id].id = id
+            print(id)
+
+        self.markerPublisher.publish(self.marker_array)
+
 
 
     def callback(self, data):
@@ -62,25 +78,35 @@ class MarkerObj:
         marker.color.b = blue_  
         self.marker_array.markers.append(marker)
     
+    def marker_list(self, id_list):
+        for id in id_list:
+            pose = Pose()
+            pose.position.x = 0
+            pose.position.y = 0
+            pose.position.z = 0
+            pose.orientation.x = 0
+            pose.orientation.y = 0
+            pose.orientation.z = 0
+            pose.orientation.w = 0
+            self.create_marker(frame=f"/base_link{id}", type="", pose=pose, scale=[1,1,1], color=[255, 255, 0], lifetime=0)
+    
 
 def main():
     rospy.init_node("marker_handler")
     obj = MarkerObj()
 
-    pose = Pose()
-    pose.position.x = 0
-    pose.position.y = 0
-    pose.position.z = 0
-    pose.orientation.x = 0
-    pose.orientation.y = 0
-    pose.orientation.z = 0
-    pose.orientation.w = 0
+   
 
-    obj.create_marker(frame="/base_link0", type="", pose=pose, scale=[1,1,1], color=[255, 255, 0], lifetime=0)
+    list = [0, 1]
+
+    obj.marker_list(list)
 
     obj.setPublishers()
-    obj.setSubscribers()
+    # obj.setSubscribers()
+    ## test 2
+    obj.waitMessage(list)
     rospy.spin()
+    
 
 if __name__ == "__main__":
     main()
