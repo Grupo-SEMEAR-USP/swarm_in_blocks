@@ -28,6 +28,8 @@ const settings = {
 function Carrosel() {
     return (
       <div id="Carrosel">
+        <div id='ca_green_gradient'></div>
+        <div id='ca_purple_gradient'></div>
         <Slider
             {...settings}
         >

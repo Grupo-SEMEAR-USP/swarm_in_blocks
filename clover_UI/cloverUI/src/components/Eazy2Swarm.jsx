@@ -4,6 +4,7 @@ import './styles/Eazy2Swarm.css'
 function Eazy2Swarm() {
     return (
       <div id="Eazy2Swarm">
+        <div id='e_purple_gradient'></div>
         <div class='container'>
           <img src='src/assets/swarm.png' id='img'/>
           <div id='eazy_text'>

@@ -7,12 +7,7 @@ import Eazy2Swarm from './components/Eazy2Swarm'
 import Carrosel from './components/Carrosel'
 import Bottom from './components/Bottom'
 
-
-
-
-
-function App() {
-  return (
+const App = () => ( 
     <div className="App">
       <Header />
       <Front_page />
@@ -21,7 +16,7 @@ function App() {
       <Carrosel />
       <Bottom />
     </div>
-  )
-}
+);
+
 
 export default App

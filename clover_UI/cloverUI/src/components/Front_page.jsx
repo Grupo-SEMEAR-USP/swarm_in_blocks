@@ -1,7 +1,7 @@
 import './styles/Front_page.css'
 
 
-function Front_page() {
+const Front_page= () =>{
     return (
       <div id="Front_page">
         <div class='container'>
@@ -16,6 +16,7 @@ function Front_page() {
                 </div>
             </div>
             <div id='rectangle'></div>
+            <div id='f_green_gradient'></div>
             <img src='src/assets/clover.svg' id='voo'/>
         </div>
       </div>

@@ -51,3 +51,15 @@
     max-width: 460px;
 }
 
+#c_green_gradient {
+    position: absolute;
+    width: 680px;
+    height: 600px;
+    background: linear-gradient(90deg, rgba(22, 185, 120, 0.5) 0%, rgba(18, 226, 164, 0.5) 100%);
+    filter: blur(650px);
+    border-radius: 200px;
+    transform: rotate(90deg);
+    margin-top: 5%;
+    margin-left: -55%;
+}
+
