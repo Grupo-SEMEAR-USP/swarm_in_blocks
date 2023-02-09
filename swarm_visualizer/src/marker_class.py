@@ -29,14 +29,16 @@ class MarkerObj:
         for id in lista_id:
             message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
 
-            # cur_pose = message.pose
-            # cur_pose.position.x += 1
+            cur_pose = message.pose
+            cur_pose.position.x += 1
             self.marker_array.markers[id].pose = message.pose
-            # self.marker_array.markers[id].pose.position.x += 1
+            self.marker_array.markers[id].pose.position.y += id
             self.marker_array.markers[id].id = id
             print(id)
 
-        self.markerPublisher.publish(self.marker_array)
+    
+
+        # print()
 
 
 
@@ -105,7 +107,10 @@ def main():
     # obj.setSubscribers()
     ## test 2
     obj.waitMessage(list)
-    rospy.spin()
+    # rospy.spin()
+    while not rospy.is_shutdown():
+        obj.markerPublisher.publish(obj.marker_array)
+        a = input("enter para proximo pub")
     
 
 if __name__ == "__main__":
