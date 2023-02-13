@@ -49,7 +49,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media all and (max-width: 1000px) and (min-width: 800px)  {
   :root {
     color: #213547;
     background-color: #1E1E1E;

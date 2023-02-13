@@ -6,7 +6,7 @@ function Bottom() {
         <div id="Bottom">
             <div id='hor_1'>
                 <div id='sub_ver1'>
-                    <img src='src/assets/Logo_bottom.svg'/>
+                    <img src='/assets/img/Logo_bottom.svg'/>
                     <p>It's never been easier to Swarm!</p>
                 </div>
 
