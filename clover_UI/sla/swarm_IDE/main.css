@@ -1,0 +1,559 @@
+:root{ /* Normal Colors*/
+	--bg-color: #a89a8e; /* Background Color (Line 255)*/
+	--bg-side-bar: #e0e0e0; /* Side Bar Background Color (Line 263) */
+	--bg-fly-side-bar: #c4c4c4; /* Fly Side Bar Background Color (Line 273) */
+	--bg-tabs: #c4c4c4; /* Tabs Background Color (Line 37) */
+	--border-color: #a1a1a1; /* Border Line Background Color (Line 38) */
+	--image: 0; /* Color invertor for swarm in blocks symbol */
+	--bg-button: rgb(230, 230, 230); /* Button Background Color (Line 256) */
+	--bg-disabled: #9e9e9e; /* Disabled Button Background Color (Line 273) */
+}
+
+.dark-mode:root{ /* Dark-Mode Colors*/
+	--bg-color: #54504c; 
+	--bg-side-bar: #9393be;
+	--bg-fly-side-bar: #735FB7;
+	--bg-tabs: #5D5D9D;
+	--border-color: #735FB7;
+	--image: 1;
+	--bg-button: rgb(1, 1, 1);
+	--bg-disabled: #474545;
+}
+
+.Swarm_svg {  
+	-webkit-filter: invert(var(--image));  
+	filter: invert(var(--image));  
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
+}
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+.blink-one {
+	animation: blinker-one 1s linear infinite;
+}
+@keyframes blinker-one {
+	0% {
+	opacity: 0;
+	}
+}
+
+@keyframes blinker-two {
+	100% {
+	opacity: 0;
+	}
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 0.5; }
+	100% { opacity: 1; }
+}
+
+@keyframes shake {
+	10%, 90% {
+	transform: translate3d(-1.5px, 0, 0);
+	}
+	20%, 80% {
+	transform: translate3d(2.5px, 0, 0);
+	}
+	30%, 50%, 70% {
+	transform: translate3d(-4.5px, 0, 0);
+	}
+	40%, 60% {
+	transform: translate3d(4.5px, 0, 0);
+	}
+}
+
+.aplly-shake {
+	position: relative;
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	animation-iteration-count: 3;
+	background-color: #5D5D9D;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	padding: 1;
+	margin: 0;
+	display: grid;
+	grid-template-areas:
+		"tabs tools"
+		"content content";
+	grid-template-rows: min-content 1fr;
+	grid-template-columns: 1fr min-content;
+	font-family: 'Poppins';
+	font-size: 16px;
+}
+
+/*  tools and tabs visual */
+
+#tools, #tabs {
+	font-family: 'Poppins';
+	background: var(--bg-tabs);
+	border-bottom: 2px var(--border-color) solid;
+	white-space: nowrap;
+}
+
+#tools {
+	grid-area: tools;
+	white-space: nowrap;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+}
+
+#tabs {
+	grid-area: tabs;
+	list-style: none;
+	margin: 0;
+	padding: 10px;
+}
+
+/* <unsaved> and examples */
+
+#program-name {
+	width: 160px;
+	border: none;
+	font-size: 14px;
+	padding: 6px;
+	outline: none;
+	background: transparent;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+#program-name:active {
+	background: transparent;
+	text-align: center;
+	animation: blinker 1s linear infinite;
+}
+
+.changed #program-name {
+	color: red;
+}
+
+/* dark mode switch */
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+	padding-bottom: 10px;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 10px;
+	background-color: #ccc;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	border-radius: 34px;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 40px;
+	width: 40px;
+	left: 0px;
+	bottom: 4px;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border-radius: 50%;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	box-shadow: 0 0px 15px #2020203d;
+	background: white url('./blockly/media/bright_mode.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+input:checked + .slider {
+	background-color:  rgb(154, 91, 212);
+}
+
+input:focus + .slider {
+	box-shadow: 0 0 1px rgb(154, 91, 212);
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(24px);
+	-ms-transform: translateX(24px);
+	transform: translateX(24px);
+	background: white url('./blockly/media/night-mode.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* disconnected */
+
+.disconnected {
+	font-size: 16px;
+	color: rgb(255, 108, 108);
+	display:inline;
+	margin-right: 110px;
+}
+
+.disconnected-light {
+	margin-right: 10px;
+	animation: blinker 0.6s linear infinite;
+	height: 8px;
+	width: 8px;
+	background-color: rgb(255, 0, 0);
+	border-radius: 50%;
+}
+
+.blink-two {
+	animation: blinker-two 1.4s linear infinite;
+}
+
+.connected .disconnected { 
+	display: none;
+}
+
+.connected .disconnected-light {
+	display: none;
+}
+
+/* non visual settings */
+.backend-fail {
+	margin-right: 20px;
+	display: none;
+}
+
+#running {
+	color: green;
+	margin-right: 20px;
+	animation: 1s blink linear infinite;
+	display: none;
+}
+
+.running #running { display: block; }
+
+/* tools buttons (launch, run, stop and land) */
+
+#tools button {
+	font-size: 20px;
+	background-color: var(--bg-button);
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+	color:var(--dark-blue);
+	transition-duration: 0.3s;
+} 
+
+#tools button:hover {
+	background-color: rgb(154, 91, 212);
+	color: white;
+}
+
+#tools button:disabled, button[disabled]{
+	border: 0px solid #999999;
+	background-color: var(--bg-disabled);
+	color: #666666;
+	box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.19);
+}
+
+#tools button:active {
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	transform: translate3d(0, 0, 0);
+	perspective: 1000px;
+}
+
+/* modal-overlay */
+::selection{
+	color: #fff;
+	background: #7d2ae8;
+}
+.popup{
+	position: absolute;
+	left: 50%;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
+}
+
+.popup{
+	background: #fff;
+	padding: 25px;
+	border-radius: 15px;
+	top: -150%;
+	max-width: 380px;
+	width: 100%;
+	opacity: 0;
+	pointer-events: none;
+	box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+	transform: translate(-50%, -50%) scale(1.2);
+	transition: top 0s 0.2s ease-in-out,
+				opacity 0.2s 0s ease-in-out,
+				transform 0.2s 0s ease-in-out;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
+
+}
+.popup.show{
+	top: 50%;
+	opacity: 1;
+	padding-bottom: 5px;
+	pointer-events: auto;
+	transform:translate(-50%, -50%) scale(1);
+	transition: top 0s 0s ease-in-out,
+				opacity 0.2s 0s ease-in-out,
+				transform 0.2s 0s ease-in-out;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
+
+}
+.popup :is(header, .icons, .field, .ready){
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
+}
+.popup header{
+	padding-bottom: 15px;
+	border-bottom: 1px solid #ebedf9;
+	z-index: 9999999; /* overlap some blockly popups and the python script */
+}
+header span{
+	font-size: 21px;
+	font-weight: 600;
+}
+header .close, .icons a{
+	display: flex;
+	align-items: center;
+	border-radius: 50%;
+	justify-content: center;
+	transition: all 0.3s ease-in-out;
+}
+header .close{
+	color: #878787;
+	font-size: 17px;
+	background: #f2f3fb;
+	height: 33px;
+	width: 33px;
+	cursor: pointer;
+	z-index: 10;
+}
+header .close:hover{
+	background: #ebedf9;
+	z-index: 10;
+}
+.popup .content-modal{
+	margin: 20px 0;
+}
+.popup .icons{
+	margin: 15px 0 20px 0;
+}
+.content-modal p{
+	font-size: 16px;
+	float:left;
+	margin-top: 10px;
+}
+
+.content-modal .field{
+	float:right;
+	margin: 0px 0 -5px 0;
+	height: 45px;
+	width:150px;
+	border-radius: 4px;
+	padding: 0 5px;
+	border: 1px solid #727070;
+}
+.field.active{
+	border-color: #7d2ae8;
+}
+.field i{
+	width: 20px;
+	font-size: 18px;
+	text-align: center;
+}
+.field.active i{
+	color: rgb(154, 91, 212);
+}
+.field input{
+	/* change here */
+	width: 82%;
+	height: 100%;
+	border: none;
+	outline: none;
+	font-size: 15px;
+}
+
+.field select{
+	width: 82%;
+	height: 100%;
+	border: none;
+	outline: none;
+	font-size: 15px;
+	background-color: transparent;
+}
+
+.output_box{
+	max-width: 100%;
+	width: 100%;
+	max-height: 200px;
+	height: 100%;
+	resize: none;
+	border: 1px solid #727070;
+	font-size: 15px;
+	border-radius: 4px;
+	padding: 0 5px;
+}
+
+.copy-button{
+	background: transparent;
+	border: none;
+	padding: 5px 160px;
+}
+.copy-button:hover{
+	background: #9b6ad4;
+	border-radius:5px;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 180px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px;
+	position: absolute;
+	z-index: 1;
+	bottom: 150%;
+	left: 50%;
+	margin-left: -75px;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* python/blockly switch */
+#tabs li {
+	font-size: 16px;
+	display: inline-block;
+	padding: 5px 10px;
+	cursor: pointer;
+	background-color: rgb(224, 224, 224);
+	padding: 0.65rem 1.1rem;
+	margin-bottom:2rem;
+	color:var(--dark-blue);
+	transition-duration: 0.4s;
+}
+
+#tabs li.selected {
+	color: white;
+	background-color: rgb(154, 91, 212);
+	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 20px 0 rgba(0, 0, 0, 0.19);
+	border-bottom: 3px solid #00ff00;
+}
+
+
+#run {
+	width: 70px;
+}
+
+/* notifications */
+#notifications {
+	position: absolute;
+	right: 10px;
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	max-width: 350px;
+	top: 53px;
+	/* border: white solid 3px; */
+	z-index: 1;
+	padding: 10px;
+	font-family: monospace;
+	font-size: 16px;
+	white-space: pre;
+	max-height: 400px;
+	overflow: scroll;
+}
+
+#notifications:empty { display: none; }
+
+/* blockly visual */
+.content {
+	display: none !important;
+	grid-area: content;
+	z-index: 1;
+}
+
+body[data-tab="blocks"] #blockly { display: block !important; }
+body[data-tab="python"] #python { display: block !important; }
+
+#python {
+	margin: 0px;
+	padding: 10px;
+	z-index: 999999; /* overlap some Blockly's popups */
+}
+
+.blocklySvg {
+	background: var(--bg-color);
+	outline: none;
+	overflow: hidden;
+	position: absolute;
+	display: block;
+}
+
+.blocklyToolboxDiv {
+	background-color: var(--bg-side-bar);
+	width: 140px;
+	overflow-x: visible;
+	overflow-y: auto;
+	position: absolute;
+	z-index: 70;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.blocklyFlyoutBackground {
+	fill: var(--bg-fly-side-bar);
+	fill-opacity: .8;
+}
+

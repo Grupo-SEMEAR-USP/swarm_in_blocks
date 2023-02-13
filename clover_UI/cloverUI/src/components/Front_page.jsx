@@ -17,7 +17,7 @@ const Front_page= () =>{
             </div>
             <div id='rectangle'></div>
             <div id='f_green_gradient'></div>
-            <img src='src/assets/clover.svg' id='voo'/>
+            <img src='/assets/img/clover.svg' id='voo'/>
         </div>
       </div>
     )

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<title>Clover Blocks</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="main.css">
+	<link rel="icon" href="data:,">
+	<link rel="stylesheet" href="highlight/styles/monokai-sublime.css">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
+	<script src="highlight/highlight.pack.js"></script>
+	<script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+	<script src="roslib.js"></script>
+	<script src="blockly/blockly_compressed.js"></script>
+	<script src="blockly/python_compressed.js"></script>
+	<script src="blockly/blocks_compressed.js"></script>
+	<script src="blockly/msg/js/en.js"></script>
+	<script type="module" src="main.js"></script>
+	<!-- launch with ajax and Launch.py -->
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+		function launch(){
+			alert('running');
+
+		}
+    </script>
+	<!-- Pop up of "Launch clover" Range Enforced feature -->
+	<script type="text/javascript">
+		function rage_enforced() {
+			var min = 0;
+			var max = 20;
+
+			var inputRef = document.getElementById("txt");
+			var txtValue = inputRef.value;
+			if(isNaN(parseFloat(txtValue))){
+				console.log("warning input is not a number");
+				return;
+			}
+			var newNum = parseFloat(txtValue);
+			console.log(`NEW:${newNum}`);
+			if (newNum > max || newNum < min) {
+				console.log('input not in range (' + min + ", " + max + ")");
+				inputRef.value = "";
+				inputRef.classList.add("apply-shake");
+				setTimeout(function(){
+					inputRef.classList.remove("apply-shake");
+				}, 500);
+			}
+		}
+	</script>
+	<style>
+		@keyframes shake {
+			10%, 90% {
+			transform: translate3d(-1.5px, 0, 0);
+			}
+			20%, 80% {
+			transform: translate3d(2.5px, 0, 0);
+			}
+			30%, 50%, 70% {
+			transform: translate3d(-4.5px, 0, 0);
+			}
+			40%, 60% {
+			transform: translate3d(4.5px, 0, 0);
+			}
+		}
+		.apply-shake {
+			position: relative;
+			animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+			animation-iteration-count: 3;
+		}
+	</style>
+</head>
+
+
+<body data-tab="blocks">
+	<ul id="tabs" style="padding-bottom: 5px; padding-top: 5px; padding-left: 20px;">
+		<a href="https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/introduction/swarm-in-blocks" style="text-align:left" target=_blank; rel=noopener noreferrer>
+			<img	src="./blockly/media/Swarm_in_Blocks.svg"
+					alt="Swarm in Blocks"
+					width="100"
+					height="100"
+					title="Swarm in Blocks"
+					style="margin-right: 40px;"
+					class="Swarm_svg"
+			/></a>
+		<li style="text-align:center; margin: 10px 0;" class="selected" data-tab="blocks" class="w3-bar-item">
+			Blocks
+			<img    src="./blockly/media/blockly.svg"
+					alt="Blockly"
+					width="26"
+					height="26"
+					title="blockly"
+			/>
+		</li>
+		<li style="text-align:center; margin: 10px 0;" data-tab="python" class="w3-bar-item">
+			Python
+			<img    src="./blockly/media/python.svg"
+					alt="Python"
+					width="21"
+					height="21"
+					title="python"
+			/>
+		</li>
+		<div style="margin-left: 15px; display:inline-block">
+			<label class="switch">
+				<input type="checkbox" id="switch">
+					<span class="slider"></span>
+			</label>
+		</div>
+	</ul>
+
+	<div id="tools">
+		<div class="disconnected-light"></div>
+		<div class="disconnected"> Disconnected</div>
+		<div class="backend-fail">Failed to contact with <code>swarm_clover_blocks</code> node, see <a href="../clover/docs/en/blocks.html#configuration" target="_blank">configuration</a> documentation.</div>
+		<div id="running">Running...</div>
+		<select id="program-name" title="Files are saved in <package_path>/programs/.">
+				<option value="" disabled selected>&lt;Unsaved&gt;</option>
+				<option value="@clear">Clear</option>
+				<option style="font-style: italic;" value="@save">Save</option>
+			<optgroup label="User" data-type="user"></optgroup>
+			<optgroup label="Examples" data-type="example"></optgroup>
+		</select>
+		<!-- buttons -->
+		<button class="view-modal" title="Launch" style="margin-bottom: 0px;margin-right: 6px;margin-left: 26px;">
+			<img    src="./blockly/media/drone.png"
+						alt="Launch"
+						width="38"
+						height="38"
+						class="Swarm_svg"
+			/>
+		</button>
+		<button onclick="runProgram()" disabled id="run" disabled title="Run" style="margin-bottom: 0px; margin-right: 6px;">
+			<img    src="./blockly/media/play_dark.png"
+					alt="Run"
+					width="23"
+					height="23"
+					class="Swarm_svg"
+			/>
+		</button>
+		<button onclick="stopProgram()" title="Stop" style="margin-bottom: 0px; margin-right: 6px;">
+			<img    src="./blockly/media/pause.png"
+					alt="Stop"
+					width="26"
+					height="26"
+					class="Swarm_svg"
+			/>
+		</button>
+		<button onclick="land()" title="Stop and Land" style="margin-bottom: 0px;margin-right: 10px;">
+			<img    src="./blockly/media/flag.png"
+					alt="Land"
+					width="35"
+					height="35"
+					class="Swarm_svg"
+			/>
+		</button>
+	</div>
+
+	<!-- launch pop up -->
+	<div class="popup">
+		<header>
+			<span>Launch</span>
+			<div class="close"><i class="uil uil-times"></i></div>
+		</header>
+		<form class="content-modal">
+			<p>Number of clovers </p>
+			<div class="field">
+				<span class="iconify" data-icon="bi:boxes"></span>
+				<input type="number" id="number" onkeyup="rage_enforced()" onchange="setOutput()" min="0" max="20" stpe="1">
+				<button style="display: none;">Ready</button>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			<p>Launch mode </p>
+			<div class="field">
+				<span class="iconify" data-icon="akar-icons:settings-horizontal"></span>
+				<select name="Launch mode" id="mode" onchange="setOutput()">
+					<option value="planning"> Planning </option>
+					<option value="simulation"> Simulation </option>
+					<option value="navigation"> Navigation </option>
+				</select>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			<p>initial formation </p>
+			<div class="field">
+				<span class="iconify" data-icon="bi:grid-3x3-gap"></span>
+				<select name="Initial formation" id="formation" onchange="setOutput()">
+					<option value="line"> Line </option>
+					<option value="circle"> Circle </option>
+					<option value="full_square"> Full Square </option>
+					<option value="empty_square"> Empty Square </option>
+				</select>
+			</div>
+			<div style="clear:both;">&nbsp;</div><br>
+			
+			<!-- "Run this command" -->
+			<center style="font-size: 16px;"><i class="url-icon uil uil-link"></i> Run this command <i class="url-icon uil uil-link"></i></center>
+			<textarea readonly class="output_box" value="" id="output_box" rows="3" disabled></textarea>
+			
+			<div class="tooltip">
+				<center>
+					<button class="copy-button" type="button" onclick="copy()" onmouseout="outTooltip()">
+						<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+						<span class="iconify" data-icon="ep:copy-document"></span>
+					</button>
+				</center>
+			</div>
+
+			<script>
+				function setOutput(){
+
+					// command create
+					var num = document.getElementById("number");
+					var mode = document.getElementById("mode");
+					var form = document.getElementById("formation");
+					
+					mode_value = mode.value;
+					num_value = num.value;
+					form_value = form.value;
+					output = ''
+					if(mode_value == 'simulation'){
+						output = `roslaunch swarm_in_blocks simulation.launch num:=${num_value} formation:=${form_value}`;
+					}
+					if(mode_value == 'navigation'){
+						output = `roslaunch swarm_in_blocks navigation.launch`;
+					}
+					if(mode_value == 'planning'){
+						output = `roslaunch swarm_in_blocks planning.launch`;
+					}
+					var out = document.getElementById("output_box");
+					out.value = output;
+				}
+
+				function copy() {
+					var copyText = document.getElementById("output_box");
+					copyText.select();
+					copyText.setSelectionRange(0, 99999);
+					navigator.clipboard.writeText(copyText.value);
+					
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copied: " + copyText.value;
+				}
+				function outTooltip() {
+					var tooltip = document.getElementById("myTooltip");
+					tooltip.innerHTML = "Copy to clipboard";
+				}
+			</script>
+		</form>
+	</div>
+
+	<div id="notifications"></div>
+
+	<div id="blockly" class="content"></div>
+	<pre id="python" class="content" contenteditable oncut="return false" onpaste="return false" onkeydown="if(!event.metaKey) return false" spellcheck="false"></pre>
+
+	<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+		<!-- Categoria Swarm com os blocos LED_HEIGHT e FORMS -->
+		<category name="Swarm" colour="#cf0173">
+			<block type="take_off_all">
+				<value name="Z"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="land_all"></block>
+			<block type="return_and_land"></block>
+			<block type="set_2d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="set_3d_formation">
+				<value name="NUM"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+				<value name="LENGTH"><shadow type="math_number"><field name=NUM>1</field></shadow></value>
+			</block>
+			<block type="translate_formation">
+				<value name="TX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="TZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="rotate_formation">
+				<value name="ANGLEX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ANGLEZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="scale_formation">
+				<value name="SX"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SY"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SZ"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="apply_formation"></block>
+			<block type="plot_formation"></block>
+		</category>
+		<category name="Flight" colour="#870b99">
+			<block type="navigate">
+				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="Y"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="Z"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="take_off">
+				<value name="ALT"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="land">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="set_yaw">
+				<value name="YAW"><shadow type="angle"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="wait">
+				<value name="TIME"><shadow type="math_number"><field name="NUM">3</field></shadow></value>
+			</block>
+			<block type="wait_arrival">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="setpoint">
+				<value name="VX"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="VY"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="VZ"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="PITCH"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="ROLL"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="YAW"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="THRUST"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+
+			<block type="forms">
+				<value name="Z"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="X"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="SPEED"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<!-- <block type="key_pressed"></block> -->
+		</category>
+		<category name="State" colour="#bf7300">
+			<block type="get_position">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="get_yaw">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="get_attitude">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="distance">
+				<value name="X"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="Y"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="Z"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="get_time"></block>
+			<block type="arrived">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="rangefinder_distance"></block>
+			<block type="mode">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="armed">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="voltage">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+		</category>
+		<category name="LED" colour="#006f2b">
+			<block type="set_effect">
+				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="set_led">
+				<value name="INDEX"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+				<value name="COLOR"><shadow type="colour_picker"></shadow></value>
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+			<block type="led_count">
+				<value name="ID"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+			</block>
+		</category>
+		<!-- <category name="GPIO" colour="#5b97cc">
+			<block type="gpio_read">
+				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+			</block>
+			<block type="gpio_write">
+				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="LEVEL"><shadow type="logic_boolean"></shadow></value>
+			</block>
+			<block type="set_servo">
+				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="PWM"><shadow type="math_number"><field name="NUM">1500</field></shadow></value>
+			</block>
+			<block type="set_duty_cycle">
+				<value name="PIN"><shadow type="math_number"><field name="NUM">1</field></shadow></value>
+				<value name="DUTY_CYCLE"><shadow type="math_number"><field name="NUM">0.5</field></shadow></value>
+			</block>
+		</category> -->
+		<sep></sep>
+		<category name="Logic" colour="#5b80a5">
+			<block type="controls_if"></block>
+			<block type="logic_compare">
+				<field name="OP">EQ</field>
+			</block>
+			<block type="logic_operation">
+				<field name="OP">AND</field>
+			</block>
+			<block type="logic_negate"></block>
+			<block type="logic_boolean">
+				<field name="BOOL">TRUE</field>
+			</block>
+			<block type="logic_null"></block>
+			<block type="logic_ternary"></block>
+		</category>
+		<category name="Loops" colour="#5ba55b">
+			<block type="controls_repeat_ext">
+				<value name="TIMES">
+					<shadow type="math_number">
+						<field name="NUM">10</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="controls_whileUntil">
+				<field name="MODE">WHILE</field>
+			</block>
+			<block type="controls_for">
+				<field name="VAR" id="SMJ.7:a)p9(!mF0x)WK~">i</field>
+				<value name="FROM">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="math_number">
+						<field name="NUM">10</field>
+					</shadow>
+				</value>
+				<value name="BY">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="controls_forEach">
+				<field name="VAR" id="#hg!+5qncbZDpf;c6Qiw">j</field>
+			</block>
+			<block type="controls_flow_statements">
+				<field name="FLOW">BREAK</field>
+			</block>
+		</category>
+		<category name="Math" colour="#5b67a5">
+			<block type="math_number">
+				<field name="NUM">0</field>
+			</block>
+			<block type="math_arithmetic">
+				<field name="OP">ADD</field>
+				<value name="A">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+				<value name="B">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_single">
+				<field name="OP">ROOT</field>
+				<value name="NUM">
+					<shadow type="math_number">
+						<field name="NUM">9</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_trig">
+				<field name="OP">SIN</field>
+				<value name="NUM">
+					<shadow type="math_number">
+						<field name="NUM">45</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_constant">
+				<field name="CONSTANT">PI</field>
+			</block>
+			<block type="math_number_property">
+				<mutation divisor_input="false"></mutation>
+				<field name="PROPERTY">EVEN</field>
+				<value name="NUMBER_TO_CHECK">
+					<shadow type="math_number">
+						<field name="NUM">0</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_round">
+				<field name="OP">ROUND</field>
+				<value name="NUM">
+					<shadow type="math_number">
+						<field name="NUM">3.1</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_on_list">
+				<mutation op="SUM"></mutation>
+				<field name="OP">SUM</field>
+			</block>
+			<block type="math_modulo">
+				<value name="DIVIDEND">
+					<shadow type="math_number">
+						<field name="NUM">64</field>
+					</shadow>
+				</value>
+				<value name="DIVISOR">
+					<shadow type="math_number">
+						<field name="NUM">10</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_constrain">
+				<value name="VALUE">
+					<shadow type="math_number">
+						<field name="NUM">50</field>
+					</shadow>
+				</value>
+				<value name="LOW">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+				<value name="HIGH">
+					<shadow type="math_number">
+						<field name="NUM">100</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_random_int">
+				<value name="FROM">
+					<shadow type="math_number">
+						<field name="NUM">1</field>
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="math_number">
+						<field name="NUM">100</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="math_random_float"></block>
+		</category>
+		<category name="Text" colour="#5ba58c">
+			<block type="text">
+				<field name="TEXT"></field>
+			</block>
+			<block type="text_join">
+				<mutation items="2"></mutation>
+			</block>
+			<block type="text_append">
+				<field name="VAR" id="SmwB.@#2p5}McHySTA:V">item</field>
+				<value name="TEXT">
+					<shadow type="text">
+						<field name="TEXT"></field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_length">
+				<value name="VALUE">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_isEmpty">
+				<value name="VALUE">
+					<shadow type="text">
+						<field name="TEXT"></field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_indexOf">
+				<field name="END">FIRST</field>
+				<value name="VALUE">
+					<block type="variables_get">
+						<field name="VAR" id="C^Ay41*aH0(G-jwM$x4w">text</field>
+					</block>
+				</value>
+				<value name="FIND">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_charAt">
+				<mutation at="true"></mutation>
+				<field name="WHERE">FROM_START</field>
+				<value name="VALUE">
+					<block type="variables_get">
+						<field name="VAR" id="C^Ay41*aH0(G-jwM$x4w">text</field>
+					</block>
+				</value>
+			</block>
+			<block type="text_getSubstring">
+				<mutation at1="true" at2="true"></mutation>
+				<field name="WHERE1">FROM_START</field>
+				<field name="WHERE2">FROM_START</field>
+				<value name="STRING">
+					<block type="variables_get">
+						<field name="VAR" id="C^Ay41*aH0(G-jwM$x4w">text</field>
+					</block>
+				</value>
+			</block>
+			<block type="text_changeCase">
+				<field name="CASE">UPPERCASE</field>
+				<value name="TEXT">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_trim">
+				<field name="MODE">BOTH</field>
+				<value name="TEXT">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_print">
+				<value name="TEXT">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="text_prompt_ext">
+				<mutation type="TEXT"></mutation>
+				<field name="TYPE">TEXT</field>
+				<value name="TEXT">
+					<shadow type="text">
+						<field name="TEXT">abc</field>
+					</shadow>
+				</value>
+			</block>
+		</category>
+		<category name="Lists" colour="#745ba5">
+			<block type="lists_create_with">
+				<mutation items="0"></mutation>
+			</block>
+			<block type="lists_create_with">
+				<mutation items="3"></mutation>
+			</block>
+			<block type="lists_repeat">
+				<value name="NUM">
+					<shadow type="math_number">
+						<field name="NUM">5</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="lists_length"></block>
+			<block type="lists_isEmpty"></block>
+			<block type="lists_indexOf">
+				<field name="END">FIRST</field>
+				<value name="VALUE">
+					<block type="variables_get">
+						<field name="VAR" id="+/w.~s(u:tRiXNBG5eR#">list</field>
+					</block>
+				</value>
+			</block>
+			<block type="lists_getIndex">
+				<mutation statement="false" at="true"></mutation>
+				<field name="MODE">GET</field>
+				<field name="WHERE">FROM_START</field>
+				<value name="VALUE">
+					<block type="variables_get">
+						<field name="VAR" id="+/w.~s(u:tRiXNBG5eR#">list</field>
+					</block>
+				</value>
+			</block>
+			<block type="lists_setIndex">
+				<mutation at="true"></mutation>
+				<field name="MODE">SET</field>
+				<field name="WHERE">FROM_START</field>
+				<value name="LIST">
+					<block type="variables_get">
+						<field name="VAR" id="+/w.~s(u:tRiXNBG5eR#">list</field>
+					</block>
+				</value>
+			</block>
+			<block type="lists_getSublist">
+				<mutation at1="true" at2="true"></mutation>
+				<field name="WHERE1">FROM_START</field>
+				<field name="WHERE2">FROM_START</field>
+				<value name="LIST">
+					<block type="variables_get">
+						<field name="VAR" id="+/w.~s(u:tRiXNBG5eR#">list</field>
+					</block>
+				</value>
+			</block>
+			<block type="lists_split">
+				<mutation mode="SPLIT"></mutation>
+				<field name="MODE">SPLIT</field>
+				<value name="DELIM">
+					<shadow type="text">
+						<field name="TEXT">,</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="lists_sort">
+				<field name="TYPE">NUMERIC</field>
+				<field name="DIRECTION">1</field>
+			</block>
+		</category>
+		<category name="Colour" colour="#a5745b">
+			<block type="colour_picker">
+				<field name="COLOUR">#ff0000</field>
+			</block>
+			<block type="colour_random"></block>
+			<block type="colour_rgb">
+				<value name="RED">
+					<shadow type="math_number">
+						<field name="NUM">100</field>
+					</shadow>
+				</value>
+				<value name="GREEN">
+					<shadow type="math_number">
+						<field name="NUM">50</field>
+					</shadow>
+				</value>
+				<value name="BLUE">
+					<shadow type="math_number">
+						<field name="NUM">0</field>
+					</shadow>
+				</value>
+			</block>
+			<block type="colour_blend">
+				<value name="COLOUR1">
+					<shadow type="colour_picker">
+						<field name="COLOUR">#ff0000</field>
+					</shadow>
+				</value>
+				<value name="COLOUR2">
+					<shadow type="colour_picker">
+						<field name="COLOUR">#3333ff</field>
+					</shadow>
+				</value>
+				<value name="RATIO">
+					<shadow type="math_number">
+						<field name="NUM">0.5</field>
+					</shadow>
+				</value>
+			</block>
+		</category>
+		<sep></sep>
+		<category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
+		<category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
+	</xml>
+
+<!-- modal overlay -->
+
+</body>
+
+</html>

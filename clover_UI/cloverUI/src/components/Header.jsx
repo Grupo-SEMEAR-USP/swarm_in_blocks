@@ -7,7 +7,7 @@ function Header() {
       <div id="Header">
           <div id='h_purple_gradient'></div>
             <div id='he_1'>
-              <img src='src/assets/logo_header.png'/>
+              <img src='/assets/img/logo_header.png'/>
             </div>
             
             <div id='he_2'>
