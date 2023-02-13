@@ -18,9 +18,11 @@ function Eazy2Swarm() {
 
               <div class='text3'>
                 Swarm in Blocks is a CopterHack 2023 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle.              </div>
-              <button class='button'> 
+              <a href="http://localhost/swarm_clover_blocks/" target="_blank;" rel="noopener" noreferrer>
+                <button class='button'> 
                   Get Started
-              </button>
+                </button>
+              </a>
           </div>
         </div>
       </div>
