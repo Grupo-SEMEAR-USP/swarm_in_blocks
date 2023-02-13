@@ -13,7 +13,7 @@ function Clover_tools() {
                 Tools
                 <div class='text3'>
                     Set of tools for using Clover, in this section these features will be displayed on the screen simultaneously for handling the drone and these applications.</div>
-                <a href='ground_station/ground_station.html'>
+                <a href='http://localhost/ground_station/ground_station.html' target="_blank;">
                     <button class='button'> 
                         Get Started
                     </button>

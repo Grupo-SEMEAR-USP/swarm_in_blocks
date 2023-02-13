@@ -11,10 +11,10 @@ function Header() {
             </div>
             
             <div id='he_2'>
-              <a id='he_links'>Home</a>
+              <a href='http://localhost/' id='he_links'>Home</a>
               <a id='he_links'>About us</a>
-              <a id='he_links'>Kit tools</a>
-              <a id='he_links'>Swarm in blocks</a>
+              <a href='http://localhost/ground_station/ground_station.html' target="_blank;" id='he_links'>Kit tools</a>
+              <a href="http://localhost/swarm_IDE/swarmIDE/www/index.html" target="_blank;" id='he_links'>Swarm in blocks</a>
             </div>
       </div>
     )
