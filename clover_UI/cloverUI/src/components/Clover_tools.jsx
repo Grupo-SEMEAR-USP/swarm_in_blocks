@@ -4,15 +4,15 @@ import './styles/Clover_tools.css'
 function Clover_tools() {
 
     return (
-      <div id="Clover_tools">
+    <div id="Clover_tools">
         <div class='container'>
             <div id='c_green_gradient'></div>
             <div id='sub_text'>
-                Clover kit
+                Swarm 
                 <p />
-                Tools
+                Station
                 <div class='text3'>
-                    Set of tools for using Clover, in this section these features will be displayed on the screen simultaneously for handling the drone and these applications.</div>
+                Set of tools and resources integrated into a platform for handling a swarm of Clovers. The station provides the use of the main functionalities for handling swarms in an easy and integrated way. </div>
                 <a href='http://localhost/ground_station/ground_station.html' target="_blank;">
                     <button class='button'> 
                         Get Started
@@ -44,7 +44,7 @@ function Clover_tools() {
                 </div>
             </div>
         </div>
-      </div>
+    </div>
     )
 }
 
