@@ -17,8 +17,10 @@
     <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
     <title>Document</title>
 </head>
-<body>
-    <div id="viz"></div>
+<body onload="pubMarkerState('reload');">
+    <div id="viz" style="width : 900px; height : 585"></div>
+    <!-- <canvas style="width : 900px; height : 600px" -->
+    <button onclick="pubMarkerState('reload');">Reload markers</button>
 </body>
 
 <script src="3d.js"></script>

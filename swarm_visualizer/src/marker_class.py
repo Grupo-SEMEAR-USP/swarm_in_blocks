@@ -9,6 +9,7 @@ from geometry_msgs.msg import PoseStamped
 from swarm_checker.msg import SwarmState
 from std_msgs.msg import ColorRGBA
 from std_msgs.msg import Header
+from std_msgs.msg import String
 import sys
 import rospy
 
@@ -25,8 +26,13 @@ class MarkerObj:
 
 
     def setSubscribers(self):
-        rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
+        # rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
+        rospy.Subscriber("/marker_state", String, callback=self.markerCallback)
 
+    def markerCallback(self, data):
+        if data.data == 'reload':
+            rospy.loginfo('Republishing markers on reload request..')
+            self.markerPublisher.publish(self.marker_array)
 
     def setListId(self):
         # set id list from SwarmState
@@ -137,18 +143,20 @@ def main():
 
 
     obj.setPublishers() 
+    obj.setSubscribers()  
     obj.setListId() # get id array from connected clovers
     obj.marker_list() # create a marker for each id
     obj.setInitialPose() # configure initial pose array
     obj.waitMessage() # links mavros pose to marker's
-    # obj.setSubscribers()  
+    
     # rospy.spin()
 
-    while not rospy.is_shutdown():
-        obj.markerPublisher.publish(obj.marker_array)
-        if input("enter para proximo pub") == 'quit':
-            break
-        
+    # while not rospy.is_shutdown():
+    #     obj.markerPublisher.publish(obj.marker_array)
+    #     if input("enter para proximo pub") == 'quit':
+    #         break
+    obj.markerPublisher.publish(obj.marker_array)
+    rospy.spin()
     
 
 if __name__ == "__main__":
