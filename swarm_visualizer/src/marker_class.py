@@ -6,6 +6,7 @@ from geometry_msgs.msg import Pose
 from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import PoseStamped
+from swarm_checker.msg import SwarmState
 from std_msgs.msg import ColorRGBA
 from std_msgs.msg import Header
 import sys
@@ -16,6 +17,8 @@ class MarkerObj:
     def __init__(self):
         self.marker_array = MarkerArray()
         self.marker_single = Marker()
+        self.lista_id = []
+        self.initial_pos = []
 
     def setPublishers(self):
         self.markerPublisher = rospy.Publisher("/vehicle_marker", MarkerArray, queue_size=10)
@@ -25,21 +28,49 @@ class MarkerObj:
         rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
 
 
-    def waitMessage(self, lista_id):
-        for id in lista_id:
-            message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
+    def setListId(self):
+        # set id list from SwarmState
+        rospy.loginfo('Getting all connected clovers..')
+        while True:
+            try:
+                message = rospy.wait_for_message("/swarm_checker/state", SwarmState, timeout=5)
+                self.lista_id = message.connected_ids
+                rospy.loginfo(f'Connected clovers are: {self.lista_id}')
+                break
 
-            cur_pose = message.pose
-            cur_pose.position.x += 1
-            self.marker_array.markers[id].pose = message.pose
-            self.marker_array.markers[id].pose.position.y += id
-            self.marker_array.markers[id].id = id
-            print(id)
+            except Exception as err:
+                rospy.logerr("Could not get connected clovers, trying again")
+            # self.lista_id = [0, 1, 2]
+        
 
-    
 
+    def setInitialPose(self):
+        
+        for id in self.lista_id:
+            init_x = rospy.get_param(f'/clover{id}/initial_pose/x')
+            init_y = rospy.get_param(f'/clover{id}/initial_pose/y')
+
+            self.initial_pos.append([init_x, init_y])
+        
+        rospy.loginfo(self.initial_pos)
+
+    def waitMessage(self):
+        for id in self.lista_id:
+            try:
+                message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
+
+                cur_pose = message.pose
+                # cur_pose.position.x += 1
+                self.marker_array.markers[id].pose = message.pose
+                print('aaa')
+                self.marker_array.markers[id].pose.position.x += self.initial_pos[id][0]
+                self.marker_array.markers[id].pose.position.y += self.initial_pos[id][1]
+                self.marker_array.markers[id].id = id
+                self.marker_array.markers[id].header.frame_id = f'/base_link{id}'
+                print(f'Marker {id} initialized successfully')
+            except Exception as err:
+                print('Not all markers successfully initialized', err)
         # print()
-
 
 
     def callback(self, data):
@@ -52,6 +83,7 @@ class MarkerObj:
         except Exception as err:
             print(err)
     
+
     def create_marker(self, frame, type, pose, scale, color, lifetime):
         marker = Marker()
     
@@ -80,8 +112,8 @@ class MarkerObj:
         marker.color.b = blue_  
         self.marker_array.markers.append(marker)
     
-    def marker_list(self, id_list):
-        for id in id_list:
+    def marker_list(self):
+        for id in self.lista_id:
             pose = Pose()
             pose.position.x = 0
             pose.position.y = 0
@@ -91,6 +123,8 @@ class MarkerObj:
             pose.orientation.z = 0
             pose.orientation.w = 0
             self.create_marker(frame=f"/base_link{id}", type="", pose=pose, scale=[1,1,1], color=[255, 255, 0], lifetime=0)
+
+            print('a', id)
     
 
 def main():
@@ -98,19 +132,23 @@ def main():
     obj = MarkerObj()
 
    
+    # id list of functional clovers from swarm state
+    # list = [0, 1, 2]
 
-    list = [0, 1]
 
-    obj.marker_list(list)
-
-    obj.setPublishers()
-    # obj.setSubscribers()
-    ## test 2
-    obj.waitMessage(list)
+    obj.setPublishers() 
+    obj.setListId() # get id array from connected clovers
+    obj.marker_list() # create a marker for each id
+    obj.setInitialPose() # configure initial pose array
+    obj.waitMessage() # links mavros pose to marker's
+    # obj.setSubscribers()  
     # rospy.spin()
+
     while not rospy.is_shutdown():
         obj.markerPublisher.publish(obj.marker_array)
-        a = input("enter para proximo pub")
+        if input("enter para proximo pub") == 'quit':
+            break
+        
     
 
 if __name__ == "__main__":

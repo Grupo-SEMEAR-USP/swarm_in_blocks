@@ -25,7 +25,7 @@ var viewer, tfClient;
 function setScene(fixedFrame) {
 	viewer = new ROS3D.Viewer({
 		divID: 'viz',
-		width: 1000,
+		width: 900,
 		height: 600,
 		antialias: true
 	});
@@ -63,6 +63,8 @@ function addVehicle() {
 		topic: '/vehicle_marker',
 		rootObject: viewer.scene
 	});
+
+	// call service to republish markers positions
 }
 
 
