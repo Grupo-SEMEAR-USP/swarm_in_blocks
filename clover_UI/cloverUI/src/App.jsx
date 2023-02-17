@@ -13,8 +13,8 @@ const App = () => (
     <div className="App">
       <Header />
       <Front_page />
-      <Clover_tools />
       <Eazy2Swarm />
+      <Clover_tools />
       <Carrosel />
       <Bottom />
     </div>

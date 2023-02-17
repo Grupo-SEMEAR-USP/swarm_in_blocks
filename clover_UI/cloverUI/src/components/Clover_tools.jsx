@@ -8,7 +8,7 @@ function Clover_tools() {
         <div class='container'>
             <div id='c_green_gradient'></div>
             <div id='sub_text'>
-                Swarm 
+                Clover Swarm 
                 <p />
                 Station
                 <div class='text3'>
@@ -28,11 +28,11 @@ function Clover_tools() {
                     </div>
                 </div>
 
-                <div id='c_excep'>
+                <div id='c'>
                     <img src='/assets/img/Clover_documentation.svg' id=''/>
                     <div id='text_card'>
-                        <div id='text1_card'>Clover documentation</div>
-                        Access to the source documentation of the drone developed by the company Coex.                    
+                        <div id='text1_card'>Real time information</div>
+                        Acess real time information of the Clovers while they are online                    
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@ function Clover_tools() {
                     <img src='/assets/img/Clover_blocks.svg' id=''/>
                     <div id='text_card'>
                         <div id='text1_card'>Clover blocks</div>
-                        Code development through blocks to control a clover.                    </div>
+                        Code development through blocks to control a clover                   </div>
                 </div>
             </div>
         </div>

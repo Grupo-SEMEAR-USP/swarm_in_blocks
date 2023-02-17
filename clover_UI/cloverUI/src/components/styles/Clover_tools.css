@@ -31,25 +31,26 @@
     text-align: left;
     color: rgba(255, 255, 255, 0.7);;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     max-width: 460px;
     padding: 10px;
     margin: 30px 0px 30px 0px;
 
 }
 
-#c_excep{
-    background: linear-gradient(153.47deg, rgba(255, 255, 255, 0) -341.94%, #14101D 95.11%);;
-    box-shadow: 0px 20px 100px -10px rgba(66, 71, 91, 0.1);
+#c:hover{
+    background: linear-gradient(153.47deg, rgba(255, 255, 255, 0) -341.94%, #22143fdf 95.11%);;
+    box-shadow: 0px 20px 100px -10px rgba(52, 58, 79, 0.187);
     border-radius: 20px;
     display: flex;
     text-align: left;
     color: rgba(255, 255, 255, 0.7);;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     padding: 10px;
     max-width: 460px;
 }
+
 
 #c_green_gradient {
     position: absolute;
