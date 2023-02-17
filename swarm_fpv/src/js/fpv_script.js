@@ -116,7 +116,6 @@ var ros = new ROSLIB.Ros({
     }
   }
   
- 
   
   // function create_element(id) {
   //   var element = document.getElementById('dropdown')
