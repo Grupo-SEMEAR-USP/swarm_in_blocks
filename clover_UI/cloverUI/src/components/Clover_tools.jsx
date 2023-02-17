@@ -8,7 +8,14 @@ function Clover_tools() {
         <div class='container'>
             <div id='c_green_gradient'></div>
             <div id='sub_text'>
-                Clover Swarm 
+                <div id='sub_text_st'>
+                    <div id='text_seg_st'>
+                        Eazy to 
+                    </div>
+                    <div id='eazy_text_st' >
+                        Swarm
+                    </div>
+                </div>
                 <p />
                 Station
                 <div class='text3'>

@@ -26,6 +26,25 @@
     font-weight: 600;
 }
 
+#sub_text_st{
+    display: flex;
+}
+
+#text_seg_st{
+    margin-top: 40px;
+}
+
+#eazy_text_st{
+    /* padding of 5 pixels right after the tag: text_seg_st */
+    padding-left: 15px;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    background: radial-gradient(190% 170% at 100% -13.91%, #A967DF 0%, #A967DF 33.33%, #A967DF 20.4%, #571B97 70.58%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 #c{
     display: flex;
     text-align: left;
