@@ -38,7 +38,17 @@
 
     <button id="increase" onclick="increaseImageSize();">Size +</button>
     <button id="decrease" onclick="decreaseImageSize();">Size -</button>
-</body>
+
+    <!-- <div tabindex="0" id="listener">
+      <canvas id="canvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+    </div> -->
+    <p>Clik on the rectangle below to enable keyboard listener event</p>
+    <p id="feedback">Off</p>
+    <div id="listener" style="width:500px; height:100px; background-color:#494155" tabindex="0"></div>
+
+  </body>
+
+
 <script src="fpv_script.js"></script>
 <script src="fpv_key_listener.js"></script>
 <script src="fpv_data.js"></script>

@@ -111,23 +111,47 @@ function Drone(id, name) {
         }
 }
 
-// var drone = new Drone(0, "clover0");
-//drone['KeyW']()
 
-window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time
+
+// key events 
+var rectangle_window = document.getElementById("listener")
+var feedback = document.getElementById("feedback")
+
+
+rectangle_window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time
 (event) => {
     let key = event.code;
     if (event.repeat == true) {
         return;
     } else if (acceptedValues.includes(key)) {
     
-    console.log(key)
+    feedback.innerText = "DOWN - debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
+    console.log(key);
     drone[String(key)]();
-    
 }
 }
 ,true)
 
-window.addEventListener("keyup", (event) => {
+
+rectangle_window.addEventListener("keyup", (event) => {
+    feedback.innerText = "off listener- debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
+
     drone['Stop']();
 })
+
+
+// rectangle.addEventListener("keydown",
+// (event) => {
+//     let key = event.code;
+//     console.log("RECTANGLE")
+// })
+
+
+// $("#listener").hover(function() {
+//     this.focus();
+// }, function() {
+//     this.blur();
+// }).keydown(function(e) {
+//     alert(e.keyCode);
+// });
+
