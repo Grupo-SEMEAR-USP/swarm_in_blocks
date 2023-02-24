@@ -5,22 +5,31 @@
         <title>Ground station</title>
         <link rel="stylesheet" href="./font_awesome/css/all.min.css">
         <link rel="stylesheet" href="./style.css">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://static.robotwebtools.org/threejs/current/three.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/STLLoader.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/0.18.0/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
     </head>
 
-    <body>
-        <nav id="topbar">
-            <a href="../swarm_IDE/index.html" target="_blank">Swarm in blocks</a>
-            <a href="#FPV" target="_blank">FPV</a>
-        </nav>
+    <body onload="pubMarkerState('reload');" id="viz">
+            <nav id="topbar">
+                <a href="../swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
+                <a href="../swarm_fpv/src/js/fpv_clover.html" target="_blank">FPV</a>
+            </nav>
 
-        <nav id="leftbar">
-            <a href="#comands" target="_blank"><i class="fa-solid fa-circle-play"></i></i></a>
-            <a href="#terminal" target="_blank"><i class="fa-solid fa-terminal"></i></i></a>
-            <a href="#process" target="_blank"><i class="fa-solid fa-microchip"></i></a>
-            <a href="#security" target="_blank"><i class="fa-solid fa-shield-halved"></i></a>
-        </nav>
-
-        <script type="text/javascript" src="js.js"></script>
+            <nav id="leftbar">
+                <a href="#comands" target="_blank"><i class="fa-solid fa-circle-play"></i></a>
+                <a href="#terminal" target="_blank"><i class="fa-solid fa-terminal"></i></a>
+                <a href="#process" target="_blank"><i class="fa-solid fa-microchip"></i></a>
+                <a href="#security" target="_blank"><i class="fa-solid fa-shield-halved"></i></a>
+            </nav>
     </body>
+    <script src="3d.js"></script>
 
 </html>
