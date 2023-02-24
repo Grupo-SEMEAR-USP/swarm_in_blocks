@@ -41,13 +41,21 @@ function pubMarkerState(message) {
 
 // defining ros3d  
 
+var largura = window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+var altura = window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+
 var viewer, tfClient;
 
 function setScene(fixedFrame) {
 	viewer = new ROS3D.Viewer({
 		divID: 'viz',
-		width: 900,
-		height: 580,
+		width: largura,
+		height: altura,
 		antialias: true
 	});
 
