@@ -13,7 +13,7 @@ function Header() {
             <div id='he_2'>
               <a href='http://localhost/' id='he_links'>Home</a>
               <a href='http://www.semear.eesc.usp.br/equipe-atena/' target="_blank;" id='he_links'>About us</a>
-              <a href='http://localhost/swarm_station/ground_station.html' target="_blank;" id='he_links'>Kit tools</a>
+              <a href='http://localhost/swarm_station/ground_station.html' target="_blank;" id='he_links'>Swarm station</a>
               <a href="http://localhost/swarm_clover_blocks/www/index.html" target="_blank;" id='he_links'>Swarm in blocks</a>
             </div>
       </div>
