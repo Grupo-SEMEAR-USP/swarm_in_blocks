@@ -15,7 +15,7 @@ body{
     justify-content: space-between;
 }
 
-/*---------------------Barra topo------------------------*/
+/*---------------------Top Bar------------------------*/
 #topbar{
     background-color: #1E1E1E;
     overflow: hidden;
@@ -37,7 +37,7 @@ body{
     transition: 0.3s;
 }
 
-/*---------------------Barra direita------------------------*/
+/*---------------------Right Bar------------------------*/
 
 #clover{
     padding: 0px 0px 10px 0px;
@@ -114,22 +114,79 @@ body{
 }
 
 
-/*---------------------Barra esquerda------------------------*/
+/*---------------------Left Bar------------------------*/
 
 .fpv__instructions {
+    font-size: 14px;
     padding: 0px 0px 10px 0px;
     position: relative;
     margin-left: 20px;
     margin-top: 100px;    
     top: 70px;
     width: 300px;
+    height: 400px;
     background-color: #242424;
     border-radius: 10px;
 }
 
 .fpv__instructions_title {
+    font-size: 16px;
     color: #FFFFFF;
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.fpv__box {
+    box-sizing: border-box;
+    position: absolute;
+    border: 1px solid #454545;
+}
+
+.wsad_box {
+    /* title = 10 + 25 + 10 */
+    margin-top: 45px; 
+    left: 5%;
+    right: 5%;
+    top: 0%;
+    bottom: 55%; /* 100% hard coded */
+
+}
+
+.fpv__header {
+    background-color: #454545;
+    display: block;
+    text-align: center;
+    color: #FFFFFF;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 3px 0px 3px 0px;
+}
+
+.fpv__keys {
+    font-size:15px;
+    display: block;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 8px 0px 8px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.fpv__divider {
+    border: 1px solid #454545;
+}
+
+.fpv__content {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.wsad_content {
+    max-height: 100%;
+    width: auto;
+}
+
+.arrows_header{
+    margin-top: 15px;
 }
