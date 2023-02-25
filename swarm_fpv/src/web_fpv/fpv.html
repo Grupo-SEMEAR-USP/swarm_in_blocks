@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Swarm station</title>
+        <link rel="stylesheet" href="./font_awesome/css/all.min.css">
+        <link rel="stylesheet" href="./style.css">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://static.robotwebtools.org/threejs/current/three.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/STLLoader.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/0.18.0/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    </head>
+    <body >
+        <nav id="topbar">
+            <a href="../swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
+            <a href="../swarm_station/ground_station.html" target="_blank">Swarm Station</a>
+        </nav>
+
+        <div id="bars">
+            <nav id="leftbar">
+                <div class="v277_29">
+                    <div class="v245_199">
+
+                    </div>
+                    <span class="v245_229">Basics Commands</span>
+                    <div class="v277_27">
+                        <div class="v245_220"></div>
+                        <div class="v245_235"></div>
+                        <div class="v245_239"></div>
+                        <div class="v245_240"></div>
+                        <span class="v245_241">Up</span>
+                        <span class="v245_242">Yaw+</span>
+                        <span class="v245_243">Yaw-</span>
+                        <span class="v245_244">Down</span>
+                        <span class="v245_245">W</span>
+                        <span class="v245_246">D</span>
+                        <span class="v245_247">A</span>
+                        <span class="v245_248">S</span>
+                    </div>
+                    <div class="v277_28">
+                        <div class="v245_237"></div>
+                        <div class="v245_255"></div>
+                        <div class="v245_256"></div>
+                        <span class="v245_257"> > </span>
+                        <span class="v251_28">Forward</span>
+                        <span class="v251_30">Right</span>
+                        <span class="v251_31">Left</span>
+                        <span class="v251_29">Backward</span>
+                        <span class="v245_258"> > </span>
+                        <span class="v245_259"> < </span>
+                        <span class="v245_260"> > </span>
+                    </div>
+                </div>
+            </nav>
+
+            <nav id="rightbar">
+                <div id="clover">
+                    <select 
+                        id="dropdown"
+                        onchange = "javascript:reload_subscriber(this);"
+                        class="select-center" 
+                        style="display:block"
+                    >
+                        <option value = null>Select an id</option>
+                    </select>
+                    <div id="topics">
+                        <div id="head">BATTERY<div id="battery">-</div></div>
+                        <div id="head">CONNECTED<div id="state">-</div></div>
+                        <div id="head">CPU DATA<div id="cpu">-</div></div>
+                    </div>
+                    <div id="topics">
+                        <div id="head">TELEMETRY</div>
+                    </div>
+                    <div id="topics2">
+                        <div id="head2"><div>x</div><div>y</div><div>z</div></div>
+                        <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
+                    </div>
+                </div>
+                <div id="swarm">
+                    <div>Swarm</div>
+                    <div id="topics">
+                        <div id="head">CLOVERS<div>-</div></div>
+                        <div id="head">FORMATION<div>-</div></div>
+                    </div>
+                </div>
+            </nav>
+    </body>
+    <script src="3d.js"></script>
+    <script src="fpv_script.js"></script>
+    <script src="fpv_key_listener.js"></script>
+    <script src="fpv_data.js"></script>
+</html>
