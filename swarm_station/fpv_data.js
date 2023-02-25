@@ -5,7 +5,15 @@ var telemetry_z = document.getElementById('telemetry_z')
 var cpu = document.getElementById('cpu')
 var state = document.getElementById('state')
 
-
+// set sleep function 
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
 
 // listeners
 function update_BatteryStatus(id) {
@@ -39,6 +47,8 @@ function update_Telemetry(id) {
             x = message.pose.position.x.toFixed(2);
             y = message.pose.position.y.toFixed(2);
             z = message.pose.position.z.toFixed(2);
+            // sleep(5) //not working
+            console.log('x: ', x, 'y: ', y, 'z: ', z)
             telemetry_x.innerText = `${x}`
             telemetry_y.innerText = `${y}`
             telemetry_z.innerText = `${z}`
