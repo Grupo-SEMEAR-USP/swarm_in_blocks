@@ -64,7 +64,7 @@
                     <select 
                         id="dropdown"
                         onchange = "javascript:reload_subscriber(this);"
-                        class="select-center" 
+                        class="dropdown" 
                         style="display:block"
                     >
                         <option value = null>Select an id</option>
@@ -93,12 +93,21 @@
         <div class="fpv__streaming">
             <div class="fpv__streaming_header">
                 <div class="fpv__disconnected-light"></div>
-                <div class="fpv__disconnected"> Disconnected </div>
-                <div class="fpv__clover_tab">
-                    Clover X
-                </div>
+                <div class="fpv__disconnected" id="disconnected"> Disconnected </div>
+                <select 
+                    id="streaming-dropdown"
+                    onchange = "javascript:reload_subscriber(this);"
+                    class="streaming-dropdown" 
+                    style="display:block"
+                >
+                    <option value = null>Clover ID</option>
+                </select>
             </div>
             <img src="./../assets/fpv_screen 2.png" alt="" class="fpv__cam" width="640" height="480" >
+            <div class="fpv__pedal">
+                <div id="pedal_feedback"> Clicked </div>
+                <img src="./../assets/mouse_rest.png" alt="mouse_rest" id="pedal">
+            </div>
         </div>
     </body>
     <script src="fpv_script.js"></script>

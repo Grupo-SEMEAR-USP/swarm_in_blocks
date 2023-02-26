@@ -206,7 +206,7 @@ input:checked + .slider:before {
 	-webkit-transform: translateX(24px);
 	-ms-transform: translateX(24px);
 	transform: translateX(24px);
-	background: white url('./blockly/media/night-mode.png');
+	backgrounddisconnected: white url('./blockly/media/night-mode.png');
 	background-repeat: no-repeat;
 	background-position: center;
 }

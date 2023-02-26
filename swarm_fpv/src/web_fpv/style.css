@@ -205,10 +205,9 @@ body{
 .fpv__streaming {
     /* center on the center (horizontal and vertical) of the screen */
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding-bottom: 50px;
 }
 
 .fpv__streaming_header {
@@ -240,10 +239,6 @@ body{
     color: red
 }
 
-.blink-two {
-	animation: blinker-two 1.4s linear infinite;
-}
-
 .fpv__connected .fpv__disconnected { 
 	display: none;
 }
@@ -252,9 +247,52 @@ body{
 	display: none;
 }
 
-.fpv__clover_tab {
-    text-align: center;
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+
+.streaming-dropdown {
     display: block;
     background-color: #242424;
     border-radius: 10px 10px 0px 0px;
+    width: 100%;
+    height: 100%;
+    color: #FFFFFF;
+    text-align: center;
+    /* no stroke */
+    border: none;
+    /* align in the center verticaly */
+    align-items: center;
 }
+
+.fpv__pedal {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#pedal:hover {
+    cursor: pointer;
+}
+
+#pedal {
+    /* transition: filter 0.2s ease-in-out; */
+}
+
+#pedal.clicked {
+    filter: brightness(130%) sepia(100%) hue-rotate(200deg);
+}
+
+#pedal_feedback {
+    color: transparent;
+}
+
+#pedal_feedback.clicked {
+    display: block;
+    color: #ffffff;
+}
+
+/* .pedal:active {
+    filter: brightness(300%);
+} */

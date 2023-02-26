@@ -3,6 +3,9 @@ var telemetry = document.getElementById('telemetry')
 var cpu = document.getElementById('cpu')
 var state = document.getElementById('state')
 
+var disconnected = document.querySelector('#disconnected');
+const pedal = document.querySelector('#pedal');
+const pedal_feedback = document.querySelector('#pedal_feedback');
 
 
 // listeners
@@ -23,7 +26,6 @@ function update_BatteryStatus(id) {
     }
 
 }
-
 
 function update_Telemetry(id) {
     console.log(typeof id)
@@ -62,9 +64,47 @@ function update_Telemetry(id) {
     }
 }
 
+update_Streaming => (id) => {    
+    if (id != "null") {
+        var listenerState = new ROSLIB.Topic({
+            ros : ros,
+            name : `/clover${id}/mavros/state`,
+            messageType : 'mavros_msgs/State'
+
+        })
+
+        listenerState.subscribe((message) =>{
+            mode = message.mode;
+            isConnected = message.connected;
+            if (isConnected == true) {
+                isConnected = "Connected"
+            }
+            else {
+                isConnected = "Disconnected"
+            }    
+            disconnected.innerText = `Mode: ${mode}
+                                ${isConnected}`
+        });
+    }
+}
+
 function update_CPU(id) {
     if (id != "null") {
     cpu.innerText = `CPU DATA FROM CLOVER ${id}`
      // code here
     }
 }
+
+// When the user clicks on the div, add the "clicked" class to change the filter brightness
+pedal.addEventListener('click', function() {
+    pedal.classList.add('clicked');
+    pedal_feedback.classList.add('clicked');
+});
+
+  // When the user clicks anywhere outside the div, remove the "clicked" class to restore the original filter brightness
+document.addEventListener('click', function(event) {
+    if (!pedal.contains(event.target)) {
+        pedal.classList.remove('clicked');
+        pedal_feedback.classList.remove('clicked');
+    }
+});
