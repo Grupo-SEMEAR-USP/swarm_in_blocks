@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>FPV web</title>
+        <link rel="stylesheet" href="./font_awesome/css/all.min.css">
+        <link rel="stylesheet" href="./style.css">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://static.robotwebtools.org/threejs/current/three.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/STLLoader.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/0.18.0/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    </head>
+    <body >
+        <!-- TOPBAR -->
+        <nav id="topbar">
+            <a href="../swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
+            <a href="../swarm_station/ground_station.html" target="_blank">Swarm Station</a>
+        </nav>
+        <!-- BARS -->
+        <div id="bars">
+            <!-- LEFT BAR -->
+            <nav id="leftbar" class="fpv__instructions">
+                <div class="fpv__instructions_title"> Basic Commands </div>
+                <!-- WSAD -->
+                <div class="fpv__box wsad_box">
+                    <div class="fpv__header">
+                        <div> Up </div> <div> Down </div> <div> Yaw + </div> <div> Yaw - </div>
+                    </div>
+                    <div class="fpv__keys wsad__keys">
+                        <div> W </div><div> S </div><div> A </div><div> D </div>
+                    </div>
+                    <div class="fpv__divider"></div>
+                    <div class="fpv__content">
+                        <img src="./../assets/wsad3.png" alt="WSAD Commands" class="wsad_content"></img>
+                    </div>
+                </div>
+                <!-- ARROWS -->
+                <div class="fpv__box arrows_box">
+                <div class="fpv__header">
+                        <div> Forth </div> <div> Back </div> <div> Right </div> <div> Left </div>
+                    </div>
+                    <div class="fpv__keys arrows__keys">
+                        <div style="transform: rotate(-90deg);"> > </div>
+                        <div style="transform: rotate(90deg);"> > </div>
+                        <div> > </div>
+                        <div style="transform: rotate(180deg);"> > </div>
+                    </div>
+                    <div class="fpv__divider"></div>
+                    <div class="fpv__content">
+                        <img src="./../assets/fpv__arrows.png" alt="Arrows Commands" class="wsad_content"></img>
+                    </div>
+            </nav>
+            <!-- RIGHT BAR -->
+            <nav id="rightbar">
+                <div id="clover">
+                    <select 
+                        id="dropdown"
+                        onchange = "javascript:reload_subscriber(this);"
+                        class="select-center" 
+                        style="display:block"
+                    >
+                        <option value = null>Select an id</option>
+                    </select>
+                    <div id="topics">
+                        <div id="head">Battery<div id="battery">-</div></div>
+                        <div id="head">Connected<div id="state">-</div></div>
+                        <div id="head">CPU Data<div id="cpu">-</div></div>
+                    </div>
+                    <div id="topics">
+                        <div id="head">Telemetry</div>
+                    </div>
+                    <div id="topics2">
+                        <div id="head2"><div>x</div><div>y</div><div>z</div></div>
+                        <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
+                    </div>
+                </div>
+                <div id="swarm">
+                    <div>Swarm</div>
+                    <div id="topics">
+                        <div id="head">Clovers #<div>-</div></div>
+                        <div id="head">Formation<div>-</div></div>
+                    </div>
+                </div>
+            </nav>
+        <div class="fpv__streaming">
+            <div class="fpv__streaming_header">
+                <div class="fpv__disconnected-light"></div>
+                <div class="fpv__disconnected"> Disconnected </div>
+                <div class="fpv__clover_tab">
+                    Clover X
+                </div>
+            </div>
+            <img src="./../assets/fpv_screen 2.png" alt="" class="fpv__cam" width="640" height="480" >
+        </div>
+    </body>
+    <script src="fpv_script.js"></script>
+    <script src="fpv_key_listener.js"></script>
+    <script src="fpv_data.js"></script>
+</html>
