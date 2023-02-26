@@ -83,6 +83,7 @@ var ros = new ROSLIB.Ros({
     update_Telemetry(id)
     update_CPU(id)
   }
+  // update_Streaming(id)
   
   //update_listener(0);
   

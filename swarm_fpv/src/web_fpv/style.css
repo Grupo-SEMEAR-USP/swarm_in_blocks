@@ -289,7 +289,7 @@ body{
 }
 
 #pedal_feedback.clicked {
-    display: block;
+    opacity: 0.5;
     color: #ffffff;
 }
 
