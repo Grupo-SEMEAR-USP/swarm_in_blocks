@@ -199,3 +199,62 @@ body{
     max-height: 100%;
     width: auto;
 }
+
+/*---------------------Center Streaming------------------------*/
+
+.fpv__streaming {
+    /* center on the center (horizontal and vertical) of the screen */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-bottom: 50px;
+}
+
+.fpv__streaming_header {
+    background-color: #454545;
+    display: block;
+    color: #FFFFFF;
+    display: grid;
+    /* division proporiton: 9 to 2 */
+    grid-template-columns: 1fr 18fr 4fr; 
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.fpv__disconnected-light {
+    animation: blinker 0.6s linear infinite;
+    margin-top: 30%;
+    margin-left: 35%;
+    left:0%;
+    height: 7px;
+	width: 7px;
+	background-color: rgb(255, 0, 0);
+	border-radius: 50%;
+}
+
+.fpv__disconnected {
+    font-size: 13px;
+    padding: 2px 0px 2px 0px;
+    left: 5%;
+    color: red
+}
+
+.blink-two {
+	animation: blinker-two 1.4s linear infinite;
+}
+
+.fpv__connected .fpv__disconnected { 
+	display: none;
+}
+
+.fpv__connected .fpv__disconnected-light {
+	display: none;
+}
+
+.fpv__clover_tab {
+    text-align: center;
+    display: block;
+    background-color: #242424;
+    border-radius: 10px 10px 0px 0px;
+}
