@@ -94,6 +94,21 @@ function addVehicle() {
 		
 	});
 
+	new ROS3D.MarkerArrayClient({
+		ros: ros,
+		tfClient: tfClient,
+		topic: '/safe_marker',
+		rootObject: viewer.scene
+		
+	});
+	new ROS3D.MarkerArrayClient({
+		ros: ros,
+		tfClient: tfClient,
+		topic: '/text_marker',
+		rootObject: viewer.scene
+		
+	});
+
 	for (let i = 0; i < 3; i++) {
 		pubMarkerState('reload');
 		console.log(i)
