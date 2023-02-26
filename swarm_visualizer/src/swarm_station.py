@@ -1,0 +1,319 @@
+#!/usr/bin/python3
+
+from visualization_msgs.msg import MarkerArray
+from visualization_msgs.msg import Marker
+from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Point
+from geometry_msgs.msg import PoseStamped
+from swarm_checker.msg import SwarmState
+from std_msgs.msg import ColorRGBA
+from std_msgs.msg import Header
+from std_msgs.msg import String
+import sys
+import rospy
+
+
+class MarkerObj:
+    def __init__(self):
+        self.vehicle_marker_array = MarkerArray()
+        self.safe_marker_array = MarkerArray()
+        self.text_marker_array = MarkerArray()
+
+        self.marker_single = Marker()
+        self.lista_id = []
+        self.initial_pos = []
+
+        self.isSafeZoneActive = False
+
+        self.mesh_path = "package://clover/clover_description/meshes/clover4/clover_body_solid.dae"
+        # self.mesh_path = "package://clover/clover_description/urdf/clover/clover4.xacro"
+
+    def setPublishers(self):
+        self.markerPublisher = rospy.Publisher("/vehicle_marker", MarkerArray, queue_size=10)
+        self.safeMarkerPublisher = rospy.Publisher("/safe_marker", MarkerArray, queue_size=10)
+        self.textMarkerPublisher = rospy.Publisher("/text_marker", MarkerArray, queue_size=10)
+
+
+    def setSubscribers(self):
+        # rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
+        rospy.Subscriber("/marker_state", String, callback=self.markerCallback)
+
+    def markerCallback(self, data):
+        if data.data == 'reload':
+            rospy.loginfo('Republishing markers on reload request..')
+            self.markerPublisher.publish(self.vehicle_marker_array)
+            self.textMarkerPublisher.publish(self.text_marker_array)
+            if self.isSafeZoneActive == True:
+                self.safeMarkerPublisher.publish(self.safe_marker_array)
+        
+        if data.data == 'safe_zone':
+            self.isSafeZoneActive = True
+            # Publihsing safe zone markers based on swarm station request  
+            pointA = Point()
+            pointB = Point()
+            pointC = Point()
+            pointD = Point()
+
+            pointA.x, pointA.y, pointA.z = -3.5, -3.4, 0
+            pointC.x, pointC.y, pointC.z = 3.5, 2.4, 0
+
+            pointB.x, pointB.y, pointB.z = pointA.x, pointC.y, 0
+            pointD.x, pointD.y, pointD.z = pointC.x, pointA.y, 0
+
+            height = 6
+            point_list = []
+            for i in range(height):
+            #     pointA.z, pointB.z, pointC.z, pointD = height, height, height, height
+                a = Point()
+                b = Point()
+                c = Point()
+                d = Point()
+                a.x,a.y,a.z = pointA.x, pointA.y, i*0.8
+                b.x,b.y,b.z = pointB.x, pointB.y, i*0.8
+                c.x,c.y,c.z = pointC.x, pointC.y, i*0.8
+                d.x,d.y,d.z = pointD.x, pointD.y, i*0.8
+                point_list.append(a)
+                point_list.append(b)
+                point_list.append(b)
+                point_list.append(c)
+                point_list.append(c)
+                point_list.append(d)
+                point_list.append(d)
+                point_list.append(a)
+
+                # point_list.append(pointA)
+                # point_list.append(pointB)
+                # point_list.append(pointB)
+                # point_list.append(pointC)
+                # point_list.append(pointC)
+                # point_list.append(pointD)
+                # point_list.append(pointD)
+                # point_list.append(pointA)
+                # pointA.z +=1
+            
+            print(point_list)
+            color = [0, 255, 0]
+            scale = [1,1,1]
+            type = 'line'
+            frame = '/map'
+            
+            pose = Pose()
+            pose.position.x = 0
+            pose.position.y = 0
+            pose.position.z = 0
+            pose.orientation.x = 0
+            pose.orientation.y = 0
+            pose.orientation.z = 0
+            pose.orientation.w = 0
+
+            try:
+                rospy.loginfo('Creating line marker')
+                self.create_marker(frame=frame, type=type, pose=pose, scale=scale, color=color, lifetime=0, action=0, vertices=point_list)
+                rospy.loginfo('Marker line created')
+
+                print(self.safe_marker_array)
+
+                self.safeMarkerPublisher.publish(self.safe_marker_array)
+
+            except Exception as err:
+                rospy.logerr(err)
+                
+            
+
+    def setListId(self):
+        # set id list from SwarmState
+        rospy.loginfo('Getting all connected clovers..')
+        while True:
+            try:
+                message = rospy.wait_for_message("/swarm_checker/state", SwarmState, timeout=5)
+                self.lista_id = message.connected_ids
+                rospy.loginfo(f'Connected clovers are: {self.lista_id}')
+                break
+
+            except Exception as err:
+                rospy.logerr("Could not get connected clovers, trying again")
+            # self.lista_id = [0, 1, 2]
+        
+
+
+    def setInitialPose(self):
+        
+        for id in self.lista_id:
+            init_x = rospy.get_param(f'/clover{id}/initial_pose/x')
+            init_y = rospy.get_param(f'/clover{id}/initial_pose/y')
+
+            self.initial_pos.append([init_x, init_y])
+        
+        rospy.loginfo(self.initial_pos)
+
+    def waitMessage(self):
+        for id in self.lista_id:
+            try:
+                message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
+
+                cur_pose = message.pose
+                # cur_pose.position.x += 1
+                self.vehicle_marker_array.markers[id].pose = message.pose
+                print('aaa')
+                self.vehicle_marker_array.markers[id].pose.position.x += self.initial_pos[id][0]
+                self.vehicle_marker_array.markers[id].pose.position.y += self.initial_pos[id][1]
+                self.vehicle_marker_array.markers[id].id = id
+                self.vehicle_marker_array.markers[id].header.frame_id = f'/base_link{id}'
+                print(f'Marker {id} initialized successfully')
+            except Exception as err:
+                print('Not all markers successfully initialized', err)
+        # print()
+
+
+    def callback(self, data):
+        # print("a")
+        self.vehicle_marker_array.markers[0].pose = data.pose
+        # print(self.marker_array)
+        try:
+            self.markerPublisher.publish(self.vehicle_marker_array)
+            sys.exit(1)
+        except Exception as err:
+            print(err)
+    
+
+    def create_marker(self, frame, type, pose, scale, color, lifetime, action=0, vertices=0):
+        marker = Marker()
+        rospy.logwarn(frame)
+        marker.header.frame_id = frame
+        # marker_.header.stamp = rospy.Time.now()
+        # marker.type = marker.ARROW
+
+        marker.action = action # eq a 0 - criar/ modificar
+
+        rospy.loginfo("appending")
+        marker.pose.position.x = pose.position.x
+        marker.pose.position.y = pose.position.y
+        marker.pose.position.z = pose.position.z
+        marker.pose.orientation.x = pose.orientation.x
+        marker.pose.orientation.y = pose.orientation.y
+        marker.pose.orientation.z = pose.orientation.z
+        marker.pose.orientation.w = pose.orientation.w
+
+        marker.lifetime = rospy.Duration.from_sec(lifetime) # 0 -> forever
+        # marker.scale.x = scale[0]
+        # marker.scale.y = scale[1]
+        # marker.scale.z = scale[2]
+        marker.color.a = 1
+
+
+        if type == 'drone':
+            marker.type = marker.MESH_RESOURCE
+            marker.mesh_resource = self.mesh_path
+
+            vector = Vector3()
+            vector.x = scale[0]
+            vector.y = scale[1]
+            vector.z = scale[2]
+            # marker.scale.x = scale[0]
+            # marker.scale.y = scale[1]
+            # marker.scale.z = scale[2]
+
+            marker.scale = vector
+            marker.color.r = 0
+            marker.color.g = 0
+            marker.color.b = 0  
+
+            self.vehicle_marker_array.markers.append(marker)
+
+        elif type == 'line':
+            marker.type = marker.LINE_LIST
+            red_, green_, blue_ = color
+            marker.color.r = red_
+            marker.color.g = green_
+            marker.color.b = blue_         
+
+            marker.points = vertices
+
+            vector = Vector3()
+            vector.x = scale[0]
+            vector.y = scale[1]
+            vector.z = scale[2]
+            # marker.scale.x = scale[0]
+            # marker.scale.y = scale[1]
+            # marker.scale.z = scale[2]
+            marker.scale = vector
+            marker.color.a = 1
+            self.safe_marker_array.markers.append(marker)
+        
+        elif type == 'text':
+            marker.type = marker.TEXT_VIEW_FACING
+            red_, green_, blue_ = color
+            marker.color.r = red_
+            marker.color.g = green_
+            marker.color.b = blue_             
+        
+            marker.text = f"Clover {frame}"
+            vector = Vector3()
+            vector.x = scale[0]
+            vector.y = scale[1]
+            vector.z = scale[2]
+            # marker.scale.x = scale[0]
+            # marker.scale.y = scale[1]
+            # marker.scale.z = scale[2]
+            marker.scale = vector
+            marker.color.a = 1
+
+            self.text_marker_array.markers.append(marker)
+        
+        rospy.loginfo("done")
+
+    
+    def marker_list(self):
+        for id in self.lista_id:
+            pose = Pose()
+            pose.position.x = 0
+            pose.position.y = 0
+            pose.position.z = 0
+            pose.orientation.x = 0
+            pose.orientation.y = 0
+            pose.orientation.z = 0
+            pose.orientation.w = 0
+
+            # Vehicle marker
+            self.create_marker(frame=f"/base_link{id}", type="drone", pose=pose, scale=[1,1,1], color=[255, 255, 0], lifetime=0)
+
+            #  Text marker
+            text_s = 0.45
+            self.create_marker(frame=f"/base_link{id}", type="text", pose=pose, scale=[text_s, text_s, text_s], color=[255, 255, 255], lifetime=0)
+
+
+            print('Current id: ', id)
+
+            
+    
+
+def main():
+    rospy.init_node("marker_handler")
+    obj = MarkerObj()
+
+   
+    # id list of functional clovers from swarm state
+    # list = [0, 1, 2]
+
+
+    obj.setPublishers() 
+    obj.setSubscribers()  
+    obj.setListId() # get id array from connected clovers
+    obj.marker_list() # create a marker for each id
+    obj.setInitialPose() # configure initial pose array
+    obj.waitMessage() # links mavros pose to marker's
+    
+    # rospy.spin()
+
+    # while not rospy.is_shutdown():
+    #     obj.markerPublisher.publish(obj.marker_array)
+    #     if input("enter para proximo pub") == 'quit':
+    #         break
+    obj.markerPublisher.publish(obj.vehicle_marker_array)
+    obj.textMarkerPublisher.publish(obj.text_marker_array)
+    rospy.spin()
+    
+
+if __name__ == "__main__":
+    main()
