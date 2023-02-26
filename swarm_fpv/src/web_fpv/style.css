@@ -47,7 +47,8 @@ body{
     background-color: #242424;
     border-radius: 10px;
     margin-right: 20px;
-    margin-top: 100px;    
+
+    margin-top: 100px;
 }
 
 #swarm{
@@ -113,20 +114,20 @@ body{
     min-width: 40px;
 }
 
-
 /*---------------------Left Bar------------------------*/
 
 .fpv__instructions {
-    font-size: 14px;
+    font-size: 13px;
     padding: 0px 0px 10px 0px;
     position: relative;
     margin-left: 20px;
-    margin-top: 100px;    
     top: 70px;
     width: 300px;
-    height: 400px;
+    height: 355px;
     background-color: #242424;
     border-radius: 10px;
+    
+    margin-top: 100px;    
 }
 
 .fpv__instructions_title {
@@ -146,11 +147,18 @@ body{
 .wsad_box {
     /* title = 10 + 25 + 10 */
     margin-top: 45px; 
-    left: 5%;
-    right: 5%;
+    left: 3%;
+    right: 3%;
     top: 0%;
-    bottom: 55%; /* 100% hard coded */
+    bottom: 49%; /* 100% hard coded */
 
+}
+
+.arrows_box {
+    left: 3%;
+    right: 3%;
+    top: 55%;
+    bottom: 4%;
 }
 
 .fpv__header {
@@ -160,17 +168,25 @@ body{
     color: #FFFFFF;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: 3px 0px 3px 0px;
+    padding: 4px 0px 4px 0px;
 }
 
+
 .fpv__keys {
-    font-size:15px;
     display: block;
     color: #FFFFFF;
     text-align: center;
     padding: 8px 0px 8px 0px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.wsad__keys {
+    font-size: 15px;
+}
+
+.arrows__keys {
+    font-size: 18px;
 }
 
 .fpv__divider {
@@ -180,13 +196,6 @@ body{
 .fpv__content {
     margin-top: 5px;
     text-align: center;
-}
-
-.wsad_content {
     max-height: 100%;
     width: auto;
-}
-
-.arrows_header{
-    margin-top: 15px;
 }

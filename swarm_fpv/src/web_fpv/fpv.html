@@ -29,11 +29,11 @@
                 <div class="fpv__instructions_title"> Basic Commands </div>
                 <!-- WSAD -->
                 <div class="fpv__box wsad_box">
-                    <div class="fpv__header wsad_header">
-                        <div> UP </div> <div> DOWN </div> <div> YAW + </div> <div> YAW - </div>
+                    <div class="fpv__header">
+                        <div> Up </div> <div> Down </div> <div> Yaw + </div> <div> Yaw - </div>
                     </div>
-                    <div class="fpv__keys wsad_keys">
-                        <div> W </div> <div> S </div> <div> A </div> <div> D </div>
+                    <div class="fpv__keys wsad__keys">
+                        <div> W </div><div> S </div><div> A </div><div> D </div>
                     </div>
                     <div class="fpv__divider"></div>
                     <div class="fpv__content">
@@ -42,15 +42,18 @@
                 </div>
                 <!-- ARROWS -->
                 <div class="fpv__box arrows_box">
-                <div class="fpv__header arrows_header">
-                        <div> UP </div> <div> DOWN </div> <div> YAW + </div> <div> YAW - </div>
+                <div class="fpv__header">
+                        <div> Forth </div> <div> Back </div> <div> Right </div> <div> Left </div>
                     </div>
-                    <div class="fpv__keys wsad_keys">
-                        <div> W </div> <div> S </div> <div> A </div> <div> D </div>
+                    <div class="fpv__keys arrows__keys">
+                        <div style="transform: rotate(-90deg);"> > </div>
+                        <div style="transform: rotate(90deg);"> > </div>
+                        <div> > </div>
+                        <div style="transform: rotate(180deg);"> > </div>
                     </div>
                     <div class="fpv__divider"></div>
                     <div class="fpv__content">
-                        <img src="./../assets/wsad3.png" alt="WSAD Commands" class="wsad_content"></img>
+                        <img src="./../assets/fpv__arrows.png" alt="Arrows Commands" class="wsad_content"></img>
                     </div>
             </nav>
 
@@ -65,12 +68,12 @@
                         <option value = null>Select an id</option>
                     </select>
                     <div id="topics">
-                        <div id="head">BATTERY<div id="battery">-</div></div>
-                        <div id="head">CONNECTED<div id="state">-</div></div>
-                        <div id="head">CPU DATA<div id="cpu">-</div></div>
+                        <div id="head">Battery<div id="battery">-</div></div>
+                        <div id="head">Connected<div id="state">-</div></div>
+                        <div id="head">CPU Data<div id="cpu">-</div></div>
                     </div>
                     <div id="topics">
-                        <div id="head">TELEMETRY</div>
+                        <div id="head">Telemetry</div>
                     </div>
                     <div id="topics2">
                         <div id="head2"><div>x</div><div>y</div><div>z</div></div>
@@ -80,8 +83,8 @@
                 <div id="swarm">
                     <div>Swarm</div>
                     <div id="topics">
-                        <div id="head">CLOVERS<div>-</div></div>
-                        <div id="head">FORMATION<div>-</div></div>
+                        <div id="head">Clovers #<div>-</div></div>
+                        <div id="head">Formation<div>-</div></div>
                     </div>
                 </div>
             </nav>
