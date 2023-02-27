@@ -45,12 +45,12 @@
                             <option value = null>Select an id</option>
                         </select>
                         <div id="topics">
-                            <div id="head">BATTERY<div id="battery">-</div></div>
-                            <div id="head">CONNECTED<div id="state">-</div></div>
-                            <div id="head">CPU DATA<div id="cpu">-</div></div>
+                            <div id="head">Battery<div id="battery">-</div></div>
+                            <div id="head">Connected<div id="state">-</div></div>
+                            <div id="head">CPU data<div id="cpu">-</div></div>
                         </div>
                         <div id="topics">
-                            <div id="head">TELEMETRY</div>
+                            <div id="head">Telemetry</div>
                         </div>
                         <div id="topics2">
                             <div id="head2"><div>x</div><div>y</div><div>z</div></div>
@@ -60,10 +60,27 @@
                     <div id="swarm">
                         <div>Swarm</div>
                         <div id="topics">
-                            <div id="head">CLOVERS<div>-</div></div>
-                            <div id="head">FORMATION<div>-</div></div>
+                            <div id="head">Clovers<div>-</div></div>
+                            <div id="head">Formation<div>-</div></div>
                         </div>
                     </div>
+
+                    <button class="open-modal">
+                        Back to land
+                    </button>
+                    <div id="fade" class="hide"></div>
+                    <div id="modal" class="hide">
+                        <div id="modal_header">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
+                            <div>Are you sure?</div>
+                        </div>
+                        <div id="modal_body">
+                            <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
+                            <button class="close-modal" id="cancel">Cancel</button>
+                            <button class="close-modal" id="ok">Yes</button>
+                        </div>
+                    </div>
+                        
                 </nav>
             </div>
     </body>
