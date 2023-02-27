@@ -28,13 +28,46 @@
 
             <div id="bars">
                 <nav id="leftbar">
-                    <a href="#comands" target="_blank"><i class="fa-solid fa-circle-play"></i></a>
-                    <a href="#terminal" target="_blank"><i class="fa-solid fa-terminal"></i></a>
-                    <a href="#process" target="_blank"><i class="fa-solid fa-microchip"></i></a>
-                    <a href="#security" target="_blank"><i class="fa-solid fa-shield-halved"></i></a>
+                    <a href="#comands" id="left_links"><i class="fa-solid fa-circle-play"></i></a>
+                    <a href="#terminal" id="left_links"><i class="fa-solid fa-terminal"></i></a>
+                    <a href="#process" id="left_links"><i class="fa-solid fa-microchip"></i></a>
+                    <a class="open-seg" id="left_links"><i class="fa-solid fa-shield-halved"></i></a>
+                    <div id="fade_seg" class="hide"></div>
+
+                    <div id="seg" class="hide">
+                        <div id="seg_header">
+                            <i class="fa-solid fa-shield-halved" style="font-size: 60px; color: #571B97; padding-bottom: 10px;"></i>
+                            <div>Safe Area</div>
+                        </div>
+
+                        <div id="seg_body">
+                            <p style="margin-bottom: 25px;">Determine the type and dimensions of the security area</p>
+                            <div id="form">
+                                <div id="radios">
+                                    <input type="radio" name="type" value="circle"/> 
+                                    <label>Circle</label><br />
+                                    <input type="radio" name="type" value="square"/> 
+                                    <label>Square</label><br />
+                                    <input type="radio" name="type" value="rectange"/> 
+                                    <label>Rectangle</label><br />
+                                </div>
+
+                                <div id="inputs_circle">
+                                    <input type="number" placeholder="height"><br />
+                                    <input type="number" placeholder="width">
+                                </div>
+
+                            </div>
+                            <a href="#"><button id="ok">Safe</button></a>
+                            <button class="close-seg" id="cancel">Cancel</button>   
+                        </div>
+
+                    </div>
+
                 </nav>
 
                 <nav id="rightbar">
+
                     <div id="clover">
                         <select 
                             id="dropdown"
@@ -57,6 +90,7 @@
                             <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
                         </div>
                     </div>
+
                     <div id="swarm">
                         <div>Swarm</div>
                         <div id="topics">
@@ -65,19 +99,19 @@
                         </div>
                     </div>
 
-                    <button class="open-modal">
+                    <button class="open-land">
                         Back to land
                     </button>
-                    <div id="fade" class="hide"></div>
-                    <div id="modal" class="hide">
-                        <div id="modal_header">
+                    <div id="fade_land" class="hide"></div>
+                    <div id="land" class="hide">
+                        <div id="land_header">
                             <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
                             <div>Are you sure?</div>
                         </div>
-                        <div id="modal_body">
+                        <div id="land_body">
                             <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
-                            <button class="close-modal" id="cancel">Cancel</button>
-                            <button class="close-modal" id="ok">Yes</button>
+                            <a href="#"><button id="ok">Yes</button></a>
+                            <button class="close-land" id="cancel">Cancel</button>
                         </div>
                     </div>
                         

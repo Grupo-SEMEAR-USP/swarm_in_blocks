@@ -46,7 +46,7 @@ body{
     margin-left: 20px;
 }
 
-#leftbar a{
+#left_links{
     background-color: #242424;
     display: block;
     text-align: center;
@@ -54,9 +54,10 @@ body{
     border-radius: 5px;
     padding: 5px;
     color: #FFFFFF;
+    cursor: pointer;
 }
 
-#leftbar a:hover{
+#left_links:hover{
     color: #571B97;
     transition: 0.3s;
 }
@@ -143,7 +144,7 @@ body{
 /*---------------------Land button------------------------*/
 
 
-.open-modal{
+.open-land{
     width: 300px;
     padding: 8px 0px 8px 0px;
     border-radius: 5px;
@@ -159,11 +160,11 @@ body{
     text-align: center;
 }
 
-.open-modal:hover{
+.open-land:hover{
     opacity: 1;
 }
 
-#fade{
+#fade_land{
     position: fixed;
     top: 0;
     left: 0;
@@ -173,7 +174,7 @@ body{
     z-index: 5;
 }
 
-#modal{
+#land{
     position: fixed;
     left: 50%;
     top: 50%;
@@ -185,7 +186,7 @@ body{
     padding: 20px;
 }
 
-#modal_header{
+#land_header{
     display: block;
     text-align: center;
     margin-bottom: 10px;
@@ -193,26 +194,26 @@ body{
     font-weight: 400;
 }
 
-#modal_body{
+#land_body{
     font-size: 16px;
     text-align: center;
 }
 
-#fade,
-#modal {
+#fade_land,
+#land {
   transition: 0.5s;
   opacity: 1;
   pointer-events: all;
 }
 
-#modal.hide,
-#fade.hide{
+#land.hide,
+#fade_land.hide{
     opacity: 0;
     pointer-events: none;
 }
 
 
-#modal.hide{
+#land.hide{
     top: 0;
 }
 
@@ -226,7 +227,7 @@ body{
     cursor: pointer;
     opacity: 0.9;
     font-size: 1rem;
-    margin-right: 5px;
+    margin-left: 5px;
     width: 75px;
 }
 
@@ -240,11 +241,85 @@ body{
     cursor: pointer;
     opacity: 0.9;
     font-size: 1rem;
-    margin-left: 5px;
+    margin-right: 5px;
     width: 75px;
 }
 
 button:hover {
     opacity: 1;
+}
+
+
+/*---------------------Segurity button------------------------*/
+
+.open-seg:hover{
+    opacity: 1;
+}
+
+#seg{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 10;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+#seg_header{
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+}
+
+#radios{
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+#form{
+    display: flex;
+    justify-content: space-between;
+}
+
+#seg_body{
+    font-size: 16px;
+    text-align: center;
+}
+
+
+#fade_seg,
+#seg {
+  transition: 0.5s;
+  opacity: 1;
+  pointer-events: all;
+}
+
+#seg.hide,
+#fade_seg.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+
+#seg.hide{
+    top: 0;
+}
+
+#fade_seg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#seg #ok{
+    background-color: #571B97;
 }
 

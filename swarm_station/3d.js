@@ -146,16 +146,37 @@ setScene('map')
 addAxes()
 addVehicle()
 
-const openModalButton = document.querySelector(".open-modal");
-const closeModalButton = document.querySelector(".close-modal");
-const modal = document.querySelector("#modal");
-const fade = document.querySelector("#fade");
+const openModalLand = document.querySelector(".open-land");
+const closeModalLand = document.querySelector(".close-land");
+const fade_land = document.querySelector("#fade_land");
 
-const toggleModal = () => {
-	modal.classList.toggle("hide");
-	fade.classList.toggle("hide");
+const land = document.querySelector("#land");
+
+const toggleModalLand = () => {
+	land.classList.toggle("hide");
+	fade_land.classList.toggle("hide");
 };
 
-[openModalButton, closeModalButton, fade].forEach((el) => {
-	el.addEventListener("click", () => toggleModal());
+[openModalLand, closeModalLand, fade_land].forEach((el) => {
+	el.addEventListener("click", () => toggleModalLand());
 });
+
+
+
+
+const openModalSeg = document.querySelector(".open-seg");
+const closeModalSeg = document.querySelector(".close-seg");
+const fade_seg = document.querySelector("#fade_seg");
+
+const seg = document.querySelector("#seg");
+
+const toggleModalSeg = () => {
+	seg.classList.toggle("hide");
+	fade_seg.classList.toggle("hide");
+};
+
+[openModalSeg, closeModalSeg, fade_seg].forEach((el) => {
+	el.addEventListener("click", () => toggleModalSeg());
+});
+
+
