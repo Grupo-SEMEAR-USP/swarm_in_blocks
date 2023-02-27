@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<!-- <?xml version="1.0"?>
 
 <launch>
 
@@ -33,11 +33,14 @@
 
     <group ns="clover$(arg ID)">
 
+        <!-- ID parameter -->
+        <param name="clover_id" value="$(arg ID)"/> <!-- mudei-->
+
         <!-- mavros -->
         <include file="$(find clover)/launch/mavros.launch">
             <arg name="fcu_conn" value="$(arg fcu_conn)"/>
             <arg name="fcu_ip" value="$(arg fcu_ip)"/>
-            <arg name="fcu_sys_id" value="$(arg fcu_sys_id)"/>
+            <arg name="fcu_sys_id" value="$((arg fcu_sys_id) + arg('ID'))"/>  <!-- mudei-->
             <arg name="gcs_bridge" value="$(arg gcs_bridge)"/>
         </include>
 
@@ -107,4 +110,4 @@
 
     </group>
 
-</launch>
+</launch> -->
