@@ -179,4 +179,13 @@ const toggleModalSeg = () => {
 	el.addEventListener("click", () => toggleModalSeg());
 });
 
+$(document).ready(function() {
+	$(".desc").hide();
+	$('input[type="radio"]').click(function() {
+		var test = $(this).val();
+		$(".desc").hide();
+		$("#"+test).show();
+	});
+});
+
 
