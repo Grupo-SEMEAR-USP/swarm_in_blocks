@@ -1,17 +1,23 @@
 // import FitAddon from '/node_modules/xterm-addon-fit/lib/xterm-addon-fit.js';
 // Create a conection between the frontend and backend 
 
+// let divs = JSON.parse(localStorage.getItem('ids')) || [];
+
 class webTerminal {
 
     constructor(terminalDiv_id) {
 
         // TerminalDiv_id ->1,2,3...
+        // divs.push(terminalDiv_id);
+        // localStorage.setItem('ids', JSON.stringify(divs));
+        // let ids = JSON.parse(localStorage.getItem('ids'));
+        // console.log("Divs: ", ids);
         
         let server = "ws://localhost:606" + terminalDiv_id
 
         // this.socket = new WebSocket("ws://localhost:6060");
         this.socket = new WebSocket(server);
-        console.log("Esse socket: ", this.socket);
+        console.log("This socket: ", this.socket);
 
         // Library used to control terminal's size
         this.fitAddon = new FitAddon.FitAddon();
@@ -47,11 +53,9 @@ class webTerminal {
         this.currentDirectory = [];
         this.auxCurDir=false;
         this.aux1 = 0;
-        this.lastclientInput;
         this.newLine = false;
         this.numberLine = 0;
-        this.tabCount = 0;
-        this.lastTabInput;
+        this.terminalDiv_id = terminalDiv_id;
 
         this.update()
     }
@@ -158,15 +162,24 @@ class webTerminal {
 
     checkButton(socket){
 
-        const msg = "New Terminal";
-        const asciiMsg = [];
+        // const msg = "New Terminal";
+        // const asciiMsg = [];
 
-        for (let i = 0; i < msg.length; i++) {
-            asciiMsg.push(msg.charCodeAt(i));
-        }
+        // for (let i = 0; i < msg.length; i++) {
+        //     asciiMsg.push(msg.charCodeAt(i));
+        // }
         // console.log(asciiMsg);
+        let counter = 1;
 
         this.openTerminalButton.addEventListener("click", function() {
+            counter +=1;
+
+            const msg = "New Terminal" + counter;
+            const asciiMsg = [];
+
+            for (let i = 0; i < msg.length; i++) {
+                asciiMsg.push(msg.charCodeAt(i));
+            }
             // console.log("Botão apertado");
             socket.send(asciiMsg);    
         });
