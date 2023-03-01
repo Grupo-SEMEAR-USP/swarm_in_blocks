@@ -67,19 +67,37 @@ body{
 #clover{
     padding: 0px 0px 5px 0px;
     position: relative;
-    top: 60px;
+    top: 70px;
     width: 300px;
     background-color: #242424;
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
+    right: -320px;
+    transition: .4s;
+}
+
+#clover.active{
+    left: 0;
+}
+
+#hiden{
+    position: relative;
+    text-align: right;
+    top: 60px;
+    margin-right: 20px;
+    opacity: 0.9;
+}
+
+.menuAberto{
+    left:0;
 }
 
 #swarm{
     font-size: 14px;
     padding: 5px 0px 5px 0px;
     position: relative;
-    top: 70px;
+    top: 80px;
     text-align: center;
     color: #FFFFFF;
     width: 300px;
@@ -87,6 +105,12 @@ body{
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
+    right: -320px;
+    transition: .4s;
+}
+
+#swarm.active{
+    left: 0;
 }
 
 #clover select{
@@ -144,7 +168,7 @@ body{
 /*---------------------Land button------------------------*/
 
 
-.open-land{
+#open-land{
     width: 300px;
     padding: 8px 0px 8px 0px;
     border-radius: 5px;
@@ -156,11 +180,17 @@ body{
     opacity: 0.9;
     font-size: 1rem;
     position: relative;
-    top: 80px;
+    top: 90px;
     text-align: center;
+    right: -320px;
+    transition: .4s;
 }
 
-.open-land:hover{
+#open-land.active{
+    left: 0;
+}
+
+#open-land:hover{
     opacity: 1;
 }
 
@@ -197,6 +227,7 @@ body{
 #land_body{
     font-size: 16px;
     text-align: center;
+    color: hsl(0, 0%, 40%);
 }
 
 #fade_land,
@@ -270,25 +301,25 @@ button:hover {
 
 #seg_header{
     display: block;
-    margin-bottom: 10px;
     font-size: 18px;
     font-weight: 400;
     text-align: center;
 }
 
-#radios{
-    text-align: left;
-    margin-bottom: 15px;
+#options{
+    text-align: left;  
 }
 
 #form{
     display: flex;
     justify-content: space-between;
+    margin: 20px 15px;
 }
 
 #seg_body{
     font-size: 16px;
     text-align: center;
+    color: hsl(0, 0%, 40%);
 }
 
 
@@ -321,5 +352,80 @@ button:hover {
 
 #seg #ok{
     background-color: #571B97;
+}
+
+.rad-label {
+    display: flex;
+    align-items: center;
+    border-radius: 100px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.rad-design {
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    background: linear-gradient(to right bottom, #CA75FD, #571B97);
+    position: relative;
+}
+
+.rad_input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    z-index: -1;
+}
+  
+.rad-design::before {
+    content: '';
+    display: inline-block;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    background: hsl(0, 0%, 90%);
+    transform: scale(1.1);
+    transition: .3s;
+}
+  
+.rad_input:checked+.rad-design::before {
+    transform: scale(0);
+}
+  
+.rad-text {
+    color: hsl(0, 0%, 60%);
+    margin-left: 14px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    transition: .3s;
+}
+  
+.rad_input:checked~.rad-text {
+    color: hsl(0, 0%, 40%);
+}
+
+#inputs{
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#inputs input{
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 150px;
+    height: 20px;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+    border: 2px solid #eee;
+}
+
+#inputs input:focus{
+    outline: none;
+    border-color: #571B97;
 }
 

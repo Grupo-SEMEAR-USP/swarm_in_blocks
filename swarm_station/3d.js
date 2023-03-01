@@ -146,7 +146,7 @@ setScene('map')
 addAxes()
 addVehicle()
 
-const openModalLand = document.querySelector(".open-land");
+const openModalLand = document.querySelector("#open-land");
 const closeModalLand = document.querySelector(".close-land");
 const fade_land = document.querySelector("#fade_land");
 
@@ -179,4 +179,18 @@ const toggleModalSeg = () => {
 	el.addEventListener("click", () => toggleModalSeg());
 });
 
+$(document).ready(function() {
+	$(".desc").hide();
+	$('input[type="radio"]').click(function() {
+		var test = $(this).val();
+		$(".desc").hide();
+		$("#"+test).show();
+	});
+});
+
+function show(){
+	document.getElementById('swarm').classList.toggle('active');
+	document.getElementById('clover').classList.toggle('active');
+	document.getElementById('open-land').classList.toggle('active');
+}
 

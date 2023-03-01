@@ -11,7 +11,7 @@ from std_msgs.msg import Float32
 class RaspResourcePublisher:
     def __init__(self, id):
         self.clover_id = id
-        self.raspData_pub = rospy.Publisher(f"/clover_{self.clover_id}/cpu_usage", raspData, queue_size=10)
+        # self.raspData_pub = rospy.Publisher(f"/clover_{self.clover_id}/cpu_usage", raspData, queue_size=10)
         self.rate = rospy.Rate(1) # 1 Hz
 
     def publish_data(self):
@@ -40,14 +40,12 @@ class RaspResourcePublisher:
                 # Disk data
                 # disk_usage = psutil.disk_usage('/')
                 # disk_usage = self.convertDataToDict(disk_usage)
-
-                # Test the collected data
-                # print(f"virtual_memory{virtual_memory_gB} \n\n swap memory{swap_memory_gB} \n\n cpu_freq{cpu_freq} \n\n cpu_usage: {cpu_usage_percent}%")
-                # print(f"\n\n temperatura todos sensores: {sensors_temperature_total}")
-                # print(f"\n\n bateria sensores: {sensors_battery}")
-                # print(f"\n\n Uso do disco: {disk_usage}")
                 
                 # Network data:
+
+                net_v4 = psutil.net_if_addrs()
+                net_io_counters = psutil.net_io_counters()
+                net_status = psutil.net_if_stats()
 
                 # net_v4 = psutil.net_if_adrrs()['wlp2s0'][0]
                 # adrrs_v4 = net_v4.address # endereço da conexão ipv4
@@ -76,25 +74,37 @@ class RaspResourcePublisher:
                     if process_info['cpu_percent'] != 0:
                         process_list.append(process_info)
                 process_list = sorted(process_list, key = lambda p: p['cpu_percent'], reverse = True)[:3]
-                # print(f"\n\n Processos que mais demandam cpu: {process_list} \n\n ")
+
+
+                # Test the collected data
+                print(f"\n\n Virtual memory: {virtual_memory}")
+                print(f"\n\n Uso da cpu: {cpu_usage_percent}, Freq: {cpu_freq}")
+                print(f"\n\n temperatura todos sensores: {sensors_temperature_total}")
+                print(f"\n\n bateria sensores: {sensors_battery}")
+                # print(f"\n\n Uso do disco: {disk_usage}")
+                print(f"\n\n Processos que mais demandam cpu: {process_list} \n\n ")
+                print(f"\n\n Dados de rede: {net_v4}\n\n Conexão: {net_io_counters} \n\n Status: {net_status}")
 
                 # print(f"{cpu_usage_percent},  {cpu_freq_dict}, {virtual_memory_percent},{virtual_memory_dict}, {process_list}")
 
 
 
                 # Defining the message to be sent
-                rasp_data = raspData()
+                # rasp_data = raspData()
 
-                rasp_data.cpu_usage_percent = cpu_usage_percent
-                rasp_data.cpu_freq_current = cpu_freq.current
-                rasp_data.cpu_freq_min = cpu_freq.min
-                rasp_data.cpu_freq_max = cpu_freq.max
-                rasp_data.virtualMemory_percent = virtual_memory_percent
+                # rasp_data.cpu_usage_percent = cpu_usage_percent
+                # rasp_data.cpu_freq_current = cpu_freq.current
+                # rasp_data.cpu_freq_min = cpu_freq.min
+                # rasp_data.cpu_freq_max = cpu_freq.max
+                # rasp_data.virtualMemory_percent = virtual_memory_percent
 
 
-                for process in process_list:
-                    rasp_data.process_usage_list.append(process['cpu_percent'])
-                    rasp_data.process_name_list.append(process['name'])
+                # for process in process_list:
+                #     rasp_data.process_usage_list.append(process['cpu_percent'])
+                #     rasp_data.process_name_list.append(process['name'])
+
+
+                    
 
                 # cpu_msg = Float32()
                 # cpu_msg.data = cpu_usage_percent
@@ -104,7 +114,7 @@ class RaspResourcePublisher:
 
                 # self.cpu_pub.publish(cpu_msg)
                 # self.mem_per_pub.publish(mem_msg)
-                self.raspData_pub.publish(rasp_data)
+                # self.raspData_pub.publish(rasp_data)
                 self.rate.sleep()
             
             except rospy.ServiceException as e:

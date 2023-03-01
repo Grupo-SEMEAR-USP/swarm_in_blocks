@@ -17,6 +17,8 @@
         <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
         <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
         <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
     </head>
 
     <body onload="pubMarkerState('reload');" >
@@ -28,7 +30,7 @@
 
             <div id="bars">
                 <nav id="leftbar">
-                    <a href="#comands" id="left_links"><i class="fa-solid fa-circle-play"></i></a>
+                    <a href="#topics" id="left_links"><i class="fa-regular fa-rectangle-list"></i></a>
                     <a href="#terminal" id="left_links"><i class="fa-solid fa-terminal"></i></a>
                     <a href="#process" id="left_links"><i class="fa-solid fa-microchip"></i></a>
                     <a class="open-seg" id="left_links"><i class="fa-solid fa-shield-halved"></i></a>
@@ -41,22 +43,42 @@
                         </div>
 
                         <div id="seg_body">
-                            <p style="margin-bottom: 25px;">Determine the type and dimensions of the security area</p>
+                            <p style="margin-bottom: 10px;">Determine the type and dimensions of the security area</p>
                             <div id="form">
-                                <div id="radios">
-                                    <input type="radio" name="type" value="circle"/> 
-                                    <label>Circle</label><br />
-                                    <input type="radio" name="type" value="square"/> 
-                                    <label>Square</label><br />
-                                    <input type="radio" name="type" value="rectange"/> 
-                                    <label>Rectangle</label><br />
+                                <div id="options">
+                                    <label class="rad-label">
+                                        <input type="radio" class="rad_input" name="rad" value="circle">
+                                        <div class="rad-design"></div>
+                                        <div class="rad-text">Circle</div>
+                                    </label>
+
+                                    <label class="rad-label">
+                                        <input type="radio" class="rad_input" name="rad" value="square">
+                                        <div class="rad-design"></div>
+                                        <div class="rad-text">Square</div>
+                                    </label>
+
+                                    <label class="rad-label">
+                                        <input type="radio" class="rad_input" name="rad" value="rectangle">
+                                        <div class="rad-design"></div>
+                                        <div class="rad-text">Rectangle</div>
+                                    </label>
                                 </div>
 
-                                <div id="inputs_circle">
-                                    <input type="number" placeholder="height"><br />
-                                    <input type="number" placeholder="width">
+                                <div id="inputs">
+                                    <div class="desc" id="circle">
+                                        <input type="number" placeholder="Radius">
+                                    </div>
+                                    <div class="desc" id="square">
+                                        <input type="number" placeholder="x"><br />
+                                        <input type="number" placeholder="z">
+                                    </div>
+                                    <div class="desc" id="rectangle">
+                                        <input type="number" placeholder="x"><br />
+                                        <input type="number" placeholder="y"><br />
+                                        <input type="number" placeholder="z">
+                                    </div>
                                 </div>
-
                             </div>
                             <a href="#"><button id="ok">Safe</button></a>
                             <button class="close-seg" id="cancel">Cancel</button>   
@@ -67,54 +89,57 @@
                 </nav>
 
                 <nav id="rightbar">
-
-                    <div id="clover">
-                        <select 
-                            id="dropdown"
-                            onchange = "javascript:reload_subscriber(this);"
-                            class="select-center" 
-                            style="display:block"
-                        >
-                            <option value = null>Select an id</option>
-                        </select>
-                        <div id="topics">
-                            <div id="head">Battery<div id="battery">-</div></div>
-                            <div id="head">Connected<div id="state">-</div></div>
-                            <div id="head">CPU data<div id="cpu">-</div></div>
-                        </div>
-                        <div id="topics">
-                            <div id="head">Telemetry</div>
-                        </div>
-                        <div id="topics2">
-                            <div id="head2"><div>x</div><div>y</div><div>z</div></div>
-                            <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
-                        </div>
+                    <div id="hiden">
+                        <a><i class="fa-solid fa-bars" onclick="show()" style="color: #FFFFFF; padding: 10px; background-color: #242424; border-radius: 10px; cursor: pointer;"></i></a>
                     </div>
+                    <div class="menu">
+                        <div id="clover">
+                            <select 
+                                id="dropdown"
+                                onchange = "javascript:reload_subscriber(this);"
+                                class="select-center" 
+                                style="display:block"
+                            >
+                                <option value = null>Select an id</option>
+                            </select>
+                            <div id="topics">
+                                <div id="head">Battery<div id="battery">-</div></div>
+                                <div id="head">Connected<div id="state">-</div></div>
+                                <div id="head">CPU data<div id="cpu">-</div></div>
+                            </div>
+                            <div id="topics">
+                                <div id="head">Telemetry</div>
+                            </div>
+                            <div id="topics2">
+                                <div id="head2"><div>x</div><div>y</div><div>z</div></div>
+                                <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
+                            </div>
+                        </div>
 
-                    <div id="swarm">
-                        <div>Swarm</div>
-                        <div id="topics">
-                            <div id="head">Clovers<div>-</div></div>
-                            <div id="head">Formation<div>-</div></div>
+                        <div id="swarm">
+                            <div>Swarm</div>
+                            <div id="topics">
+                                <div id="head">Clovers<div>-</div></div>
+                                <div id="head">Formation<div>-</div></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <button class="open-land">
-                        Back to land
-                    </button>
-                    <div id="fade_land" class="hide"></div>
-                    <div id="land" class="hide">
-                        <div id="land_header">
-                            <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
-                            <div>Are you sure?</div>
+                        <button id="open-land">
+                            Back to land
+                        </button>
+                        <div id="fade_land" class="hide"></div>
+                        <div id="land" class="hide">
+                            <div id="land_header">
+                                <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
+                                <div>Are you sure?</div>
+                            </div>
+                            <div id="land_body">
+                                <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
+                                <a href="#"><button id="ok">Yes</button></a>
+                                <button class="close-land" id="cancel">Cancel</button>
+                            </div>
                         </div>
-                        <div id="land_body">
-                            <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
-                            <a href="#"><button id="ok">Yes</button></a>
-                            <button class="close-land" id="cancel">Cancel</button>
-                        </div>
-                    </div>
-                        
+                    </div>   
                 </nav>
             </div>
     </body>
