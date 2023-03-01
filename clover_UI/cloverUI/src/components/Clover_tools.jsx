@@ -10,7 +10,7 @@ function Clover_tools() {
             <div id='sub_text'>
                 <div id='sub_text_st'>
                     <div id='text_seg_st'>
-                        Eazy to 
+                        Easy to 
                     </div>
                     <div id='eazy_text_st' >
                         Swarm
