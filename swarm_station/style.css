@@ -73,6 +73,12 @@ body{
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
+    right: -320px;
+    transition: .4s;
+}
+
+#clover.active{
+    left: 0;
 }
 
 #hiden{
@@ -99,6 +105,12 @@ body{
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
+    right: -320px;
+    transition: .4s;
+}
+
+#swarm.active{
+    left: 0;
 }
 
 #clover select{
@@ -156,7 +168,7 @@ body{
 /*---------------------Land button------------------------*/
 
 
-.open-land{
+#open-land{
     width: 300px;
     padding: 8px 0px 8px 0px;
     border-radius: 5px;
@@ -170,9 +182,15 @@ body{
     position: relative;
     top: 90px;
     text-align: center;
+    right: -320px;
+    transition: .4s;
 }
 
-.open-land:hover{
+#open-land.active{
+    left: 0;
+}
+
+#open-land:hover{
     opacity: 1;
 }
 
@@ -335,7 +353,6 @@ button:hover {
 #seg #ok{
     background-color: #571B97;
 }
-
 
 .rad-label {
     display: flex;
