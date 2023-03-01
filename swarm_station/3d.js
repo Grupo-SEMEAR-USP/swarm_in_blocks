@@ -32,12 +32,16 @@ var marker_state = new ROSLIB.Topic({
 function pubMarkerState(message) {
 
 	var msg = new ROSLIB.Message({
-		data : message,
+		command : message,
 	});
 
 	marker_state.publish(msg)
 }
 
+// string command
+// geometry_msgs/Point[] points
+// float32 lenght
+// float32 radio
 
 // defining ros3d  
 
@@ -108,6 +112,13 @@ function addVehicle() {
 		rootObject: viewer.scene
 		
 	});
+
+	new ROS3D.MarkerArrayClient({
+		ros: ros,
+		tfClient: tfClient,
+		topic: '/base_vehicle_marker',
+		rootObject: viewer.scene
+	})
 
 	for (let i = 0; i < 3; i++) {
 		pubMarkerState('reload');

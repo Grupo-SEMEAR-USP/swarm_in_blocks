@@ -11,6 +11,7 @@ from swarm_checker.msg import SwarmState
 from std_msgs.msg import ColorRGBA
 from std_msgs.msg import Header
 from std_msgs.msg import String
+from swarm_visualizer.msg import SwarmStationCommands
 import tf2_ros
 import tf
 import sys
@@ -22,6 +23,7 @@ class MarkerObj:
         self.vehicle_marker_array = MarkerArray()
         self.safe_marker_array = MarkerArray()
         self.text_marker_array = MarkerArray()
+        self.base_marker_array = MarkerArray()
 
         self.marker_single = Marker()
         self.lista_id = []
@@ -29,28 +31,32 @@ class MarkerObj:
 
         self.isSafeZoneActive = False
 
-        # self.mesh_path = "package://clover/clover_description/meshes/clover4/clover_body_solid.dae"
+        self.mesh_path_base = "package://clover/clover_description/meshes/clover4/clover_body_solid.dae"
         self.mesh_path = "package://clover/clover_description/meshes/clover4/clover_guards_transparent.dae"
 
     def setPublishers(self):
         self.markerPublisher = rospy.Publisher("/vehicle_marker", MarkerArray, queue_size=10)
         self.safeMarkerPublisher = rospy.Publisher("/safe_marker", MarkerArray, queue_size=10)
         self.textMarkerPublisher = rospy.Publisher("/text_marker", MarkerArray, queue_size=10)
+        self.baseMarkerPublisher = rospy.Publisher("/base_vehicle_marker", MarkerArray, queue_size=10)
 
 
     def setSubscribers(self):
         # rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
-        rospy.Subscriber("/marker_state", String, callback=self.markerCallback)
+        rospy.Subscriber("/marker_state", SwarmStationCommands, callback=self.markerCallback)
 
     def markerCallback(self, data):
-        if data.data == 'reload':
+        if data.command == 'reload':
             rospy.loginfo('Republishing markers on reload request..')
             self.markerPublisher.publish(self.vehicle_marker_array)
             self.textMarkerPublisher.publish(self.text_marker_array)
+            self.baseMarkerPublisher.publish(self.base_marker_array)
+
             if self.isSafeZoneActive == True:
                 self.safeMarkerPublisher.publish(self.safe_marker_array)
         
-        if data.data == 'safe_zone':
+        if data.command == 'rectangle':
+            rospy.loginfo('Creating safe zone markers on request')
             self.isSafeZoneActive = True
             # Publihsing safe zone markers based on swarm station request  
             pointA = Point()
@@ -58,8 +64,10 @@ class MarkerObj:
             pointC = Point()
             pointD = Point()
 
-            pointA.x, pointA.y, pointA.z = -6.5, -6.4, 0
-            pointC.x, pointC.y, pointC.z = 7.5, 8.4, 0
+            # pointA.x, pointA.y, pointA.z = -6.5, -6.4, 0
+            # pointC.x, pointC.y, pointC.z = 7.5, 8.4, 0
+            pointA = data.points[0]
+            pointC = data.points[1]
 
             pointB.x, pointB.y, pointB.z = pointA.x, pointC.y, 0
             pointD.x, pointD.y, pointD.z = pointC.x, pointA.y, 0
@@ -95,7 +103,7 @@ class MarkerObj:
                 # point_list.append(pointA)
                 # pointA.z +=1
             
-            print(point_list)
+            # print(point_list)
             color = [255, 0, 255]
             
             type = 'line'
@@ -112,7 +120,7 @@ class MarkerObj:
 
             scale = [4,4,4]
 
-            try:
+            try:    
                 rospy.loginfo('Creating line marker')
                 self.create_marker(frame=frame, type=type, pose=pose, scale=scale, color=color, lifetime=0, action=0, vertices=point_list)
                 rospy.loginfo('Marker line created')
@@ -166,6 +174,9 @@ class MarkerObj:
                 self.vehicle_marker_array.markers[id].id = id
                 self.vehicle_marker_array.markers[id].header.frame_id = f'/body{id}'
 
+                self.base_marker_array.markers[id].id = id
+                self.base_marker_array.markers[id].header.frame_id = f'/body{id}'
+
                 # self.text_marker_array.markers[id].pose = message.pose
                 # # print('aaa')
                 # self.text_marker_array.markers[id].pose.position.x += self.initial_pos[id][0]
@@ -175,8 +186,9 @@ class MarkerObj:
                 self.text_marker_array.markers[id].id = id
                 self.text_marker_array.markers[id].header.frame_id = f'/text{id}'
                 rospy.loginfo(f'Marker {id} initialized successfully')
+
             except Exception as err:
-                print('Not all markers successfully initialized', err)
+                rospy.logerr('Not all markers successfully initialized', err)
         # print()
 
 
@@ -277,6 +289,28 @@ class MarkerObj:
                 marker.color.a = 1
 
                 self.text_marker_array.markers.append(marker)
+
+            elif type == 'base':
+                marker.type = marker.MESH_RESOURCE
+                marker.mesh_resource = self.mesh_path_base
+
+                vector = Vector3()
+                vector.x = scale[0]
+                vector.y = scale[1]
+                vector.z = scale[2]
+                # marker.scale.x = scale[0]
+                # marker.scale.y = scale[1]
+                # marker.scale.z = scale[2]
+
+                marker.mesh_use_embedded_materials = True 
+
+                marker.scale = vector
+                marker.color.r = 0
+                marker.color.g = 0
+                marker.color.b = 0
+
+                self.base_marker_array.markers.append(marker)
+
         except Exception as err:
             rospy.logerr(f"COULD NOT CREATE MARKER OF TYPE {type} - {err}")
         rospy.loginfo("done")
@@ -297,6 +331,8 @@ class MarkerObj:
 
             # Vehicle marker
             self.create_marker(frame=f"/body{id}", type="drone", pose=pose, scale=[1,1,1], color=[255, 255, 0], lifetime=0)
+
+            self.create_marker(frame=f'/body{id}', type="base", pose=pose, scale=[1,1,1], color=[0,0,0], lifetime=0)
 
             #  Text marker
             # self.createTfFrame(id)
