@@ -52,6 +52,7 @@ function update_Telemetry(id) {
             telemetry_x.innerText = `${x}`
             telemetry_y.innerText = `${y}`
             telemetry_z.innerText = `${z}`
+            listenerTelemetry.unsubscribe();
         });
 
 
@@ -66,6 +67,7 @@ function update_Telemetry(id) {
             mode = message.mode;
             isConnected = message.connected;
             state.innerText = `${isConnected}`
+            listenerState.unsubscribe();
             // telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
         });
 
