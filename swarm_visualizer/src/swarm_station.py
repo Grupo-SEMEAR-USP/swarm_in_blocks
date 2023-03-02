@@ -17,6 +17,11 @@ import tf
 import sys
 import rospy
 
+from clover import srv
+from std_srvs.srv import Trigger
+
+import threading
+
 
 class MarkerObj:
     def __init__(self):
@@ -34,6 +39,9 @@ class MarkerObj:
         self.mesh_path_base = "package://clover/clover_description/meshes/clover4/clover_body_solid.dae"
         self.mesh_path = "package://clover/clover_description/meshes/clover4/clover_guards_transparent.dae"
 
+        self.landServices = []
+        self.ledServices = []
+
     def setPublishers(self):
         self.markerPublisher = rospy.Publisher("/vehicle_marker", MarkerArray, queue_size=10)
         self.safeMarkerPublisher = rospy.Publisher("/safe_marker", MarkerArray, queue_size=10)
@@ -45,6 +53,20 @@ class MarkerObj:
         # rospy.Subscriber("/clover0/mavros/local_position/pose", PoseStamped, callback=self.callback)
         rospy.Subscriber("/marker_state", SwarmStationCommands, callback=self.markerCallback)
 
+
+    def setServices(self):
+        try:
+            for id in self.lista_id:
+                rospy.wait_for_service(f"/clover{id}/land", timeout=1)
+                self.landServices.append(rospy.ServiceProxy(f"/clover{id}/land", Trigger))
+
+                rospy.wait_for_service(f"/clover{id}/led/set_effect", timeout=1)
+                self.ledServices.append(rospy.ServiceProxy(f"/clover{id}/led/set_effect", srv.SetLEDEffect))
+
+        except Exception as err:
+            rospy.logerr(f'Could not initialize services for swarm station backend. Please consider running it again - LAND ALL NOT AVAILABLE - {err}')
+
+
     def markerCallback(self, data):
         if data.command == 'reload':
             rospy.loginfo('Republishing markers on reload request..')
@@ -55,7 +77,7 @@ class MarkerObj:
             if self.isSafeZoneActive == True:
                 self.safeMarkerPublisher.publish(self.safe_marker_array)
         
-        if data.command == 'rectangle':
+        elif data.command == 'rectangle':
             rospy.loginfo('Creating safe zone markers on request')
             self.isSafeZoneActive = True
             # Publihsing safe zone markers based on swarm station request  
@@ -132,6 +154,18 @@ class MarkerObj:
             except Exception as err:
                 rospy.logerr(err)
                 
+        elif data.command == 'land_all':
+            threads = list()
+
+            rospy.logwarn('Landing all drones on request..')            
+            for service in self.landServices:
+                # service()
+                thr = threading.Thread(target=service)
+                threads.append(thr)
+                thr.start()
+                
+            for index, thread in enumerate(threads):
+                thread.join()
             
 
     def setListId(self):
@@ -163,9 +197,9 @@ class MarkerObj:
     def waitMessage(self):
         for id in self.lista_id:
             try:
-                message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
+                # message = rospy.wait_for_message(f'/clover{id}/mavros/local_position/pose', PoseStamped, timeout=5)
 
-                cur_pose = message.pose
+                # cur_pose = message.pose
                 # cur_pose.position.x += 1
                 # self.vehicle_marker_array.markers[id].pose = message.pose
                 # print('aaa')
@@ -213,13 +247,6 @@ class MarkerObj:
         marker.action = action # eq a 0 - criar/ modificar
 
         rospy.loginfo("appending")
-        # marker.pose.position.x = pose.position.x
-        # marker.pose.position.y = pose.position.y
-        # marker.pose.position.z = pose.position.z
-        # marker.pose.orientation.x = pose.orientation.x
-        # marker.pose.orientation.y = pose.orientation.y
-        # marker.pose.orientation.z = pose.orientation.z
-        # marker.pose.orientation.w = pose.orientation.w
         marker.pose = pose
 
         marker.lifetime = rospy.Duration.from_sec(lifetime) # 0 -> forever
@@ -342,39 +369,21 @@ class MarkerObj:
 
             rospy.loginfo(f'Current id: {id}')
 
-    # def createTfFrame(self, id):
-    #     m = TransformStamped()
-    #     m.header.frame_id = f'body{id}'
-    #     m.child_frame_id = f'text{id}'
-    #     m.transform.translation.z = 0.4
-
-    #     self.tf_handler.setTransform(m)
-    #     rospy.loginfo("self.tf_handler.getFrameStrings()")
-
-    
 
 def main():
     rospy.init_node("marker_handler")
     obj = MarkerObj()
 
    
-    # id list of functional clovers from swarm state
-    # list = [0, 1, 2]
-
-
     obj.setPublishers() 
     obj.setSubscribers()  
     obj.setListId() # get id array from connected clovers
+    obj.setServices()
     obj.marker_list() # create a marker for each id
     obj.setInitialPose() # configure initial pose array
     obj.waitMessage() # links mavros pose to marker's
     
-    # rospy.spin()
 
-    # while not rospy.is_shutdown():
-    #     obj.markerPublisher.publish(obj.marker_array)
-    #     if input("enter para proximo pub") == 'quit':
-    #         break
     obj.markerPublisher.publish(obj.vehicle_marker_array)
     obj.textMarkerPublisher.publish(obj.text_marker_array)
     rospy.spin()

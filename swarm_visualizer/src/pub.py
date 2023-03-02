@@ -17,7 +17,7 @@ a = Point()
 b = Point()
 a.x, a.y, a.z = -5, -2, 0
 b.x, b.y, b.z = 5, 5, 5
-msg.command = 'rectangle'
+msg.command = 'land_all'
 msg.points = [a, b]
 
 while True:

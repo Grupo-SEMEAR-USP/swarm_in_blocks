@@ -29,10 +29,13 @@ var marker_state = new ROSLIB.Topic({
 	
 })
 
-function pubMarkerState(message) {
+function pubMarkerState(command, points = [], lenght = 0, radius = 0) {
 
 	var msg = new ROSLIB.Message({
-		command : message,
+		command : command,
+		points: points,
+		lenght: lenght,
+		radius: radius
 	});
 
 	marker_state.publish(msg)
