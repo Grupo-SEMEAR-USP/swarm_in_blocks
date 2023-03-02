@@ -20,7 +20,7 @@ function update_BatteryStatus(id) {
         listenerBattery.subscribe(function(message){
             // list1 = message.cell_voltage
             // console.log(message.voltage)
-            battery.innerText = `Voltage: ${message.voltage} V`
+            battery.innerText = `Voltage: ${message.voltage.toFixed(2)} V`
             
         });
     }
@@ -41,8 +41,9 @@ function update_Telemetry(id) {
             y = message.pose.position.y.toFixed(2);
             z = message.pose.position.z.toFixed(2);
             telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
+            listenerTelemetry.unsubscribe();
         });
-
+        
 
         var listenerState = new ROSLIB.Topic({
             ros : ros,
@@ -56,6 +57,7 @@ function update_Telemetry(id) {
             isConnected = message.connected;
             state.innerText = `Mode: ${mode}
                                 Connected: ${isConnected}`
+            listenerState.unsubscribe()
             // telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
         });
 
