@@ -17,6 +17,8 @@
         <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
         <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
         <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+        <script src="js/eventemitter2.min.js"></script>
+        <script src="js/roslib.min.js"></script>
     </head>
     <body >
         <!-- TOPBAR -->
@@ -91,6 +93,7 @@
                 </div>
             </nav>
         <div class="fpv__streaming">
+            <!-- STREAMING -->
             <div class="fpv__streaming_header">
                 <div class="fpv__disconnected-light"></div>
                 <div class="fpv__disconnected" id="disconnected"> Disconnected </div>
@@ -103,10 +106,16 @@
                     <option value = null>Clover ID</option>
                 </select>
             </div>
-            <img src="./../assets/fpv_screen 2.png" alt="" class="fpv__cam" width="640" height="480" >
+            <img id="image_subscriber" class="fpv__cam" 
+            width="640" height="480" >
             <div class="fpv__pedal">
                 <div id="pedal_feedback"> Clicked </div>
-                <img src="./../assets/mouse_rest.png" alt="mouse_rest" id="pedal">
+                <div id="pedal_output"> Output</div>
+                <!-- <div id="pedal_listener">
+                    <img src="./../assets/mouse_rest.png" alt="mouse_rest" id="pedal" class="pedal">
+                </div> -->
+                <div id="pedal" style="width:500px; height:100px; background-color:#494155" tabindex="0"></div>
+
             </div>
         </div>
     </body>

@@ -48,7 +48,7 @@ function update_Telemetry(id) {
             y = message.pose.position.y.toFixed(2);
             z = message.pose.position.z.toFixed(2);
             // sleep(5) //not working
-            console.log('x: ', x, 'y: ', y, 'z: ', z)
+            // console.log('x: ', x, 'y: ', y, 'z: ', z)
             telemetry_x.innerText = `${x}`
             telemetry_y.innerText = `${y}`
             telemetry_z.innerText = `${z}`

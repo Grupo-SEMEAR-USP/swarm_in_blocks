@@ -1,5 +1,7 @@
 var battery = document.getElementById('battery')
-var telemetry = document.getElementById('telemetry')
+var telemetry_x = document.getElementById('telemetry_x')
+var telemetry_y = document.getElementById('telemetry_y')
+var telemetry_z = document.getElementById('telemetry_z')
 var cpu = document.getElementById('cpu')
 var state = document.getElementById('state')
 
@@ -40,7 +42,10 @@ function update_Telemetry(id) {
             x = message.pose.position.x.toFixed(2);
             y = message.pose.position.y.toFixed(2);
             z = message.pose.position.z.toFixed(2);
-            telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
+            // console.log('x: ', x, 'y: ', y, 'z: ', z)
+            telemetry_x.innerText = `${x}`
+            telemetry_y.innerText = `${y}`
+            telemetry_z.innerText = `${z}`            
             listenerTelemetry.unsubscribe();
         });
         

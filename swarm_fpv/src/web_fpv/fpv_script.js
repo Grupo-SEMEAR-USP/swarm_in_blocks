@@ -32,7 +32,7 @@ var ros = new ROSLIB.Ros({
   }
   
   function increaseImageSize() {
-    let img = document.getElementById("image_sub")
+    let img = document.getElementById("image_subscriber")
     
     width *= 1.1
     height *= 1.1
@@ -44,7 +44,7 @@ var ros = new ROSLIB.Ros({
     // nome.height = nome.height + 850;
   }
   function decreaseImageSize() {
-    let img = document.getElementById("image_sub")
+    let img = document.getElementById("image_subscriber")
     
     width *= 0.9
     height *= 0.9
@@ -76,7 +76,7 @@ var ros = new ROSLIB.Ros({
     });
     listener.subscribe(function(message) {
       // console.log('Received message on ' + listener.name);
-      document.getElementById('image_sub').src = "data:image/jpeg;base64," + message.data;
+      document.getElementById('image_subscriber').src = "data:image/jpeg;base64," + message.data;
     });
 
     update_BatteryStatus(id)
@@ -105,7 +105,7 @@ var ros = new ROSLIB.Ros({
   });
   
   function addIds() {
-    var element = document.getElementById('dropdown')
+    var element = document.getElementById('streaming-dropdown')
   
     for (let id in list) {
       // create_element(lista[x])

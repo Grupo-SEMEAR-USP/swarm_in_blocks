@@ -1,7 +1,8 @@
-let element = document.getElementById("output")
-let acceptedValues = ["KeyW", "KeyS", "KeyA", "KeyD",
-                      "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
+var element = document.querySelector("#pedal_output");
+var acceptedValues = ["KeyW", "KeyS", "KeyA", "KeyD",
+                    "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 
+console.log('element:', element)
 // deals with the text updating (for debugging purposes)
 function updateContent(text) {
     element.innerText = text
@@ -114,9 +115,9 @@ function Drone(id, name) {
 
 
 // key events 
-var rectangle_window = document.getElementById("listener")
-var feedback = document.getElementById("feedback")
-
+var rectangle_window = document.querySelector("#pedal")
+// listen to all window 
+var feedback = document.querySelector("#pedal_feedback")
 
 rectangle_window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time
 (event) => {
@@ -134,7 +135,7 @@ rectangle_window.addEventListener("keydown",  // TO DO => Array of elements that
 
 
 rectangle_window.addEventListener("keyup", (event) => {
-    feedback.innerText = "off listener- debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
+        feedback.innerText = "off listener- debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
 
     drone['Stop']();
 })
