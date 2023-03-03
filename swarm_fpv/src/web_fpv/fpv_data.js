@@ -43,8 +43,7 @@ function update_Telemetry(id) {
         listenerState.subscribe((message) =>{
             mode = message.mode;
             isConnected = message.connected;
-            state.innerText = `Mode: ${mode}
-                                Connected: ${isConnected}`
+            state.innerText = `${isConnected}`
             // visual feedback for streaming header
             if (isConnected == true) {
                 console.log('connected:', isConnected)

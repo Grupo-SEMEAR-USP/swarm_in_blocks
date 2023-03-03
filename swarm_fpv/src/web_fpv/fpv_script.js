@@ -78,6 +78,7 @@ var ros = new ROSLIB.Ros({
     listener.subscribe(function(message) {
       // console.log('Received message on ' + listener.name);
       document.getElementById('image_subscriber').src = "data:image/jpeg;base64," + message.data;
+    
     });
 
     update_BatteryStatus(id)
@@ -101,8 +102,8 @@ var ros = new ROSLIB.Ros({
   listenerSwarm.subscribe(function(message) {
     // document.getElementById('connected_ids')
     list = message.all_clovers_ids // [0, 1, 3, 5] TO DO -> Na verdade é with_camera_ids, mas para simulaçao 
-    listenerSwarm.unsubscribe()
     addIds()
+    listenerSwarm.unsubscribe()
   });
   
   function addIds() {
@@ -116,7 +117,6 @@ var ros = new ROSLIB.Ros({
       child.setAttribute('value', `${list[id]}`)
       element.appendChild(child)
     }
-    listenerSwarm.unsubscribe()
   }
   
   
