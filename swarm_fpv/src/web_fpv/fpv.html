@@ -63,14 +63,6 @@
             <!-- RIGHT BAR -->
             <nav id="rightbar">
                 <div id="clover">
-                    <select 
-                        id="dropdown"
-                        onchange = "javascript:reload_subscriber(this);"
-                        class="dropdown" 
-                        style="display:block"
-                    >
-                        <option value = null>Select an id</option>
-                    </select>
                     <div id="topics">
                         <div id="head">Battery<div id="battery">-</div></div>
                         <div id="head">Connected<div id="state">-</div></div>
@@ -95,8 +87,8 @@
         <div class="fpv__streaming">
             <!-- STREAMING -->
             <div class="fpv__streaming_header">
-                <div class="fpv__disconnected-light"></div>
-                <div class="fpv__disconnected" id="disconnected"> Disconnected </div>
+                <div class="fpv__disconnected-light" id="fpv_light"></div>
+                <div class="fpv__disconnected" id="fpv_disconnected"> Disconnected </div>
                 <select 
                     id="streaming-dropdown"
                     onchange = "javascript:reload_subscriber(this);"
@@ -106,10 +98,11 @@
                     <option value = null>Clover ID</option>
                 </select>
             </div>
+            <!-- proportion 640x480 -->
             <img id="image_subscriber" class="fpv__cam" 
-            width="640" height="480" >
+            width="510" height="360" >
             <div class="fpv__pedal">
-                <div id="pedal_feedback"> Clicked </div>
+                <div id="pedal_feedback"> Listening to keyboard keys </div>
                 <div id="pedal_output"> Output</div>
                 <!-- <div id="pedal_listener">
                     <img src="./../assets/mouse_rest.png" alt="mouse_rest" id="pedal" class="pedal">

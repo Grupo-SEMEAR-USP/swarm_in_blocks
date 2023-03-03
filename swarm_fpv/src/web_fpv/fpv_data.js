@@ -4,11 +4,12 @@ var telemetry_y = document.getElementById('telemetry_y')
 var telemetry_z = document.getElementById('telemetry_z')
 var cpu = document.getElementById('cpu')
 var state = document.getElementById('state')
-
 var disconnected = document.querySelector('#disconnected');
+
 const pedal = document.querySelector('#pedal');
 const pedal_feedback = document.querySelector('#pedal_feedback');
-
+const fpv_disconnected = document.querySelector('#fpv_disconnected');
+const fpv_light = document.querySelector('#fpv_light');
 
 // listeners
 function update_BatteryStatus(id) {
@@ -62,6 +63,23 @@ function update_Telemetry(id) {
             isConnected = message.connected;
             state.innerText = `Mode: ${mode}
                                 Connected: ${isConnected}`
+            // visual feedback for streaming header
+            if (isConnected == true) {
+                console.log('connected:', isConnected)
+                fpv_disconnected.innerText = `Connected`
+                fpv_disconnected.classList.add('fpv__connected')
+                fpv_light.classList.add('fpv__connected-light')
+                fpv_disconnected.classList.remove('fpv__disconnected')
+                fpv_light.classList.remove('fpv__disconnected-light')
+            }
+            else {
+                // if the class online it is there, remove it
+                fpv_disconnected.innerText = `Disconnected`
+                fpv_disconnected.classList.remove('fpv__connected')
+                fpv_light.classList.remove('fpv__connected-light')
+                fpv_disconnected.classList.add('fpv__disconnected')
+                fpv_light.classList.add('fpv__disconnected-light')
+            }
             listenerState.unsubscribe()
             // telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
         });

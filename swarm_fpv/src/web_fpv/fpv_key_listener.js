@@ -115,15 +115,15 @@ function Drone(id, name) {
 
 
 // key events 
-var rectangle_window = document.querySelector("#pedal")
+var rectangle_window = document.getElementById("pedal")
 // listen to all window 
-var feedback = document.querySelector("#pedal_feedback")
+var feedback = document.querySelector("#feedback") // for debugging purposes
 
 rectangle_window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time
 (event) => {
     let key = event.code;
     if (event.repeat == true) {
-        return;
+        return;w
     } else if (acceptedValues.includes(key)) {
     
     feedback.innerText = "DOWN - debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
