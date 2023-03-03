@@ -68,6 +68,7 @@ class MarkerObj:
 
 
     def markerCallback(self, data):
+        rospy.loginfo('callback')
         if data.command == 'reload':
             rospy.loginfo('Republishing markers on reload request..')
             self.markerPublisher.publish(self.vehicle_marker_array)

@@ -25,7 +25,7 @@ ros.on('close', function() {
 var marker_state = new ROSLIB.Topic({
 	ros: ros,
 	name: "/marker_state",
-	messageType: 'std_msgs/String'
+	messageType: 'swarm_visualizer/SwarmStationCommands'
 	
 })
 
@@ -40,25 +40,54 @@ btnSalvar.addEventListener("click", function(event){
 	var radius = frmSafe.radius.radius;
 
 	var points = []
-
+	
 	if (command == "circle"){
-		points[0] = [frmSafe.circle_x.value, frmSafe.circle_x.value, frmSafe.circle_x.value]
+		points[0] = [parseFloat(frmSafe.circle_x.value), parseFloat(frmSafe.circle_y.value), parseFloat(frmSafe.circle_z.value)]
 	}
 	if (command == "square"){
-		points[0] = [frmSafe.square_x.value, frmSafe.square_x.value, frmSafe.square_x.value]
+		points[0] = [parseFloat(frmSafe.square_x.value), parseFloat(frmSafe.square_y.value), parseFloat(frmSafe.square_z.value)]
 	}
 	if (command == "rectangle"){
-		points[0] = [frmSafe.r1_x.value, frmSafe.r1_x.value, frmSafe.r1_x.value]
-		points[1] = [frmSafe.r2_x.value, frmSafe.r2_x.value, frmSafe.r2_x.value]
+		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value), parseFloat(frmSafe.r1_z.value)]
+		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value), parseFloat(frmSafe.r2_z.value)]
 	}
 
 	console.log(points)
+	point_list = []
+	// point_list = [
+	// {
+	// 	x: points[0][0],
+	// 	y: points[0][1],
+	// 	z: points[0][2]
+	// },
+	// {
+	// 	x: points[1][0],
+	// 	y: points[1][1],
+	// 	z: points[1][2]
+	// }];
 
-	pubMarkerState(command, points, lenght, radius);
+	for (let index = 0; index < points.length; index++) {
+		// const element = array[index];
+		let point = new ROSLIB.Message ({
+			x: points[index][0],
+			y: points[index][1],
+			z: points[index][2]
+		});
+
+		point_list.push(point)
+		
+	}
+
+	console.log(point_list)
+	pubMarkerState(command, point_list, lenght, radius);
 
 })
 
-function pubMarkerState(command, points, lenght, radius) {
+var geometry_msgsPoint = function() {};
+
+function pubMarkerState(command='reload', points={}, lenght=0, radius=0) {
+	
+	
 	var msg = new ROSLIB.Message({
 		command : command, //cirlce, rectangle, square
 		points: points, //[[x,y,z],[x,y,z],...]
@@ -66,6 +95,8 @@ function pubMarkerState(command, points, lenght, radius) {
 		radius: radius //circle
 	});
 
+	console.log(`Republishing on /marker_state command ${command}`)
+	console.log(msg)
 	marker_state.publish(msg)
 }
 
@@ -152,8 +183,8 @@ function addVehicle() {
 	})
 
 	for (let i = 0; i < 3; i++) {
-		pubMarkerState('reload');
-		console.log(i)
+		pubMarkerState(command='reload');
+		console.log("reloading vehicles")
 	}
 }
 
@@ -187,3 +218,4 @@ function addArucoMap() {
 setScene('map')
 addAxes()
 addVehicle()
+

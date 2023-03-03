@@ -1,4 +1,4 @@
 string command
-geometry_msgs/Point[] points
+float32[][] points
 float32 lenght
-float32 radio
+float32 radius

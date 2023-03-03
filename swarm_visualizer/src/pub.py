@@ -17,7 +17,7 @@ a = Point()
 b = Point()
 a.x, a.y, a.z = -5, -2, 0
 b.x, b.y, b.z = 5, 5, 5
-msg.command = 'land_all'
+msg.command = 'rectangle'
 msg.points = [a, b]
 
 while True:
@@ -25,4 +25,4 @@ while True:
 
     rospy.loginfo(f'publishing /n{msg}')
     a = input('press')
-# rospy.Rate(100).sleep()
+    rospy.Rate(100).sleep()
