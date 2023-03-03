@@ -270,17 +270,27 @@ body{
 .fpv__pedal {
     margin-top: 10px;
     text-align: center;
+    border: none;
+}
+
+#pedal {
+    border: none;
+    transition: filter 0.2s ease-in-out;
 }
 
 #pedal:hover {
     cursor: pointer;
 }
 
-#pedal {
-    /* transition: filter 0.2s ease-in-out; */
+#pedal:focus,
+#pedal.clicked:focus {
+    border: none;
+    border-color: transparent;
+    outline: none;
 }
 
 #pedal.clicked {
+    border: none;
     filter: brightness(130%) sepia(100%) hue-rotate(200deg);
 }
 

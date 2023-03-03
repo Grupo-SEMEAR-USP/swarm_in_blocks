@@ -13,9 +13,10 @@ var ros = new ROSLIB.Ros({
   // ----------------------
   // var lista = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   var list = [];
+  // proportion 640x480
   var width, height;
-  width = 320;
-  height = 240; // standart sizes (may change)
+  width = 510;
+  height = 360; // standart sizes (may change)
   var drone;
   
   function define_id(id_c) {
