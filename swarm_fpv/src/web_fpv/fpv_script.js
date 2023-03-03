@@ -116,6 +116,7 @@ var ros = new ROSLIB.Ros({
       child.setAttribute('value', `${list[id]}`)
       element.appendChild(child)
     }
+    listenerSwarm.unsubscribe()
   }
   
   
