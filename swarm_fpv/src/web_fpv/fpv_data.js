@@ -11,24 +11,6 @@ const pedal_feedback = document.querySelector('#pedal_feedback');
 const fpv_disconnected = document.querySelector('#fpv_disconnected');
 const fpv_light = document.querySelector('#fpv_light');
 
-// listeners
-function update_BatteryStatus(id) {
-    if (id != "null") {
-        var listenerBattery = new ROSLIB.Topic({
-            ros:ros,
-            name: `/clover${id}/mavros/battery`,
-            messageType: 'sensor_msgs/BatteryState'
-        })
-
-        listenerBattery.subscribe(function(message){
-            // list1 = message.cell_voltage
-            // console.log(message.voltage)
-            battery.innerText = `Voltage: ${message.voltage.toFixed(2)} V`
-            
-        });
-    }
-
-}
 
 function update_Telemetry(id) {
     console.log(typeof id)
@@ -107,15 +89,33 @@ update_Streaming => (id) => {
             else {
                 isConnected = "Disconnected"
             }    
-            disconnected.innerText = `Mode: ${mode}
-                                ${isConnected}`
+            disconnected.innerText = `${isConnected}`
         });
     }
 }
 
+// listeners
+function update_BatteryStatus(id) {
+    if (id != "null") {
+        var listenerBattery = new ROSLIB.Topic({
+            ros:ros,
+            name: `/clover${id}/mavros/battery`,
+            messageType: 'sensor_msgs/BatteryState'
+        })
+
+        listenerBattery.subscribe(function(message){
+            // list1 = message.cell_voltage
+            // console.log(message.voltage)
+            battery.innerText = `${message.voltage.toFixed(2)} V`
+            
+        });
+    }
+
+}
+
 function update_CPU(id) {
     if (id != "null") {
-    cpu.innerText = `CPU DATA FROM CLOVER ${id}`
+    cpu.innerText = `CLOVER ${id}`
      // code here
     }
 }
