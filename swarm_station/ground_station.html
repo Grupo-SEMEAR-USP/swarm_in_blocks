@@ -18,7 +18,6 @@
         <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
         <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-
     </head>
 
     <body onload="pubMarkerState('reload');" >
@@ -42,7 +41,7 @@
                             <div>Safe Area</div>
                         </div>
 
-                        <div id="seg_body">
+                        <form id="seg_body">
                             <p style="margin-bottom: 10px;">Determine the type and dimensions of the security area</p>
                             <div id="form">
                                 <div id="options">
@@ -67,22 +66,42 @@
 
                                 <div id="inputs">
                                     <div class="desc" id="circle">
-                                        <input type="number" placeholder="Radius">
+                                        <input type="number" name="radius" value="radius" placeholder="Radius">
+                                        <div style="display: flex; padding-top: 5px;">
+                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
+                                            <input type="number" style="width: 60px;" placeholder="x"  name="circle_x">
+                                            <input type="number" style="width: 60px;" placeholder="y"  name="circle_y">
+                                            <input type="number" style="width: 60px;" placeholder="z"  name="circle_z">
+                                        </div>
                                     </div>
                                     <div class="desc" id="square">
-                                        <input type="number" placeholder="x"><br />
-                                        <input type="number" placeholder="z">
+                                        <input type="number" value="lenght" name="lenght" placeholder="Lenght">
+                                        <div style="display: flex; padding-top: 5px;">
+                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
+                                            <input type="number" style="width: 60px;" placeholder="x"  name="square_x">
+                                            <input type="number" style="width: 60px;" placeholder="y"  name="square_y">
+                                            <input type="number" style="width: 60px;" placeholder="z"  name="square_z">
+                                        </div>
                                     </div>
                                     <div class="desc" id="rectangle">
-                                        <input type="number" placeholder="x"><br />
-                                        <input type="number" placeholder="y"><br />
-                                        <input type="number" placeholder="z">
+                                        <div style="display: flex; padding-top: 5px;">
+                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 1</label>
+                                            <input type="number" style="width: 60px;" placeholder="x"  name="r1_x">
+                                            <input type="number" style="width: 60px;" placeholder="y"  name="r1_y">
+                                            <input type="number" style="width: 60px;" placeholder="z"  name="r1_z">
+                                        </div>
+                                        <div style="display: flex; padding-top: 5px;">
+                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 2</label>
+                                            <input type="number" style="width: 60px;" placeholder="x"  name="r2_x">
+                                            <input type="number" style="width: 60px;" placeholder="y"  name="r2_y">
+                                            <input type="number" style="width: 60px;" placeholder="z"  name="r2_z">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#"><button id="ok">Safe</button></a>
+                            <button class="close-seg" type="submit" id="ok">Safe</button>
                             <button class="close-seg" id="cancel">Cancel</button>   
-                        </div>
+                        </form>
 
                     </div>
 
@@ -147,5 +166,5 @@
     <script src="fpv_script.js"></script>
     <script src="fpv_key_listener.js"></script>
     <script src="fpv_data.js"></script>
-
+    <script src="js.js"></script>
 </html>
