@@ -21,7 +21,7 @@
     </head>
 
     <body onload="pubMarkerState('reload');" >
-        <div id="viz" style="position: absolute;"></div>
+        <div id="viz" style="position: fixed;"></div>
             <nav id="topbar">
                 <a href="../swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
                 <a href="../swarm_fpv/src/web_fpv/fpv.html" target="_blank">FPV</a>
@@ -29,9 +29,9 @@
 
             <div id="bars">
                 <nav id="leftbar">
-                    <a href="#topics" id="left_links"><i class="fa-regular fa-rectangle-list"></i></a>
-                    <a href="#terminal" id="left_links"><i class="fa-solid fa-terminal"></i></a>
-                    <a href="#process" id="left_links"><i class="fa-solid fa-microchip"></i></a>
+                    <a id="left_links" onclick="show_info()"><i class="fa-solid fa-microchip"></i></a>
+                    <a class="open-topic" id="left_links"><i class="fa-regular fa-rectangle-list"></i></a>
+                    <a id="left_links"><i class="fa-solid fa-terminal"></i></a>
                     <a class="open-seg" id="left_links"><i class="fa-solid fa-shield-halved"></i></a>
                     <div id="fade_seg" class="hide"></div>
 
@@ -99,17 +99,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="close-seg" type="submit" id="ok">Safe</button>
-                            <button class="close-seg" id="cancel">Cancel</button>   
+                            <div style="display: flex; float: right;">
+                                <button class="close-input-seg" type="submit" id="ok">Safe</button>  
+                                <div class="close-seg" id="cancel" >Cancel</div>
+                            </div> 
                         </form>
-
                     </div>
 
                 </nav>
 
                 <nav id="rightbar">
                     <div id="hiden">
-                        <a><i class="fa-solid fa-bars" onclick="show()" style="color: #FFFFFF; padding: 10px; background-color: #242424; border-radius: 10px; cursor: pointer;"></i></a>
+                        <a><i class="fa-solid fa-bars" onclick="show()" id="lines_icon"></i></a>
                     </div>
                     <div class="menu">
                         <div id="clover">
@@ -135,13 +136,13 @@
                             </div>
                         </div>
 
-                        <div id="swarm">
+                        <!--<div id="swarm">
                             <div>Swarm</div>
                             <div id="topics">
                                 <div id="head">Clovers<div>-</div></div>
                                 <div id="head">Formation<div>-</div></div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <button id="open-land">
                             Back to land
@@ -161,10 +162,29 @@
                     </div>   
                 </nav>
             </div>
+
+            <nav>
+                <div id="clovers_info">
+                    
+                </div>
+            </nav> 
+            
+            <nav>
+                <div id="fade_topic" class="hide"></div>
+                <div id="topic_list" class="hide">
+                    <div id="topic_header">
+                        <i class="fa-regular fa-rectangle-list" style="font-size: 60px; color: #571B97; padding-bottom: 10px;"></i>
+                        <div>List of topics</div>
+                    </div>
+                    <div id="topic_body">
+                        
+                    </div>
+                </div>
+            </nav>  
     </body>
     <script src="3d.js"></script>
-    <!-- <script src="fpv_script.js"></script>
-    <script src="fpv_key_listener.js"></script> -->
+    <script src="fpv_script.js"></script>
+    <script src="fpv_key_listener.js"></script>
     <script src="fpv_data.js"></script>
     <script src="js.js"></script>
 </html>

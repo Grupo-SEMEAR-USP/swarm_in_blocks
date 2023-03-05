@@ -55,6 +55,6 @@
     <include file="$(find swarm_clover_blocks)/www/web_terminal/launch/terminal_Web.launch"> </include>
 
     <!-- Rasp data launch -->
-    <include file="$(find rasp_pkg)/launch/rasp_publisher.launch"> </include>
+    <!--<include file="$(find rasp_pkg)/launch/rasp_publisher.launch"> </include>-->
 
 </launch>

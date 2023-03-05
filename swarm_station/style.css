@@ -5,6 +5,8 @@
 
 body{
     margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
     box-sizing: border-box;
     font-family: "Poppins";
 }
@@ -57,7 +59,7 @@ body{
     cursor: pointer;
 }
 
-#left_links:hover{
+#leftbar a:hover{
     color: #571B97;
     transition: 0.3s;
 }
@@ -73,12 +75,12 @@ body{
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
-    right: -320px;
     transition: .4s;
+    display: none;
 }
 
 #clover.active{
-    left: 0;
+    display: block;
 }
 
 #hiden{
@@ -87,6 +89,15 @@ body{
     top: 60px;
     margin-right: 20px;
     opacity: 0.9;
+}
+
+#lines_icon{
+    color: #FFFFFF; padding: 10px; background-color: #242424; border-radius: 10px; cursor: pointer;
+}
+
+#lines_icon:hover{
+    color: #571B97;
+    transition: 0.3s;
 }
 
 .menuAberto{
@@ -115,7 +126,7 @@ body{
 
 #clover select{
     background-color: #242424;
-    border-radius: 5px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
     width: 100%;
     height: 30px;
     color: #FFFFFF;
@@ -180,14 +191,14 @@ body{
     opacity: 0.9;
     font-size: 1rem;
     position: relative;
-    top: 90px;
+    top: 80px;
     text-align: center;
-    right: -320px;
     transition: .4s;
+    display: none;
 }
 
 #open-land.active{
-    left: 0;
+    display: block;
 }
 
 #open-land:hover{
@@ -433,3 +444,110 @@ input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
+button{
+    font-family: "Poppins";
+}
+
+/*---------------------Clovers info------------------------*/
+
+#clovers_info{
+    background-color: #242424;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 250px;
+    opacity: 0.9;
+    transition: 0.3s;
+    display: none;
+    margin: 10px;
+}
+
+#clovers_info.active{
+    display: block;
+}
+
+#clovers_info.inactive{
+    display: none;
+}
+
+/*---------------------Topic list------------------------*/
+
+#open-topic.active{
+    display: block;
+}
+
+#open-topic:hover{
+    opacity: 1;
+}
+
+#fade_topic{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#topic_list{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 10;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+#topic_header{
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+#topic_body{
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 40%);
+    height: 300px;
+    width: 350px;
+    overflow-y: scroll;
+}
+
+#fade_topic,
+#topic_list {
+  transition: 0.5s;
+  opacity: 1;
+  pointer-events: all;
+}
+
+#topic_list.hide,
+#fade_topic.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+#topic_list.hide{
+    top: 0;
+}
+
+#cancel{
+    border-radius: 5px;
+    background-color: gray;
+    color: #FFFFFF;
+    padding: 0.4rem 0rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1rem;
+    margin-left: 5px;
+    width: 75px;
+}

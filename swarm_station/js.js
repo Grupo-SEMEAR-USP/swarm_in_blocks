@@ -13,11 +13,9 @@ const toggleModalLand = () => {
 	el.addEventListener("click", () => toggleModalLand());
 });
 
-
-
-
 const openModalSeg = document.querySelector(".open-seg");
 const closeModalSeg = document.querySelector(".close-seg");
+const closeInputModalSeg = document.querySelector(".close-input-seg");
 const fade_seg = document.querySelector("#fade_seg");
 
 const seg = document.querySelector("#seg");
@@ -27,9 +25,10 @@ const toggleModalSeg = () => {
 	fade_seg.classList.toggle("hide");
 };
 
-[openModalSeg, closeModalSeg, fade_seg].forEach((el) => {
+[openModalSeg, closeModalSeg, fade_seg, closeInputModalSeg].forEach((el) => {
 	el.addEventListener("click", () => toggleModalSeg());
 });
+
 
 $(document).ready(function() {
 	$(".desc").hide();
@@ -41,9 +40,28 @@ $(document).ready(function() {
 });
 
 function show(){
-	document.getElementById('swarm').classList.toggle('active');
 	document.getElementById('clover').classList.toggle('active');
 	document.getElementById('open-land').classList.toggle('active');
 }
+
+function show_info(){
+	document.getElementById('clovers_info').classList.toggle('active');
+}
+
+
+const openModalTopic = document.querySelector(".open-topic");
+const closeModalTopic = document.querySelector(".close-topic");
+const fade_topic = document.querySelector("#fade_topic");
+
+const topic = document.querySelector("#topic_list");
+
+const toggleModalTopic = () => {
+	topic.classList.toggle("hide");
+	fade_topic.classList.toggle("hide");
+};
+
+[openModalTopic, closeModalTopic, fade_topic].forEach((el) => {
+	el.addEventListener("click", () => toggleModalTopic());
+});
 
 
