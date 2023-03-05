@@ -112,34 +112,6 @@ function Drone(id, name) {
 }
 
 
-
-// key events 
-var rectangle_window = document.getElementById("listener")
-var feedback = document.getElementById("feedback")
-
-
-rectangle_window.addEventListener("keydown",  // TO DO => Array of elements that accepts multiple keys at the sime time
-(event) => {
-    let key = event.code;
-    if (event.repeat == true) {
-        return;
-    } else if (acceptedValues.includes(key)) {
-    
-    feedback.innerText = "DOWN - debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
-    console.log(key);
-    drone[String(key)]();
-}
-}
-,true)
-
-
-rectangle_window.addEventListener("keyup", (event) => {
-    feedback.innerText = "off listener- debugging pourpose only - TODO-> think of other ways of telling the user the listener is on"
-
-    drone['Stop']();
-})
-
-
 // rectangle.addEventListener("keydown",
 // (event) => {
 //     let key = event.code;
