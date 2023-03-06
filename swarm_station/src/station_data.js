@@ -60,7 +60,6 @@ function update_Telemetry(id) {
             ros : ros,
             name : `/clover${id}/mavros/state`,
             messageType : 'mavros_msgs/State'
-
         })
 
         listenerState.subscribe((message) =>{

@@ -11,6 +11,10 @@ var ros = new ROSLIB.Ros({
     console.log('Connection to websocket server closed.');
   });
 
+var disconnected = document.querySelector('#disconnected');
+const fpv_disconnected = document.querySelector('#fpv_disconnected');
+const fpv_light = document.querySelector('#fpv_light');
+
 
 const openModalLand = document.querySelector("#open-land");
 const closeModalLand = document.querySelector(".close-land");
@@ -88,8 +92,7 @@ listSwarm = new ROSLIB.Topic({
 
 listSwarm.subscribe(function(message) {
   // document.getElementById('connected_ids')
-  Connected = message.connected_ids
-  // console.log(cloversConnected)
+  list = message.all_clovers_ids
   listSwarm.unsubscribe()
 });
 
@@ -103,16 +106,15 @@ function show_info(){
 
 	document.querySelector("#clovers_info").innerHTML = "";
 
-	for(let id in Connected){
+	//for(let id in Connected)
+	for(let id in list){
 		duplicaElemento();
-		update_cards(id)
+		update_cards(id);
 	}
 	document.getElementById('clovers_info').classList.toggle('active');
 	document.getElementById('mic').classList.toggle('active');
 }
 
-
-var listRasp;
 //puxa os dados para o card - recebe o id do card
 function update_cards(id) {
     if (id != "null") {
@@ -138,7 +140,7 @@ function update_cards(id) {
         var bytes_recv = message.bytes_recv;
         var packets_sent = message.packets_sent;
         var packets_recv = message.packets_recv;
-        var net_data_max = message.net_data_max;
+        var net_data_adress = message.net_data_adress;
       
         var process_list_string = '';
         for (var i = 0; i < process_usage_list.length; i++) {
@@ -146,16 +148,54 @@ function update_cards(id) {
         }
 
         // Update the HTML elements with the new values
-        document.getElementById("cpu_usage_percent").innerHTML = 'Cpu usage: ' + cpu_usage.toFixed(2) + '%';
-        document.getElementById("cpu_freq_current").innerHTML = 'Cpu current frequency: ' + cpu_freq_current.toFixed(2) + 'Hz';
-        document.getElementById("cpu_freq_min").innerHTML = 'Cpu min frequency: ' + cpu_freq_min.toFixed(2) + 'Hz';
-        document.getElementById("cpu_freq_max").innerHTML = 'Cpu max frequency: ' + cpu_freq_max.toFixed(2) + 'Hz';
-        document.getElementById("virtualMemory_percent").innerHTML = 'Virtual memory usage: ' + virtualMemory_percentage.toFixed(2) + '%';
-        document.getElementById("cpu_temperature").innerHTML = 'Cpu temperature: ' + cpu_temperature.toFixed(2) + ' celsius';
+        document.getElementById("cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
+        document.getElementById("cpu_freq_current").innerHTML = cpu_freq_current.toFixed(2) + 'Hz';
+        document.getElementById("cpu_freq_min").innerHTML = cpu_freq_min.toFixed(2) + 'Hz';
+        document.getElementById("cpu_freq_max").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
+        document.getElementById("virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
+        document.getElementById("cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
+		document.getElementById("net_data_adress").innerHTML = net_data_adress;
+
+
+
         document.getElementById("bytes").innerHTML = 'Bytes sent: '+ bytes_sent + ' Bytes received: ' + bytes_recv;
         document.getElementById("packets").innerHTML = 
         document.getElementById("process_list").innerHTML = 'Most used processes: ' + '<br>' +  process_list_string;
       });
+
+	  var listState = new ROSLIB.Topic({
+		ros : ros,
+		name : `/clover${id}/mavros/state`,
+		messageType : 'mavros_msgs/State'
+
+		})
+
+		listState.subscribe((message) =>{
+		mode = message.mode;
+		Connected = message.connected;
+		state.innerText = `${Connected}`
+		// visual feedback for streaming header
+		if (Connected == true) {
+			console.log('connected:', Connected)
+			fpv_disconnected.innerText = `Connected`
+			fpv_disconnected.classList.add('fpv__connected')
+			fpv_light.classList.add('fpv__connected-light')
+			fpv_disconnected.classList.remove('fpv__disconnected')
+			fpv_light.classList.remove('fpv__disconnected-light')
+		}
+		else {
+			// if the class online it is there, remove it
+			fpv_disconnected.innerText = `Disconnected`
+			fpv_disconnected.classList.remove('fpv__connected')
+			fpv_light.classList.remove('fpv__connected-light')
+			fpv_disconnected.classList.add('fpv__disconnected')
+			fpv_light.classList.add('fpv__disconnected-light')
+		}
+		listState.unsubscribe()
+		// telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
+	});
+
+
     }
   }
 
