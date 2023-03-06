@@ -82,6 +82,7 @@ var ros = new ROSLIB.Ros({
     update_BatteryStatus(id)
     update_Telemetry(id)
     update_CPU(id)
+    show_info(id);
   }
   
   //update_listener(0);

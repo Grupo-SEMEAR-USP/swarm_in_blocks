@@ -488,7 +488,7 @@ button{
     display: none;
 }
 
-#cards{
+.cards{
     min-width: 300px;
     border-radius: 20px;
     padding: 3px;
@@ -497,7 +497,7 @@ button{
     margin: 10px;
 }
 
-#cards:hover {
+.cards:hover {
     transform: translateY(-0.5rem);
     transition: 0.4s;
     cursor: pointer;
