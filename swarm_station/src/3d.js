@@ -7,7 +7,7 @@ var titleEl = document.querySelector('title');
 ros.on('error', function(error) {
 	titleEl.innerText = 'Disconnected';
 	err = error;
-	alert('Connection error: please enable \'rosbridge\' in clover.launch!');
+	alert('Could not connect to ros: please make sure \'swarm_station.launch\' was launched!');
 });
 
 ros.on('connection', function() {
@@ -54,39 +54,48 @@ btnSalvar.addEventListener("click", function(event){
 
 	console.log(points)
 	point_list = []
-	// point_list = [
-	// {
-	// 	x: points[0][0],
-	// 	y: points[0][1],
-	// 	z: points[0][2]
-	// },
-	// {
-	// 	x: points[1][0],
-	// 	y: points[1][1],
-	// 	z: points[1][2]
-	// }];
-
+	
 	for (let index = 0; index < points.length; index++) {
 		// const element = array[index];
-		let point = new ROSLIB.Message ({
+		// let point = new ROSLIB.Message ({
+		point = {
 			x: points[index][0],
 			y: points[index][1],
 			z: points[index][2]
-		});
-
+		};
+		// console.log(point)
 		point_list.push(point)
 		
 	}
 
-	console.log(point_list)
+	// console.log(point_list)
 	pubMarkerState(command, point_list, lenght, radius);
 
-})
+});
+
+var point_template = []
+	
+	for (let index = 0; index < 2; index++) {
+		// const element = array[index];
+		// let point = new ROSLIB.Message ({
+		point = {
+			x: 0,
+			y: 0,
+			z: 0
+		};
+		// console.log(point)
+		point_template.push(point)
+		
+	}
+
+
+
 
 var geometry_msgsPoint = function() {};
 
-function pubMarkerState(command='reload', points={}, lenght=0, radius=0) {
+function pubMarkerState(command='reload', points= point_template, lenght=0, radius=0) {
 	
+
 	
 	var msg = new ROSLIB.Message({
 		command : command, //cirlce, rectangle, square

@@ -384,9 +384,15 @@ def main():
     obj.setInitialPose() # configure initial pose array
     obj.waitMessage() # links mavros pose to marker's
     
+    try:
+        for i in range(3):
+            obj.markerPublisher.publish(obj.vehicle_marker_array)
+            obj.textMarkerPublisher.publish(obj.text_marker_array)
+            obj.baseMarkerPublisher.publish(obj.base_marker_array)
+    except Exception as err:
+        rospy.logerr(f"Could not publish markers - {err}")
+        sys.exit(1)
 
-    obj.markerPublisher.publish(obj.vehicle_marker_array)
-    obj.textMarkerPublisher.publish(obj.text_marker_array)
     rospy.spin()
     
 
