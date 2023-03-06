@@ -11,11 +11,16 @@ const pedal_feedback = document.querySelector('#pedal_feedback');
 const fpv_disconnected = document.querySelector('#fpv_disconnected');
 const fpv_light = document.querySelector('#fpv_light');
 
+var listenerTelemetry ;
 
 function update_Telemetry(id) {
+    if (listenerTelemetry) {
+        listenerTelemetry.unsubscribe();
+    }
+
     console.log(typeof id)
     if (id != "null") {
-        var listenerTelemetry = new ROSLIB.Topic({
+        listenerTelemetry = new ROSLIB.Topic({
             ros : ros,
             name : `/clover${id}/mavros/local_position/pose`,
             messageType : 'geometry_msgs/PoseStamped'
@@ -29,7 +34,7 @@ function update_Telemetry(id) {
             telemetry_x.innerText = `${x}`
             telemetry_y.innerText = `${y}`
             telemetry_z.innerText = `${z}`            
-            listenerTelemetry.unsubscribe();
+            // listenerTelemetry.unsubscribe();
         });
         
 

@@ -13,6 +13,6 @@
         </include>
     </group>
 
-    <node pkg="swarm_visualizer" type="swarm_station.py" name="markers" />
+    <node pkg="swarm_visualizer" type="swarm_station.py" name="swarm_station" />
 
 </launch>

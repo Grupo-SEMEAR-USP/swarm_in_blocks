@@ -23,7 +23,7 @@ from std_srvs.srv import Trigger
 import threading
 
 
-class MarkerObj:
+class SwarmStation:
     def __init__(self):
         self.vehicle_marker_array = MarkerArray()
         self.safe_marker_array = MarkerArray()
@@ -92,21 +92,25 @@ class MarkerObj:
             pointA = data.points[0]
             pointC = data.points[1]
 
+            # height = pointA.z
+            height = 8
             pointB.x, pointB.y, pointB.z = pointA.x, pointC.y, 0
             pointD.x, pointD.y, pointD.z = pointC.x, pointA.y, 0
 
-            height = 6
+            
             point_list = []
-            for i in range(height):
+            # for i in range(height):
+            i = 0
+            while i <= height:
             #     pointA.z, pointB.z, pointC.z, pointD = height, height, height, height
                 a = Point()
                 b = Point()
                 c = Point()
                 d = Point()
-                a.x,a.y,a.z = pointA.x, pointA.y, i*0.8
-                b.x,b.y,b.z = pointB.x, pointB.y, i*0.8
-                c.x,c.y,c.z = pointC.x, pointC.y, i*0.8
-                d.x,d.y,d.z = pointD.x, pointD.y, i*0.8
+                a.x,a.y,a.z = pointA.x, pointA.y, i
+                b.x,b.y,b.z = pointB.x, pointB.y, i
+                c.x,c.y,c.z = pointC.x, pointC.y, i
+                d.x,d.y,d.z = pointD.x, pointD.y, i
                 point_list.append(a)
                 point_list.append(b)
                 point_list.append(b)
@@ -125,7 +129,7 @@ class MarkerObj:
                 # point_list.append(pointD)
                 # point_list.append(pointA)
                 # pointA.z +=1
-            
+                i += 0.8
             # print(point_list)
             color = [255, 0, 255]
             
@@ -373,7 +377,7 @@ class MarkerObj:
 
 def main():
     rospy.init_node("marker_handler")
-    obj = MarkerObj()
+    obj = SwarmStation()
 
    
     obj.setPublishers() 
