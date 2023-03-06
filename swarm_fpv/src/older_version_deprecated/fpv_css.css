@@ -1,0 +1,131 @@
+
+body{
+    background: #000;
+    padding-top: 10px;
+  } 
+  
+  p{
+    color: lime; 
+    font-family: "Courier";
+    font-size: 20px;
+    margin: 10px 0 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 30em;
+    animation: type 4s steps(60, end); 
+  }
+  
+  p:nth-child(0){
+    animation: type2 4s steps(60, end);
+  }
+  
+  p a{
+    color: lime;
+    text-decoration: none;
+  }
+  
+  span{
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes type{ 
+    from { width: 0; } 
+  } 
+  
+  @keyframes type2{
+    0%{width: 0;}
+    50%{width: 0;}
+    100%{ width: 100; } 
+  } 
+  
+  @keyframes blink{
+    to{opacity: .0;}
+  }
+  
+  ::selection{
+    background: black;
+  }
+
+
+
+
+
+h1 {
+    margin: 20px;
+    padding: 40px;
+    font-family: 'Courier', monospace;
+    color: white;
+    background-color: black;
+
+
+}
+
+/*p {
+    color: aquamarine;
+    background-color: black;
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }*/
+
+  button{
+    /*background: linear-gradient(white, white) padding-box, linear-gradient(to right, #13f78c, #0be6e6, #f700c5) border-box;
+	border-radius: 50em;
+	border: 3px solid transparent;
+	position: relative;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	text-decoration: none;
+	color: #10a87d;
+	padding: 0.5em 1.5em;
+	cursor: pointer;*/
+
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 3px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px
+
+  }
+
+  select{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+  }
+
+  div{
+    background-color: black;
+    
+  }
+
+
+  
+   body{
+    background-color: black;
+    background-position: center;
+   }

@@ -33,16 +33,21 @@ function update_BatteryStatus(id) {
 
 }
 
+var listenerTelemetry;
 
 function update_Telemetry(id) {
+    if(listenerTelemetry){
+        listenerTelemetry.unsubscribe();
+    }
     console.log(typeof id)
     if (id != "null") {
-        var listenerTelemetry = new ROSLIB.Topic({
+        listenerTelemetry = new ROSLIB.Topic({
             ros : ros,
             name : `/clover${id}/mavros/local_position/pose`,
             messageType : 'geometry_msgs/PoseStamped'
+            
         })
-
+                 
         listenerTelemetry.subscribe((message) =>{
             x = message.pose.position.x.toFixed(2);
             y = message.pose.position.y.toFixed(2);
@@ -55,6 +60,7 @@ function update_Telemetry(id) {
             listenerTelemetry.unsubscribe();
         });
 
+        
 
         var listenerState = new ROSLIB.Topic({
             ros : ros,
