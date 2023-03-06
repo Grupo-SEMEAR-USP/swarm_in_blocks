@@ -9,9 +9,11 @@
     font-weight: 600;
     font-size: 50px;
     color:hsl(0, 0%, 100%);
+    min-width: 540px;
 }
 
 #tools_cards{
+    min-width: 465px;
     position:relative;
     padding: 0px 0px 0px 80px;
     min-height: 200px;

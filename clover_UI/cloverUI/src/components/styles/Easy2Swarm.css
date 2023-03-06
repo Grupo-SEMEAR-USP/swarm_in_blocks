@@ -1,17 +1,26 @@
 #Easy2Swarm{
     padding: 10em 6em 0em 6em;   
+    display: flex;
+    justify-content: space-between;
 }
 
 
 #img{
-    max-width: 500px;
+    width: 470px;
     border-radius: 30px;
-    max-height: 246.43px;
+    height: 246.43px;
+    margin-top: 100px;
+    margin-right: 20px;
+}
+
+#un{
+    line-height: 60px;
 }
 
 
 #easy_text{
-    max-width: 560px;
+    max-width: 500px;
+    min-width: 500px;
     font-size: 50px;
     font-weight: 600;
     text-align:right;
@@ -19,8 +28,6 @@
 }
 
 #easy_text2{
-    padding-top: 40px;
-    padding-bottom: 5px;
     background: radial-gradient(190% 170% at 100% -13.91%, #A967DF 0%, #A967DF 33.33%, #A967DF 20.4%, #571B97 70.58%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

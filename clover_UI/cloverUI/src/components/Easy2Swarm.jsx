@@ -5,15 +5,11 @@ function Easy2Swarm() {
     return (
       <div id="Easy2Swarm">
         <div id='e_purple_gradient'></div>
-        <div class='container'>
           <img src='/assets/img/swarm.png' id='img'/>
           <div id='easy_text'>
-              It's never been easier
-              <div id='text_seg'>
-                to
-              </div>
-              <div id='easy_text2'>
-                    Swarm
+              <div id="un">
+                It's never been 
+                easier to <div id='easy_text2'>Swarm</div>  
               </div>
               <div class='text3'>
                 Swarm in Blocks is a CopterHack 2022 and 2023 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle.              </div>
@@ -23,7 +19,6 @@ function Easy2Swarm() {
                 </button>
               </a>
           </div>
-        </div>
       </div>
     )
 }

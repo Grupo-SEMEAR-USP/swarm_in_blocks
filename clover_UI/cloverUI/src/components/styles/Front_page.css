@@ -1,5 +1,7 @@
 #Front_page{
   padding: 10em 6em 0em 6em;
+  display: flex;
+  justify-content: space-between;
 }
 
 
@@ -7,7 +9,7 @@
     position: absolute;
     width: 200px;
     height: 200px;
-    margin: 3% 0% 0% 58%;
+    margin: 10px 0px 0px 700px;
     background: linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 100%);
     filter: blur(100px);
     border-radius: 200px;
@@ -33,6 +35,7 @@
   font-weight: 600;
   text-align:left;
   font-size: 58px;
+  min-width: 500px;
   color:hsl(0, 0%, 100%);
 }
 

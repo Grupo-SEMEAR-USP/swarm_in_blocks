@@ -4,7 +4,6 @@ import './styles/Front_page.css'
 const Front_page= () =>{
     return (
       <div id="Front_page">
-        <div class='container'>
             <div id='front_text'>
                 Online Block
                 <div id='front_text2'>
@@ -18,7 +17,7 @@ const Front_page= () =>{
             <div id='rectangle'></div>
             <div id='f_green_gradient'></div>
             <img src='/assets/img/clover.svg' id='voo'/>
-        </div>
+
       </div>
     )
 }
