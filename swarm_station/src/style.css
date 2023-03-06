@@ -18,22 +18,34 @@ body{
 
 /*---------------------Topbar------------------------*/
 #topbar{
+    justify-content: space-between;
     background-color: #1E1E1E;
     overflow: hidden;
     position: fixed;
     width: 100%;
+    display: flex;
+
 }
 
-#topbar a{
+#topbar img{
+    height: 40px;
+    padding: 8px 16px;
+
+}
+
+#top_links{
+    padding: 12px 16px;
+}
+
+#top_links a{
     color: #FFFFFF;
-    float: right;
     text-decoration: none;
-    display: block;
-    padding: 10px 16px ;
     font-size: 18px;
     font-weight: 500;
+    padding-left: 18px;
 }
-#topbar a:hover{
+
+#top_links a:hover{
     color: #571B97;
     transition: 0.3s;
 }
@@ -44,11 +56,11 @@ body{
     width: 40px;
     height: 40px;
     position: relative;
-    top: 60px;
+    top: 70px;
     margin-left: 20px;
 }
 
-#left_links{
+#leftbar a{
     background-color: #242424;
     display: block;
     text-align: center;
@@ -64,12 +76,16 @@ body{
     transition: 0.3s;
 }
 
+#mic.active{
+    color: #571B97;
+}
+
 /*---------------------Right bar------------------------*/
 
 #clover{
     padding: 0px 0px 5px 0px;
     position: relative;
-    top: 70px;
+    top: 80px;
     width: 300px;
     background-color: #242424;
     border-radius: 10px;
@@ -86,7 +102,7 @@ body{
 #hiden{
     position: relative;
     text-align: right;
-    top: 60px;
+    top: 70px;
     margin-right: 20px;
     opacity: 0.9;
 }
@@ -108,7 +124,7 @@ body{
     font-size: 14px;
     padding: 5px 0px 5px 0px;
     position: relative;
-    top: 80px;
+    top: 90px;
     text-align: center;
     color: #FFFFFF;
     width: 300px;
@@ -191,7 +207,7 @@ body{
     opacity: 0.9;
     font-size: 1rem;
     position: relative;
-    top: 80px;
+    top: 90px;
     text-align: center;
     transition: .4s;
     display: none;

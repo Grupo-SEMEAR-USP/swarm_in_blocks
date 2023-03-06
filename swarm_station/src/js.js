@@ -46,6 +46,7 @@ function show(){
 
 function show_info(){
 	document.getElementById('clovers_info').classList.toggle('active');
+	document.getElementById('mic').classList.toggle('active');
 }
 
 
