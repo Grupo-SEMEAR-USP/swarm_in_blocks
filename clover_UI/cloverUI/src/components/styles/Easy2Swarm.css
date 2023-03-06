@@ -1,0 +1,54 @@
+#Easy2Swarm{
+    padding: 10em 6em 0em 6em;   
+    display: flex;
+    justify-content: space-between;
+}
+
+
+#img{
+    width: 470px;
+    border-radius: 30px;
+    height: 246.43px;
+    margin-top: 100px;
+    margin-right: 20px;
+}
+
+#un{
+    line-height: 60px;
+}
+
+
+#easy_text{
+    max-width: 500px;
+    min-width: 500px;
+    font-size: 50px;
+    font-weight: 600;
+    text-align:right;
+    color:hsl(0, 0%, 100%);
+}
+
+#easy_text2{
+    background: radial-gradient(190% 170% at 100% -13.91%, #A967DF 0%, #A967DF 33.33%, #A967DF 20.4%, #571B97 70.58%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#text_seg{
+    position: absolute;
+    margin-top: 40px;
+    padding-left: 315px;
+}
+
+
+#e_purple_gradient {
+    position: absolute;
+    width: 500px;
+    height: 600px;
+    background: linear-gradient(90deg, #9C1DE8 0%, #571B97 100%);
+    filter: blur(450px);
+    border-radius: 200px;
+    transform: rotate(94.82deg);
+    margin-top: -28%;
+    margin-left: 90%;
+}

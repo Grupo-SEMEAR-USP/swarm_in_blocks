@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="fcu_conn" default="usb"/>
+    <arg name="fcu_ip" default="127.0.0.1"/>
+    <arg name="fcu_sys_id" default="1"/>
+    <arg name="gcs_bridge" default="tcp"/>
+    <arg name="web_video_server" default="true"/>
+    <arg name="rosbridge" default="true"/>
+    <arg name="main_camera" default="true"/>
+    <arg name="optical_flow" default="false"/>
+    <arg name="aruco" default="true"/>
+    <arg name="rangefinder_vl53l1x" default="true"/>
+    <arg name="led" default="true"/>
+    <!-- <arg name="blocks" default="false"/> -->
+    <arg name="rc" default="false"/>
+    <arg name="force_init" value="true"/> <!-- force estimator to init by publishing zero pose -->
+
+    <!-- Drone's args -->
+    <arg name="ID" default="0"/>
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0.3"/>
+    <arg name="R" default="0"/>
+    <arg name="P" default="0"/>
+    <arg name="Y" default="0"/>
+
+    <arg name="simulator" default="false"/> <!-- flag that we are not operating on a simulated drone -->
+
+    <!-- log formatting -->
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}]: ${logger}: ${message}"/>
+
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" if="$(eval rosbridge or rc)"/>
+
+    <!-- tf2 republisher for web visualization -->
+    <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" output="screen" if="$(arg rosbridge)"/>
+    
+    <!-- web video server -->
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server" if="$(arg web_video_server)" required="false" respawn="true" respawn_delay="5">
+        <param name="default_stream_type" value="ros_compressed"/>
+        <param name="publish_rate" value="1.0"/>
+    </node>
+    
+    <!-- PX4 configs -->
+    <arg name="daemon" default="true"/> <!-- Automatically starts the px4io module-->
+
+    <!-- MAVROS -->
+    <arg name="remote" value="$(eval 14800 + arg('ID'))"/> <!-- Porta do Mavros no UAV -> PC -->
+    <arg name="local" value="$(eval 15000 + arg('ID'))"/> <!-- Porta para receber msgs Mavlink no PC -->
+    <param name="fcu_url" value="$(arg usb_device)" if="$(eval fcu_conn == 'usb')"/>
+
+
+    <!-- remap mavlink bridge topics -->
+    <!-- <remap from="/mavlink/to" to="/mavlink$(arg num)/to" />
+    <remap from="/mavlink/from" to="/mavlink$(arg num)/from" /> -->
+
+
+    <group ns="clover$(arg ID)">
+
+        <!-- ID parameter -->
+        <param name="clover_id" value="$(arg ID)"/> <!-- Defines clover Id-->
+
+        <!-- Initial position parameters (z initializes in 0.0, not 0.3 because of gazebo ground colision) -->
+        <param name="initial_pose/x" value="$(arg x)"/>
+        <param name="initial_pose/y" value="$(arg y)"/>
+        <param name="initial_pose/z" value="0"/>
+
+        <!-- mavros -> Lançando o launch do mavros -->
+        <!-- <include file="$(find clover)/launch/mavros.launch">
+            <arg name="fcu_conn" value="$(arg fcu_conn)"/>
+            <arg name="fcu_ip" value="$(eval arg(fcu_ip))"/>  IP do veículo aéreo / ID necessário para simulação
+            <arg name="fcu_sys_id" value="$(eval arg(fcu_sys_id) + arg('ID'))"/>  Drone system id
+            <arg name="gcs_bridge" value="$(arg gcs_bridge)"/> Computer's ip adress
+
+            <param name="fcu_url" value="$(arg fcu_url)"/>
+
+            
+        </include> -->
+
+        <!-- MAVROS 2 option -> Lançando direto pelo nó -->
+
+        <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="$(arg output)">
+            <param name="fcu_url" value="$(arg fcu_url)"/>
+            <param name="target_system_id" value="$(eval arg(fcu_sys_id) + arg('ID'))"/>
+            <param name="target_component_id" value="1"/>
+            <param name="gcs_quiet_mode" value="true"/>
+            <param name="conn/timeout" value="20"/>
+
+            <param name="local_position/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="local_position/tf/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="global_position/child_frame_id" value="base_link$(arg ID)"/>
+            <param name="global_position/tf/child_frame_id" value="base_link$(arg ID)"/>
+
+            <!-- basic params -->
+            <rosparam command="load" file="$(find clover)/launch/mavros_config.yaml"/>
+            <rosparam param="plugin_whitelist">
+                - altitude
+                - command
+                - distance_sensor
+                - ftp
+                - global_position
+                - imu
+                - local_position
+                - manual_control
+                # - mocap_pose_estimate
+                - param
+                - px4flow
+                - rc_io
+                - setpoint_attitude
+                - setpoint_position
+                - setpoint_raw
+                - setpoint_velocity
+                - sys_status
+                - sys_time
+                - vision_pose_estimate
+                # - vision_speed_estimate
+                # - waypoint
+            </rosparam>
+        </node>
+
+
+        <!-- aruco markers -->
+        <include file="$(find clover)/launch/aruco.launch" if="$(eval aruco or force_init)">
+            <arg name="force_init" value="$(arg force_init)"/>
+            <arg name="disable" value="$(eval not aruco)"/>
+        </include>
+
+        <!-- optical flow -->
+        <node pkg="nodelet" type="nodelet" name="optical_flow" args="load clover/optical_flow main_camera_nodelet_manager" if="$(arg optical_flow)" clear_params="true" output="screen" respawn="true">
+            <remap from="image_raw" to="main_camera/image_raw"/>
+            <remap from="camera_info" to="main_camera/camera_info"/>
+            <param name="calc_flow_gyro" value="true"/>
+            <param name="roi_rad" value="0.8"/>
+        </node>
+
+        <!-- simplified offboard control -->
+        <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
+            <param name="reference_frames/main_camera_optical" value="map"/>
+            
+            <param name="reference_frames/body" value="map"/>
+            <param name="reference_frames/base_link" value="map"/>
+            <param name="reference_frames/navigate_target" value="map"/>
+
+            <param name="body_frame" value="body$(arg ID)"/>
+            <param name="target_frame" value="navigate_target$(arg ID)"/>
+            <param name="setpoint" value="setpoint$(arg ID)"/>
+        </node>
+
+        <!-- simplified offboard control -> With REMAP -->
+        <!-- <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
+            <param name="reference_frames/main_camera_optical" value="map"/>
+            
+            <param name="reference_frames/body" value="map"/>
+            <param name="reference_frames/base_link" value="map"/>
+            <param name="reference_frames/navigate_target" value="map"/>
+
+            <param name="body_frame" value="body"/>
+            <param name="target_frame" value="navigate_target"/>
+            <param name="setpoint" value="setpoint"/>
+
+            <remap from="body_frame" to="body$(arg ID)" />
+            <remap name="target_frame" to="navigate_target$(arg ID)"/>
+            <remap name="setpoint" to="setpoint$(arg ID)"/>
+        </node> -->
+
+
+        <!-- main camera - Talvez precise lançar o nó diretamente e usar remap-->
+        <include file="$(find clover)/launch/main_camera.launch" if="$(arg main_camera)">
+            <arg name="simulator" value="$(arg simulator)"/>
+        </include>
+
+        <!-- vl53l1x ToF rangefinder -->
+        <node name="rangefinder" pkg="vl53l1x" type="vl53l1x_node" output="screen" if="$(eval rangefinder_vl53l1x and not simulator)">
+            <param name="frame_id" value="rangefinder"/>
+            <param name="min_signal" value="0.4"/>
+            <param name="pass_statuses" type="yaml" value="[0, 6, 7, 11]"/>
+        </node>
+
+        <!-- led strip -->
+        <include file="$(find clover)/launch/led.launch" if="$(arg led)">
+            <arg name="simulator" value="$(arg simulator)"/>
+        </include>
+
+        <!-- Clover Blocks -->
+        <!-- <node name="clover_blocks" pkg="clover_blocks" type="clover_blocks" output="screen" if="$(arg blocks)"/> -->
+
+        <!-- rc backend -->
+        <node name="rc" pkg="clover" type="rc" output="screen" if="$(arg rc)" clear_params="true">
+            <!-- Send fake GCS heartbeats. Set to "true" for upstream PX4 -->
+            <param name="use_fake_gcs" value="false"/>
+        </node>
+
+        <!-- Update static directory -->
+        <!-- <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true">
+            <param name="default_package" value="clover"/>
+        </node> -->
+
+    </group>
+
+</launch>

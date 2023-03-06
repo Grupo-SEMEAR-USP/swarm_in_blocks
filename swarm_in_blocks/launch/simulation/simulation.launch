@@ -51,4 +51,10 @@
     <!-- swarm checker node -->
     <node pkg="swarm_checker" name="swarm_checker" type="swarm_checker_node.py" output="screen"/>
 
+    <!-- Terminal Web node    -->
+    <include file="$(find swarm_clover_blocks)/www/web_terminal/launch/terminal_Web.launch"> </include>
+
+    <!-- Rasp data launch -->
+    <!--<include file="$(find rasp_pkg)/launch/rasp_publisher.launch"> </include>-->
+
 </launch>

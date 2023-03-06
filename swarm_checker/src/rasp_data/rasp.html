@@ -1,0 +1,39 @@
+<!doctype html>
+  <html>
+    <head>
+      <!-- Configurações necessárias no documento-->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, intial-scale=1.0">
+      <title> Raspberry Pi data </title>
+      <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    </head>
+    <body style="background-color: black;"
+    >
+      <div id = "Main text" style="text-align: center; color: white;"> 
+
+        <h1 style="color: rgb(111, 255, 28);"> Raspberry Pi collected data </h1>
+
+        <select id="selectCloverId" class="selectionBox" style="display:block;">
+          <option value = null> Select clover id </option>
+        </select>
+
+        <div class="data" style="display: inline-block;" onchange="javascript:update_RaspData();">
+            <ul>
+                <li id="cpu_usage_percent"> </li>
+                <li id="cpu_freq_current"> </li>
+                <li id="cpu_freq_min"> </li>
+                <li id="cpu_freq_max"> </li>
+                <li id="virtualMemory_percent"> </li>
+                <li id="cpu_temperature"> </li>
+                <li id="bytes"> </li>
+                <li id="packets"></li>
+                <li id="data_max"> </li>
+                <li id="Address set by router: "> </li>
+                <li id="process_list"> </li>
+            </ul>
+        </div>
+
+      </div>
+    </body>
+    <script src="rasp_subscriber_node.js"></script>
+  </html>

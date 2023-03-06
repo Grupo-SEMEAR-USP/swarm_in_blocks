@@ -1,0 +1,652 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+body{
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+#bars{
+    display: flex;
+    justify-content: space-between;
+}
+
+/*---------------------Topbar------------------------*/
+#topbar{
+    justify-content: space-between;
+    background-color: #1E1E1E;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    display: flex;
+
+}
+
+#topbar img{
+    height: 37px;
+    padding: 5px 16px 0px 10px;
+
+}
+
+#top_links{
+    padding: 10px 16px 5px 10px;
+}
+
+#top_links a{
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    padding-left: 18px;
+}
+
+#top_links a:hover{
+    color: #571B97;
+    transition: 0.3s;
+}
+
+/*---------------------Left bar------------------------*/
+
+#leftbar{
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: 70px;
+    margin-left: 20px;
+}
+
+#leftbar a{
+    background-color: #242424;
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+#leftbar a:hover{
+    color: #571B97;
+    transition: 0.3s;
+}
+
+#mic.active{
+    color: #571B97;
+}
+
+/*---------------------Right bar------------------------*/
+
+#clover{
+    padding: 0px 0px 5px 0px;
+    position: relative;
+    top: 80px;
+    width: 300px;
+    background-color: #242424;
+    border-radius: 10px;
+    margin-right: 20px;
+    opacity: 0.9;
+    transition: .4s;
+    display: none;
+}
+
+#clover.active{
+    display: block;
+}
+
+#hiden{
+    position: relative;
+    text-align: right;
+    top: 70px;
+    margin-right: 20px;
+    opacity: 0.9;
+}
+
+#lines_icon{
+    color: #FFFFFF; padding: 10px; background-color: #242424; border-radius: 10px; cursor: pointer;
+}
+
+#lines_icon:hover{
+    color: #571B97;
+    transition: 0.3s;
+}
+
+.menuAberto{
+    left:0;
+}
+
+#swarm{
+    font-size: 14px;
+    padding: 5px 0px 5px 0px;
+    position: relative;
+    top: 90px;
+    text-align: center;
+    color: #FFFFFF;
+    width: 300px;
+    background-color: #242424;
+    border-radius: 10px;
+    margin-right: 20px;
+    opacity: 0.9;
+    right: -320px;
+    transition: .4s;
+}
+
+#swarm.active{
+    left: 0;
+}
+
+#clover select{
+    background-color: #242424;
+    border-radius: 10px 10px 0px 0px;
+    width: 100%;
+    height: 30px;
+    color: #FFFFFF;
+    font-size: 15px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+
+#topics{
+    background-color: #454545;
+    display: block;
+    padding: 0px 5px 0px 5px;
+    margin: 5px 10px 0px 10px;
+    text-align: center;
+}
+
+#head{
+    justify-content: space-between;
+    display: flex;
+    font-size: 14px;
+    color: #FFFFFF;
+    margin-bottom: 5px;
+}
+
+#head div{
+    color: black;
+    padding: 0px 20px 0px 20px;
+}
+
+#topics2{
+    display: block;
+    color: #FFFFFF;
+}
+
+#head2{
+    justify-content: space-between;
+    display: flex;
+    padding: 0px 50px 2px 50px;
+}
+
+#b2{
+    justify-content: space-between;
+    display: flex;
+    padding: 0px 40px 0px 40px;
+    min-width: 40px;
+}
+
+/*---------------------Land button------------------------*/
+
+
+#open-land{
+    width: 300px;
+    padding: 8px 0px 8px 0px;
+    border-radius: 5px;
+    background-color: #f5b507;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1rem;
+    position: relative;
+    top: 90px;
+    text-align: center;
+    transition: .4s;
+    display: none;
+}
+
+#open-land.active{
+    display: block;
+}
+
+#open-land:hover{
+    opacity: 1;
+}
+
+#fade_land{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#land{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 10;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+#land_header{
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+#land_body{
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 40%);
+}
+
+#fade_land,
+#land {
+  transition: 0.5s;
+  opacity: 1;
+  pointer-events: all;
+}
+
+#land.hide,
+#fade_land.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+#land.hide{
+    top: 0;
+}
+
+#cancel{
+    border-radius: 5px;
+    background-color: gray;
+    color: #FFFFFF;
+    padding: 0.4rem 0rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1rem;
+    margin-left: 5px;
+    width: 75px;
+}
+
+#ok{
+    border-radius: 5px;
+    background-color: #f5b507;
+    color: #FFFFFF;
+    padding: 0.4rem 0rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1rem;
+    margin-right: 5px;
+    width: 75px;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+
+/*---------------------Segurity button------------------------*/
+
+.open-seg:hover{
+    opacity: 1;
+}
+
+#seg{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 10;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+#seg_header{
+    display: block;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+}
+
+#options{
+    text-align: left;  
+}
+
+#form{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 15px;
+}
+
+#seg_body{
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 40%);
+}
+
+
+#fade_seg,
+#seg {
+  transition: 0.5s;
+  opacity: 1;
+  pointer-events: all;
+}
+
+#seg.hide,
+#fade_seg.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+
+#seg.hide{
+    top: 0;
+}
+
+#fade_seg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#seg #ok{
+    background-color: #571B97;
+}
+
+.rad-label {
+    display: flex;
+    align-items: center;
+    border-radius: 100px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.rad-design {
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    background: linear-gradient(to right bottom, #CA75FD, #571B97);
+    position: relative;
+}
+
+.rad_input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    z-index: -1;
+}
+  
+.rad-design::before {
+    content: '';
+    display: inline-block;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    background: hsl(0, 0%, 90%);
+    transform: scale(1.1);
+    transition: .3s;
+}
+  
+.rad_input:checked+.rad-design::before {
+    transform: scale(0);
+}
+  
+.rad-text {
+    color: hsl(0, 0%, 60%);
+    margin-left: 14px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    transition: .3s;
+}
+  
+.rad_input:checked~.rad-text {
+    color: hsl(0, 0%, 40%);
+}
+
+#inputs{
+    margin-top: 20px;
+    margin-right: 5px;
+}
+
+#inputs input{
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 150px;
+    height: 20px;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+    border: 2px solid #eee;
+}
+
+#inputs input:focus{
+    outline: none;
+    border-color: #571B97;
+}
+
+input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+}
+
+button{
+    font-family: "Poppins";
+}
+
+/*---------------------Clovers info------------------------*/
+
+#clovers_info{
+    background-color: #1E1E1E;
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    transition: 0.3s;
+    display: none;
+    overflow-x: scroll;
+    padding: 6px;
+    opacity: 0.9;
+}
+
+#clovers_info.active{
+    display: flex;
+}
+
+#clovers_info.inactive{
+    display: none;
+}
+
+.cards{
+    min-width: 300px;
+    border-radius: 20px;
+    padding: 3px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    background-image: linear-gradient(144deg, #571B97, #AF40FF 50%,#d192ff);
+    margin: 10px;
+}
+
+.cards:hover {
+    transform: translateY(-0.5rem);
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+#card_content{
+    background: #242424;
+    border-radius: 17px;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+
+#card_title{
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
+    padding: 0px 0px;
+    text-align: center;
+}
+
+#clover_name{
+    color: #FFFFFF;
+    background-color: #571B97;
+    font-size: 15px;
+    margin: 5px 0px;
+    font-weight: 600;
+    padding: 5px 0px;
+}
+
+#card_body{
+    color: #FFFFFF;
+    padding: 5px 15px;
+    font-size: 14px;
+}
+
+#properties{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+}
+
+#status{
+    display: flex;
+    text-align: center;
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+.fpv__disconnected-light {
+    animation: blinker 0.6s linear infinite;
+    margin-top: 10px;
+    margin-right: 5px;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+	background-color: rgb(255, 0, 0);
+}
+
+.fpv__disconnected {
+    font-size: 14px;
+    padding: 2px 0px 2px 0px;
+    color: red
+}
+
+
+.fpv__connected { 
+    font-size: 15px;
+    padding: 2px 0px 2px 0px;
+    color: green
+}
+
+.fpv__connected-light {
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+    background-color: green;
+}
+
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+
+/*---------------------Topic list------------------------*/
+
+#open-topic.active{
+    display: block;
+}
+
+#open-topic:hover{
+    opacity: 1;
+}
+
+#fade_topic{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#topic_list{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 10;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+#topic_header{
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+#topic_body{
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 40%);
+    height: 300px;
+    width: 350px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+
+#fade_topic,
+#topic_list {
+  transition: 0.5s;
+  opacity: 1;
+  pointer-events: all;
+}
+
+#topic_list.hide,
+#fade_topic.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+#topic_list.hide{
+    top: 0;
+}

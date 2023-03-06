@@ -13,6 +13,7 @@ ros.on('error', function(error) {
 ros.on('connection', function() {
 	console.log('connected');
 	titleEl.innerText = 'Connected';
+	// pubMarkerState('reload')
 });
 
 ros.on('close', function() {
@@ -20,13 +21,33 @@ ros.on('close', function() {
 	titleEl.innerText = 'Disconnected';
 });
 
+// defining publisher
+var marker_state = new ROSLIB.Topic({
+	ros: ros,
+	name: "/marker_state",
+	messageType: 'std_msgs/String'
+	
+})
+
+function pubMarkerState(message) {
+
+	var msg = new ROSLIB.Message({
+		data : message,
+	});
+
+	marker_state.publish(msg)
+}
+
+
+// defining ros3d  
+
 var viewer, tfClient;
 
 function setScene(fixedFrame) {
 	viewer = new ROS3D.Viewer({
 		divID: 'viz',
-		width: 1000,
-		height: 600,
+		width: 900,
+		height: 580,
 		antialias: true
 	});
 
@@ -62,7 +83,29 @@ function addVehicle() {
 		tfClient: tfClient,
 		topic: '/vehicle_marker',
 		rootObject: viewer.scene
+		
 	});
+
+	new ROS3D.MarkerArrayClient({
+		ros: ros,
+		tfClient: tfClient,
+		topic: '/safe_marker',
+		rootObject: viewer.scene
+		
+	});
+	new ROS3D.MarkerArrayClient({
+		ros: ros,
+		tfClient: tfClient,
+		topic: '/text_marker',
+		rootObject: viewer.scene
+		
+	});
+
+
+	for (let i = 0; i < 3; i++) {
+		pubMarkerState('reload');
+		console.log(i)
+	}
 }
 
 
@@ -95,3 +138,4 @@ function addArucoMap() {
 setScene('map')
 addAxes()
 addVehicle()
+

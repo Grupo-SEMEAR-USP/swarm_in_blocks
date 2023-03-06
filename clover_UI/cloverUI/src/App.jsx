@@ -3,25 +3,22 @@ import './App.css'
 import Front_page from './components/Front_page'
 import Header from './components/Header'
 import Clover_tools from './components/Clover_tools'
-import Eazy2Swarm from './components/Eazy2Swarm'
+import Easy2Swarm from './components/Easy2Swarm'
 import Carrosel from './components/Carrosel'
 import Bottom from './components/Bottom'
 
 
 
-
-
-function App() {
-  return (
+const App = () => ( 
     <div className="App">
       <Header />
       <Front_page />
+      <Easy2Swarm />
       <Clover_tools />
-      <Eazy2Swarm />
       <Carrosel />
       <Bottom />
     </div>
-  )
-}
+);
+
 
 export default App
