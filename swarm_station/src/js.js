@@ -110,6 +110,7 @@ function show_info(){
 	for(let id in list){
 		duplicaElemento();
 		update_cards(id);
+		document.querySelector("#id").innerHTML = id;
 	}
 	document.getElementById('clovers_info').classList.toggle('active');
 	document.getElementById('mic').classList.toggle('active');
@@ -118,7 +119,7 @@ function show_info(){
 //puxa os dados para o card - recebe o id do card
 function update_cards(id) {
     if (id != "null") {
-      listRasp = new ROSLIB.Topic({
+      var listRasp = new ROSLIB.Topic({
         ros: ros,
         name: `/clover_${id}/cpu_usage`,
         messageType: 'rasp_pkg/raspData'
@@ -194,8 +195,6 @@ function update_cards(id) {
 		listState.unsubscribe()
 		// telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
 	});
-
-
     }
   }
 
