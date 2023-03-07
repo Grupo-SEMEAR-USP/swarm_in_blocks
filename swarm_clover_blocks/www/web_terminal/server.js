@@ -1,4 +1,5 @@
-const WebSocket = require('ws');
+var WebSocketClient = require('websocket');
+var WebSocket = require('ws');
 var os = require('os');
 var pty = require('node-pty');
 

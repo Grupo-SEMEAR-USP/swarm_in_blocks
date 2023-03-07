@@ -107,13 +107,39 @@ class SingleClover:
             rospy.sleep(0.2)
 
 
-
+# string command
+# geometry_msgs/Point[] points
+# float32 length
+# float32 radius
 
 
 class SafeZone:
     def __init__(self):
         self.lista_id = []
         self.isSafeZoneActive = False
+
+        # message template
+        self.safe_zone_data = {
+            'points' : [[0,0,0], [0,0,0]],
+            'length' : 0,
+            'radius' : 0
+        }
+
+    def setSubscribers(self):
+        rospy.Subscriber("/marker_state", SwarmStationCommands, callback=self.setSafeZoneMode)
+
+    def setSafeZoneMode(self, data):
+        if data.command =="rectangle": # to do -  add more cases
+            self.isSafeZoneActive = True
+
+            # setting template to initialize safe zone backend
+            for points in data.points:
+                self.safe_zone_data['points'][0] = points[0]
+                self.safe_zone_data['points'][1] = points[1]
+                self.safe_zone_data['points'][2] = points[2]
+
+            self.safe_zone_data['length'] = data.length
+            self.safe_zone_data['radius'] = data.radius
 
     def setListId(self):
         # set id list from SwarmState
@@ -130,10 +156,15 @@ class SafeZone:
             # self.lista_id = [0, 1, 2]
 
     def checkPosition(self):
+        if self.isSafeZoneActive:
+            # do stuff here
+            pass
         pass
 
 def main():
     safe_zone = SafeZone()
+
+    safe_zone.setSubscribers()
     
     while not rospy.is_shutdown():
 

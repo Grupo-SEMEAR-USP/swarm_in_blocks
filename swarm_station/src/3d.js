@@ -36,7 +36,7 @@ btnSalvar.addEventListener("click", function(event){
 
 	var frmSafe = document.querySelector("#seg_body");
 	var command = frmSafe.rad.value;
-	var lenght = frmSafe.lenght.lenght;
+	var length = frmSafe.length.length;
 	var radius = frmSafe.radius.radius;
 
 	var points = []
@@ -69,7 +69,7 @@ btnSalvar.addEventListener("click", function(event){
 	}
 
 	// console.log(point_list)
-	pubMarkerState(command, point_list, lenght, radius);
+	pubMarkerState(command, point_list, length, radius);
 
 });
 
@@ -93,14 +93,14 @@ var point_template = []
 
 var geometry_msgsPoint = function() {};
 
-function pubMarkerState(command='reload', points= point_template, lenght=0, radius=0) {
+function pubMarkerState(command='reload', points= point_template, length=0, radius=0) {
 	
 
 	
 	var msg = new ROSLIB.Message({
 		command : command, //cirlce, rectangle, square
 		points: points, //[[x,y,z],[x,y,z],...]
-		lenght: lenght, //square
+		length: length, //square
 		radius: radius //circle
 	});
 
@@ -111,7 +111,7 @@ function pubMarkerState(command='reload', points= point_template, lenght=0, radi
 
 // string command
 // geometry_msgs/Point[] points
-// float32 lenght
+// float32 length
 // float32 radio
 
 // defining ros3d  

@@ -52,7 +52,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   raspData.msg
-  processInfo.msg
+  # processInfo.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -106,10 +106,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS include
+#  INCLUDE_DIRS include
  LIBRARIES rasp_pkg
  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs message_runtime
- DEPENDS system_lib
+#  DEPENDS system_lib
 )
 
 ###########
