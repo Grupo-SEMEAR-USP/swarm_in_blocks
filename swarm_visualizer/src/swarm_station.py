@@ -16,11 +16,12 @@ import tf2_ros
 import tf
 import sys
 import rospy
+import threading
 
 from clover import srv
 from std_srvs.srv import Trigger
 
-import threading
+
 
 
 class SwarmStation:
@@ -240,7 +241,6 @@ class SwarmStation:
             sys.exit(1)
         except Exception as err:
             print(err)
-    
 
     def create_marker(self, frame, type, pose, scale, color, lifetime, action=0, vertices=0, id_t = 0):
         marker = Marker()
@@ -379,7 +379,7 @@ def main():
     rospy.init_node("marker_handler")
     obj = SwarmStation()
 
-   
+    obj.get_param()
     obj.setPublishers() 
     obj.setSubscribers()  
     obj.setListId() # get id array from connected clovers

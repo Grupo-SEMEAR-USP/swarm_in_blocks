@@ -97,27 +97,32 @@ listSwarm.subscribe(function(message) {
 });
 
 function show_info(){
-	var elemento = document.querySelector("#clovers_info > .cards");
-
-	function duplicaElemento(){
-		var clonado = elemento.cloneNode(true);
-		document.querySelector("#clovers_info").appendChild(clonado);
-	}
 
 	document.querySelector("#clovers_info").innerHTML = "";
 
-	//for(let id in Connected)
 	for(let id in list){
-		duplicaElemento();
-		update_cards(id);
-		document.querySelector("#id").innerHTML = id;
+		new_cards(id);
 	}
 	document.getElementById('clovers_info').classList.toggle('active');
 	document.getElementById('mic').classList.toggle('active');
 }
 
+
+var elemento = document.querySelector("#clovers_info > .cards"); //card
+
 //puxa os dados para o card - recebe o id do card
-function update_cards(id) {
+function new_cards(id) {
+
+	
+	var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
+	document.getElementById("clovers_info").appendChild(clonado);
+
+	clonado.classList.remove('id');
+	clonado.classList.add('id' + id);
+
+	document.querySelector('.id').innerHTML = id;
+
+
     if (id != "null") {
       var listRasp = new ROSLIB.Topic({
         ros: ros,
@@ -126,9 +131,6 @@ function update_cards(id) {
       });
 
       listRasp.subscribe((message) => {
-
-        console.log(message)
-
         var cpu_usage = message.cpu_usage_percent;
         var cpu_freq_current = message.cpu_freq_current;
         var cpu_freq_max = message.cpu_freq_min;
@@ -163,40 +165,38 @@ function update_cards(id) {
         document.getElementById("packets").innerHTML = 
         document.getElementById("process_list").innerHTML = 'Most used processes: ' + '<br>' +  process_list_string;
       });
-
-	  var listState = new ROSLIB.Topic({
-		ros : ros,
-		name : `/clover${id}/mavros/state`,
-		messageType : 'mavros_msgs/State'
-
-		})
-
-		listState.subscribe((message) =>{
-		mode = message.mode;
-		Connected = message.connected;
-		state.innerText = `${Connected}`
-		// visual feedback for streaming header
-		if (Connected == true) {
-			console.log('connected:', Connected)
-			fpv_disconnected.innerText = `Connected`
-			fpv_disconnected.classList.add('fpv__connected')
-			fpv_light.classList.add('fpv__connected-light')
-			fpv_disconnected.classList.remove('fpv__disconnected')
-			fpv_light.classList.remove('fpv__disconnected-light')
-		}
-		else {
-			// if the class online it is there, remove it
-			fpv_disconnected.innerText = `Disconnected`
-			fpv_disconnected.classList.remove('fpv__connected')
-			fpv_light.classList.remove('fpv__connected-light')
-			fpv_disconnected.classList.add('fpv__disconnected')
-			fpv_light.classList.add('fpv__disconnected-light')
-		}
-		listState.unsubscribe()
-		// telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
-	});
     }
   }
+
+
+// Topiclist
+
+function getTopics() {
+    var topicsClient = new ROSLIB.Service({
+    ros : ros,
+    name : '/rosapi/topics',
+    serviceType : 'rosapi/Topics'
+    });
+
+    var request = new ROSLIB.ServiceRequest();
+
+    topicsClient.callService(request, function(result) {
+    console.log("Getting topics...");
+	
+	teste = result.topics.join();
+	
+
+	var list_topics = teste.replace(/,/g, "<br>");
+	console.log(list_topics);
+
+	if(list_topics != null){
+		document.getElementById("desc_topics").innerHTML = list_topics;
+	}
+	else{
+		document.getElementById("desc_topics").innerHTML = 'No topics';
+	}
+    });
+};
 
 
   
