@@ -518,7 +518,7 @@ button{
     text-align: center;
 }
 
-#clover_name{
+.clover_name{
     color: #FFFFFF;
     background-color: #571B97;
     font-size: 15px;
@@ -613,6 +613,7 @@ button{
     max-width: 90%;
     border-radius: 0.5rem;
     padding: 20px;
+    text-align: center;
 }
 
 #topic_header{
@@ -627,8 +628,8 @@ button{
     font-size: 16px;
     text-align: center;
     color: hsl(0, 0%, 40%);
-    height: 300px;
-    width: 350px;
+    width: 420px;
+    max-height: 400px;
     overflow-y: scroll;
     overflow-x: scroll;
 }

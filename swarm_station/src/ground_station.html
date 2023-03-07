@@ -32,7 +32,7 @@
             <div id="bars">
                 <nav id="leftbar">
                     <a id="mic" onclick="show_info()"><i class="fa-solid fa-microchip"></i></a>
-                    <a class="open-topic"><i class="fa-regular fa-rectangle-list"></i></a>
+                    <a class="open-topic" onclick="getTopics()"><i class="fa-regular fa-rectangle-list"></i></a>
                     <a><i class="fa-solid fa-terminal"></i></a>
                     <a class="open-seg"><i class="fa-solid fa-shield-halved"></i></a>
                     <div id="fade_seg" class="hide"></div>
@@ -173,7 +173,7 @@
                                     <div class="fpv__disconnected-light" id="fpv_light"></div>
                                     <div class="fpv__disconnected" id="fpv_disconnected"> Disconnected </div>
                                 </div>
-                                <div id="clover_name" style="display: flex; justify-content: center;">Clover<div id="id" style="padding-left: 10px;">-</div></div>
+                                <div class="clover_name" style="display: flex; justify-content: center;">Clover<div class="id" style="padding-left: 10px;">-</div></div>
                             </div>
                             <div id="card_body">
                                 <div id="properties">
@@ -206,8 +206,9 @@
                         <div>List of topics</div>
                     </div>
                     <div id="topic_body">
-                        <button class="close-topic" id="cancel">Close</button>
+                        <div id="desc_topics" style="padding: 10px 0px;"></div>
                     </div>
+                    <button class="close-topic" id="cancel" style="margin-top: 15px;">Close</button>
                 </div>
             </nav>  
     </body>
