@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<launch>
+        <node pkg="rasp_pkg" name="rasp_resource_publisher" type="rasp_resource_publisher_node.py" output="screen" />
+        <!-- <include file = "$(find rosbridge_server)/lauch/rosbridge_websocket.launch">
+                <arg name="port" value="9090"/>
+        </include> -->
+</launch>
