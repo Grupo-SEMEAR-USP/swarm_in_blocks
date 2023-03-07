@@ -18,6 +18,7 @@ const fpv_light = document.querySelector('#fpv_light');
 
 const openModalLand = document.querySelector("#open-land");
 const closeModalLand = document.querySelector(".close-land");
+const closeInputModalLand = document.querySelector(".close-input-land");
 const fade_land = document.querySelector("#fade_land");
 
 const land = document.querySelector("#land");
@@ -27,7 +28,7 @@ const toggleModalLand = () => {
 	fade_land.classList.toggle("hide");
 };
 
-[openModalLand, closeModalLand, fade_land].forEach((el) => {
+[openModalLand, closeModalLand, fade_land, closeInputModalLand].forEach((el) => {
 	el.addEventListener("click", () => toggleModalLand());
 });
 
@@ -189,12 +190,8 @@ function getTopics() {
 	var list_topics = teste.replace(/,/g, "<br>");
 	console.log(list_topics);
 
-	if(list_topics != null){
-		document.getElementById("desc_topics").innerHTML = list_topics;
-	}
-	else{
-		document.getElementById("desc_topics").innerHTML = 'No topics';
-	}
+	document.getElementById("desc_topics").innerHTML = list_topics;
+	
     });
 };
 

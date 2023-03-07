@@ -476,7 +476,6 @@ button{
     transition: 0.3s;
     display: none;
     overflow-x: scroll;
-    padding: 6px;
     opacity: 0.9;
 }
 
@@ -494,7 +493,7 @@ button{
     padding: 3px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     background-image: linear-gradient(144deg, #571B97, #AF40FF 50%,#d192ff);
-    margin: 10px;
+    margin: 16px;
 }
 
 .cards:hover {
