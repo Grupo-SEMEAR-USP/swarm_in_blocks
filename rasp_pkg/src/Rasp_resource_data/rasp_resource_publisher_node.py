@@ -11,7 +11,7 @@ from std_msgs.msg import Float32
 class RaspResourcePublisher:
     def __init__(self, id):
         self.clover_id = id
-        # self.raspData_pub = rospy.Publisher(f"/clover_{self.clover_id}/cpu_usage", raspData, queue_size=10)
+        self.raspData_pub = rospy.Publisher(f"/clover_{self.clover_id}/cpu_usage", raspData, queue_size=10)
         self.rate = rospy.Rate(1) # 1 Hz
 
     def publish_data(self):
@@ -31,21 +31,21 @@ class RaspResourcePublisher:
                 # swap_memory_dict = self.convertDataToDict(swap_memory)
 
                 # Sensors data -> Testar dados na rasp antes de definir como passar na msg
-                sensors_battery = psutil.sensors_battery()
+                # sensors_battery = psutil.sensors_battery() 
                 sensors_temperature_total = psutil.sensors_temperatures()
 
-                # sensors_temperature = psutil.sensors_temperatures()['coretemp'][0]                
+                sensors_temperature_current = psutil.sensors_temperatures()['cpu_thermal'][0]           
                 # sensors_temperature = self.convertDataToDict(sensors_temperature)
 
                 # Disk data
                 # disk_usage = psutil.disk_usage('/')
                 # disk_usage = self.convertDataToDict(disk_usage)
-                
+
                 # Network data:
 
-                net_v4 = psutil.net_if_addrs()
+                net_data = psutil.net_if_addrs()['wlan0'][0]
                 net_io_counters = psutil.net_io_counters()
-                net_status = psutil.net_if_stats()
+                net_status = psutil.net_if_stats()['wlan0'][0]
 
                 # net_v4 = psutil.net_if_adrrs()['wlp2s0'][0]
                 # adrrs_v4 = net_v4.address # endereço da conexão ipv4
@@ -77,34 +77,38 @@ class RaspResourcePublisher:
 
 
                 # Test the collected data
-                print(f"\n\n Virtual memory: {virtual_memory}")
-                print(f"\n\n Uso da cpu: {cpu_usage_percent}, Freq: {cpu_freq}")
-                print(f"\n\n temperatura todos sensores: {sensors_temperature_total}")
-                print(f"\n\n bateria sensores: {sensors_battery}")
+                # print(f"\n\n Virtual memory: {virtual_memory}")
+                # print(f"\n\n Uso da cpu: {cpu_usage_percent}, Freq: {cpu_freq}")
+                # print(f"\n\n temperatura todos sensores: {sensors_temperature_total}")
+                # print(f"\n\n bateria sensores: {sensors_battery}")
                 # print(f"\n\n Uso do disco: {disk_usage}")
-                print(f"\n\n Processos que mais demandam cpu: {process_list} \n\n ")
-                print(f"\n\n Dados de rede: {net_v4}\n\n Conexão: {net_io_counters} \n\n Status: {net_status}")
-
-                # print(f"{cpu_usage_percent},  {cpu_freq_dict}, {virtual_memory_percent},{virtual_memory_dict}, {process_list}")
-
+                # print(f"\n\n Processos que mais demandam cpu: {process_list} \n\n ")
+                # print(f"\n\n Dados de rede: {net_v4}\n\n Conexão: {net_io_counters} \n\n Status: {net_status}")
 
 
                 # Defining the message to be sent
-                # rasp_data = raspData()
+                rasp_data = raspData()
 
-                # rasp_data.cpu_usage_percent = cpu_usage_percent
-                # rasp_data.cpu_freq_current = cpu_freq.current
-                # rasp_data.cpu_freq_min = cpu_freq.min
-                # rasp_data.cpu_freq_max = cpu_freq.max
-                # rasp_data.virtualMemory_percent = virtual_memory_percent
+                rasp_data.cpu_usage_percent = cpu_usage_percent
+                rasp_data.cpu_freq_current = cpu_freq.current
+                rasp_data.cpu_freq_min = cpu_freq.min
+                rasp_data.cpu_freq_max = cpu_freq.max
+                rasp_data.virtualMemory_percent = virtual_memory_percent
+                rasp_data.cpu_temperature = sensors_temperature_current.current
+                rasp_data.net_data_adress = net_data.adress
+                rasp_data.bytes_sent = self.convertBytesToGigaB(net_io_counters.bytes_sent) 
+                rasp_data.bytes_recv = self.convertBytesToGigaB(net_io_counters.bytes_recv)
+                rasp_data.packets_sent = net_io_counters.packets_sent
+                rasp_data.packets_recv = net_io_counters.packets_recv
+                rasp_data.net_data_max = net_status.mtu               
 
 
-                # for process in process_list:
-                #     rasp_data.process_usage_list.append(process['cpu_percent'])
-                #     rasp_data.process_name_list.append(process['name'])
+                for process in process_list:
+                    rasp_data.process_usage_list.append(process['cpu_percent'])
+                    rasp_data.process_name_list.append(process['name'])
 
 
-                    
+
 
                 # cpu_msg = Float32()
                 # cpu_msg.data = cpu_usage_percent
@@ -114,9 +118,9 @@ class RaspResourcePublisher:
 
                 # self.cpu_pub.publish(cpu_msg)
                 # self.mem_per_pub.publish(mem_msg)
-                # self.raspData_pub.publish(rasp_data)
+                self.raspData_pub.publish(rasp_data)
                 self.rate.sleep()
-            
+
             except rospy.ServiceException as e:
                 print(f"Publish rasp data from clover{self.clover_id} failed %s", e)
 
@@ -150,5 +154,4 @@ if __name__ == '__main__':
 
     except rospy.ROSInterruptException:
         pass
-
 
