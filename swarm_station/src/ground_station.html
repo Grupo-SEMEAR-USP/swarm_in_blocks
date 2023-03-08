@@ -9,9 +9,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-        <script src="node_modules/xterm/lib/xterm.js"></script>
-        <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+        <link rel="stylesheet" href="web_terminal/node_modules/xterm/css/xterm.css" />
+        <script src="web_terminal/node_modules/xterm/lib/xterm.js"></script>
+        <script src="web_terminal/node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
 
         <script src="js_3d/threejs.js"></script>
         <script src="js_3d/ColladaLoader.js"></script>
@@ -35,12 +35,16 @@
 
             <div id="content" style="display: flex;">
                 <div id="terminal">
+                    <div >
+
+                    </div>
                 </div>
                 <div id="bars">
                     <nav id="leftbar">
                         <a id="mic" onclick="show_info()"><i class="fa-solid fa-microchip"></i></a>
                         <a class="open-topic" onclick="getTopics()"><i class="fa-regular fa-rectangle-list"></i></a>
                         <a id="open-button-terminal" onclick="open_terminal()"><i class="fa-solid fa-terminal"></i></a>
+                        <a id="open-terminal"><i class="fa-solid fa-terminal"></i></a>
                         <a class="open-seg"><i class="fa-solid fa-shield-halved"></i></a>
                         <div id="fade_seg" class="hide"></div>
 
@@ -224,4 +228,6 @@
     <script src="station_key_listener.js"></script>
     <script src="station_data.js"></script>
     <script src="js.js"></script>
+    <script src="web_terminal/client.js"></script>
+    <script src="web_terminal/index.js"></script>
 </html>
