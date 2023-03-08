@@ -29,6 +29,7 @@ body{
     position: fixed;
     width: 100%;
     display: flex;
+    margin-bottom: 5px;
 }
 
 #topbar img{
@@ -68,6 +69,8 @@ body{
     background-color: #242424;
     display: block;
     text-align: center;
+    height: 25px;
+    width: 25px;
     margin-bottom: 20px;
     border-radius: 5px;
     padding: 5px;
@@ -659,11 +662,13 @@ button{
 
 #terminal{
     display: none;
-    margin: auto;
-    max-width: 700px;
-    max-height: 100%;
-    background-color: #eee;
+    min-width: 690px;
+    max-height: 457px;
     position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 7px;
+    text-align: left;
 }
 
 #terminal.active{
@@ -674,4 +679,30 @@ button{
     width: 200px;
     height: 200px;
     background-color: #571B97;
+}
+
+#open-terminal{
+    display: none;
+    height: 35px;
+    width: 35px;
+    background-color: #571B97;
+    text-align: center;
+    margin-top: 185px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-style: none;
+}
+
+#open-terminal.active{
+    display: block;
+}
+
+#open-button-terminal.active{
+    color: #571B97;
+}
+
+#terminal .nameTerminal{
+    background-color: #eee;
+    padding: 10px 15px;
 }

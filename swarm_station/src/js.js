@@ -159,7 +159,7 @@ function new_cards(id) {
         document.getElementById("cpu_freq_max").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
         document.getElementById("virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
         document.getElementById("cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
-		document.getElementById("net_data_adress").innerHTML = net_data_adress;
+		    document.getElementById("net_data_adress").innerHTML = net_data_adress;
 
 
 
@@ -202,6 +202,8 @@ function getTopics() {
 
 function open_terminal(){
 	document.getElementById('terminal').classList.toggle('active');
+  document.getElementById('open-terminal').classList.toggle('active');
+  document.getElementById('open-button-terminal').classList.toggle('active');
 }
 
 
