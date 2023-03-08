@@ -494,7 +494,7 @@ button{
     display: none;
 }
 
-.cards{
+#cards{
     min-width: 300px;
     border-radius: 20px;
     padding: 3px;
@@ -503,13 +503,13 @@ button{
     margin: 16px;
 }
 
-.cards:hover {
+#cards:hover {
     transform: translateY(-0.5rem);
     transition: 0.4s;
     cursor: pointer;
 }
 
-.cards #card_content{
+#card_content{
     background: #242424;
     border-radius: 17px;
     width: 100%;
@@ -517,14 +517,14 @@ button{
     opacity: 1;
 }
 
-.cards #card_title{
+#card_title{
     width: 100%;
     border-radius: 10px 10px 0px 0px;
     padding: 0px 0px;
     text-align: center;
 }
 
-.cards .clover_name{
+.clover_name{
     color: #FFFFFF;
     background-color: #571B97;
     font-size: 15px;
@@ -533,19 +533,19 @@ button{
     padding: 5px 0px;
 }
 
-.cards #card_body{
+#card_body{
     color: #FFFFFF;
     padding: 5px 15px;
     font-size: 14px;
 }
 
-.cards #properties{
+#properties{
     display: flex;
     justify-content: space-between;
     padding-bottom: 5px;
 }
 
-.cards #status{
+#status{
     display: flex;
     text-align: center;
     padding-left: 20px;

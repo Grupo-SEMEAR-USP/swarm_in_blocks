@@ -108,24 +108,16 @@ function show_info(){
 }
 
 
-var elemento = document.querySelector("#clovers_info > .cards"); //card
+var elemento = document.querySelector("#cards"); //card
 
 //puxa os dados para o card - recebe o id do card
 function new_cards(id) {
-
-	
-	var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
-	document.getElementById("clovers_info").appendChild(clonado);
-	
-
-	let div_id = document.createElement("id_"+id);
-
-	document.querySelector(".clover_name").append(div_id);
-
-	document.querySelector("id_"+id).innerHTML = id;
-
-
     if (id != "null") {
+
+      var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
+      document.getElementById("clovers_info").appendChild(clonado);
+      document.querySelector(".cards > #card_content > #card_title > .clover_name > #id").innerHTML = "Clover "+id;
+
       var listRasp = new ROSLIB.Topic({
         ros: ros,
         name: `/clover_${id}/cpu_usage`,
@@ -153,20 +145,12 @@ function new_cards(id) {
         }
 
         // Update the HTML elements with the new values
-        document.getElementById("cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
-        document.getElementById("cpu_freq_current").innerHTML = cpu_freq_current.toFixed(2) + 'Hz';
-        document.getElementById("cpu_freq_min").innerHTML = cpu_freq_min.toFixed(2) + 'Hz';
-        document.getElementById("cpu_freq_max").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
-        document.getElementById("virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
-        document.getElementById("cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
-		    document.getElementById("net_data_adress").innerHTML = net_data_adress;
-
-
-
-        document.getElementById("bytes").innerHTML = 'Bytes sent: '+ bytes_sent + ' Bytes received: ' + bytes_recv;
-        document.getElementById("packets").innerHTML = 
-        document.getElementById("process_list").innerHTML = 'Most used processes: ' + '<br>' +  process_list_string;
+        document.querySelector(".cards > #card_content > #card_title > .clover_name > #net_data_adress").innerHTML = net_data_adress.toFixed(2);
+        document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
+        document.querySelector(".cards > #card_content > #card_title > .clover_name > #virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
+        document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
       });
+      clonado.className = ".cards_"+id;
     }
   }
 
