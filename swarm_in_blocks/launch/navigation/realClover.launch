@@ -1,3 +1,4 @@
+
 <?xml version="1.0"?>
 
 <launch>
@@ -16,10 +17,6 @@
     <!-- <arg name="blocks" default="false"/> -->
     <arg name="rc" default="false"/>
     <arg name="force_init" value="true"/> <!-- force estimator to init by publishing zero pose -->
-
-    <arg name="camera" default="false"/>
-    <arg name="rangefinder" default="true"/>
-    <arg name="flashlight" default="false"/>
 
     <!-- Drone's args -->
     <arg name="ID" default="0"/>
@@ -53,25 +50,12 @@
     <!-- MAVROS -->
     <arg name="remote" value="$(eval 14800 + arg('ID'))"/> <!-- Porta do Mavros no UAV -> PC -->
     <arg name="local" value="$(eval 15000 + arg('ID'))"/> <!-- Porta para receber msgs Mavlink no PC -->
-    <!-- <param name="fcu_url" value="$(arg usb_device)" if="$(eval fcu_conn == 'usb')"/> -->
-    <arg name="fcu_url" default="udp://:$(arg remote)@localhost:$(arg local)"/>
-
-   <!-- PX4 simulator IP, vehicle model and config-->
-    <arg name="est" default="ekf2"/>
-    <arg name="vehicle" default="clover"/>
-    <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
-    <env name="PX4_ESTIMATOR" value="$(arg est)" />
-    <!-- <env name="PX4_SIM_HOST_ADDR" value="$(arg simulator_ip)"/> -->
-
-    <!-- Gazebo -->
-    <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
-    <!-- Output type -->
-    <arg name="output" default="screen"/>
+    <param name="fcu_url" value="$(arg usb_device)" if="$(eval fcu_conn == 'usb')"/>
 
 
     <!-- remap mavlink bridge topics -->
-    <!-- <remap from="/mavlink/to" to="/mavlink$(arg ID)/to" />
-    <remap from="/mavlink/from" to="/mavlink$(arg ID)/from" /> -->
+    <!-- <remap from="/mavlink/to" to="/mavlink$(arg num)/to" />
+    <remap from="/mavlink/from" to="/mavlink$(arg num)/from" /> -->
 
 
     <group ns="clover$(arg ID)">
@@ -90,37 +74,9 @@
             <arg name="fcu_ip" value="$(eval arg(fcu_ip))"/>  IP do veículo aéreo / ID necessário para simulação
             <arg name="fcu_sys_id" value="$(eval arg(fcu_sys_id) + arg('ID'))"/>  Drone system id
             <arg name="gcs_bridge" value="$(arg gcs_bridge)"/> Computer's ip adress
-
             <param name="fcu_url" value="$(arg fcu_url)"/>
-
+            
         </include> -->
-
-                <!-- PX4 SITL -->
-        <arg unless="$(arg daemon)" name="px4_command_arg1" value=""/>
-        <arg     if="$(arg daemon)" name="px4_command_arg1" value="-d"/>
-        <!-- <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="$(arg output)" args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)">
-            <env name="PX4_SIM_MODEL" value="$(arg vehicle)"/>
-            <env name="PX4_ESTIMATOR" value="$(arg est)"/>
-        </node> -->
-        <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="$(arg output)" args="$(find swarm_in_blocks)/px4fmu_common -s etc/init.d-posix/rcS -i $(arg ID)">
-            <env name="PX4_SIM_MODEL" value="$(arg vehicle)"/>
-            <env name="PX4_ESTIMATOR" value="$(arg est)"/>
-        </node>
-
-               <!-- generate urdf vehicle model -->
-        <arg name="cmd" default="$(find xacro)/xacro 
-                                    $(find clover_description)/urdf/clover/clover4.xacro 
-                                    main_camera:=$(arg camera)
-                                    rangefinder:=$(arg rangefinder)
-                                    led:=$(arg led) 
-                                    gps:=true
-                                    maintain_camera_rate:=false
-                                    use_clover_physics:=false 
-                                    mavlink_tcp_port:=$(arg mavlink_tcp_port)"/>
-
-                                      <!-- spawn vehicle -->
-        <param command="$(arg cmd)" name="urdf_$(arg vehicle)$(arg ID)"/>
-        <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="$(arg output)" args="-urdf -param urdf_$(arg vehicle)$(arg ID) -model $(arg vehicle)$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 
         <!-- MAVROS 2 option -> Lançando direto pelo nó -->
 
@@ -198,11 +154,9 @@
             <param name="reference_frames/body" value="map"/>
             <param name="reference_frames/base_link" value="map"/>
             <param name="reference_frames/navigate_target" value="map"/>
-
             <param name="body_frame" value="body"/>
             <param name="target_frame" value="navigate_target"/>
             <param name="setpoint" value="setpoint"/>
-
             <remap from="body_frame" to="body$(arg ID)" />
             <remap name="target_frame" to="navigate_target$(arg ID)"/>
             <remap name="setpoint" to="setpoint$(arg ID)"/>
