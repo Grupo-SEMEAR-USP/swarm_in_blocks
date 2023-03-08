@@ -9,6 +9,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+        <script src="node_modules/xterm/lib/xterm.js"></script>
+        <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+
         <script src="js_3d/threejs.js"></script>
         <script src="js_3d/ColladaLoader.js"></script>
         <script src="js_3d/ColladaLoader2.js"></script>
@@ -20,8 +24,8 @@
     </head>
 
     <body onload="pubMarkerState('reload');" >
-        <div id="viz" style="position: fixed;"></div>
-            <nav id="topbar">
+        <div id="viz" style="position: absolute;"></div>
+            <nav id="topbar" style="position: relative;">
                 <a href="/index.html" target="_blank"><img src='/assets/img/logo_header.png' /></a>
                 <div id="top_links">
                     <a href="/swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
@@ -29,141 +33,144 @@
                 </div>
             </nav>
 
-            <div id="bars">
-                <nav id="leftbar">
-                    <a id="mic" onclick="show_info()"><i class="fa-solid fa-microchip"></i></a>
-                    <a class="open-topic" onclick="getTopics()"><i class="fa-regular fa-rectangle-list"></i></a>
-                    <a><i class="fa-solid fa-terminal"></i></a>
-                    <a class="open-seg"><i class="fa-solid fa-shield-halved"></i></a>
-                    <div id="fade_seg" class="hide"></div>
+            <div id="content" style="display: flex;">
+                <div id="terminal">
+                </div>
+                <div id="bars">
+                    <nav id="leftbar">
+                        <a id="mic" onclick="show_info()"><i class="fa-solid fa-microchip"></i></a>
+                        <a class="open-topic" onclick="getTopics()"><i class="fa-regular fa-rectangle-list"></i></a>
+                        <a id="open-button-terminal" onclick="open_terminal()"><i class="fa-solid fa-terminal"></i></a>
+                        <a class="open-seg"><i class="fa-solid fa-shield-halved"></i></a>
+                        <div id="fade_seg" class="hide"></div>
 
-                    <div id="seg" class="hide">
-                        <div id="seg_header">
-                            <i class="fa-solid fa-shield-halved" style="font-size: 60px; color: #571B97; padding-bottom: 10px;"></i>
-                            <div>Safe Area</div>
-                        </div>
+                        <div id="seg" class="hide">
+                            <div id="seg_header">
+                                <i class="fa-solid fa-shield-halved" style="font-size: 60px; color: #571B97; padding-bottom: 10px;"></i>
+                                <div>Safe Area</div>
+                            </div>
 
-                        <form id="seg_body">
-                            <p style="margin-bottom: 10px;">Determine the type and dimensions of the security area</p>
-                            <div id="form">
-                                <div id="options">
-                                    <label class="rad-label">
-                                        <input type="radio" class="rad_input" name="rad" value="circle">
-                                        <div class="rad-design"></div>
-                                        <div class="rad-text">Circle</div>
-                                    </label>
+                            <form id="seg_body">
+                                <p style="margin-bottom: 10px;">Determine the type and dimensions of the security area</p>
+                                <div id="form">
+                                    <div id="options">
+                                        <label class="rad-label">
+                                            <input type="radio" class="rad_input" name="rad" value="circle">
+                                            <div class="rad-design"></div>
+                                            <div class="rad-text">Circle</div>
+                                        </label>
 
-                                    <label class="rad-label">
-                                        <input type="radio" class="rad_input" name="rad" value="square">
-                                        <div class="rad-design"></div>
-                                        <div class="rad-text">Square</div>
-                                    </label>
+                                        <label class="rad-label">
+                                            <input type="radio" class="rad_input" name="rad" value="square">
+                                            <div class="rad-design"></div>
+                                            <div class="rad-text">Square</div>
+                                        </label>
 
-                                    <label class="rad-label">
-                                        <input type="radio" class="rad_input" name="rad" value="rectangle">
-                                        <div class="rad-design"></div>
-                                        <div class="rad-text">Rectangle</div>
-                                    </label>
+                                        <label class="rad-label">
+                                            <input type="radio" class="rad_input" name="rad" value="rectangle">
+                                            <div class="rad-design"></div>
+                                            <div class="rad-text">Rectangle</div>
+                                        </label>
+                                    </div>
+
+                                    <div id="inputs">
+                                        <div class="desc" id="circle">
+                                            <input type="number" name="radius" value="radius" placeholder="Radius">
+                                            <div style="display: flex; padding-top: 5px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="circle_x">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="circle_y">
+                                                <input type="number" style="width: 60px;" placeholder="z"  name="circle_z">
+                                            </div>
+                                        </div>
+                                        <div class="desc" id="square">
+                                            <input type="number" value="lenght" name="lenght" placeholder="Lenght">
+                                            <div style="display: flex; padding-top: 5px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="square_x">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="square_y">
+                                                <input type="number" style="width: 60px;" placeholder="z"  name="square_z">
+                                            </div>
+                                        </div>
+                                        <div class="desc" id="rectangle">
+                                            <div style="display: flex; padding-top: 5px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 1</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="r1_x">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="r1_y">
+                                                <input type="number" style="width: 60px;" placeholder="z"  name="r1_z">
+                                            </div>
+                                            <div style="display: flex; padding-top: 5px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 2</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="r2_x">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="r2_y">
+                                                <input type="number" style="width: 60px;" placeholder="z"  name="r2_z">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div style="display: flex; float: right;">
+                                    <button class="close-input-seg" type="submit" id="ok">Safe</button>  
+                                    <div class="close-seg" id="cancel" >Cancel</div>
+                                </div> 
+                            </form>
+                        </div>
+                    </nav>
 
-                                <div id="inputs">
-                                    <div class="desc" id="circle">
-                                        <input type="number" name="radius" value="radius" placeholder="Radius">
-                                        <div style="display: flex; padding-top: 5px;">
-                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
-                                            <input type="number" style="width: 60px;" placeholder="x"  name="circle_x">
-                                            <input type="number" style="width: 60px;" placeholder="y"  name="circle_y">
-                                            <input type="number" style="width: 60px;" placeholder="z"  name="circle_z">
-                                        </div>
-                                    </div>
-                                    <div class="desc" id="square">
-                                        <input type="number" value="lenght" name="lenght" placeholder="Lenght">
-                                        <div style="display: flex; padding-top: 5px;">
-                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
-                                            <input type="number" style="width: 60px;" placeholder="x"  name="square_x">
-                                            <input type="number" style="width: 60px;" placeholder="y"  name="square_y">
-                                            <input type="number" style="width: 60px;" placeholder="z"  name="square_z">
-                                        </div>
-                                    </div>
-                                    <div class="desc" id="rectangle">
-                                        <div style="display: flex; padding-top: 5px;">
-                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 1</label>
-                                            <input type="number" style="width: 60px;" placeholder="x"  name="r1_x">
-                                            <input type="number" style="width: 60px;" placeholder="y"  name="r1_y">
-                                            <input type="number" style="width: 60px;" placeholder="z"  name="r1_z">
-                                        </div>
-                                        <div style="display: flex; padding-top: 5px;">
-                                            <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 2</label>
-                                            <input type="number" style="width: 60px;" placeholder="x"  name="r2_x">
-                                            <input type="number" style="width: 60px;" placeholder="y"  name="r2_y">
-                                            <input type="number" style="width: 60px;" placeholder="z"  name="r2_z">
-                                        </div>
-                                    </div>
+                    <nav id="rightbar">
+                        <div id="hiden">
+                            <a><i class="fa-solid fa-bars" onclick="show()" id="lines_icon"></i></a>
+                        </div>
+                        <div class="menu">
+                            <div id="clover">
+                                <select 
+                                    id="dropdown"
+                                    onchange = "javascript:reload_subscriber(this);"
+                                    class="select-center" 
+                                    style="display:block"
+                                >
+                                    <option value = null>Select an id</option>
+                                </select>
+                                <div id="topics">
+                                    <div id="head">Battery<div id="battery">-</div></div>
+                                    <div id="head">Connected<div id="state">-</div></div>
+                                    <div id="head">CPU data<div id="cpu">-</div></div>
+                                </div>
+                                <div id="topics">
+                                    <div id="head">Telemetry</div>
+                                </div>
+                                <div id="topics2">
+                                    <div id="head2"><div>x</div><div>y</div><div>z</div></div>
+                                    <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
                                 </div>
                             </div>
-                            <div style="display: flex; float: right;">
-                                <button class="close-input-seg" type="submit" id="ok">Safe</button>  
-                                <div class="close-seg" id="cancel" >Cancel</div>
-                            </div> 
-                        </form>
-                    </div>
-                </nav>
 
-                <nav id="rightbar">
-                    <div id="hiden">
-                        <a><i class="fa-solid fa-bars" onclick="show()" id="lines_icon"></i></a>
-                    </div>
-                    <div class="menu">
-                        <div id="clover">
-                            <select 
-                                id="dropdown"
-                                onchange = "javascript:reload_subscriber(this);"
-                                class="select-center" 
-                                style="display:block"
-                            >
-                                <option value = null>Select an id</option>
-                            </select>
-                            <div id="topics">
-                                <div id="head">Battery<div id="battery">-</div></div>
-                                <div id="head">Connected<div id="state">-</div></div>
-                                <div id="head">CPU data<div id="cpu">-</div></div>
-                            </div>
-                            <div id="topics">
-                                <div id="head">Telemetry</div>
-                            </div>
-                            <div id="topics2">
-                                <div id="head2"><div>x</div><div>y</div><div>z</div></div>
-                                <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
-                            </div>
-                        </div>
+                            <!--<div id="swarm">
+                                <div>Swarm</div>
+                                <div id="topics">
+                                    <div id="head">Clovers<div>-</div></div>
+                                    <div id="head">Formation<div>-</div></div>
+                                </div>
+                            </div>-->
 
-                        <!--<div id="swarm">
-                            <div>Swarm</div>
-                            <div id="topics">
-                                <div id="head">Clovers<div>-</div></div>
-                                <div id="head">Formation<div>-</div></div>
+                            <button id="open-land">
+                                Back to land
+                            </button>
+                            <div id="fade_land" class="hide"></div>
+                            <div id="land" class="hide">
+                                <div id="land_header">
+                                    <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
+                                    <div>Are you sure?</div>
+                                </div>
+                                <div id="land_body">
+                                    <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
+                                    <a class="close-land"><button id="ok" onclick="pubMarkerState(command='land_all')">Yes</button></a>
+                                    <button class="close-input-land" id="cancel">Cancel</button>
+                                </div>
                             </div>
-                        </div>-->
-
-                        <button id="open-land">
-                            Back to land
-                        </button>
-                        <div id="fade_land" class="hide"></div>
-                        <div id="land" class="hide">
-                            <div id="land_header">
-                                <i class="fa-solid fa-circle-exclamation" style="font-size: 60px; color: #f5b507; padding-bottom: 10px;"></i>
-                                <div>Are you sure?</div>
-                            </div>
-                            <div id="land_body">
-                                <p style="margin-bottom: 25px;">All the drones will be back in the land</p>
-                                <a class="close-land"><button id="ok" onclick="pubMarkerState(command='land_all')">Yes</button></a>
-                                <button class="close-land" id="cancel">Cancel</button>
-                            </div>
-                        </div>
-                    </div>   
-                </nav>
+                        </div>   
+                    </nav>
+                </div>
             </div>
-
             <nav>
                 <div id="clovers_info">
                     <div class="cards">
@@ -173,7 +180,7 @@
                                     <div class="fpv__disconnected-light" id="fpv_light"></div>
                                     <div class="fpv__disconnected" id="fpv_disconnected"> Disconnected </div>
                                 </div>
-                                <div class="clover_name" style="display: flex; justify-content: center;">Clover<div class="id" style="padding-left: 10px;">-</div></div>
+                                <div class="clover_name" style="display: flex; justify-content: center;"></div>
                             </div>
                             <div id="card_body">
                                 <div id="properties">

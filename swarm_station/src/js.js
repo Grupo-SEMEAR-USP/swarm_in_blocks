@@ -18,6 +18,7 @@ const fpv_light = document.querySelector('#fpv_light');
 
 const openModalLand = document.querySelector("#open-land");
 const closeModalLand = document.querySelector(".close-land");
+const closeInputModalLand = document.querySelector(".close-input-land");
 const fade_land = document.querySelector("#fade_land");
 
 const land = document.querySelector("#land");
@@ -27,7 +28,7 @@ const toggleModalLand = () => {
 	fade_land.classList.toggle("hide");
 };
 
-[openModalLand, closeModalLand, fade_land].forEach((el) => {
+[openModalLand, closeModalLand, fade_land, closeInputModalLand].forEach((el) => {
 	el.addEventListener("click", () => toggleModalLand());
 });
 
@@ -97,7 +98,6 @@ listSwarm.subscribe(function(message) {
 });
 
 function show_info(){
-
 	document.querySelector("#clovers_info").innerHTML = "";
 
 	for(let id in list){
@@ -116,11 +116,13 @@ function new_cards(id) {
 	
 	var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
 	document.getElementById("clovers_info").appendChild(clonado);
+	
 
-	clonado.classList.remove('id');
-	clonado.classList.add('id' + id);
+	let div_id = document.createElement("id_"+id);
 
-	document.querySelector('.id').innerHTML = id;
+	document.querySelector(".clover_name").append(div_id);
+
+	document.querySelector("id_"+id).innerHTML = id;
 
 
     if (id != "null") {
@@ -181,22 +183,41 @@ function getTopics() {
     var request = new ROSLIB.ServiceRequest();
 
     topicsClient.callService(request, function(result) {
-    console.log("Getting topics...");
-	
-	teste = result.topics.join();
-	
+		console.log("Getting topics...");
+		
+		teste = result.topics.join();
+		
 
-	var list_topics = teste.replace(/,/g, "<br>");
-	console.log(list_topics);
+		var list_topics = teste.replace(/,/g, "<br>");
+		console.log(list_topics);
 
-	if(list_topics != null){
-		document.getElementById("desc_topics").innerHTML = list_topics;
-	}
-	else{
-		document.getElementById("desc_topics").innerHTML = 'No topics';
-	}
+		document.getElementById("desc_topics").innerHTML = list_topics;sss
     });
 };
+
+
+
+
+// --------------------------Terminal
+
+function open_terminal(){
+	document.getElementById('terminal').classList.toggle('active');
+}
+
+var terminalCounter = 0;
+document.getElementById("open-button-terminal").addEventListener("click", function() {
+    console.log("Creating new terminal")
+    terminalCounter++;
+    var terminalDiv = document.createElement("div");
+    terminalDiv.className = webTerminal;
+    terminalDiv.id = terminalCounter - 1;
+    document.querySelector("#terminal").appendChild(terminalDiv);
+    terminalDiv.style.marginBottom = "5px"; // adiciona um estilo CSS para ajustar a margem inferior
+    // document.body.appendChild(document.createElement("br"));
+    // var webTerminal = new webTerminal(document.getElementById("terminal" + terminalCounter));
+    console.log("Terminal div: ", terminalDiv);
+    let terminal = new webTerminal(terminalDiv.id);
+});
 
 
   

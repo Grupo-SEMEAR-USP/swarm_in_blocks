@@ -14,6 +14,11 @@ body{
 #bars{
     display: flex;
     justify-content: space-between;
+    width: 100%;
+}
+
+#bars.active{
+    width: 60%;
 }
 
 /*---------------------Topbar------------------------*/
@@ -24,7 +29,6 @@ body{
     position: fixed;
     width: 100%;
     display: flex;
-
 }
 
 #topbar img{
@@ -56,7 +60,7 @@ body{
     width: 40px;
     height: 40px;
     position: relative;
-    top: 70px;
+    margin-top: 10px;
     margin-left: 20px;
 }
 
@@ -85,24 +89,24 @@ body{
 #clover{
     padding: 0px 0px 5px 0px;
     position: relative;
-    top: 80px;
+    margin-top: 10px;
     width: 300px;
     background-color: #242424;
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
-    transition: .4s;
-    display: none;
+    transition: 0.05s;
+    visibility: hidden;
 }
 
 #clover.active{
-    display: block;
+    visibility: inherit;
 }
 
 #hiden{
     position: relative;
     text-align: right;
-    top: 70px;
+    margin-top: 10px;
     margin-right: 20px;
     opacity: 0.9;
 }
@@ -124,7 +128,7 @@ body{
     font-size: 14px;
     padding: 5px 0px 5px 0px;
     position: relative;
-    top: 90px;
+    margin-top: 10px;
     text-align: center;
     color: #FFFFFF;
     width: 300px;
@@ -207,14 +211,14 @@ body{
     opacity: 0.9;
     font-size: 1rem;
     position: relative;
-    top: 90px;
+    margin-top: 10px;
     text-align: center;
-    transition: .4s;
-    display: none;
+    transition: 0.05s;
+    visibility: hidden;
 }
 
 #open-land.active{
-    display: block;
+    visibility: inherit;
 }
 
 #open-land:hover{
@@ -476,7 +480,6 @@ button{
     transition: 0.3s;
     display: none;
     overflow-x: scroll;
-    padding: 6px;
     opacity: 0.9;
 }
 
@@ -494,7 +497,7 @@ button{
     padding: 3px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     background-image: linear-gradient(144deg, #571B97, #AF40FF 50%,#d192ff);
-    margin: 10px;
+    margin: 16px;
 }
 
 .cards:hover {
@@ -503,7 +506,7 @@ button{
     cursor: pointer;
 }
 
-#card_content{
+.cards #card_content{
     background: #242424;
     border-radius: 17px;
     width: 100%;
@@ -511,14 +514,14 @@ button{
     opacity: 1;
 }
 
-#card_title{
+.cards #card_title{
     width: 100%;
     border-radius: 10px 10px 0px 0px;
     padding: 0px 0px;
     text-align: center;
 }
 
-.clover_name{
+.cards .clover_name{
     color: #FFFFFF;
     background-color: #571B97;
     font-size: 15px;
@@ -527,19 +530,19 @@ button{
     padding: 5px 0px;
 }
 
-#card_body{
+.cards #card_body{
     color: #FFFFFF;
     padding: 5px 15px;
     font-size: 14px;
 }
 
-#properties{
+.cards #properties{
     display: flex;
     justify-content: space-between;
     padding-bottom: 5px;
 }
 
-#status{
+.cards #status{
     display: flex;
     text-align: center;
     padding-left: 20px;
@@ -650,4 +653,26 @@ button{
 
 #topic_list.hide{
     top: 0;
+}
+
+/*---------------------terminal------------------------*/
+
+#terminal{
+    display: none;
+    width: 720px;
+    height: 100%;
+    background-color: #eee;
+    position: relative;
+    word-wrap: break-word;
+    margin: 5px;
+}
+
+#terminal.active{
+    display: block;
+}
+
+#terminal_screen{
+    width: 200px;
+    height: 200px;
+    background-color: #571B97;
 }

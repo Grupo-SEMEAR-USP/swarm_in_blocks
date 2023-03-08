@@ -2,10 +2,7 @@
 
 var terminalCounter = 0;
 document.getElementById("open-terminal-button").addEventListener("click", function() {
-    console.log("Creating new tasasaserminal")
-    // setTimeout(function() {
-    //     console.log("Esta mensagem será exibida após 1 segundo.");
-    //   }, 1000);
+    console.log("Creating new terminal")
     terminalCounter++;
     var terminalDiv = document.createElement("div");
     terminalDiv.className = webTerminal;
