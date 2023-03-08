@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-        <node pkg="swarm_clover_blocks" name="web_terminal" type="web_terminal_run.py" output="screen" />
-</launch>
