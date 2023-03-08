@@ -26,7 +26,7 @@ class Server{
 
         var ptyProcess = pty.spawn(os.platform() === 'win32' ? 'powershell.exe' : 'bash', [], {
             name: 'xterm-color',
-            cols: 81,
+            cols: 76,
             cwd: process.env.HOME,
             env: process.env,
         })    
