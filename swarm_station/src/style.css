@@ -669,6 +669,7 @@ button{
     overflow-x: hidden;
     padding-right: 7px;
     text-align: left;
+    margin-top: 5px;
 }
 
 #terminal.active{
@@ -687,7 +688,7 @@ button{
     width: 35px;
     background-color: #571B97;
     text-align: center;
-    margin-top: 185px;
+    margin-top: 210px;
     border-radius: 5px;
     color: #FFFFFF;
     cursor: pointer;
