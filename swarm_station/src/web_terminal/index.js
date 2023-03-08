@@ -2,8 +2,9 @@
 
 var terminalCounter = 0;
 document.getElementById("open-button-terminal").addEventListener("click", function() {
+    console.log("Terminal counter: ", terminalCounter)
     if(terminalCounter === 0){
-        console.log("Creating new terminal")
+        console.log("Botão 1 apertado");
         terminalCounter++;
         var terminalDiv = document.createElement("div");
         terminalDiv.className = webTerminal;
@@ -18,6 +19,7 @@ document.getElementById("open-button-terminal").addEventListener("click", functi
 });
 
 document.getElementById("open-terminal").addEventListener("click", function(){
+    console.log("Botão 2 apertado");
     console.log("New terminal")
     terminalCounter++;
     var terminalDiv = document.createElement("div");
