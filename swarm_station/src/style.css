@@ -14,6 +14,11 @@ body{
 #bars{
     display: flex;
     justify-content: space-between;
+    width: 100%;
+}
+
+#bars.active{
+    width: 60%;
 }
 
 /*---------------------Topbar------------------------*/
@@ -24,7 +29,6 @@ body{
     position: fixed;
     width: 100%;
     display: flex;
-
 }
 
 #topbar img{
@@ -56,7 +60,7 @@ body{
     width: 40px;
     height: 40px;
     position: relative;
-    top: 70px;
+    margin-top: 10px;
     margin-left: 20px;
 }
 
@@ -85,24 +89,24 @@ body{
 #clover{
     padding: 0px 0px 5px 0px;
     position: relative;
-    top: 80px;
+    margin-top: 10px;
     width: 300px;
     background-color: #242424;
     border-radius: 10px;
     margin-right: 20px;
     opacity: 0.9;
-    transition: .4s;
-    display: none;
+    transition: 0.05s;
+    visibility: hidden;
 }
 
 #clover.active{
-    display: block;
+    visibility: inherit;
 }
 
 #hiden{
     position: relative;
     text-align: right;
-    top: 70px;
+    margin-top: 10px;
     margin-right: 20px;
     opacity: 0.9;
 }
@@ -124,7 +128,7 @@ body{
     font-size: 14px;
     padding: 5px 0px 5px 0px;
     position: relative;
-    top: 90px;
+    margin-top: 10px;
     text-align: center;
     color: #FFFFFF;
     width: 300px;
@@ -207,14 +211,14 @@ body{
     opacity: 0.9;
     font-size: 1rem;
     position: relative;
-    top: 90px;
+    margin-top: 10px;
     text-align: center;
-    transition: .4s;
-    display: none;
+    transition: 0.05s;
+    visibility: hidden;
 }
 
 #open-land.active{
-    display: block;
+    visibility: inherit;
 }
 
 #open-land:hover{
@@ -649,4 +653,26 @@ button{
 
 #topic_list.hide{
     top: 0;
+}
+
+/*---------------------terminal------------------------*/
+
+#terminal{
+    display: none;
+    width: 720px;
+    height: 100%;
+    background-color: #eee;
+    position: relative;
+    word-wrap: break-word;
+    margin: 5px;
+}
+
+#terminal.active{
+    display: block;
+}
+
+#terminal_screen{
+    width: 200px;
+    height: 200px;
+    background-color: #571B97;
 }
