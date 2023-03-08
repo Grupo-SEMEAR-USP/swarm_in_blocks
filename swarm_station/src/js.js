@@ -116,11 +116,13 @@ function new_cards(id) {
 	
 	var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
 	document.getElementById("clovers_info").appendChild(clonado);
+	
 
-	clonado.classList.remove('id');
-	clonado.classList.add('id' + id);
+	let div_id = document.createElement("id_"+id);
 
-	document.querySelector('.id').innerHTML = id;
+	document.querySelector(".clover_name").append(div_id);
+
+	document.querySelector("id_"+id).innerHTML = id;
 
 
     if (id != "null") {
