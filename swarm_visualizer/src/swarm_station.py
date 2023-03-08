@@ -379,7 +379,7 @@ def main():
     rospy.init_node("marker_handler")
     obj = SwarmStation()
 
-    obj.get_param()
+    # obj.get_param()
     obj.setPublishers() 
     obj.setSubscribers()  
     obj.setListId() # get id array from connected clovers
