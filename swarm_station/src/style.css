@@ -176,7 +176,7 @@ body{
     margin-bottom: 5px;
 }
 
-#head div{
+#head .norm{
     color: black;
     padding: 0px 20px 0px 20px;
 }
@@ -570,12 +570,52 @@ button{
 
 
 .fpv__connected { 
-    font-size: 15px;
+    font-size: 14px;
     padding: 2px 0px 2px 0px;
     color: green
 }
 
 .fpv__connected-light {
+    animation: blinker 0.6s linear infinite;
+    margin-top: 10px;
+    margin-right: 5px;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+    background-color: green;
+}
+
+/*Right bar connected*/
+#head .fpv__disconnected-light {
+    animation: blinker 0.6s linear infinite;
+    margin: 7px 0px 0px 70px;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+	background-color: rgb(255, 0, 0);
+    display: none;
+}
+
+#head .fpv__disconnected-light.active {
+    display: block;
+}
+
+#head .fpv__disconnected {
+    font-size: 14px;
+    padding: 0px 20px 0px 0px;
+    color: red;
+}
+
+
+#head .fpv__connected { 
+    font-size: 14px;
+    padding: 0px 20px 0px 0px;
+    color: green
+}
+
+#head .fpv__connected-light {
+    animation: blinker 0.6s linear infinite;
+    margin: 7px 0px 0px 70px;
     height: 7px;
 	width: 7px;
 	border-radius: 50%;
@@ -634,8 +674,7 @@ button{
     font-size: 16px;
     text-align: center;
     color: hsl(0, 0%, 40%);
-    width: 420px;
-    max-height: 400px;
+    max-height: 380px;
     overflow-y: scroll;
     overflow-x: scroll;
 }

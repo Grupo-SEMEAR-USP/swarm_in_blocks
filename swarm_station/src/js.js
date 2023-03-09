@@ -11,9 +11,7 @@ var ros = new ROSLIB.Ros({
     console.log('Connection to websocket server closed.');
   });
 
-var disconnected = document.querySelector('#disconnected');
-const fpv_disconnected = document.querySelector('#fpv_disconnected');
-const fpv_light = document.querySelector('#fpv_light');
+
 
 
 const openModalLand = document.querySelector("#open-land");
@@ -112,47 +110,84 @@ var elemento = document.querySelector("#cards"); //card
 
 //puxa os dados para o card - recebe o id do card
 function new_cards(id) {
-    if (id != "null") {
+  if (id != "null") {
 
-      var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
-      document.getElementById("clovers_info").appendChild(clonado);
-      document.querySelector(".cards > #card_content > #card_title > .clover_name > #id").innerHTML = "Clover "+id;
+    var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
+    document.getElementById("clovers_info").appendChild(clonado);
+    document.querySelector(".cards > #card_content > #card_title > .clover_name > #id").innerHTML = "Clover "+id;
 
-      var listRasp = new ROSLIB.Topic({
-        ros: ros,
-        name: `/clover_${id}/cpu_usage`,
-        messageType: 'rasp_pkg/raspData'
-      });
 
-      listRasp.subscribe((message) => {
-        var cpu_usage = message.cpu_usage_percent;
-        var cpu_freq_current = message.cpu_freq_current;
-        var cpu_freq_max = message.cpu_freq_min;
-        var cpu_freq_min = message.cpu_freq_max;
-        var virtualMemory_percentage = message.virtualMemory_percent;
-        var process_usage_list = message.process_usage_list;
-        var process_name_list = message.process_name_list;
-        var cpu_temperature = message.cpu_temperature;
-        var bytes_sent = message.bytes_sent;
-        var bytes_recv = message.bytes_recv;
-        var packets_sent = message.packets_sent;
-        var packets_recv = message.packets_recv;
-        var net_data_adress = message.net_data_adress;
+    const fpv_disconnected = document.querySelector('.cards > #card_content > #card_title > #status > #fpv_disconnected');
+    const fpv_light = document.querySelector('.cards > #card_content > #card_title > #status > #fpv_light');
+
+    var listenerState = new ROSLIB.Topic({
+      ros : ros,
+      name : `/clover${id}/mavros/state`,
+      messageType : 'mavros_msgs/State'
+
+    })
+
+    listenerState.subscribe((message) =>{
+      mode = message.mode;
+      isConnected = message.connected;
+      // visual feedback for streaming header
+      if (isConnected == true) {
+          console.log('connected:', isConnected)
+          fpv_disconnected.innerText = `Connected`
+          fpv_disconnected.classList.add('fpv__connected')
+          fpv_light.classList.add('fpv__connected-light')
+          fpv_disconnected.classList.remove('fpv__disconnected')
+          fpv_light.classList.remove('fpv__disconnected-light')
+      }
+      else {
+          // if the class online it is there, remove it
+          fpv_disconnected.innerText = `Disconnected`
+          fpv_disconnected.classList.remove('fpv__connected')
+          fpv_light.classList.remove('fpv__connected-light')
+          fpv_disconnected.classList.add('fpv__disconnected')
+          fpv_light.classList.add('fpv__disconnected-light')
+      }
+      listenerState.unsubscribe()
+      // telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
+    });
+
+
+    var listRasp = new ROSLIB.Topic({
+      ros: ros,
+      name: `/clover_${id}/cpu_usage`,
+      messageType: 'rasp_pkg/raspData'
+    });
+
+    listRasp.subscribe((message) => {
       
-        var process_list_string = '';
-        for (var i = 0; i < process_usage_list.length; i++) {
-          process_list_string += 'Process: ' + process_name_list[i] + ' Cpu usage: ' + process_usage_list[i].toFixed(2) + '% <br>';
-        }
+      var cpu_usage = message.cpu_usage_percent;
+      var cpu_freq_current = message.cpu_freq_current;
+      var cpu_freq_max = message.cpu_freq_min;
+      var cpu_freq_min = message.cpu_freq_max;
+      var virtualMemory_percentage = message.virtualMemory_percent;
+      var process_usage_list = message.process_usage_list;
+      var process_name_list = message.process_name_list;
+      var cpu_temperature = message.cpu_temperature;
+      var bytes_sent = message.bytes_sent;
+      var bytes_recv = message.bytes_recv;
+      var packets_sent = message.packets_sent;
+      var packets_recv = message.packets_recv;
+      var net_data_adress = message.net_data_adress;
+    
+      var process_list_string = '';
+      for (var i = 0; i < process_usage_list.length; i++) {
+        process_list_string += 'Process: ' + process_name_list[i] + ' Cpu usage: ' + process_usage_list[i].toFixed(2) + '% <br>';
+      }
 
-        // Update the HTML elements with the new values
-        document.querySelector(".cards > #card_content > #card_title > .clover_name > #net_data_adress").innerHTML = net_data_adress.toFixed(2);
-        document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
-        document.querySelector(".cards > #card_content > #card_title > .clover_name > #virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
-        document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
-      });
-      clonado.className = ".cards_"+id;
-    }
+      // Update the HTML elements with the new values
+      document.querySelector(".cards > #card_content > #card_title > .clover_name > #net_data_adress").innerHTML = net_data_adress.toFixed(2);
+      document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
+      document.querySelector(".cards > #card_content > #card_title > .clover_name > #virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
+      document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
+    });
+    clonado.className = ".cards_"+id;
   }
+}
 
 
 // Topiclist

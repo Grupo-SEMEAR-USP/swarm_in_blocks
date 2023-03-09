@@ -3,7 +3,8 @@ var telemetry_x = document.getElementById('telemetry_x')
 var telemetry_y = document.getElementById('telemetry_y')
 var telemetry_z = document.getElementById('telemetry_z')
 var cpu = document.getElementById('cpu')
-var state = document.getElementById('state')
+const fpv_disconnected = document.querySelector('#head > #fpv_disconnected');
+const fpv_light = document.querySelector('#head > #fpv_light');
 
 // set sleep function 
 function sleep(milliseconds) {
@@ -60,8 +61,6 @@ function update_Telemetry(id) {
             listenerTelemetry.unsubscribe();
         });
 
-        
-
         var listenerState = new ROSLIB.Topic({
             ros : ros,
             name : `/clover${id}/mavros/state`,
@@ -71,8 +70,25 @@ function update_Telemetry(id) {
         listenerState.subscribe((message) =>{
             mode = message.mode;
             isConnected = message.connected;
-            state.innerText = `${isConnected}`
-            listenerState.unsubscribe();
+            // visual feedback for streaming header
+            if (isConnected == true) {
+                console.log('connected:', isConnected)
+                fpv_disconnected.innerText = `Connected`
+                fpv_disconnected.classList.add('fpv__connected')
+                fpv_light.classList.add('fpv__connected-light')
+                fpv_disconnected.classList.remove('fpv__disconnected')
+                fpv_light.classList.remove('fpv__disconnected-light')
+            }
+            else {
+                // if the class online it is there, remove it
+                fpv_disconnected.innerText = `Disconnected`
+                fpv_disconnected.classList.remove('fpv__connected')
+                fpv_light.classList.remove('fpv__connected-light')
+                document.getElementById('fpv__disconnected-light').classList.toggle('active');
+                fpv_disconnected.classList.add('fpv__disconnected')
+                fpv_light.classList.add('fpv__disconnected-light')
+            }
+            listenerState.unsubscribe()
             // telemetry.innerText = `Telemetry:\nx: ${x};\ny: ${y};\nz: ${z};`
         });
 
