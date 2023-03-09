@@ -5,7 +5,6 @@ import rospy
 import psutil
 #import necessary msgs
 from rasp_pkg.msg import raspData
-from rasp_pkg.msg import processInfo
 from std_msgs.msg import Float32
 
 class RaspResourcePublisher:
@@ -95,12 +94,12 @@ class RaspResourcePublisher:
                 rasp_data.cpu_freq_max = cpu_freq.max
                 rasp_data.virtualMemory_percent = virtual_memory_percent
                 rasp_data.cpu_temperature = sensors_temperature_current.current
-                rasp_data.net_data_adress = net_data.adress
+                rasp_data.net_data_adress = net_data.address
                 rasp_data.bytes_sent = self.convertBytesToGigaB(net_io_counters.bytes_sent) 
                 rasp_data.bytes_recv = self.convertBytesToGigaB(net_io_counters.bytes_recv)
                 rasp_data.packets_sent = net_io_counters.packets_sent
                 rasp_data.packets_recv = net_io_counters.packets_recv
-                rasp_data.net_data_max = net_status.mtu               
+                #rasp_data.net_data_max = net_status.mtu               
 
 
                 for process in process_list:
@@ -154,4 +153,5 @@ if __name__ == '__main__':
 
     except rospy.ROSInterruptException:
         pass
+
 
