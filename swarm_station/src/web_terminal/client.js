@@ -172,16 +172,21 @@ class webTerminal {
         let counter = 1;
 
         this.openTerminalButton.addEventListener("click", function() {
-            counter +=1;
+            if(counter<10){
+                counter +=1;
 
-            const msg = "New Terminal" + counter;
-            const asciiMsg = [];
-
-            for (let i = 0; i < msg.length; i++) {
-                asciiMsg.push(msg.charCodeAt(i));
+                const msg = "New Terminal" + counter;
+                const asciiMsg = [];
+    
+                for (let i = 0; i < msg.length; i++) {
+                    asciiMsg.push(msg.charCodeAt(i));
+                }
+                // console.log("Botão apertado");
+                socket.send(asciiMsg);   
+            }else{
+                console.log("maximum number of terminals exceeded");
             }
-            // console.log("Botão apertado");
-            socket.send(asciiMsg);    
+ 
         });
 
     }
@@ -189,4 +194,5 @@ class webTerminal {
 }
 
 // let terminal = new webTerminal();
+
 
