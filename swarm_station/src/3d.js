@@ -2,24 +2,34 @@ var ros = new ROSLIB.Ros({
 	url : 'ws://' + location.hostname + ':9090'
 });
 
-var titleEl = document.querySelector('title');
+var x = new Boolean(true);
 
 ros.on('error', function(error) {
-	titleEl.innerText = 'Disconnected';
 	err = error;
 	alert('Could not connect to ros: please make sure \'swarm_station.launch\' was launched!');
 });
 
 ros.on('connection', function() {
-	console.log('connected');
-	titleEl.innerText = 'Connected';
+	x = true;
+	console.log(x);
 	// pubMarkerState('reload')
 });
 
 ros.on('close', function() {
+	x = false;
 	console.log('disconnected');
-	titleEl.innerText = 'Disconnected';
 });
+
+
+// --------------------------Terminal---------------------
+
+function open_terminal(){
+	if(x) {
+		document.getElementById('terminal').classList.toggle('active');
+		document.getElementById('open-terminal').classList.toggle('active');
+		document.getElementById('open-button-terminal').classList.toggle('active');
+	}
+}
 
 // defining publisher
 var marker_state = new ROSLIB.Topic({

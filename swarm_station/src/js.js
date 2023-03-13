@@ -1,8 +1,9 @@
+
 var ros = new ROSLIB.Ros({
-    url: 'ws://localhost:9090'
+    url : 'ws://' + location.hostname + ':9090'
   });
   ros.on('connection', function() {
-    console.log('Connected to websocket server.');
+    console.log('connected');
   });
   ros.on('error', function(error) {
     console.log('Error connecting to websocket server: ', error);
@@ -10,9 +11,6 @@ var ros = new ROSLIB.Ros({
   ros.on('close', function() {
     console.log('Connection to websocket server closed.');
   });
-
-
-
 
 const openModalLand = document.querySelector("#open-land");
 const closeModalLand = document.querySelector(".close-land");
@@ -202,28 +200,26 @@ function getTopics() {
     var request = new ROSLIB.ServiceRequest();
 
     topicsClient.callService(request, function(result) {
-		console.log("Getting topics...");
-		
-		teste = result.topics.join();
-		
+      console.log("Getting topics...");
+      
+      teste = result.topics.join();
+      
 
-		var list_topics = teste.replace(/,/g, "<br>");
-		console.log(list_topics);
+      var list_topics = teste.replace(/,/g, "<br>");
+      console.log(list_topics);
 
-		document.getElementById("desc_topics").innerHTML = list_topics;sss
+      if(teste === ""){
+        document.getElementById("desc_topics").innerHTML = "No topics";
+      }
+      else{
+        document.getElementById("desc_topics").innerHTML = list_topics;
+      }
     });
 };
 
 
 
-
-// --------------------------Terminal
-
-function open_terminal(){
-	document.getElementById('terminal').classList.toggle('active');
-  document.getElementById('open-terminal').classList.toggle('active');
-  document.getElementById('open-button-terminal').classList.toggle('active');
-}
+// --------------------------Popup cards---------------------
 
 
   
