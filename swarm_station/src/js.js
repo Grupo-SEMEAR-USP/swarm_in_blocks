@@ -100,16 +100,14 @@ function show_info(){
 		new_cards(id);
 	}
 	document.getElementById('clovers_info').classList.toggle('active');
-	document.getElementById('mic').classList.toggle('active');
+	document.getElementById('mic').classList.toggle('active')
 }
-
 
 var elemento = document.querySelector("#cards"); //card
 
 //puxa os dados para o card - recebe o id do card
 function new_cards(id) {
   if (id != "null") {
-
     var clonado = elemento.cloneNode(true); //card - igual sempre então é clonado
     document.getElementById("clovers_info").appendChild(clonado);
     document.querySelector(".cards > #card_content > #card_title > .clover_name > #id").innerHTML = "Clover "+id;
@@ -117,6 +115,7 @@ function new_cards(id) {
 
     const fpv_disconnected = document.querySelector('.cards > #card_content > #card_title > #status > #fpv_disconnected');
     const fpv_light = document.querySelector('.cards > #card_content > #card_title > #status > #fpv_light');
+  
 
     var listenerState = new ROSLIB.Topic({
       ros : ros,
@@ -183,44 +182,92 @@ function new_cards(id) {
       document.querySelector(".cards > #card_content > #card_title > .clover_name > #virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
       document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
     });
-    clonado.className = ".cards_"+id;
+    clonado.className = id;
   }
 }
+
+const openModalcd = document.querySelector(".open-cd");
+const closeModalcd = document.querySelector(".close-cd");
+const fade_cd = document.querySelector("#fade-cd");
+
+const cd = document.querySelector("#cd");
+
+const toggleModalcd = () => {
+  cd.classList.toggle("hide");
+  fade_cd.classList.toggle("hide");
+};
+
+
+[openModalcd, closeModalcd, fade_cd].forEach((el) => {
+  el.addEventListener("click", () => toggleModalcd());
+  //var test = el.openModalcd.className;
+  //console.log(test);
+});
+
 
 
 // Topiclist
 
 function getTopics() {
-    var topicsClient = new ROSLIB.Service({
+  var topicsClient = new ROSLIB.Service({
     ros : ros,
     name : '/rosapi/topics',
     serviceType : 'rosapi/Topics'
     });
 
-    var request = new ROSLIB.ServiceRequest();
+  var request = new ROSLIB.ServiceRequest();
 
-    topicsClient.callService(request, function(result) {
-      console.log("Getting topics...");
-      
-      teste = result.topics.join();
-      
+  topicsClient.callService(request, function(result) {
+    console.log("Getting topics...");
+    
+    teste = result.topics.join();
+    
 
-      var list_topics = teste.replace(/,/g, "<br>");
-      console.log(list_topics);
+    var list_topics = teste.replace(/,/g, "<br>");
+    console.log(list_topics);
 
-      if(teste === ""){
-        document.getElementById("desc_topics").innerHTML = "No topics";
-      }
-      else{
-        document.getElementById("desc_topics").innerHTML = list_topics;
-      }
-    });
+    if(teste === ""){
+      document.getElementById("desc_topics").innerHTML = "No topics";
+    }
+    else{
+      document.getElementById("desc_topics").innerHTML = list_topics;
+    }
+  });
 };
-
 
 
 // --------------------------Popup cards---------------------
 
+function getInfos() {
+  var listRasp = new ROSLIB.Topic({
+    ros: ros,
+    name: `/clover_${id}/cpu_usage`,
+    messageType: 'rasp_pkg/raspData'
+  });
+
+  listRasp.subscribe((message) => {   
+    var cpu_freq_current = message.cpu_freq_current;
+    var cpu_freq_max = message.cpu_freq_min;
+    var cpu_freq_min = message.cpu_freq_max;
+    var process_usage_list = message.process_usage_list;
+    var process_name_list = message.process_name_list;
+    var bytes_sent = message.bytes_sent;
+    var bytes_recv = message.bytes_recv;
+    var packets_sent = message.packets_sent;
+    var packets_recv = message.packets_recv;
+  
+    var process_list_string = '';
+    for (var i = 0; i < process_usage_list.length; i++) {
+      process_list_string += 'Process: ' + process_name_list[i] + ' Cpu usage: ' + process_usage_list[i].toFixed(2) + '% <br>';
+    }
+
+    // Update the HTML elements with the new values
+    document.querySelector(".cards > #card_content > #card_title > .clover_name > #net_data_adress").innerHTML = net_data_adress.toFixed(2);
+    document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_usage_percent").innerHTML = cpu_usage.toFixed(2) + '%';
+    document.querySelector(".cards > #card_content > #card_title > .clover_name > #virtualMemory_percent").innerHTML = virtualMemory_percentage.toFixed(2) + '%';
+    document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
+  });
+};
 
   
 

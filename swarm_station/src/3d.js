@@ -12,7 +12,6 @@ ros.on('error', function(error) {
 ros.on('connection', function() {
 	x = true;
 	console.log(x);
-	// pubMarkerState('reload')
 });
 
 ros.on('close', function() {
@@ -126,15 +125,15 @@ function pubMarkerState(command='reload', points= point_template, length=0, radi
 
 // defining ros3d  
 
-var largura = window.innerWidth
-|| document.documentElement.clientWidth
-|| document.body.clientWidth;
-
-var altura = window.innerHeight
-|| document.documentElement.clientHeight
-|| document.body.clientHeight;
+var largura = window.innerWidth;
+var altura = window.innerHeight;
 
 var viewer, tfClient;
+
+setInterval(function() {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+}, 1000);
 
 function setScene(fixedFrame) {
 	viewer = new ROS3D.Viewer({
