@@ -227,7 +227,7 @@ class SwarmInternalCollisionAvoidance():
         angle = np.arccos(np.clip(np.dot(traj_vec_i, traj_vec_j)/np.linalg.norm(traj_vec_i)/np.linalg.norm(traj_vec_j), -1.0, 1.0))
         
         # RETORNA TRUE SE VETORES DAS TRAJETORIAS FOREM PARALELOS
-        if angle*np.pi <= 20 or angle >= 160:
+        if np.degrees(angle) <= 20 or np.degrees(angle) >= 160:
             is_parallel = True
         else:
             is_parallel = False
