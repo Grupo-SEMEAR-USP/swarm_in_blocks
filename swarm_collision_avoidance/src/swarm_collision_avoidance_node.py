@@ -299,13 +299,12 @@ class SwarmInternalCollisionAvoidance():
         
 
     def __handleNonParallelClovers(self,  clover_id_i, clover_id_j):
-        # WARNING - BASE LINK MAY NOT BE WELL PLACED
-        # SALVA AS TRAJETORIAS ATUAIS DE CADA CCLOVER (DOS 2)
+        rospy.loginfo(f"Clovers on a non parallel trajectory.")
+
         trans_target_i = self.tfBuffer.lookup_transform('map', f'navigate_target{clover_id_i}', rospy.Time())
         trans_target_j = self.tfBuffer.lookup_transform('map', f'navigate_target{clover_id_j}', rospy.Time())
 
         # Using threads to guarantee that both clovers stoped on the secure place to continue navigation
-        # PARA OS 2 DRONES NO ATUAL LOCAL AO MESMO TEMPO
         stop_thrd_i = Thread(target=self.__stopClover, args=(clover_id_i,))
         stop_thrd_j = Thread(target=self.__stopClover, args=(clover_id_j,))
 
@@ -321,10 +320,11 @@ class SwarmInternalCollisionAvoidance():
         if clover_id_i > clover_id_j:
             stopped_id = clover_id_i
             self.__goToLastTarget(clover_id_j, traj_vec_j)
+
         else:
             stopped_id = clover_id_j
             self.__goToLastTarget(clover_id_i, traj_vec_i)
-        
+
         while not rospy.is_shutdown():
             clover_i = self.swarm[clover_id_i]
             clover_j = self.swarm[clover_id_j]
@@ -334,16 +334,9 @@ class SwarmInternalCollisionAvoidance():
 
             dist = self.__getDistance(pose_i, pose_j)
 
-            # trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
-            # trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
-
-            # if distance is more than 1 times the clover distance thresh
-            # go ahead and continue the last trajectory
-            if dist > 1*self.dist_threshold:
+            if dist > 2.5*self.dist_threshold:
                 break
         
-        # navigate to last target
-        # RETOMA TRAJETORIA DO DRONE QUE ESTAVA PARADO
         if stopped_id == clover_id_i:
             self.__goToLastTarget(clover_id_i, traj_vec_i)
         else:
