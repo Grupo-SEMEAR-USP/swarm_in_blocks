@@ -2,12 +2,28 @@
 var ros = new ROSLIB.Ros({
     url : 'ws://' + location.hostname + ':9090'
   });
+
+const ss_disconnected = document.querySelector('#ss_disconnected');
+const ss_light = document.querySelector('#ss_light');
+
   ros.on('connection', function() {
-    console.log('connected');
+    console.log('Error connecting to websocket server ss: ');
+    ss_disconnected.innerText = `Connected`
+    ss_disconnected.classList.add('ss__connected')
+    ss_light.classList.add('ss__connected-light')
+    ss_disconnected.classList.remove('ss__disconnected')
+    ss_light.classList.remove('ss__disconnected-light')
   });
+
   ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
+    console.log('Error connecting to websocket server ss: ', error);
+    ss_disconnected.innerText = `Disconnected`
+    ss_disconnected.classList.remove('ss__connected')
+    ss_light.classList.remove('ss__connected-light')
+    ss_disconnected.classList.add('ss__disconnected')
+    ss_light.classList.add('ss__disconnected-light')
   });
+
   ros.on('close', function() {
     console.log('Connection to websocket server closed.');
   });
@@ -268,6 +284,23 @@ function getInfos() {
     document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
   });
 };
+
+function onlynumber(evt) {
+  var theEvent = evt || window.event;
+  var key = theEvent.keyCode || theEvent.which;
+  key = String.fromCharCode( key );
+  //var regex = /^[0-9.,]+$/;
+  var regex = /^[0-9.]+$/;
+  if( !regex.test(key) ) {
+    theEvent.returnValue = false;
+    if(theEvent.preventDefault) theEvent.preventDefault();
+    document.getElementById("num").classList.add("apply-shake");
+    setTimeout(function(){
+    document.getElementById("num").classList.remove("apply-shake");
+    }, 500);
+  }
+}
+
 
   
 

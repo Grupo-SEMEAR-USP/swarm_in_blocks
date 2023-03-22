@@ -807,3 +807,62 @@ button{
 #cd.hide{
     top: 0;
 }
+
+@keyframes shake {
+    10%, 90% {
+    transform: translate3d(-1.5px, 0, 0);
+    }
+    20%, 80% {
+    transform: translate3d(2.5px, 0, 0);
+    }
+    30%, 50%, 70% {
+    transform: translate3d(-4.5px, 0, 0);
+    }
+    40%, 60% {
+    transform: translate3d(4.5px, 0, 0);
+    }
+}
+
+.apply-shake {
+    position: relative;
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    animation-iteration-count: 3;
+}
+
+.ss__disconnected-light {
+    animation: blinker 0.6s linear infinite;
+    margin: 21px 10px 0px 0px;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+	background-color: rgb(255, 0, 0);
+    display: none;
+}
+
+.ss__disconnected-light.active {
+    display: block;
+}
+
+.ss__disconnected {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 0px 0px 0px;
+    color: red;
+}
+
+
+.ss__connected { 
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 0px 0px 0px;
+    color: green
+}
+
+.ss__connected-light {
+    animation: blinker 0.6s linear infinite;
+    margin: 21px 10px 0px 0px;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+    background-color: green;
+}

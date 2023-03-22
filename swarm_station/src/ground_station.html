@@ -27,7 +27,10 @@
     <body onload="pubMarkerState('reload');" >
         <div id="viz" style="position: absolute;"></div>
             <nav id="topbar" style="position: relative;">
-                <a href="/index.html" target="_blank"><img src='/assets/img/logo_header.png' /></a>
+                <div style="display: flex;">
+                    <a href="/index.html" target="_blank"><img src='/assets/img/logo_header.png' /></a>
+                    <div id="mood" style="display: flex;"><div class="ss__disconnected-light" id="ss_light"></div><div class="ss__disconnected" id="ss_disconnected">Disconnected</div></div>
+                </div>
                 <div id="top_links">
                     <a href="/swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
                     <a href="/swarm_fpv/src/web_fpv/fpv.html" target="_blank">FPV</a>
@@ -62,12 +65,6 @@
                                         </label>
 
                                         <label class="rad-label">
-                                            <input type="radio" class="rad_input" name="rad" value="square">
-                                            <div class="rad-design"></div>
-                                            <div class="rad-text">Square</div>
-                                        </label>
-
-                                        <label class="rad-label">
                                             <input type="radio" class="rad_input" name="rad" value="rectangle">
                                             <div class="rad-design"></div>
                                             <div class="rad-text">Rectangle</div>
@@ -76,35 +73,25 @@
 
                                     <div id="inputs">
                                         <div class="desc" id="circle">
-                                            <input type="number" name="radius" value="radius" placeholder="Radius">
+                                            <input type="number" name="radius" value="radius" placeholder="Radius" id="num" onkeypress="return onlynumber();">
                                             <div style="display: flex; padding-top: 5px;">
                                                 <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
-                                                <input type="number" style="width: 60px;" placeholder="x"  name="circle_x">
-                                                <input type="number" style="width: 60px;" placeholder="y"  name="circle_y">
-                                                <input type="number" style="width: 60px;" placeholder="z"  name="circle_z">
-                                            </div>
-                                        </div>
-                                        <div class="desc" id="square">
-                                            <input type="number" value="lenght" name="lenght" placeholder="Lenght">
-                                            <div style="display: flex; padding-top: 5px;">
-                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Center</label>
-                                                <input type="number" style="width: 60px;" placeholder="x"  name="square_x">
-                                                <input type="number" style="width: 60px;" placeholder="y"  name="square_y">
-                                                <input type="number" style="width: 60px;" placeholder="z"  name="square_z">
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="circle_x" onkeypress="return onlynumber();">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="circle_y" onkeypress="return onlynumber();">
+                                                <input type="number" style="width: 60px;" placeholder="z"  name="circle_z" onkeypress="return onlynumber();">
                                             </div>
                                         </div>
                                         <div class="desc" id="rectangle">
-                                            <div style="display: flex; padding-top: 5px;">
-                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 1</label>
-                                                <input type="number" style="width: 60px;" placeholder="x"  name="r1_x">
-                                                <input type="number" style="width: 60px;" placeholder="y"  name="r1_y">
-                                                <input type="number" style="width: 60px;" placeholder="z"  name="r1_z">
+                                            <input type="number" name="lenght" value="lenght" placeholder="Lenght" id="num" onkeypress="return onlynumber();">
+                                            <div style="display: flex; padding-top: 2px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px; min-width: 60px;">Point 1</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="r1_x" onkeypress="return onlynumber();">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="r1_y" onkeypress="return onlynumber();">
                                             </div>
-                                            <div style="display: flex; padding-top: 5px;">
-                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px;">Point 2</label>
-                                                <input type="number" style="width: 60px;" placeholder="x"  name="r2_x">
-                                                <input type="number" style="width: 60px;" placeholder="y"  name="r2_y">
-                                                <input type="number" style="width: 60px;" placeholder="z"  name="r2_z">
+                                            <div style="display: flex; padding-top: 2px;">
+                                                <label style="padding-right: 10px; font-size: 14px; padding-top: 2px; min-width: 60px;">Point 2</label>
+                                                <input type="number" style="width: 60px;" placeholder="x"  name="r2_x" onkeypress="return onlynumber();">
+                                                <input type="number" style="width: 60px;" placeholder="y"  name="r2_y" onkeypress="return onlynumber();">
                                             </div>
                                         </div>
                                     </div>
