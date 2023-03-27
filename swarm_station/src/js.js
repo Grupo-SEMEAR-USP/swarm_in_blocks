@@ -294,10 +294,18 @@ function onlynumber(evt) {
   if( !regex.test(key) ) {
     theEvent.returnValue = false;
     if(theEvent.preventDefault) theEvent.preventDefault();
-    document.getElementById("num").classList.add("apply-shake");
+    var ca = document.querySelectorAll("#num");
+    var i;
+    for (i = 0; i < ca.length; i++) {
+      ca[i].classList.add("apply-shake");
+    }
     setTimeout(function(){
-    document.getElementById("num").classList.remove("apply-shake");
-    }, 500);
+      var i;
+      for (i = 0; i < ca.length; i++) {
+        ca[i].classList.remove("apply-shake");
+      }
+      
+    }, 400);
   }
 }
 
