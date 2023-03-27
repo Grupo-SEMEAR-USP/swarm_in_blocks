@@ -161,7 +161,7 @@
             </div>
             <nav>
                 <div id="clovers_info" class="open-cd">
-                    <div id="cards" class="cards">
+                    <div id="cards" class="cards" onclick="openThis(this)">
                         <div id="card_content">
                             <div id="card_title">
                                 <div id="status">
@@ -202,9 +202,25 @@
                     </div>
                     <div id="cd_body">
                         <div id="desc-clovers" style="padding: 10px 0px;">
+                            <div id="properties">
+                                <div id="title">CPU min frequency:</div>
+                                <div id="cpu_freq_min">-</div>
+                            </div>
+                            <div id="properties">
+                                <div id="title">CPU max frequency:</div>
+                                <div id="cpu_freq_max">-</div>
+                            </div>
+                            <div id="properties">
+                                <div id="title">CPU current frequency:</div>
+                                <div id="cpu_freq_current">-</div>
+                            </div>
+                            <div id="properties">
+                                <div id="title">Most used processes:</div>
+                                <div id="process_list"></div>
+                            </div>
                         </div>
                     </div>
-                    <button class="close-cd" id="cancel" style="margin-top: 15px;">Close</button>
+                    <button class="close-cd" onclick="openThis()" id="cancel" style="margin-top: 15px;">Close</button>
                 </div>
             </nav>
             

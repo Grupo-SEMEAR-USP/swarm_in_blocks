@@ -780,6 +780,7 @@ button{
     margin-bottom: 10px;
     font-size: 18px;
     font-weight: 400;
+    width: 300px;
 }
 
 #cd_body{
@@ -866,4 +867,8 @@ button{
 	width: 7px;
 	border-radius: 50%;
     background-color: green;
+}
+
+#cd #title{
+    color: #1E1E1E;
 }
