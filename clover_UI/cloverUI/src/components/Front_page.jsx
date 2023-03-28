@@ -14,7 +14,7 @@ const Front_page= () =>{
                     Basic and advanced functionality applied in blocks in simple or integrated automation. Swarm formations created in a simplified and autonomous way.
                 </div>
             </div>
-            <div id='rectangle'></div>
+            {/* <div id='rectangle'></div> */}
             <div id='f_green_gradient'></div>
             <img src='/assets/img/clover.svg' id='voo'/>
 
