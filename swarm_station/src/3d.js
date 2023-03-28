@@ -53,12 +53,9 @@ btnSalvar.addEventListener("click", function(event){
 	if (command == "circle"){
 		points[0] = [parseFloat(frmSafe.circle_x.value), parseFloat(frmSafe.circle_y.value), parseFloat(frmSafe.circle_z.value)]
 	}
-	if (command == "square"){
-		points[0] = [parseFloat(frmSafe.square_x.value), parseFloat(frmSafe.square_y.value), parseFloat(frmSafe.square_z.value)]
-	}
 	if (command == "rectangle"){
-		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value), parseFloat(frmSafe.r1_z.value)]
-		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value), parseFloat(frmSafe.r2_z.value)]
+		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value)]
+		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value)]
 	}
 
 	console.log(points)
@@ -67,13 +64,13 @@ btnSalvar.addEventListener("click", function(event){
 	for (let index = 0; index < points.length; index++) {
 		// const element = array[index];
 		// let point = new ROSLIB.Message ({
-		point = {
+		points = {
 			x: points[index][0],
 			y: points[index][1],
 			z: points[index][2]
 		};
 		// console.log(point)
-		point_list.push(point)
+		point_list.push(points)
 		
 	}
 
@@ -102,9 +99,7 @@ var point_template = []
 
 var geometry_msgsPoint = function() {};
 
-function pubMarkerState(command='reload', points= point_template, length=0, radius=0) {
-	
-
+function pubMarkerState(command='reload', points=point_template, length=0, radius=0) {
 	
 	var msg = new ROSLIB.Message({
 		command : command, //cirlce, rectangle, square

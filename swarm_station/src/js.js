@@ -2,12 +2,28 @@
 var ros = new ROSLIB.Ros({
     url : 'ws://' + location.hostname + ':9090'
   });
+
+const ss_disconnected = document.querySelector('#ss_disconnected');
+const ss_light = document.querySelector('#ss_light');
+
   ros.on('connection', function() {
-    console.log('connected');
+    console.log('Error connecting to websocket server ss: ');
+    ss_disconnected.innerText = `Connected`
+    ss_disconnected.classList.add('ss__connected')
+    ss_light.classList.add('ss__connected-light')
+    ss_disconnected.classList.remove('ss__disconnected')
+    ss_light.classList.remove('ss__disconnected-light')
   });
+
   ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
+    console.log('Error connecting to websocket server ss: ', error);
+    ss_disconnected.innerText = `Disconnected`
+    ss_disconnected.classList.remove('ss__connected')
+    ss_light.classList.remove('ss__connected-light')
+    ss_disconnected.classList.add('ss__disconnected')
+    ss_light.classList.add('ss__disconnected-light')
   });
+
   ros.on('close', function() {
     console.log('Connection to websocket server closed.');
   });
@@ -197,12 +213,40 @@ const toggleModalcd = () => {
   fade_cd.classList.toggle("hide");
 };
 
+function openThis(element){
+  [openModalcd, closeModalcd, fade_cd].forEach((el) => {
+    el.addEventListener("click", () => toggleModalcd());
+  });
+  var id = element.className;
+  
+  var listRasp = new ROSLIB.Topic({
+    ros: ros,
+    name: `/clover_${id}/cpu_usage`,
+    messageType: 'rasp_pkg/raspData'
+  });
 
-[openModalcd, closeModalcd, fade_cd].forEach((el) => {
-  el.addEventListener("click", () => toggleModalcd());
-  //var test = el.openModalcd.className;
-  //console.log(test);
-});
+  listRasp.subscribe((message) => {
+    
+    var cpu_freq_current = message.cpu_freq_current;
+    var cpu_freq_max = message.cpu_freq_min;
+    var cpu_freq_min = message.cpu_freq_max;
+    var process_usage_list = message.process_usage_list;
+    var process_name_list = message.process_name_list;
+  
+    var process_list_string = '';
+    for (var i = 0; i < process_usage_list.length; i++) {
+      process_list_string += 'Process: ' + process_name_list[i] + ' Cpu usage: ' + process_usage_list[i].toFixed(2) + '% <br>';
+    }
+
+    // Update the HTML elements with the new values
+    document.querySelector("").innerHTML = cpu_freq_current.toFixed(2) + 'Hz';
+    document.querySelector("").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
+    document.querySelector("").innerHTML = cpu_freq_min.toFixed(2) + 'Hz';
+    document.getElementById("process_list").innerHTML = '<br>' +  process_list_string;
+  });
+}
+
+
 
 
 
@@ -268,6 +312,31 @@ function getInfos() {
     document.querySelector(".cards > #card_content > #card_title > .clover_name > #cpu_temperature").innerHTML = cpu_temperature.toFixed(2) + '°C';
   });
 };
+
+function onlynumber(evt) {
+  var theEvent = evt || window.event;
+  var key = theEvent.keyCode || theEvent.which;
+  key = String.fromCharCode( key );
+  //var regex = /^[0-9.,]+$/;
+  var regex = /^[0-9-.]+$/;
+  if( !regex.test(key) ) {
+    theEvent.returnValue = false;
+    if(theEvent.preventDefault) theEvent.preventDefault();
+    var ca = document.querySelectorAll("#num");
+    var i;
+    for (i = 0; i < ca.length; i++) {
+      ca[i].classList.add("apply-shake");
+    }
+    setTimeout(function(){
+      var i;
+      for (i = 0; i < ca.length; i++) {
+        ca[i].classList.remove("apply-shake");
+      }
+      
+    }, 400);
+  }
+}
+
 
   
 
