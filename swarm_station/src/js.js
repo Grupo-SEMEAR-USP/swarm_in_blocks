@@ -110,13 +110,15 @@ listSwarm.subscribe(function(message) {
 });
 
 function show_info(){
-	document.querySelector("#clovers_info").innerHTML = "";
+  if(x) {
+		document.querySelector("#clovers_info").innerHTML = "";
 
-	for(let id in list){
-		new_cards(id);
+    for(let id in list){
+      new_cards(id);
+    }
+    document.getElementById('clovers_info').classList.toggle('active');
+    document.getElementById('mic').classList.toggle('active')
 	}
-	document.getElementById('clovers_info').classList.toggle('active');
-	document.getElementById('mic').classList.toggle('active')
 }
 
 var elemento = document.querySelector("#cards"); //card
@@ -217,7 +219,10 @@ function openThis(element){
   [openModalcd, closeModalcd, fade_cd].forEach((el) => {
     el.addEventListener("click", () => toggleModalcd());
   });
+
   var id = element.className;
+  
+  document.querySelector("#clo").innerHTML = 'Clover ' + id;
   
   var listRasp = new ROSLIB.Topic({
     ros: ros,
@@ -226,7 +231,7 @@ function openThis(element){
   });
 
   listRasp.subscribe((message) => {
-    
+  
     var cpu_freq_current = message.cpu_freq_current;
     var cpu_freq_max = message.cpu_freq_min;
     var cpu_freq_min = message.cpu_freq_max;
@@ -239,9 +244,9 @@ function openThis(element){
     }
 
     // Update the HTML elements with the new values
-    document.querySelector("").innerHTML = cpu_freq_current.toFixed(2) + 'Hz';
-    document.querySelector("").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
-    document.querySelector("").innerHTML = cpu_freq_min.toFixed(2) + 'Hz';
+    document.querySelector("#cpu_freq_current").innerHTML = cpu_freq_current.toFixed(2) + 'Hz';
+    document.querySelector("#cpu_freq_max").innerHTML = cpu_freq_max.toFixed(2) + 'Hz';
+    document.querySelector("#cpu_freq_min").innerHTML = cpu_freq_min.toFixed(2) + 'Hz';
     document.getElementById("process_list").innerHTML = '<br>' +  process_list_string;
   });
 }
