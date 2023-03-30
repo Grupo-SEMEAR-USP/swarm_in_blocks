@@ -48,35 +48,33 @@ btnSalvar.addEventListener("click", function(event){
 	var length = frmSafe.length.length;
 	var radius = frmSafe.radius.radius;
 
-	var points = []
+	var points = [[],[]]
 	
 	if (command == "circle"){
 		points[0] = [parseFloat(frmSafe.circle_x.value), parseFloat(frmSafe.circle_y.value), parseFloat(frmSafe.circle_z.value)]
 	}
 	if (command == "rectangle"){
-		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value)]
-		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value)]
+		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value), 0]
+		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value), 0]
 	}
 
-	console.log(points)
 	point_list = []
 	
 	for (let index = 0; index < points.length; index++) {
 		// const element = array[index];
 		// let point = new ROSLIB.Message ({
-		points = {
+		point = {
 			x: points[index][0],
 			y: points[index][1],
 			z: points[index][2]
 		};
 		// console.log(point)
-		point_list.push(points)
-		
+		point_list.push(point)
 	}
 
+	console.log(point_list)
 	// console.log(point_list)
 	pubMarkerState(command, point_list, length, radius);
-
 });
 
 var point_template = []
