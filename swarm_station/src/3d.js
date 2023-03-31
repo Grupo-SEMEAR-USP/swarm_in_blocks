@@ -43,20 +43,27 @@ var btnSalvar = document.querySelector("#ok")
 btnSalvar.addEventListener("click", function(event){
 	event.preventDefault();
 
+	var length = 0.0;
+	var radius = 0.0;
+	
 	var frmSafe = document.querySelector("#seg_body");
 	var command = frmSafe.rad.value;
-	var length = frmSafe.length.length;
-	var radius = frmSafe.radius.radius;
+	radius = parseFloat(frmSafe.radius.value);
 
-	var points = [[],[]]
+	var points = []
 	
 	if (command == "circle"){
-		points[0] = [parseFloat(frmSafe.circle_x.value), parseFloat(frmSafe.circle_y.value), parseFloat(frmSafe.circle_z.value)]
+		points[0] = [parseFloat(frmSafe.circle_x.value), parseFloat(frmSafe.circle_y.value), 0]
+		length = parseFloat(frmSafe.length_c.value);
 	}
 	if (command == "rectangle"){
 		points[0] = [parseFloat(frmSafe.r1_x.value), parseFloat(frmSafe.r1_y.value), 0]
 		points[1] = [parseFloat(frmSafe.r2_x.value), parseFloat(frmSafe.r2_y.value), 0]
+		length = parseFloat(frmSafe.length_r.value);
 	}
+
+	console.log(length)
+	console.log(radius)
 
 	point_list = []
 	

@@ -21,7 +21,7 @@ import threading
 from clover import srv
 from std_srvs.srv import Trigger
 
-
+import math
 
 
 class SwarmStation:
@@ -37,8 +37,8 @@ class SwarmStation:
 
         self.isSafeZoneActive = False
 
-        self.mesh_path_base = "package://clover/clover_description/meshes/clover4/clover_body_solid.dae"
-        self.mesh_path = "package://clover/clover_description/meshes/clover4/clover_guards_transparent.dae"
+        self.mesh_path_base = "package://swarm_station/meshes/clover4/clover_body_solid.dae"
+        self.mesh_path = "package://swarm_station/meshes/clover4/clover_guards_transparent.dae"
 
         self.landServices = []
         self.ledServices = []
@@ -94,7 +94,7 @@ class SwarmStation:
             pointC = data.points[1]
 
             # height = pointA.z
-            height = 8
+            height = data.length
             pointB.x, pointB.y, pointB.z = pointA.x, pointC.y, 0
             pointD.x, pointD.y, pointD.z = pointC.x, pointA.y, 0
 
@@ -159,6 +159,75 @@ class SwarmStation:
 
             except Exception as err:
                 rospy.logerr(err)
+
+        elif data.command == 'circle':
+            rospy.loginfo('Creating cirlce safe zone markers on request')
+            self.isSafeZoneActive = True
+            # Publihsing safe zone markers based on swarm station request  
+            pointA = Point()
+            # pointB = Point()
+            # pointC = Point()
+            # pointD = Point()
+
+            # pointA.x, pointA.y, pointA.z = -6.5, -6.4, 0
+            # pointC.x, pointC.y, pointC.z = 7.5, 8.4, 0
+            pointA = data.points[0]
+            radius = data.radius
+            # pointC = data.points[1]
+
+            height = data.length
+            # height = 8
+            # pointB.x, pointB.y, pointB.z = pointA.x, pointC.y, 0
+            # pointD.x, pointD.y, pointD.z = pointC.x, pointA.y, 0
+
+            
+            point_list = []
+            i=0
+            while i <= height:
+                ang = 0
+                while ang <= 360:
+                    a = Point()
+
+                    x = pointA.x + radius * math.cos(math.radians(ang))
+                    y = pointA.y + radius * math.sin(math.radians(ang))
+                    z = i
+
+                    a.x = x
+                    a.y = y
+                    a.z = z
+                    point_list.append(a)
+
+                    ang += 5
+                i += 0.8
+
+            color = [255, 0, 255]
+            
+            type = 'line'
+            frame = '/map'
+            
+            pose = Pose()
+            pose.position.x = 0
+            pose.position.y = 0
+            pose.position.z = 0
+            pose.orientation.x = 0
+            pose.orientation.y = 0
+            pose.orientation.z = 0
+            pose.orientation.w = 0
+
+            scale = [4,4,4]
+
+            try:    
+                rospy.loginfo('Creating circle line marker')
+                self.create_marker(frame=frame, type=type, pose=pose, scale=scale, color=color, lifetime=0, action=0, vertices=point_list)
+                rospy.loginfo('Circle marker line created')
+
+                print(self.safe_marker_array)
+
+                self.safeMarkerPublisher.publish(self.safe_marker_array)
+
+            except Exception as err:
+                rospy.logerr(err)
+    
                 
         elif data.command == 'land_all':
             threads = list()
