@@ -1,3 +1,4 @@
+from importlib.resources import path
 import rospy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,6 +6,7 @@ import sys
 import os
 import traceback
 import logging
+import formation3D as f3D
 
 sys.path.insert(0, os.path.dirname(__file__))
 import transform
@@ -229,6 +231,7 @@ Alphabet_dictionary = {
     "SWARM_S": SWARM_S
 }
 
+
 def Letter_Verification(letter, N):
     letter_sizes = eval(letter+'_size')
     print(f"S - Simple type for {letter} (Need {letter_sizes[0]} clovers)")
@@ -279,9 +282,35 @@ def Word(word, N):
     word_coord = np.vstack((word_list_2))
     return word_coord
 
+def Word_open3d(word, N):
+    i = 0
+    list_str = list(word.upper())
+    path_list = []
+    word_list = []
+    word_list_2 = []
+        
+    for i in range(len(list_str)):
+        if(len(list_str)>1):
+            list_N = N-int((N/len(list_str))*(len(list_str)-1))
+           
+        else:  
+            list_N = N
+
+        path_list.append(f"/home/eduardo/catkin_ws/src/swarm_in_blocks/swarm_in_blocks/src/stl_letters/{list_str[i]}.stl")
+        coord, mesh, pcd = f3D.formation3DFromMesh(path_list[i], list_N)
+        word_list.append(coord)
+    
+    for index in range(len(word_list)):
+            word_list_2.append(transform.translateFormation(
+                word_list[index], i, 0, 0))
+            i += 20
+
+    word_coord = np.vstack((word_list_2))
+    return word_coord
 
 if __name__ == "__main__":
     coord = np.empty((0, 4))
     letter_word = input(f"Please, enter cont word: ")
-    coord = Word(letter_word,90)
+    #Word_open3d(letter_word, 20)
+    coord = Word_open3d(letter_word, 70)
     plot_letter_preview(coord)

@@ -88,6 +88,11 @@ class SingleClover:
                 break
             rospy.sleep(0.2)
 
+        # POSSIVEL SOLUÇAO:
+        # SWARMCHECKER VERIFICA LISTA DE CLOVERS QUE AINDA ESTAO NO CURO DE SUAS TRAJETORIAS:
+        # ENQUANTO O NAVIGATEWAIT NAO ACABAR SEU LOOP, TER UM PARAMETRO / TOPICO QUE INDICA ISSO
+        # SWARMCHECKER: MENSAGEM A MAIS:  uint32[] on_trajectory 
+
 class SwarmInternalCollisionAvoidance():
     def __init__(self):
         # minimum secure distance (meters)
@@ -206,15 +211,23 @@ class SwarmInternalCollisionAvoidance():
         # traj_vec_i = [telem_target_i.x, telem_target_i.y, telem_target_i.z]
         # traj_vec_j = [telem_target_j.x, telem_target_j.y, telem_target_j.z]
         
+
+
+        # retorna coordenadas do navigate targest para o clover atual
+        # TODO -> COMENTAR - ESTUDAR REFERENCIAS DESSES METODOS DO TF
+        # WARNING - BASE LINK MAY NOT BE WELL PLACED - use body_id instead?
+
         trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
         trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
         
         traj_vec_i = [trans_target_i.transform.translation.x, trans_target_i.transform.translation.y, trans_target_i.transform.translation.z]
         traj_vec_j = [trans_target_j.transform.translation.x, trans_target_j.transform.translation.y, trans_target_j.transform.translation.z]
 
+        # ANGELO PELO ARCCOS
         angle = np.arccos(np.clip(np.dot(traj_vec_i, traj_vec_j)/np.linalg.norm(traj_vec_i)/np.linalg.norm(traj_vec_j), -1.0, 1.0))
         
-        if angle*np.pi <= 20 or angle >= 160:
+        # RETORNA TRUE SE VETORES DAS TRAJETORIAS FOREM PARALELOS
+        if np.degrees(angle) <= 20 or np.degrees(angle) >= 160:
             is_parallel = True
         else:
             is_parallel = False
@@ -222,9 +235,11 @@ class SwarmInternalCollisionAvoidance():
         return is_parallel
 
     def __analyseDistance(self, poses, threshold):
-        # distance matrix n,n 
+        # distance matrix n,n -> DISTANCIA DE CADA CLOVER 2 A 2
         distance_mtx = np.empty((poses.shape[0],poses.shape[0]))
         distance_mtx[:] = np.nan
+
+        # LISTA QUE ARMAZENA IDS DE CLOVERS PROXIMOS ( <= THRESHOLD DEFINIDO) E IS_PARALLEL
         near_ids = []
 
         # fill distance mtx and analyse distance if is lower than the thresh
@@ -244,6 +259,11 @@ class SwarmInternalCollisionAvoidance():
                         else:
                             is_parallel = self.__checkParalellTrajectory(i, j)
                             near_ids.append((i,j, is_parallel))
+
+                            # if not (clover.on_trajectory(i) in swarm.on_trajectory_clovers):
+                            #     is_stopped = False
+                            #     near_ids.append(is_stopped)
+                                
         return distance_mtx, near_ids
     
     def __stopClover(self, clover_id):
@@ -256,6 +276,8 @@ class SwarmInternalCollisionAvoidance():
         y = clover.pose[1]
         z = clover.pose[2]
         rospy.loginfo(f"Semaphore red for {clover_id}. Stopping clover{clover_id} in target ({x},{y},{z}, frame_id='map') until another clover pass.")
+        
+        # how would this stop the drone in case where it has already a navigate_wait execution?
         clover.navigateWait(x=x, y=y, z=z, yaw=float('nan'), speed=2.0, frame_id='map', auto_arm=False, tolerance=0.2)
 
     def __goToLastTarget(self, clover_id, traj_vec):
@@ -277,6 +299,8 @@ class SwarmInternalCollisionAvoidance():
         
 
     def __handleNonParallelClovers(self,  clover_id_i, clover_id_j):
+        rospy.loginfo(f"Clovers on a non parallel trajectory.")
+
         trans_target_i = self.tfBuffer.lookup_transform('map', f'navigate_target{clover_id_i}', rospy.Time())
         trans_target_j = self.tfBuffer.lookup_transform('map', f'navigate_target{clover_id_j}', rospy.Time())
 
@@ -296,10 +320,11 @@ class SwarmInternalCollisionAvoidance():
         if clover_id_i > clover_id_j:
             stopped_id = clover_id_i
             self.__goToLastTarget(clover_id_j, traj_vec_j)
+
         else:
             stopped_id = clover_id_j
             self.__goToLastTarget(clover_id_i, traj_vec_i)
-        
+
         while not rospy.is_shutdown():
             clover_i = self.swarm[clover_id_i]
             clover_j = self.swarm[clover_id_j]
@@ -309,15 +334,9 @@ class SwarmInternalCollisionAvoidance():
 
             dist = self.__getDistance(pose_i, pose_j)
 
-            # trans_target_i = self.tfBuffer.lookup_transform(f'base_link{clover_id_i}', f'navigate_target{clover_id_i}', rospy.Time())
-            # trans_target_j = self.tfBuffer.lookup_transform(f'base_link{clover_id_j}', f'navigate_target{clover_id_j}', rospy.Time())
-
-            # if distance is more than 1 times the clover distance thresh
-            # go ahead and continue the last trajectory
-            if dist > 1*self.dist_threshold:
+            if dist > 2.5*self.dist_threshold:
                 break
         
-        # navigate to last target
         if stopped_id == clover_id_i:
             self.__goToLastTarget(clover_id_i, traj_vec_i)
         else:
@@ -331,15 +350,24 @@ class SwarmInternalCollisionAvoidance():
         
         rospy.loginfo(f"Handling clover{clover_id_i} and clover{clover_id_j} due to possible collision with parallel trajectories.")
         self.handling_ids.append((clover_id_i, clover_id_j))
+        
+        # ANTES DE LIDAR COM TRAJETORIA PARALELA, DEVE-SE LIDAR COM CASOS EM QUE O DRONE TERMINOU A SUA TRAJETORIA
+        # E ESTA ATUALEMNTE PARADO
+        # IF IS_STOPPED :
+            # FUNÇAO
+        #ELSE: 
+            # CONDIÇOES ABAIXO (PARALELO)
+
         if is_parallel:
-            self.__handleNonParallelClovers(clover_id_i, clover_id_j)
+            self.__handleParallelClovers(clover_id_i, clover_id_j)
         else:
             self.__handleNonParallelClovers(clover_id_i, clover_id_j)
         rospy.loginfo(f"Finished handling clover{clover_id_i} and clover{clover_id_j}. Minimum distance achievied: X")
         self.handling_ids.remove((clover_id_i, clover_id_j))
 
     def avoidCollision(self):
-        
+
+        # looping principal
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             poses = []
@@ -347,9 +375,11 @@ class SwarmInternalCollisionAvoidance():
                 poses.append(clover.pose)
             poses = np.array(poses)
 
+            # MATRIX DE DISTANCIA 2 A 2 ; NEAR_IDS = LISTA DE CLOVERS PROXIMOS (THRESHOLD) E IS_PARALLEL
             distance_mtx, near_ids = self.__analyseDistance(poses, self.dist_threshold)
             
             threads = []
+            # LIDA COM POSSIVEIS COLISOES POR TRAJETORIAS PARALELAS
             for clover_id_i, clover_id_j, is_parallel in near_ids:
                 
                 if ((clover_id_i, clover_id_j) in self.handling_ids) or ((clover_id_j, clover_id_i) in self.handling_ids):

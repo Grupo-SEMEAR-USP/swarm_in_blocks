@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- rosjslib -->
+    <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+    <!-- ros3djs -->
+    <!-- <script src="http://static.robotwebtools.org/threejs/current/three.min.js"></script>
+    <script src="http://static.robotwebtools.org/threejs/current/ColladaLoader.min.js"></script>
+    <script src="http://static.robotwebtools.org/ColladaAnimationCompress/current/ColladaLoader2.min.js"></script>
+    <script src="http://static.robotwebtools.org/threejs/current/STLLoader.min.js"></script>
+    <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script src="http://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>  -->
+    <title>ROS</title>
+</head>
+<body onload="init()">
+    <h1 id="h1">Plotando urdf</h1>
+    <p id="paragraph"></p>
+
+    <div id="urdf"></div>
+
+    <select id="dropdown" name = "teste" onchange = "javascript:reload_subscriber(this);"
+class="select-center">
+                <option value = "NaN"> Select a valid id</option>
+               
+                
+
+
+</select>
+
+
+</body>
+<script src="ros_topics.js"></script>
+<script src="services.js"></script>
+<script src="atributes.js"></script>
+
+<!-- <script src="ros_3d.js"></script> -->
+
+</html>

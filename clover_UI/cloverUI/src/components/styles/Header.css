@@ -1,0 +1,35 @@
+#Header{
+    display: flex;
+    padding: 2em 2em 2em 2em;
+    justify-content: space-between;
+}
+
+#he_2{
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    font-size: 18px;
+}
+
+#he_links{
+    color: #FFFFFF;
+    text-decoration: none;
+    padding-left: 50px;
+}
+
+#he_links:hover{
+    color: #571B97;
+    transition: 0.3s;
+}
+
+#h_purple_gradient {
+    position: absolute;
+    width: 200px;
+    height: 500px;
+    background: linear-gradient(90deg, #9C1DE8 0%, #571B97 100%);
+    filter: blur(500px);
+    border-radius: 200px;
+    transform: rotate(90deg);
+    margin-left: -23%;
+    margin-top: -5%;
+}
+

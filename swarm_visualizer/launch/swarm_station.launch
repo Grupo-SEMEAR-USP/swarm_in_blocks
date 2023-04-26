@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="sep" default="false"/>
+    
+    <node pkg="swarm_visualizer" type="frames_transform.py" name="transform_frames" />
+    <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
+
+<!-- launch rosbridge -->
+    <group if="$(arg sep)">
+        <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+            <arg name="port" value="9090"/>
+        </include>
+    </group>
+
+    <node pkg="swarm_visualizer" type="swarm_station.py" name="swarm_station" />
+
+</launch>

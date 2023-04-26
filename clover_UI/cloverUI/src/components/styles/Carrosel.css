@@ -1,0 +1,60 @@
+#Carrosel{
+    padding: 10em 6em 6em 6em;
+}
+
+#card_img{
+    max-width: 250px;
+}
+
+#card_lin{
+    background: linear-gradient(90.02deg, #571B97 33.97%, rgba(30, 30, 30, 0) 90.74%);
+    width: 100px;
+    height: 3px;
+}
+
+#Cards{
+    width: 250px;
+    height: 400px;
+    display: inline-block;
+    padding: 12px 12px 12px 12px;
+    background: linear-gradient(156.38deg, #4F4F4F -59.4%, #14101D 85.92%), rgba(196, 196, 196, 0.4);
+    border-radius: 20px;
+}
+
+#card_title{
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: left;
+    padding: 40px 0px 10px 0px;
+}
+
+#card_subtitle{
+    color: rgba(255, 255, 255, 0.7);;
+    font-weight: 400;
+    font-size: 14px;
+    padding-top: 30px;
+}
+
+#ca_green_gradient {
+    position: absolute;
+    width: 500px;
+    height: 700px;
+    background: linear-gradient(90deg, rgba(22, 185, 120, 0.5) 0%, rgba(18, 226, 164, 0.5) 100%);
+    filter: blur(650px);
+    border-radius: 200px;
+    transform: rotate(90deg);
+    margin-top: 25%;
+    margin-left: 95%;
+}
+
+#ca_purple_gradient {
+    position: absolute;
+    width: 680px;
+    height: 600px;
+    background: linear-gradient(90deg, #9C1DE8 0%, #571B97 100%);
+    filter: blur(450px);
+    border-radius: 200px;
+    transform: rotate(90deg);
+    margin-left: -55%;
+}

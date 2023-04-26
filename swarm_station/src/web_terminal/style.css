@@ -1,0 +1,20 @@
+/* style.css */
+
+.webTerminal {
+  height: 432px;
+  width: 750px;
+  margin: auto;
+}
+
+#open-terminal-button {
+  display: block;
+  margin: 40px auto;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>FPV web</title>
+        <link rel = "icon" href ="/assets/img/logo_2023_s_preto.ico" type = "image/x-icon">
+        <link rel="stylesheet" href="./font_awesome/css/all.min.css">
+        <link rel="stylesheet" href="./style.css">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://static.robotwebtools.org/threejs/current/three.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/threejs/current/STLLoader.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/0.18.0/ColladaLoader.js"></script>
+        <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+        <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+        <script src="js/eventemitter2.min.js"></script>
+        <script src="js/roslib.min.js"></script>
+    </head>
+    <body >
+        <!-- TOPBAR -->
+        <nav id="topbar">
+            <a href="/swarm_clover_blocks/www/index.html" target="_blank">Swarm in blocks</a>
+            <a href="/swarm_station/src/ground_station.html" target="_blank">Swarm Station</a>
+        </nav>
+        <!-- BARS -->
+        <div id="bars">
+            <!-- LEFT BAR -->
+            <nav id="leftbar" class="fpv__instructions">
+                <div class="fpv__instructions_title"> Basic Commands </div>
+                <!-- WSAD -->
+                <div class="fpv__box wsad_box">
+                    <div class="fpv__header">
+                        <div> Up </div> <div> Down </div> <div> Yaw + </div> <div> Yaw - </div>
+                    </div>
+                    <div class="fpv__keys wsad__keys">
+                        <div> W </div><div> S </div><div> A </div><div> D </div>
+                    </div>
+                    <div class="fpv__divider"></div>
+                    <div class="fpv__content">
+                        <img src="./../assets/wsad3.png" alt="WSAD Commands" class="wsad_content"></img>
+                    </div>
+                </div>
+                <!-- ARROWS -->
+                <div class="fpv__box arrows_box">
+                <div class="fpv__header">
+                        <div> Forth </div> <div> Back </div> <div> Right </div> <div> Left </div>
+                    </div>
+                    <div class="fpv__keys arrows__keys">
+                        <div style="transform: rotate(-90deg);"> > </div>
+                        <div style="transform: rotate(90deg);"> > </div>
+                        <div> > </div>
+                        <div style="transform: rotate(180deg);"> > </div>
+                    </div>
+                    <div class="fpv__divider"></div>
+                    <div class="fpv__content">
+                        <img src="./../assets/fpv__arrows.png" alt="Arrows Commands" class="wsad_content"></img>
+                    </div>
+            </nav>
+            <!-- RIGHT BAR -->
+            <nav id="rightbar">
+                <div id="clover">
+                    <div id="topics">
+                        <div id="head">Battery<div id="battery">-</div></div>
+                        <div id="head">Connected<div id="state">-</div></div>
+                        <div id="head">CPU Data<div id="cpu">-</div></div>
+                    </div>
+                    <div id="topics">
+                        <div id="head">Telemetry</div>
+                    </div>
+                    <div id="topics2">
+                        <div id="head2"><div>x</div><div>y</div><div>z</div></div>
+                        <div id="b2"><div id="telemetry_x">-</div><div id="telemetry_y">-</div><div id="telemetry_z">-</div></div>
+                    </div>
+                </div>
+                <div id="swarm">
+                    <div>Swarm</div>
+                    <div id="topics">
+                        <div id="head">Clovers #<div>-</div></div>
+                        <div id="head">Formation<div>-</div></div>
+                    </div>
+                </div>
+            </nav>
+        <div class="fpv__streaming">
+            <!-- STREAMING -->
+            <div class="fpv__streaming_header">
+                <div class="fpv__disconnected-light" id="fpv_light"></div>
+                <div class="fpv__disconnected" id="fpv_disconnected"> Disconnected </div>
+                <select 
+                    id="streaming-dropdown"
+                    onchange = "javascript:reload_subscriber(this);"
+                    class="streaming-dropdown" 
+                    style="display:block"
+                >
+                    <option value = null>Clover ID</option>
+                </select>
+            </div>
+            <!-- proportion 640x480 -->
+            <img id="image_subscriber" class="fpv__cam" 
+            width="510" height="360" >
+            <div class="fpv__pedal">
+                <div id="pedal_feedback"> Listening to keyboard keys </div>
+                <div id="pedal_output"> Output</div>
+                <div id="pedal_listener">
+                    <img src="./../assets/mouse_rest.png" alt="mouse_rest" id="pedal" class="pedal" tabindex="0">
+                </div>
+                <!-- <div id="pedal" style="width:500px; height:100px; background-color:#494155" tabindex="0"></div> -->
+
+            </div>
+        </div>
+    </body>
+    <script src="fpv_script.js"></script>
+    <script src="fpv_key_listener.js"></script>
+    <script src="fpv_data.js"></script>
+</html>

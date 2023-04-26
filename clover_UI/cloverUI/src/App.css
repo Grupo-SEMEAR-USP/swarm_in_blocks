@@ -1,0 +1,44 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+}
+
+.text3{
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  font-size: 18px;
+  padding: 10% 0% 5% 0%;
+  line-height: 30px;
+  max-width: 650px;
+}
+
+.container{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/*-------------------------button-----------------------*/
+
+.button {
+  text-align: center;
+  background: linear-gradient(190deg, #A967DF -80%, #571B97 70%);
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 1.18em 2em 1.03em;
+  line-height: 1;
+  border-radius: 1em;
+  min-width: 8.23em;
+  font-size: 1rem;
+  border-color: #571B97;
+  font-family: "Poppins";
+}
+
+
+

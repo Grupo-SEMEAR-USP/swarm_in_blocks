@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+body{
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    background-color: #1a1a1a;
+}
+
+#bars{
+    display: flex;
+    justify-content: space-between;
+}
+
+/*---------------------Top Bar------------------------*/
+#topbar{
+    background-color: #1E1E1E;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+#topbar a{
+    color: #FFFFFF;
+    float: right;
+    text-decoration: none;
+    display: block;
+    padding: 14px 16px;
+    font-size: 18px;
+    font-weight: 500;
+}
+#topbar a:hover{
+    color: #571B97;
+    transition: 0.3s;
+}
+
+/*---------------------Right Bar------------------------*/
+
+#clover{
+    padding: 10px 0px 10px 0px;
+    position: relative;
+    top: 70px;
+    width: 300px;
+    background-color: #242424;
+    border-radius: 10px;
+    margin-right: 20px;
+
+    margin-top: 100px;
+}
+
+#swarm{
+    padding: 10px 0px 10px 0px;
+    position: relative;
+    top: 80px;
+    text-align: center;
+    color: #FFFFFF;
+    width: 300px;
+    background-color: #242424;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+
+#topics{
+    background-color: #454545;
+    display: block;
+    padding: 0px 5px 0px 5px;
+    margin: 10px 10px 0px 10px;
+    text-align: center;
+}
+
+#head{
+    justify-content: space-between;
+    display: flex;
+    font-size: 14px;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+#head div{
+    color: black;
+    padding: 0px 20px 0px 20px;
+}
+
+#topics2{
+    display: block;
+    color: #FFFFFF;
+}
+
+#head2{
+    justify-content: space-between;
+    display: flex;
+    padding: 0px 50px 5px 50px;
+}
+
+#b2{
+    justify-content: space-between;
+    display: flex;
+    padding: 0px 40px 0px 40px;
+    min-width: 40px;
+}
+
+/*---------------------Left Bar------------------------*/
+
+.fpv__instructions {
+    font-size: 13px;
+    padding: 0px 0px 10px 0px;
+    position: relative;
+    margin-left: 20px;
+    top: 70px;
+    width: 300px;
+    height: 355px;
+    background-color: #242424;
+    border-radius: 10px;
+    
+    margin-top: 100px;    
+}
+
+.fpv__instructions_title {
+    font-size: 16px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.fpv__box {
+    box-sizing: border-box;
+    position: absolute;
+    border: 1px solid #454545;
+}
+
+.wsad_box {
+    /* title = 10 + 25 + 10 */
+    margin-top: 45px; 
+    left: 3%;
+    right: 3%;
+    top: 0%;
+    bottom: 49%; /* 100% hard coded */
+
+}
+
+.arrows_box {
+    left: 3%;
+    right: 3%;
+    top: 55%;
+    bottom: 4%;
+}
+
+.fpv__header {
+    background-color: #454545;
+    display: block;
+    text-align: center;
+    color: #FFFFFF;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 4px 0px 4px 0px;
+}
+
+
+.fpv__keys {
+    display: block;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 8px 0px 8px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.wsad__keys {
+    font-size: 15px;
+}
+
+.arrows__keys {
+    font-size: 18px;
+}
+
+.fpv__divider {
+    border: 1px solid #454545;
+}
+
+.fpv__content {
+    margin-top: 5px;
+    text-align: center;
+    max-height: 100%;
+    width: auto;
+}
+
+/*---------------------Center Streaming------------------------*/
+
+.fpv__streaming {
+    /* center on the center (horizontal and vertical) of the screen */
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fpv__streaming_header {
+    background-color: #454545;
+    display: block;
+    color: #FFFFFF;
+    display: grid;
+    /* division proporiton: 9 to 2 */
+    grid-template-columns: 1fr 18fr 4fr; 
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.fpv__disconnected-light {
+    animation: blinker 0.6s linear infinite;
+    margin-top: 30%;
+    margin-left: 35%;
+    left:0%;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+	background-color: rgb(255, 0, 0);
+}
+
+.fpv__disconnected {
+    font-size: 13px;
+    padding: 2px 0px 2px 0px;
+    left: 5%;
+    color: red
+}
+
+
+.fpv__connected { 
+    font-size: 13px;
+    padding: 2px 0px 2px 0px;
+    left: 5%;
+    color: green
+}
+
+.fpv__connected-light {
+    margin-top: 30%;
+    margin-left: 35%;
+    left:0%;
+    height: 7px;
+	width: 7px;
+	border-radius: 50%;
+    background-color: green;
+}
+
+
+@keyframes blinker {
+	50% {
+	opacity: 0;
+	}
+}
+
+.streaming-dropdown {
+    display: block;
+    background-color: #242424;
+    border-radius: 10px 10px 0px 0px;
+    width: 100%;
+    height: 100%;
+    color: #FFFFFF;
+    text-align: center;
+    /* no stroke */
+    border: none;
+    /* align in the center verticaly */
+    align-items: center;
+}
+
+.fpv__pedal {
+    margin-top: 10px;
+    text-align: center;
+    border: none;
+}
+
+#pedal {
+    border: none;
+    transition: filter 0.2s ease-in-out;
+}
+
+#pedal:hover {
+    cursor: pointer;
+}
+
+#pedal:focus,
+#pedal.clicked:focus {
+    border: none;
+    border-color: transparent;
+    outline: none;
+}
+
+#pedal.clicked {
+    border: none;
+    filter: brightness(130%) sepia(100%) hue-rotate(200deg);
+}
+
+#pedal_feedback {
+    color: transparent;
+}
+
+#pedal_feedback.clicked {
+    opacity: 0.5;
+    color: #ffffff;
+}
+
+#pedal_output {
+    color: #FFFFFF
+}
+
+
+/* .pedal:active {
+    filter: brightness(300%);
+} */
+
+/* BREAKPOINTS */
+@media screen and (max-width: 1200px) {
+    #leftbar {
+        display: none;
+    }
+
+    #rightbar {
+        position: absolute;
+        left: 70%;
+    }
+    .fpv__streaming {
+        position: absolute;
+        top: 55%;
+        left: 30%;
+        transform: translate(-50%, -50%);    
+    }
+}
+@media screen and (max-width: 768px) {
+    #rightbar {
+        display: none;
+    }
+
+    .fpv__streaming {
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);    
+    }
+}
