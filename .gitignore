@@ -129,7 +129,9 @@ dmypy.json
 .pyre/
 
 # vscode
-.vscode
+.vscode/
+
+.junk/
 
 # node modules
 node_modules/
