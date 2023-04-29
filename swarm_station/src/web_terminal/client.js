@@ -164,7 +164,7 @@ class webTerminal {
                 for (let i = 0; i < msg.length; i++) {
                     asciiMsg.push(msg.charCodeAt(i));
                 }
-                // console.log("Botão pressed");
+                // console.log("Button pressed");
                 socket.send(asciiMsg);   
             }else{
                 console.log("maximum number of terminals exceeded");
