@@ -1,17 +1,7 @@
-// import FitAddon from '/node_modules/xterm-addon-fit/lib/xterm-addon-fit.js';
-// Create a conection between the frontend and backend 
-
-// let divs = JSON.parse(localStorage.getItem('ids')) || [];
 
 class webTerminal {
 
     constructor(terminalDiv_id) {
-
-        // TerminalDiv_id ->1,2,3...
-        // divs.push(terminalDiv_id);
-        // localStorage.setItem('ids', JSON.stringify(divs));
-        // let ids = JSON.parse(localStorage.getItem('ids'));
-        // console.log("Divs: ", ids);
         
         let server = "ws://localhost:606" + terminalDiv_id
 
@@ -162,13 +152,6 @@ class webTerminal {
 
     checkButton(socket){
 
-        // const msg = "New Terminal";
-        // const asciiMsg = [];
-
-        // for (let i = 0; i < msg.length; i++) {
-        //     asciiMsg.push(msg.charCodeAt(i));
-        // }
-        // console.log(asciiMsg);
         let counter = 1;
 
         this.openTerminalButton.addEventListener("click", function() {
@@ -181,7 +164,7 @@ class webTerminal {
                 for (let i = 0; i < msg.length; i++) {
                     asciiMsg.push(msg.charCodeAt(i));
                 }
-                // console.log("Botão apertado");
+                // console.log("Botão pressed");
                 socket.send(asciiMsg);   
             }else{
                 console.log("maximum number of terminals exceeded");
