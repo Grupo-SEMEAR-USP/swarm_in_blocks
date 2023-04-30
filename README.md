@@ -189,14 +189,14 @@ We did this by separating each drone topics / nodes / services with namespaces. 
 
 In other wods, instead of just `simple_offboard` node for a single drone, we'd now have `/clover0/simple_offboard`, `/clover1/simple_offboard` and so on.
 
-To launch it, you need to stop clover's default daemon, and then launch the `realClover.launch` file passing the `ID` arguement as a parameter:
+To launch it, you need to first stop clover's default daemon, and then connect all raspberrys to the same network. After that, you should connect all their `roscore` to the asm launch the `realClover.launch` file passing the `ID` arguement as a parameter:
 
     sudo systemctl stop clover
     roslaunch rasp_pkg realClover.launch ID:=0
  
 
 <p align="center">
-    <img width="700" src="assets/swarm_real/swarm.gif"/>
+    <img width="500" src="assets/swarm_real/swarm.gif"/>
 </p>
 
 > **Note:** We are aware that in the video the calibration of the drone control is not ideal, however, the objective of this test was really to validate the operation of the swarm in a real environment (which was actually done).
