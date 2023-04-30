@@ -36,7 +36,6 @@
 ---
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
-- [Motivation](#motivation)
 - [Introduction](#intro)
 - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
@@ -44,7 +43,7 @@
 - [Conclusion](#conclusion)
 ---
 
-## Motivation[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#motivation)
+## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#intro)
 
 
 Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
@@ -100,9 +99,8 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
+
 ## Getting started [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#getting_started)
-
-
 
 Our platform was made to be extremely intuitive and easy to use. To start (after completing the installation we suggested in our gitbook), you can run the command: 
 
