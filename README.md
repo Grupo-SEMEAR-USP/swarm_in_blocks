@@ -25,10 +25,10 @@
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Introduction](#Introduction)
-- [Getting started](#getting_started)
-- [Usage modes](#usage-modes)
-- [New Swarm Features](#new-features)
-- [Conclusion](#conclusion) -->
+- [Getting started](#Getting_started)
+- [Usage modes](#Usage-modes)
+- [New Swarm Features](#New-Swarm-Features)
+- [Conclusion](#Conclusion)
 ---
 
 ## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Introduction)
@@ -101,7 +101,7 @@ After that, you can open your browser and access our homepage by typing `localho
 
 ---
 
-## Usage modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Usage-modes)
+## Usage modes[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Usage-modes)
 
 
 The Swarm in Blocks can be programmed either with the blocks interface or directly in Python and we developed three main launch modes, each one focused on a different application of the project, they are:
@@ -115,7 +115,7 @@ The Swarm in Blocks can be programmed either with the blocks interface or direct
 
 ---
 
-## New Swarm Features [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#new-swarm-features)
+## New Swarm Features [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#New-Swarm-Features)
 
 
 With our vision of solving the problems that most plague the deployment of a real swarm, we have developed several features (and even integrated platforms), below we will list our main developments:
@@ -124,7 +124,7 @@ With our vision of solving the problems that most plague the deployment of a rea
 
 Como ano passado, uma das nossas preocupações era a facildiade do usuário leigo em transitar pela plataforma, por isso, esse ano decidimos reformar nosa Homepage, abrigando as principais plataformas e funcionalidades do nosso projeto.
 
-Like last year, we really wanted to make it easier to the user to 
+Like last year, we really wanted to make it easier for the user to go through our platform. That's why this year we decided to restructure our Homepage, gathering our main features and functionalities.
 
 <p align="center">
     <img width="700" src="assets/homepage/homepage.gif"/>
@@ -189,7 +189,7 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 
 ---
 
-## Conclusion (#conclusion)
+## Conclusion [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Conclusion)
 
 
 Engineering and robotics challenges have always been the main driver of Team Athena, from which we seek to impact society through innovation. Last year, during CopterHack 2022, there was no lack of challenges of this type, and in them we grew and exceeded our limits, all to deliver the best possible project: Swarm in Blocks. All the motivation to facilitate a task as complex as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope that it delights all our users.
