@@ -16,7 +16,7 @@
 ## Project Status[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#project-status)
 <table class="no-border">
   <tr>
-    <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/cmake.yml" alt="CMake"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/cmake.yml/badge.svg" alt="CMake build"/></a></td>
+    <td><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/c-cpp.yml" alt="C/C++"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/c-cpp.yml/badge.svg" alt="C/C++ Make"/></a></td>
     <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/msbuild.yml" alt="MS Build"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/msbuild.yml/badge.svg" alt="MS Build"/></a></td>
     <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml" alt="CodeQL"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"/></a></td>
@@ -37,8 +37,8 @@
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Motivation](#motivation)
-<!-- - [Introduction](#intro)
 - [Getting started](#getting_started)
+<!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
 - [Conclusion](#conclusion) -->
@@ -100,7 +100,7 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-## Getting started [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#getting_started)
+## Getting started[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#getting_started)
 
 
 
