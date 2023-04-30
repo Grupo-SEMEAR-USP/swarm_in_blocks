@@ -1,3 +1,8 @@
+<h1 align="center" style="display: block; font-size: 2.5em; font-weight: bold; margin-block-start: 1em; margin-block-end: 1em;">
+<a name="logo" href="https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/introduction/swarm-in-blocks"><img align="center" src="assets/header/capa_swarm_23.png" alt="Swarm in Blocks" style="width:100%;height:100%"/></a>
+  <br /><br /><strong>Swarm in Blocks</strong>
+</h1>
+
 
 [![Latest release](https://img.shields.io/github/v/release/aregtech/areg-sdk?label=Latest%20release&style=social)](https://github.com/aregtech/areg-sdk/releases/tag/v1.0.0)
 [![Stars](https://img.shields.io/github/stars/aregtech/areg-sdk?style=social)](https://github.com/aregtech/areg-sdk/stargazers)
@@ -32,7 +37,8 @@ In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our b
     <img width="600" src="assets/intro/clovers_leds.gif" />
 </p>
 
-### Swarm in Blocks 2022 
+### Swarm in Blocks 2022
+
 
 
 Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle. Each script represents a functionality, for example, conditional structures, loops, or functions that receive parameters and return an instruction to the swarm. 
