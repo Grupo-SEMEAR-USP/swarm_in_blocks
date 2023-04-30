@@ -4,28 +4,16 @@
 </h1>
 
 
-[![Latest release](https://img.shields.io/github/v/release/aregtech/areg-sdk?label=Latest%20release&style=social)](https://github.com/aregtech/areg-sdk/releases/tag/v1.0.0)
-[![Stars](https://img.shields.io/github/stars/aregtech/areg-sdk?style=social)](https://github.com/aregtech/areg-sdk/stargazers)
-[![Fork](https://img.shields.io/github/forks/aregtech/areg-sdk?style=social)](https://github.com/aregtech/areg-sdk/network/members)
-[![Watchers](https://img.shields.io/github/watchers/aregtech/areg-sdk?style=social)](https://github.com/aregtech/areg-sdk/watchers)
-
----
-
-
 <!-- markdownlint-disable -->
 ## Project Status[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#project-status)
 <table class="no-border">
   <tr>
     <td><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
-    <td></td>
+    <td><img alt="Ubuntu package" src="https://img.shields.io/ubuntu/v/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml" alt="CodeQL"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"/></a></td>
   </tr>  
-  <tr>
-    <td><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
-    <td><img src="https://img.shields.io/badge/OS-linux%20%7C%20windows-blue??style=flat&logo=Linux&logoColor=b0c0c0&labelColor=363D44" alt="Operating systems"/></td>
-    <td colspan="2"><img src="https://img.shields.io/badge/CPU-x86%20%7C%20x86__64%20%7C%20arm%20%7C%20aarch64-blue?style=flat&logo=amd&logoColor=b0c0c0&labelColor=363D44" alt="CPU Architect"/></td>
-  </tr>
+
 </table>
 
 ## Final Video ![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)
@@ -36,15 +24,15 @@
 ---
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
-- [Intro](#intro)
-- [Getting started](#getting_started)
+- [Introduction](#intro)
+- [Getting started](#get_start)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
 - [Conclusion](#conclusion) -->
 ---
 
-## Intro[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#intro)
+## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#intro)
 
 
 Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
@@ -100,7 +88,7 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-## Getting started[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#getting_started)
+## Getting started[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#get_start)
 
 
 
