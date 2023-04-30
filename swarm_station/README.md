@@ -17,31 +17,31 @@ If you correctly configured [apache](https://httpd.apache.org/) to host our plat
 
 ## Motivation
 
-If flying a drone alone is no longer easy, imagine a swarm all at once. The Swarm Station, seeking ease and greater usability for the user, is a completely integrated station that brings together several processes and functionalities that previously resulted in numerous terminals and screens in one place, all of this aimed not at a single drone, but at a swarm of them.
+If flying a drone alone is no longer easy, imagine a swarm all at once. The Swarm Station, seeking ease and greater usability for the user, is a **completely integrated station** that brings together several processes and functionalities that previously resulted in numerous terminals and screens in one place, all of this aimed not at a single drone, but at a swarm of them.
 
 <img src="img1_ss.png" width=700>
 
 ## Main information
-For a quick view of the most essential information of each drone there is an `information center` that brings the data of each drone in addition to the existence of a `land all` button for emergency cases so that all drones land.
+For a quick view of the most essential information of each drone there is an **information center** that brings the data of each drone in addition to the existence of a **land all button** for emergency cases so that all drones land.
 
 <img src="img1_ss.png" width=700>
 
 In addition to this partition, we have the left bar where some additional features are present. These are:
 
-#### Drone's process
+### Drone's process
 
 In this part, the user has access to the hardware information of each clover brought from the raspberry pi of the clover in an easy and comparative way, facilitating the identification of problems. 
 
-#### Topic list
+### Topic list
 
 To avoid the need for another terminal to be opened, a feature was created that shows a list of topics currently active, through these topics it is possible to analyze the calls and procedures that are being carried out.
 
-#### Terminal web
+### Terminal web
 
 This functionality brings a true terminal within the web with the ease of being able to manipulate information directly from the web and avoid the need to divide screens, one to control the drone and another to send commands to it.
 
 In addition, it is possible to create more than one terminal simultaneously, this creation of several terminals happens in an intuitive and facilitated way so that several processes can be run at the same time.
 
-#### Safe area
+### Safe area
 
 An additional resource is the safe area that allows defining an area of ​​defined format according to the user's interest in which the drones must operate, if a drone passes through this area, it is forcibly landed immediately, ensuring even more safety and robustness to the project.
