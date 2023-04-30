@@ -36,7 +36,6 @@
 
 ## Introduction [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
----
 
 Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
 
@@ -48,15 +47,13 @@ In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our b
     <img width="600" src="assets/intro/clovers_leds.gif" />
 </p>
 
-
 ### Swarm in Blocks 2022 
 
----
 
 Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle. Each script represents a functionality, for example, conditional structures, loops, or functions that receive parameters and return an instruction to the swarm. 
 
 <p align="center">
-    <img width="500" src="assets/intro/blocks.gif" />
+    <img width="500" src="assets/intro/blocksIDE.gif" />
 </p>
 
 <p align="center">
@@ -68,9 +65,9 @@ For more information on our project from last year, see our final article in [Sw
 
 Even with the huge facilities that the block platform offers, we realized that this was just the tip of the iceberg when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of tackling the main problems in validating a Swarm in a simple and polished way.
 
+
 ### What's new
 
----
 
 As already mentioned, of the various problems that can increase the complexity of a real swarm, we decided to deal with the ones that most afflicted us and reintegrated our solutions into our central platform, building a single extremely complete and cohesive platform.
 
@@ -88,9 +85,13 @@ And many other solutions are also featured on our platform, for more information
 
 > 📖 **Acess our [Gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/background-theory/system)!**
 
-## Getting started [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
 
 ---
+
+## Getting started [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
+
+
 
 Our platform was made to be extremely intuitive and easy to use. To start (after completing the installation we suggested in our gitbook), you can run the command: 
 
@@ -98,10 +99,12 @@ Our platform was made to be extremely intuitive and easy to use. To start (after
 
 After that, you can open your browser and access our homepage by typing `localhost` in the search bar.
 
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
+
+---
 
 ## Usage - modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
----
 
 The Swarm in Blocks can be programmed either with the blocks interface or directly in Python and we developed three main launch modes, each one focused on a different application of the project, they are:
 
@@ -110,17 +113,25 @@ The Swarm in Blocks can be programmed either with the blocks interface or direct
 - *Simulation Mode:* In this mode happens the simulation indeed, starting the Gazebo, the necessary ROS nodes and some other tools. It allows applying the developed features, which will be explained ahead and see how they would behave in real life.
 - *Navigation Mode:* The last mode will support executing everything developed in real clovers so that it's possible to control a swarm with block programming. The biggest obstacle yet is the practical testing of this mode, due to the financial difficulty of acquiring a Clover swarm.
 
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
+
+---
 
 ## New Swarm Features [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
----
 
 With our vision of solving the problems that most plague the deployment of a real swarm, we have developed several features (and even integrated platforms), below we will list our main developments:
 
+### Homepage
+
+Como ano passado, uma das nossas preocupações era a facildiade do usuário leigo em transitar pela plataforma, por isso, esse ano decidimos reformar nosa Homepage, abrigando as principais plataformas e funcionalidades do nosso projeto.
+
+<p align="center">
+    <img width="700" src="assets/homepage/homepage.gif"/>
+</p>
 
 ### Swarm Station
 
----
 
 The main feature from our platform is the *Swarm Station*, which is a **3d Web Visualizer** that shows in real time all the necessary information regarding the drones state, such as real time positioning and visualization, which clover is connected, the topics available and a lot more. Also, you can define a safe area to ensure each drones safety, forcing them to land in case they cross the forbidden area. The front end runs completely on the web browser, saving processing and installation resources. It also comes with a web terminal, allowing the user to open several instances of a terminal emulation in just one click.
 
@@ -142,9 +153,9 @@ Otherwise, you have to make sure that the `rosbridge_websocket` is running on po
     
 For more detailed instructions on how to use each single feature from the Swarm Station, check our [Gitbook page about the station](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/). 
 
+
 ### Swarm Collision Avoidance
 
----
 
 When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one clover is stationary and the other in motion, the case where both are in motion and with parallel trajectories, and finally the case where both are in motion and with non-parallel trajectory.
 
@@ -156,15 +167,14 @@ To turn on the collision avoidance, it is necessary to run:
     <img width="600" src="assets/collision.gif" />
 </p>
 
+
 ### Rasp Package
 
----
 
 The Raspberry package was developed to instantiate a node that will be responsible for collecting essential processing, memory and temperature information from the raspberry and send it to the Swarm Station. It's the package that should be put on the `catkin_ws/src/` directory of each Raspberry Pi, because it also contains the `realClover.launch` needed to launch the swarm on real life.
 
 ### Swarm FPV
 
----
 
 This package is a reformulation of one of the CopterHack 2022 implementations, the **Swarm First Person Viewer**. This year, we decided to restart its structure, making it run also completely on the web to integrate with the Swarm Station. It also depends on the `rosbridge_websocket` running on the port `9090` (default).
 
@@ -172,13 +182,15 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
     <img width="600" src="assets/fpv_2023.gif"/>
 </p>
 
+
 ### Real Swarm
+
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
 
 ---
 
 ## Conclusion
 
----
 
 Engineering and robotics challenges have always been the main driver of Team Athena, from which we seek to impact society through innovation. Last year, during CopterHack 2022, there was no lack of challenges of this type, and in them we grew and exceeded our limits, all to deliver the best possible project: Swarm in Blocks. All the motivation to facilitate a task as complex as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope that it delights all our users.
 
@@ -188,7 +200,10 @@ However, the work will not stop there. Our goal is to further improve our system
 
 Finally, we thank the entire COEX team that made CopterHack 2023 possible and all the support given during the competition. We are Team Athena, creator of the Swarm in Blocks platform and we appreciate all your attention!
 
-### The Atena Team 
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
+
+---
+## The Atena Team 
 
 Atena Team 2023 (Swarm in Blocks 2.0):
 
@@ -210,4 +225,4 @@ In honor of Atena Team 2022:
 - José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
 - Rafael Saud C. Ferro: [Github](https://github.com/Rafael-Saud), [LinkedIn](https://www.linkedin.com/in/rafael-saud/)
 
-
+<div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
