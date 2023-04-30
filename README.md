@@ -12,7 +12,7 @@
     <td><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
-  </tr>  
+  </tr>
 
 </table>
 
@@ -122,8 +122,6 @@ With our vision of solving the problems that most plague the deployment of a rea
 
 ### Homepage
 
-Como ano passado, uma das nossas preocupações era a facildiade do usuário leigo em transitar pela plataforma, por isso, esse ano decidimos reformar nosa Homepage, abrigando as principais plataformas e funcionalidades do nosso projeto.
-
 Like last year, we really wanted to make it easier for the user to go through our platform. That's why this year we decided to restructure our Homepage, gathering our main features and functionalities.
 
 <p align="center">
@@ -185,6 +183,21 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 
 ### Real Swarm
 
+In order to fly a real swarm using clover, we decided to take an approach of putting every clover on the same ROS network / environment so that the master could talk to each one of them. 
+
+We did this by separating each drone topics / nodes / services with namespaces. The goal is to achieve the same effect as the simulation that we've done in **CopterHACK 2022**, so each drone would have its own `/cloverID` namespace, and the ID is the identifier for each drone. Again, for more detailed information on how this works, please check out our [gitbook](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/).
+
+In other wods, instead of just `simple_offboard` node for a single drone, we'd now have `/clover0/simple_offboard`, `/clover1/simple_offboard` and so on.
+
+To launch it, you need to stop clover's default daemon, and then launch the `
+
+<p align="center">
+    <img width="700" src="assets/swarm_real/swarm.gif"/>
+</p>
+
+> **Note:** We are aware that in the video the calibration of the drone control is not ideal, however, the objective of this test was really to validate the operation of the swarm in a real environment (which was actually done).
+
+
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
 
 ---
@@ -192,13 +205,13 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 ## Conclusion[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Conclusion)
 
 
-Engineering and robotics challenges have always been the main driver of Team Athena, from which we seek to impact society through innovation. Last year, during CopterHack 2022, there was no lack of challenges of this type, and in them we grew and exceeded our limits, all to deliver the best possible project: Swarm in Blocks. All the motivation to facilitate a task as complex as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope that it delights all our users.
+Engineering and robotics challenges have always been the main driver of Team Athena, from which we seek to impact society through innovation. Last year, during CopterHack 2022, there was no lack of challenges of this type, and in them we grew and exceeded our limits, all to deliver the best possible project: **Swarm in Blocks**. All the motivation to facilitate a task as complex as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope that it delights all our users.
 
 With that came the Swarm in Blocks 2.0, which brought with it innovations that optimized the clover's flight control and that could allow for greater emotions in the handling of the drone, in addition to focusing on greater flight safety.
 The Swarm in Blocks 2.0 presents new features for this year, such as the Web terminal, First Person View (FPV), Collision Avoidance, Clover UI and Swarm Station.
 However, the work will not stop there. Our goal is to further improve our system and next steps include validating Collision Avoidance outside the simulated world and performing performance tests with network communication solutions to optimize Real Swarm.
 
-Finally, we thank the entire COEX team that made CopterHack 2023 possible and all the support given during the competition. We are Team Athena, creator of the Swarm in Blocks platform and we appreciate all your attention!
+Finally, we thank the entire COEX team that made CopterHack 2023 possible and all the support given during the competition. We are Team Atena, creator of the Swarm in Blocks platform and we appreciate all your attention!
 
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
 
