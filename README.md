@@ -185,11 +185,11 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 
 In order to fly a real swarm using clover, we decided to take an approach of putting every clover on the same ROS network / environment so that the master could talk to each one of them. 
 
-We did this by separating each drone topics / nodes / services with namespaces. The goal is to achieve the same effect as the simulation that we've done in **CopterHACK 2022**, so each drone would have its own `/cloverID` namespace, and the ID is the identifier for each drone. Again, for more detailed information on how this works, please check out our [gitbook](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/).
+We did this by separating each drone topics / nodes / services with namespaces. The goal is to achieve the same effect as the simulation that we've done in **CopterHACK 2022**, so each drone would have its own `/cloverID` namespace, and the ID is the identifier for each drone. 
 
 In other wods, instead of just `simple_offboard` node for a single drone, we'd now have `/clover0/simple_offboard`, `/clover1/simple_offboard` and so on.
 
-To launch it, you need to first stop clover's default daemon, and then connect all raspberrys to the same network. After that, you should connect all their `roscore` to the asm launch the `realClover.launch` file passing the `ID` arguement as a parameter:
+To launch it, you need to first stop clover's default daemon, and then connect all raspberrys to the same network. After that, you should connect all their `roscore` to the same IP address (the master's), and then launch the `realClover.launch` file passing the `ID` arguement as a parameter. Again, for more detailed information on how this works, please check out our [gitbook](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/):
 
     sudo systemctl stop clover
     roslaunch rasp_pkg realClover.launch ID:=0
