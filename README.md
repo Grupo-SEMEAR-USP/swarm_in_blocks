@@ -99,8 +99,9 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-
 ## Getting started [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#getting_started)
+
+
 
 Our platform was made to be extremely intuitive and easy to use. To start (after completing the installation we suggested in our gitbook), you can run the command: 
 
