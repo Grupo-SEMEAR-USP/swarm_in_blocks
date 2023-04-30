@@ -6,42 +6,20 @@
 
 ---
 
-## Final Video
+## Final Video ![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=QFKgrqIAO1E&ab_channel=SwarminBlocks" title="Link Title"><img img width="500" height="281" src="https://img.youtube.com/vi/QFKgrqIAO1E/maxresdefault.jpg"/></a>
+  <a href="https://www.youtube.com/watch?v=QFKgrqIAO1E&ab_channel=SwarminBlocks" title="Final Video 2023"><img img width="500" height="281" src="https://img.youtube.com/vi/QFKgrqIAO1E/maxresdefault.jpg" /></a>
 </p>
 
 ---
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
-- [Motivation](#motivation)
-- [Composition](#composition)
-- [Software build](#software-build)
-    - [Clone sources](#clone-sources)
-    - [Build with `cmake`](#build-with-cmake)
-    - [Build with `make`](#build-with-make)
-    - [Build with `msbuild`](#build-with-msbuild)
-    - [Build with IDE](#build-with-ide)
-- [Integration](#integration)
-    - [Integrate for development](#integrate-for-development)
-    - [Configure multicast router](#configure-multicast-router)
-    - [Configure logging](#configure-logging)
-- [Roadmap](#roadmap)
-- [Interface-centricity](#interface-centricity)
-- [More than embedded](#more-than-embedded)
-- [Use cases and benefits](#use-cases-and-benefits)
-    - [Distributed solution](#distributed-solution)
-    - [Driverless devices](#driverless-devices)
-    - [Real-time solutions](#real-time-solutions)
-    - [Digital twin](#digital-twin)
-    - [Simulation and tests](#simulation-and-tests)
-- [Examples](#examples)
-- [License](#license)
-- [Call to action](#call-to-action)
+- [Introduction](#intro)
+- [Swarm in Blocks 2022](#swarm_2022)
 
 ---
 
-## Introduction [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
+## Introduction [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#intro)
 
 
 Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
