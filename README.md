@@ -242,7 +242,7 @@ In honor of Atena Team 2022:
 - Rafael Saud C. Ferro: [Github](https://github.com/Rafael-Saud), [LinkedIn](https://www.linkedin.com/in/rafael-saud/)
 
 <p align="center">
-    <img width="700" src="assets/atena_team.png"/>
+    <img width="600" src="assets/atena_team.JPG"/>
 </p>
 
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
