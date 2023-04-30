@@ -57,7 +57,7 @@ Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based 
 </p>
 
 <p align="center">
-    <img width="600" src="assets/intro/ring.gif" />
+    <img width="500" src="assets/intro/ring.gif" />
 </p>
 
 
