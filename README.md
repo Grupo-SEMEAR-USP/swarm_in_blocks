@@ -25,7 +25,7 @@
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Introduction](#Introduction)
-- [Getting](#Getting-started)
+- [Getting started](#Getting-started)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
@@ -88,7 +88,7 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-## Getting[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Getting)
+## Getting started[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Getting-started)
 
 
 
@@ -124,6 +124,8 @@ With our vision of solving the problems that most plague the deployment of a rea
 ### Homepage
 
 Como ano passado, uma das nossas preocupações era a facildiade do usuário leigo em transitar pela plataforma, por isso, esse ano decidimos reformar nosa Homepage, abrigando as principais plataformas e funcionalidades do nosso projeto.
+
+Like last year, one of the 
 
 <p align="center">
     <img width="700" src="assets/homepage/homepage.gif"/>
