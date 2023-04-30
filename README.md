@@ -231,6 +231,10 @@ Atena Team 2023 (Swarm in Blocks 2.0):
 - Matheus Della Rocca Martins : [Github](https://github.com/MatheusDrm), [LinkedIn](https://www.linkedin.com/in/matheus-martins-9aba09212/)
 - Nathan Fernandes Vilas Boas : [Github](https://github.com/uspnathan), [LinkedIn](https://www.linkedin.com/mwlite/in/nathan-fernandes-vilas-boas-047616262)
 
+<p align="center">
+    <img width="500" src="assets/atena_team.JPG"/>
+</p>
+
 
 In honor of Atena Team 2022:
 
@@ -241,8 +245,5 @@ In honor of Atena Team 2022:
 - José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
 - Rafael Saud C. Ferro: [Github](https://github.com/Rafael-Saud), [LinkedIn](https://www.linkedin.com/in/rafael-saud/)
 
-<p align="center">
-    <img width="600" src="assets/atena_team.JPG"/>
-</p>
 
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
