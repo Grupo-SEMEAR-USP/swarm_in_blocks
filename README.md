@@ -54,9 +54,16 @@ In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our b
 
 Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle. Each script represents a functionality, for example, conditional structures, loops, or functions that receive parameters and return an instruction to the swarm. 
 
+<p align="center">
+    <img width="500" src="assets/intro/blocks.gif" />
+</p>
+
+<p align="center">
+    <img width="600" src="assets/intro/ring.gif" />
+</p>
+
+
 For more information on our project from last year, see our final article in [Swarm in Blocks 2022](https://clover.coex.tech/en/swarm_in_blocks.html).
-
-
 
 Even with the huge facilities that the block platform offers, we realized that this was just the tip of the iceberg when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of tackling the main problems in validating a Swarm in a simple and polished way.
 
@@ -138,14 +145,15 @@ For more detailed instructions on how to use each single feature from the Swarm 
 
 ---
 
-When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one cloverleaf is stationary and the other is moving, the case where both are moving and with parallel trajectories and, finally, the case where both are moving, and with non-parallel trajectory.
+When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one clover is stationary and the other in motion, the case where both are in motion and with parallel trajectories, and finally the case where both are in motion and with non-parallel trajectory.
 
+To turn on the collision avoidance, it is necessary to run:
 
     rosrun swarm_collision_avoidance swarm_collision_avoidance_node.py
 
-
-<img width="600" src="assets/collision.gif" />
-
+<p align="center">
+    <img width="600" src="assets/collision.gif" />
+</p>
 
 ### Rasp Package
 
@@ -159,7 +167,7 @@ The Raspberry package was developed to instantiate a node that will be responsib
 
 This package is a reformulation of one of the CopterHack 2022 implementations, the **Swarm First Person Viewer**. This year, we decided to restart its structure, making it run also completely on the web to integrate with the Swarm Station. It also depends on the `rosbridge_websocket` running on the port `9090` (default).
 
-<p> 
+<p align="center"> 
     <img width="600" src="assets/fpv_2023.gif"/>
 </p>
 
