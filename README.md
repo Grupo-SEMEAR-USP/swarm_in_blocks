@@ -231,8 +231,8 @@ Atena Team 2023 (Swarm in Blocks 2.0):
 - Matheus Della Rocca Martins : [Github](https://github.com/MatheusDrm), [LinkedIn](https://www.linkedin.com/in/matheus-martins-9aba09212/)
 - Nathan Fernandes Vilas Boas : [Github](https://github.com/uspnathan), [LinkedIn](https://www.linkedin.com/mwlite/in/nathan-fernandes-vilas-boas-047616262)
 
-<p align="left">
-    <img width="400" src="assets/atena_team.JPG"/>
+<p align="center">
+    <img width="500" src="assets/atena_team.JPG"/>
 </p>
 
 
