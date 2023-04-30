@@ -21,6 +21,14 @@ If flying a drone alone is no longer easy, imagine a swarm all at once. The Swar
 
 <img src="img1_ss.png" width=700>
 
-## How to use
+## Main information
+For a quick view of the most essential information of each drone there is an `information center` that brings the data of each drone in addition to the existence of a `land all` button for emergency cases so that all drones land.
 
+<img src="img1_ss.png" width=700>
 
+In addition to this partition, we have the left bar where some additional features are present. These are:
+
+### Drone's process
+### Topic list
+### Terminal web
+### Safe area
