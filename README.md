@@ -25,7 +25,7 @@
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Introduction](#Introduction)
-- [Getting started](#Getting started)
+- [Getting](#Getting)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
@@ -210,7 +210,7 @@ Atena Team 2023 (Swarm in Blocks 2.0):
 - Felipe Tommaselli: [Github](https://github.com/Felipe-Tommaselli), [LinkedIn](https://www.linkedin.com/in/felipe-tommaselli-385a9b1a4/)
 - Gabriel Ribeiro Rodrigues Dessotti : [Github](https://github.com/dessotti1), [LinkedIn](https://www.linkedin.com/in/gabriel-ribeiro-rodrigues-dessotti-8884a3216)
 - José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
-- Lucas Sales Duarte : [Github](), [LinkedIn](https://www.linkedin.com/in/lucas-sales-duarte-a963071a1)
+- Lucas Sales Duarte : [Github](https://github.com/LucasDuarte026), [LinkedIn](https://www.linkedin.com/in/lucas-sales-duarte-a963071a1)
 - Matheus Della Rocca Martins : [Github](https://github.com/MatheusDrm), [LinkedIn](https://www.linkedin.com/in/matheus-martins-9aba09212/)
 - Nathan Fernandes Vilas Boas : [Github](https://github.com/uspnathan), [LinkedIn](https://www.linkedin.com/mwlite/in/nathan-fernandes-vilas-boas-047616262)
 
