@@ -1,93 +1,129 @@
-# Swarm-in-blocks
+# Swarm in Blocks[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
-## Final Video
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=5C-1rRnyiE8" title="Link Title"><img img width="500" height="281" src="https://img.youtube.com/vi/5C-1rRnyiE8/0.jpg"/></a>
-</p>
+## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
+- [Motivation](#motivation)
+- [Composition](#composition)
+- [Software build](#software-build)
+    - [Clone sources](#clone-sources)
+    - [Build with `cmake`](#build-with-cmake)
+    - [Build with `make`](#build-with-make)
+    - [Build with `msbuild`](#build-with-msbuild)
+    - [Build with IDE](#build-with-ide)
+- [Integration](#integration)
+    - [Integrate for development](#integrate-for-development)
+    - [Configure multicast router](#configure-multicast-router)
+    - [Configure logging](#configure-logging)
+- [Roadmap](#roadmap)
+- [Interface-centricity](#interface-centricity)
+- [More than embedded](#more-than-embedded)
+- [Use cases and benefits](#use-cases-and-benefits)
+    - [Distributed solution](#distributed-solution)
+    - [Driverless devices](#driverless-devices)
+    - [Real-time solutions](#real-time-solutions)
+    - [Digital twin](#digital-twin)
+    - [Simulation and tests](#simulation-and-tests)
+- [Examples](#examples)
+- [License](#license)
+- [Call to action](#call-to-action)
 
-## Detailed Gitbook
+---
 
-Check our Gitbook, with the detailed information about all that was developed by Atena Team: https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks
+## Motivation[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#motivation)
+
 
 ## Introduction
+---
 
-Nowadays, swarms of drones are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues, but controlling a high amount of drones usually isn't a simple task, demanding a lot of studies and complex software. Swarm in Blocks was born looking to make a high-level interface based on the blocks language, to make simple handling swarms, without requiring advanced knowledge in all the necessary platforms, creating tools to allow a lot of applications based on the user needs and also using the Clover platform, which has a lot of advantages as being complete and intuitive, supporting all the project goals. 
+Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
+
+Swarm in Blocks (from it's origin in 2022) was born looking to make a *high-level interface based on the blocks language*, to make simple handling swarms, without requiring advanced knowledge in all the necessary platforms, creating tools to allow a lot of applications based on the user needs and also using the Clover platform.
+
+In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our biggest vision **"It's never been easy to Swarm"**, we talk to transcend the local scope of the past project and explore the biggest problems for implementing a Swarm. For Copterhack 2023, we present Swarm in Blocks 2.0, an even more complete platform with the purpose of facing the biggest difficulties of a Swarm in a simple and polished way.
+
+### Swarm in Blocks 2022 
+
+---
+
+Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle. Each script represents a functionality, for example, conditional structures, loops, or functions that receive parameters and return an instruction to the swarm. 
+
+For more information on our project from last year, see our final article in [Swarm in Blocks 2022](https://clover.coex.tech/en/swarm_in_blocks.html).
+
+Even with the huge facilities that the block platform offers, we realized that this was just the tip of the iceberg when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of tackling the main problems in validating a Swarm in a simple and polished way.
+
+
+### What's new
+
+---
+
+As already mentioned, of the various problems that can increase the complexity of a real swarm, we decided to deal with the ones that most afflicted us and reintegrated our solutions into our central platform, building a single extremely complete and cohesive platform.
+
+| Problem | Our Solution |
+| -------- | -------- |
+| Possible collision between drones (lack of safety especially for large Swarms)  | Collision Avoidance System  |
+| Giant clutter to keep track of all Clovers in a swarm individually (several terminals, many simulateneo computers with several people to keep track of)  | Swarm Station  |
+| Lack of basic features for handling a swarm pre-implemented in the Clover platform (such as access to battery data and raspberry computational power)  | Full integration of low level data in our Swarm Station  |
+| Lack of security in indoor tests regarding the limitation of physical space (walls and objects) in the Swarm region  | Safe Area Pop Up in Swarm Station  |
+| Decentralization of information and platforms for access  | Web Homepage  |
+| Difficulty configuring physical drones for swarm  | Our complete documentation with pre-designed settings for swarms in our repo image  |
+| Lack of a center for reports of successful tests with swarms of drones for the Clover platform describing the test conditions (odometry, etc.)  | r Show off section in our Gitbook  |
+
+And many other solutions are also featured on our platform, for more information please check the solutions described clearly and in detail throughout our **Gitbook**. We recommend reading in order to understand the fundamental precepts of our platform. 
+
+> 📖 **Acess our [Gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/background-theory/system)!**
+
+## Getting started
+
+---
+
+
+
+
+
+## Usage - modes
+
+---
+
+
+- *Planning Mode:* Its main goal is to allow the user to check the drones' layout, save and load formations, before starting the simulator or using real clovers. In order to need less computational power and avoid possible errors during the simulation.
+- *Simulation Mode:* In this mode happens the simulation indeed, starting the Gazebo, the necessary ROS nodes and some other tools. It allows applying the developed features, which will be explained ahead and see how they would behave in real life.
+- *Navigation Mode:* The last mode will support executing everything developed in real clovers so that it's possible to control a swarm with block programming. The biggest obstacle yet is the practical testing of this mode, due to the financial difficulty of acquiring a Clover swarm.
+
+
+## New Swarm Features 
+
+---
+
+We developed new features 
+
+### Swarm Station
+
+The main feature from our platform is the *Swarm Station*, which is a 3d Web Visualizer that shows in real time all the necessary information regarding the drones state, such as real time positioning and visualization, which clover is connected, the topics available and a lot more. Also, you can define a safe area to ensure each drones safety, forcing them to land in case they cross the forbidden area. The front end runs completely on the web browser, saving processing and installation resources.
 
 <p align="center">
-  <img width="500" height="281" src="./assets/ring.gif">
+    <img width="700" src="assets/swarm_station/vid01.gif"/>
 </p>
 
-## Usability
+This package uses the ROS suite `rosbridge_server` to establish a communication between the ROS environment and the web server.
 
-### How it works
+### Swarm Collision Avoidance
 
-The Swarm in Blocks can be programmed either with the blocks interface or directly in Python and we developed three main launch modes, each one focused on a different application of the project, they are:
+### Rasp Package
 
-- **Planning Mode:** Its main goal is to allow the user to check the drones' layout, save and load formations, before starting the simulator or using real clovers. In order to need less computational power and avoid possible errors during the simulation.
-- **Simulation Mode:** In this mode happens the simulation indeed, starting the Gazebo, the necessary ROS nodes and some other tools. It allows applying the developed features, which will be explained ahead and see how they would behave in real life.
-- **Navigation Mode:** The last mode will support executing everything developed in real clovers so that it's possible to control a swarm with block programming. The biggest obstacle yet is the practical testing of this mode, due to the financial difficulty of acquiring a Clover swarm.
+### Swarm FPV
 
-### Blocks Interface
+### Swarm in Blocks
 
-The entire Swarm in Blocks project was designed so that the user was in an intuitive and comfortable environment within the manipulation of swarms, for this, the existing platform with clover packages was completely rethought and adapted. In our [gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/usability/blocks-api), we have more details about the front-end design, how the user can interact with it, and achieve our main goal: Programming in blocks.
+### Swarm Clover Blocks
 
-<p align="center">
-  <img width="500" height="281" src="./assets/blocks.gif">
-</p>
+### Swarm Checker
 
-### Features
+### Swarm Examples
 
-Along with the project, we developed some features, that can be used together or independently and also serve as base for the implementation of more specific and advanced innovations. Here are the list and a brief explanation of each tool, to see more details and instructions about their use, check our [gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/background-theory/system)!
+---
 
-- **Formations:** There are some types of formation that were developed in order to create figures and other images, for uses in engineering and spectacles. They are:
-  
-  - 2D Formations: We made functions to generate some simple geometries, allowing the user to set the number of clovers used and the size of the figure, the geometries options made until now are *circle*, *empty square*, *full square* and *triangle*.
-  - 3D Formations: Besides the 2D figures, there are also some simple 3D geometries, which are *cube*, *sphere*, and *pyramid*.
-  - Alphabet: There is also the option to generate letters and words, using our Clover swarm.
-  - 3D Figures: Lastly, we have the alternative to make other 3D formations more complex, for this we use a library called Open3D that deals with 3D data, allowing the drones to create any 3D image the user inputs since it's in the supported formats.
 
-- **Transformations:** In addition to creating the formations, it's important to give the option of editing their disposition, so some operations were developed. It also makes it possible to execute more complex actions and activities with the Clovers. The transformations operations are:
-  
-  - Scale: Changes the distance between the drones, increasing or decreasing the image.
-  - Translate: All the drones move the same distance in the chosen directions.
-  - Rotate: The formation rotates around a determined axis.
+---
 
-<p align="center">
-  <img width="500" height="281" src="./assets/scaling.gif">
-</p>
-  
-- **LED effects:** Enjoying the LEDs included in the Clover, we made some functions to apply effects in all the swarm, creating figures and operations with the LEDs too.
+### Real Swarm
 
-<p align="center">
-  <img width="500" height="281" src="./assets/leds.gif">
-</p>
-
-- **Swarm Preview:** The main goal of this feature is to help the user to visualize how the swarm will behave in the simulation or real life, without using a lot of computational power and avoiding some problems in the simulation. This way a 2D or 3D image illustrating the drones' disposition can pop up on the screen when using this function.
-
-<p align="center">
-  <img width="300" height="300" src="./assets/swarm_preview.png">
-</p>
-
-- **First Person View (FPV):** The FPV node makes it a lot easier to visualize each drone's camera individually and also control each one of them at a time using keyboard bindings.
-
-<p align="center">
-  <img width="500" height="281" src="./assets/fpv.jpg">
-</p>
-
-All these features can be very useful for some applications and also be attractive to arouse the curiosity of the general public.
-
-## Conclusion
-
-Over the last months we studied a lot, grew, and surpassed our limits, trying to explore some swarm applications, all to deliver the best possible project: **Swarm in Blocks**. All the motivation to facilitate such a complex task as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope it will delight all our users. We tried to resume all the projects in this article, but as there are many details and needed explanations, it was made a [gitbook](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks), to explore them for those who are interested.
-
-For us, the results achieved were very expressive and positive, however, we believe that there is still room for improvement in the project, both considering the robustness of the swarm and the simplification of the usability of our platform. Improvement in the collision avoidance system, implementation of more formations and tests in real Clovers are some of the points that we hope to develop in future opportunities. 
-
-Finally, we thank the entire COEX team that made it possible for CopterHack 2022 to take place and all the support given during the competition. We are **Atena Team**, creator of the **Swarm in Blocks** platform and we thank you for your attention!
-
-### The Atena Team members
-- Guilherme Soares Silvestre : [Github](https://github.com/guisoares9), [LinkedIn](https://www.linkedin.com/in/guilherme-soares-silvestre-76570118b/)
-- Eduardo Morelli Fares: [Github](https://github.com/faresedu), [LinkedIn](https://www.linkedin.com/in/eduardo-fares-a271561a0/)
-- Felipe Tommaselli: [Github](https://github.com/Felipe-Tommaselli), [LinkedIn](https://www.linkedin.com/in/felipe-tommaselli-385a9b1a4/)
-- João Aires C. F. Marsicano: [Github](https://github.com/Playergeek181), [LinkedIn](https://www.linkedin.com/in/joao-aires-correa-fernandes-marciano-53b426195/)
-- José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
-- Rafael Saud C. Ferro: [Github](https://github.com/Rafael-Saud), [LinkedIn](https://www.linkedin.com/in/rafael-saud/)
+---
