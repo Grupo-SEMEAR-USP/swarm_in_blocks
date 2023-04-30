@@ -14,3 +14,13 @@ Its default port for communication between ROS applications and the web server i
 If you correctly configured [apache](https://httpd.apache.org/) to host our platform (details in our gitbook) it's quite simple to visualize the server from another device connected to the same network as the host. In order to do that, we can simply type the **host private ip** on any web browser. To get the IP:
 
 	hostname -I
+
+## Motivation
+
+Se voar um drone sozinho já não é fácil, imagine um enxame todo de uma vez só. A Swarm Station, buscando facilidade e maior usabilidade para o usuário, é uma estação completamente integrada que junta diversos processos e funcionalidades que antes resultavam em inúmeros terminais e telas em um só lugar, tudo isso visando não um só drone, mas sim um enxame deles.
+
+<img src="img1_ss.png" width=700>
+
+## How to use
+
+
