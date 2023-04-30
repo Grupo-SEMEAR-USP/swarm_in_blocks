@@ -180,10 +180,25 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 
 ---
 
+Engineering and robotics challenges have always been the main driver of Team Athena, from which we seek to impact society through innovation. Last year, during CopterHack 2022, there was no lack of challenges of this type, and in them we grew and exceeded our limits, all to deliver the best possible project: Swarm in Blocks. All the motivation to facilitate a task as complex as the manipulation of swarms of drones, even through block programming, delighted us a lot and we hope that it delights all our users.
+
+With that came the Swarm in Blocks 2.0, which brought with it innovations that optimized the clover's flight control and that could allow for greater emotions in the handling of the drone, in addition to focusing on greater flight safety.
+The Swarm in Blocks 2.0 presents new features for this year, such as the Web terminal, First Person View (FPV), Collision Avoidance, Clover UI and Swarm Station.
+However, the work will not stop there. Our goal is to further improve our system and next steps include validating Collision Avoidance outside the simulated world and performing performance tests with network communication solutions to optimize Real Swarm.
+
+Finally, we thank the entire COEX team that made CopterHack 2023 possible and all the support given during the competition. We are Team Athena, creator of the Swarm in Blocks platform and we appreciate all your attention!
+
 ### The Atena Team 
 
 Atena Team 2023 (Swarm in Blocks 2.0):
 
+- Agnes Bressan de Almeida : [Github](https://github.com/AgnesBressan), [LinkedIn](https://www.linkedin.com/in/agnes-bressan-148615262/)
+- Felipe Tommaselli: [Github](https://github.com/Felipe-Tommaselli), [LinkedIn](https://www.linkedin.com/in/felipe-tommaselli-385a9b1a4/)
+- Gabriel Ribeiro Rodrigues Dessotti : [Github](), [LinkedIn](https://www.linkedin.com/in/gabriel-ribeiro-rodrigues-dessotti-8884a3216)
+- José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
+- Lucas Sales Duarte : [Github](), [LinkedIn]()
+- Matheus Della Rocca Martins : [Github](), [LinkedIn](https://www.linkedin.com/in/matheus-martins-9aba09212/)
+- Nathan Fernandes Vilas Boas : [Github](), [LinkedIn](https://www.linkedin.com/mwlite/in/nathan-fernandes-vilas-boas-047616262)
 
 
 In honor of Atena Team 2022:
