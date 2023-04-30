@@ -44,7 +44,7 @@ Swarm in Blocks (from it's origin in 2022) was born looking to make a *high-leve
 In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our biggest vision **"It's never been easy to Swarm"**, we talk to transcend the local scope of the past project and explore the biggest problems for implementing a Swarm. For Copterhack 2023, we present Swarm in Blocks 2.0, an even more complete platform with the purpose of facing the biggest difficulties of a Swarm in a simple and polished way.
 
 <p align="center">
-    <img width="600" src="assets/intro/clovers_leds.gif"/>
+    <img width="600" src="assets/intro/clovers_leds.gif" />
 </p>
 
 
@@ -55,6 +55,8 @@ In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our b
 Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based on the blocks language, which consists of fitting code parts, like a puzzle. Each script represents a functionality, for example, conditional structures, loops, or functions that receive parameters and return an instruction to the swarm. 
 
 For more information on our project from last year, see our final article in [Swarm in Blocks 2022](https://clover.coex.tech/en/swarm_in_blocks.html).
+
+
 
 Even with the huge facilities that the block platform offers, we realized that this was just the tip of the iceberg when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of tackling the main problems in validating a Swarm in a simple and polished way.
 
@@ -105,11 +107,12 @@ The Swarm in Blocks can be programmed either with the blocks interface or direct
 
 ---
 
-We developed new features
-
+With our vision of solving the problems that most plague the deployment of a real swarm, we have developed several features (and even integrated platforms), below we will list our main developments:
 
 
 ### Swarm Station
+
+---
 
 The main feature from our platform is the *Swarm Station*, which is a **3d Web Visualizer** that shows in real time all the necessary information regarding the drones state, such as real time positioning and visualization, which clover is connected, the topics available and a lot more. Also, you can define a safe area to ensure each drones safety, forcing them to land in case they cross the forbidden area. The front end runs completely on the web browser, saving processing and installation resources. It also comes with a web terminal, allowing the user to open several instances of a terminal emulation in just one click.
 
@@ -133,20 +136,32 @@ For more detailed instructions on how to use each single feature from the Swarm 
 
 ### Swarm Collision Avoidance
 
-When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one cloverleaf is stationary and the other is moving, the case where both are moving and with parallel trajectories and, finally, the case where both are moving. and with non-parallel trajectory.
+---
 
+When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one cloverleaf is stationary and the other is moving, the case where both are moving and with parallel trajectories and, finally, the case where both are moving, and with non-parallel trajectory.
+
+
+    rosrun swarm_collision_avoidance swarm_collision_avoidance_node.py
+
+
+<img width="600" src="assets/collision.gif" />
 
 
 ### Rasp Package
 
 ---
 
-The Raspberry package was developed to instantiate a node that will be responsible for collecting essential processing, memory and temperature information from the raspberry and send it to the Swarm Station. It's the package that should be put on the `catkin_ws/src/` directory of each Raspberry Pi, because it also contains the 
+The Raspberry package was developed to instantiate a node that will be responsible for collecting essential processing, memory and temperature information from the raspberry and send it to the Swarm Station. It's the package that should be put on the `catkin_ws/src/` directory of each Raspberry Pi, because it also contains the `realClover.launch` needed to launch the swarm on real life.
 
 ### Swarm FPV
 
 ---
 
+This package is a reformulation of one of the CopterHack 2022 implementations, the **Swarm First Person Viewer**. This year, we decided to restart its structure, making it run also completely on the web to integrate with the Swarm Station. It also depends on the `rosbridge_websocket` running on the port `9090` (default).
+
+<p> 
+    <img width="600" src="assets/fpv_2023.gif"/>
+</p>
 
 ### Real Swarm
 
