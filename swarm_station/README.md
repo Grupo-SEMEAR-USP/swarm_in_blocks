@@ -48,7 +48,7 @@ This functionality brings a true terminal within the web with the ease of being 
 
 In addition, it is possible to create more than one terminal simultaneously, this creation of several terminals happens in an intuitive and facilitated way so that several processes can be run at the same time.
 
-<img src="vid04gif" width=700>
+<img src="vid04.gif" width=700>
 
 ### Safe area
 
