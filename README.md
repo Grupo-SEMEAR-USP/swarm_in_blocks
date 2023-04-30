@@ -189,7 +189,11 @@ We did this by separating each drone topics / nodes / services with namespaces. 
 
 In other wods, instead of just `simple_offboard` node for a single drone, we'd now have `/clover0/simple_offboard`, `/clover1/simple_offboard` and so on.
 
-To launch it, you need to stop clover's default daemon, and then launch the `
+To launch it, you need to stop clover's default daemon, and then launch the `realClover.launch` file passing the `ID` arguement as a parameter:
+
+    sudo systemctl stop clover
+    roslaunch rasp_pkg realClover.launch ID:=0
+ 
 
 <p align="center">
     <img width="700" src="assets/swarm_real/swarm.gif"/>
