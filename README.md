@@ -43,6 +43,11 @@ Swarm in Blocks (from it's origin in 2022) was born looking to make a *high-leve
 
 In 2023, Swarm in Blocks has taken an even bigger step, looking to fulfill our biggest vision **"It's never been easy to Swarm"**, we talk to transcend the local scope of the past project and explore the biggest problems for implementing a Swarm. For Copterhack 2023, we present Swarm in Blocks 2.0, an even more complete platform with the purpose of facing the biggest difficulties of a Swarm in a simple and polished way.
 
+<p align="center">
+    <img width="600" src="assets/intro/clovers_leds.gif"/>
+</p>
+
+
 ### Swarm in Blocks 2022 
 
 ---
@@ -77,7 +82,12 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-Nossa plataforma foi feita para 
+Our platform was made to be extremely intuitive and easy to use. To start (after completing the installation we suggested in our gitbook), you can run the command: 
+
+    roslaunch swarm_in_blocks simulation.launch num:=2 
+
+After that, you can open your browser and access our homepage by typing `localhost` in the search bar.
+
 
 ## Usage - modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
@@ -123,13 +133,15 @@ For more detailed instructions on how to use each single feature from the Swarm 
 
 ### Swarm Collision Avoidance
 
----
+When many drones move close to each other, collisions are very likely to occur. To avoid this problem, an algorithm was developed to avoid collisions between drones. When analyzing a collision, 3 types of scenario are possible, the case where one cloverleaf is stationary and the other is moving, the case where both are moving and with parallel trajectories and, finally, the case where both are moving. and with non-parallel trajectory.
 
 
 
 ### Rasp Package
 
 ---
+
+The Raspberry package was developed to instantiate a node that will be responsible for collecting essential processing, memory and temperature information from the raspberry and send it to the Swarm Station. It's the package that should be put on the `catkin_ws/src/` directory of each Raspberry Pi, because it also contains the 
 
 ### Swarm FPV
 
