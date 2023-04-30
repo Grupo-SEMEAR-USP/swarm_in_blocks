@@ -11,7 +11,7 @@
     <td><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="Ubuntu package" src="https://img.shields.io/ubuntu/v/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
-    <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml" alt="CodeQL"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"/></a></td>
+    <td><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
   </tr>  
 
 </table>
@@ -24,15 +24,15 @@
 ---
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
-- [Introduction](#intro)
-- [Getting started](#get_start)
+- [Introduction](#Introduction)
+- [Getting started](#Getting started)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
 - [Conclusion](#conclusion) -->
 ---
 
-## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#intro)
+## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Introduction)
 
 
 Nowadays, **swarms of drones** are getting more and more applications and being used in several different areas, from agriculture to surveillance and rescues. But controlling a high amount of drones isn't a simple task, demanding a lot of studies and complex software.
@@ -88,7 +88,7 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-## Getting started[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#get_start)
+## Getting[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Getting)
 
 
 
@@ -210,7 +210,7 @@ Atena Team 2023 (Swarm in Blocks 2.0):
 - Felipe Tommaselli: [Github](https://github.com/Felipe-Tommaselli), [LinkedIn](https://www.linkedin.com/in/felipe-tommaselli-385a9b1a4/)
 - Gabriel Ribeiro Rodrigues Dessotti : [Github](https://github.com/dessotti1), [LinkedIn](https://www.linkedin.com/in/gabriel-ribeiro-rodrigues-dessotti-8884a3216)
 - José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
-- Lucas Sales Duarte : [Github](), [LinkedIn]()
+- Lucas Sales Duarte : [Github](), [LinkedIn](https://www.linkedin.com/in/lucas-sales-duarte-a963071a1)
 - Matheus Della Rocca Martins : [Github](https://github.com/MatheusDrm), [LinkedIn](https://www.linkedin.com/in/matheus-martins-9aba09212/)
 - Nathan Fernandes Vilas Boas : [Github](https://github.com/uspnathan), [LinkedIn](https://www.linkedin.com/mwlite/in/nathan-fernandes-vilas-boas-047616262)
 
