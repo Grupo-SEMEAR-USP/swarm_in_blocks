@@ -9,7 +9,7 @@
 <table class="no-border">
   <tr>
     <td><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
-    <td><img alt="Ubuntu package" src="https://img.shields.io/ubuntu/v/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
+    <td><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
   </tr>  
@@ -25,7 +25,7 @@
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Introduction](#Introduction)
-- [Getting](#Getting)
+- [Getting](#Getting-started)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
 - [New Swarm Features](#new_features)
