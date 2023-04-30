@@ -77,12 +77,14 @@ And many other solutions are also featured on our platform, for more information
 
 ---
 
-
+Nossa plataforma foi feita para 
 
 ## Usage - modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
 ---
-REFORMULAR ESTES PARAGRAFOS
+
+The Swarm in Blocks can be programmed either with the blocks interface or directly in Python and we developed three main launch modes, each one focused on a different application of the project, they are:
+
 
 - *Planning Mode:* Its main goal is to allow the user to check the drones' layout, save and load formations, before starting the simulator or using real clovers. In order to need less computational power and avoid possible errors during the simulation.
 - *Simulation Mode:* In this mode happens the simulation indeed, starting the Gazebo, the necessary ROS nodes and some other tools. It allows applying the developed features, which will be explained ahead and see how they would behave in real life.
@@ -99,7 +101,7 @@ We developed new features
 
 ### Swarm Station
 
-The main feature from our platform is the *Swarm Station*, which is a **3d Web Visualizer** that shows in real time all the necessary information regarding the drones state, such as real time positioning and visualization, which clover is connected, the topics available and a lot more. Also, you can define a safe area to ensure each drones safety, forcing them to land in case they cross the forbidden area. The front end runs completely on the web browser, saving processing and installation resources. 
+The main feature from our platform is the *Swarm Station*, which is a **3d Web Visualizer** that shows in real time all the necessary information regarding the drones state, such as real time positioning and visualization, which clover is connected, the topics available and a lot more. Also, you can define a safe area to ensure each drones safety, forcing them to land in case they cross the forbidden area. The front end runs completely on the web browser, saving processing and installation resources. It also comes with a web terminal, allowing the user to open several instances of a terminal emulation in just one click.
 
 <p align="center">
     <img width="700" src="assets/swarm_station/vid01.gif"/>
@@ -121,23 +123,20 @@ For more detailed instructions on how to use each single feature from the Swarm 
 
 ### Swarm Collision Avoidance
 
+---
+
+
+
 ### Rasp Package
+
+---
 
 ### Swarm FPV
 
-### Swarm in Blocks
-
-### Swarm Clover Blocks
-
-### Swarm Checker
-
-### Swarm Examples
-
 ---
 
-
----
 
 ### Real Swarm
 
 ---
+
