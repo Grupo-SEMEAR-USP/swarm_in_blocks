@@ -6,6 +6,13 @@
 
 ---
 
+## Final Video
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=QFKgrqIAO1E&ab_channel=SwarminBlocks" title="Link Title"><img img width="500" height="281" src="https://img.youtube.com/vi/QFKgrqIAO1E/maxresdefault.jpg"/></a>
+</p>
+
+---
+
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 - [Motivation](#motivation)
 - [Composition](#composition)
@@ -61,9 +68,9 @@ Swarm in Blocks is a CopterHack 2022 project. It's a high-level interface based 
 </p>
 
 
-For more information on our project from last year, see our final article in [Swarm in Blocks 2022](https://clover.coex.tech/en/swarm_in_blocks.html).
+For more information on our project from last year, see our final article in [Swarm in Blocks 2022](https://clover.coex.tech/en/swarm_in_blocks.html). In addition, we also recommend watching our final video from last year, [Swarm in Blocks 2022 - Final Video](https://www.youtube.com/watch?v=5C-1rRnyiE8).
 
-Even with the huge facilities that the block platform offers, we realized that this was just the tip of the iceberg when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of tackling the main problems in validating a Swarm in a simple and polished way.
+Even with the huge facilities that the block platform offers, we realized that this was just the *tip of the iceberg* when it comes to deploying real swarms. Several other operational and conceptual problems in validating a real swarm still haunted the general public. With that, this year's project comes precisely with the purpose of **tackling the main problems in validating a Swarm in a simple and polished way**.
 
 
 ### What's new
@@ -103,7 +110,7 @@ After that, you can open your browser and access our homepage by typing `localho
 
 ---
 
-## Usage - modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
+## Usage modes [![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#swarm_intro)
 
 
 The Swarm in Blocks can be programmed either with the blocks interface or directly in Python and we developed three main launch modes, each one focused on a different application of the project, they are:
