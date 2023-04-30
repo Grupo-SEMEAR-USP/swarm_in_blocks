@@ -20,7 +20,7 @@
     <td></td>
     <td><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><a href="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml" alt="CodeQL"><img src="https://github.com/aregtech/areg-sdk/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"/></a></td>
-  </tr>
+  </tr>  
   <tr>
     <td><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Grupo-SEMEAR-USP/swarm_in_blocks"></td>
     <td><img src="https://img.shields.io/badge/OS-linux%20%7C%20windows-blue??style=flat&logo=Linux&logoColor=b0c0c0&labelColor=363D44" alt="Operating systems"/></td>
@@ -36,7 +36,7 @@
 ---
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
-- [Motivation](#intro)
+- [Intro](#intro)
 - [Getting started](#getting_started)
 <!-- - [Getting started](#getting_started)
 - [Usage modes](#usage_modes)
