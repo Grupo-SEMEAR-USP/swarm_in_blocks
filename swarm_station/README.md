@@ -17,7 +17,7 @@ If you correctly configured [apache](https://httpd.apache.org/) to host our plat
 
 ## Motivation
 
-Se voar um drone sozinho já não é fácil, imagine um enxame todo de uma vez só. A Swarm Station, buscando facilidade e maior usabilidade para o usuário, é uma estação completamente integrada que junta diversos processos e funcionalidades que antes resultavam em inúmeros terminais e telas em um só lugar, tudo isso visando não um só drone, mas sim um enxame deles.
+If flying a drone alone is no longer easy, imagine a swarm all at once. The Swarm Station, seeking ease and greater usability for the user, is a completely integrated station that brings together several processes and functionalities that previously resulted in numerous terminals and screens in one place, all of this aimed not at a single drone, but at a swarm of them.
 
 <img src="img1_ss.png" width=700>
 
