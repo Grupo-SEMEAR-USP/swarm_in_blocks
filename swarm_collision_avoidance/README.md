@@ -2,11 +2,6 @@
 
 Algorithm created to treat the possible collisions between the clovers during their movements.
 
-See user documentation of the clover_blocks at the [main Clover documentation site](https://clover.coex.tech/en/blocks.html).
-For more info about swarm_clover_blocks, see the [offical documentation swarm in blocks](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks)
-
-Internal package documentation is given below.
-
 ---
 
 ## Usability
@@ -41,7 +36,7 @@ The constructor of this class takes all the important information of a clover, c
 
 ### avoidCollision Method
 
-This method analyzes, every 0.1 seconds, the position between each pair of clovers in the swarm. If one of these detected distances is less than the minimum safe distance, the angle between the trajectories is calculated using the scalar product concept. After that, a function is called that deals with the collisions according to the angle detected or the fact that one of the drones is stationary.
+This method analyzes, every tenth of a second, the position between each pair of clovers in the swarm. If one of these detected distances is less than the minimum safe distance, the angle between the trajectories is calculated using the scalar product concept. After that, a function is called that deals with the collisions according to the angle detected or the fact that one of the drones is stationary.
 
 #### If one of the clovers is stopped
 
