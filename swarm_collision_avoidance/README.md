@@ -50,7 +50,7 @@ Firstly, both clovers are paralyzed. After that, one of the shamrocks is arbitra
 
 #### Non-parallel collision
 
-The first act is also to paralyze the two drones. Arbitrarily, one of the clovers is released to follow his original trajectory. After reaching a safe distance, the other clover is also released to follow its original trajectory. This is done by the `__handleNonParalellClovers` method.
+The first act is also to paralyze the two drones. Arbitrarily, one of the clovers is released to follow his original trajectory. After reaching a safe distance, the other clover is also released to follow its original trajectory. This is done by the `__handleNonParallelClovers` method.
 
 <center><img src="non_parallel_colision_perspectiva (2).gif" width=700></center>
 
