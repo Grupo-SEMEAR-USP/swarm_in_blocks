@@ -25,8 +25,7 @@ The package has the CMakeList.txt and package.xml files, which are ROS standards
 
 | Package | Description |
 | ------- | -------- |
-
-| 'src' | The collision handling algorithm is concentrated in a single file encoded in Python: swarm_collision_avoidance.py |
+| `src` | The collision handling algorithm is concentrated in a single file encoded in Python: swarm_collision_avoidance.py |
 
 ### node 'swarm_collision_avoidance'
 
