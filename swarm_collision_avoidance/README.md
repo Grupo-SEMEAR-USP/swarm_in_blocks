@@ -2,8 +2,6 @@
 
 Algorithm created to treat the possible collisions between the clovers during their movements.
 
-<img src="demo.gif" width=700>
-
 See user documentation of the clover_blocks at the [main Clover documentation site](https://clover.coex.tech/en/blocks.html).
 For more info about swarm_clover_blocks, see the [offical documentation swarm in blocks](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks)
 
@@ -53,7 +51,10 @@ In this case, the first step is to stop the clover that was moving. The stationa
 
 Firstly, both clovers are paralyzed. After that, one of the shamrocks is arbitrarily chosen to move orthogonally relative to the trajectory of the other. After that, the clover that stood still follows its original trajectory. When the latter moves far enough away from the other, the latter is also released to follow its original trajectory.
 
+<center><img src="parallel_collision_perspectiva (1).gif" width=700></center>
 #### Non-parallel collision
 
 The first act is also to paralyze the two drones. Arbitrarily, one of the clovers is released to follow his original trajectory. After reaching a safe distance, the other clover is also released to follow its original trajectory.
+
+<center><img src="non_parallel_colision_perspectiva (2).gif" width=700></center>
 
