@@ -1,12 +1,6 @@
 <h1 align="center" style="display: block; font-size: 2.5em; font-weight: bold; margin-block-start: 1em; margin-block-end: 1em;">
-
-<a name="logo" href="https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/introduction/swarm-in-blocks">
-<img align="center" src="assets/header/Capa_Swarm_23_banner.png" alt="Swarm in Blocks" style="width:100%;height:100%"/></a>
-
-<br /><br />
-
-<strong>Swarm in Blocks</strong>
-
+<a name="logo" href="https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/introduction/swarm-in-blocks"><img align="center" src="assets/header/Capa_Swarm_23_banner.png" alt="Swarm in Blocks" style="width:100%;height:100%"/></a>
+  <br /><br /><strong>Swarm in Blocks</strong>
 </h1>
 
 <!-- markdownlint-disable -->
@@ -85,7 +79,9 @@ As already mentioned, of the various problems that can increase the complexity o
 
 And many other solutions are also featured on our platform, for more information please check the solutions described clearly and in detail throughout our **Gitbook**. We recommend reading in order to understand the fundamental precepts of our platform. 
 
-> 📖 **Acess our [Gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/background-theory/system)!**
+> 📖 **Access our [Gitbook](https://app.gitbook.com/s/C9O11TiXK1JPnlrpilLg/background-theory/system)!**
+
+> 💻 **Access our [Github](https://github.com/Grupo-SEMEAR-USP/swarm_in_blocks.git)!**
 
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
 
@@ -250,5 +246,9 @@ In honor of Atena Team 2022:
 - José Carlos Andrade do Nascimento: [Github](https://github.com/joseCarlosAndrade), [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-carlos-andrade-do-nascimento-71186421a)
 - Rafael Saud C. Ferro: [Github](https://github.com/Rafael-Saud), [LinkedIn](https://www.linkedin.com/in/rafael-saud/)
 
+<p align="center">
+    <img width="700" src="assets/atena_team.png"/>
+</p>
 
 <div align="right">[ <a href="#table-of-contents">↑ to top ↑</a> ]</div>
+
