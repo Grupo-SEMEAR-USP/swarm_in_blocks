@@ -16,7 +16,6 @@ Internal package documentation is given below.
 
 This packages is completely available in the browser, so you can use it on any device with a browser through localhost. The only requirement is that the device is connected to the same network as the physical drone or with the simulation running. If you configured the Apache web service as our documentation suggests, you can (with the drone or the simulation connected) type "localhost" in the browser and acess our homepage web interface. From there you can acess the blocks programming interface, that in fact it is what this package contains.
 
-
 ---
 
 ## How it works
