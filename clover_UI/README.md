@@ -2,8 +2,9 @@
 
 Our own homepage (Clover UI) for each user accessing the page through the apache localhost port, this homepage contains the main functionalities to launch a swarm or an individual drone such as Swarm Station and Blocks IDE.
 
-<img src="homepage.gif" width=700>
-
+<p align="center">
+    <img src="homepage.gif" width=700>
+</p>
 
 For more info about `swarm_clover_blocks`, see the [offical documentation swarm in blocks](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks)
 
