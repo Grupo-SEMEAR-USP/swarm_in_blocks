@@ -23,6 +23,19 @@ If flying a drone alone is no longer easy, imagine a swarm all at once. The Swar
 <img src="../assets/swarm_station/img1_ss.png" width=700>
 </p>
 
+## Organization
+
+Swarm Station is a package that encompasses all the content responsible for creating the swarm control center, and its structure is based on some pillars that can be described as:
+
+| Package | Description |
+| ------- | -------- |
+| `assets`  |  Contains the messages that will be sent, basically the user's request and the id relative to the request |
+| `font_awesome`  | Saves the pre-ready examples for programming in blocks, already adding the complete branch of blocks to fulfill a certain specific task. They are available through the front-end |
+| `launch`  | The heart of the backend, in short, launches all the connections the package needs concentrated in a 'clover_blocks.py' file  |
+| `meshes`  | Specifies the messages the services will use (Load, Run and Store) |
+| `msg`  |  Heart of the front-end, it contains the pure blockly and our adaptation of the ide, as well as several files of communication with the backend in javascript  |
+| `src`  |  Heart of the front-end, it contains the pure blockly and our adaptation of the ide, as well as several files of communication with the backend in javascript  |
+
 ## Main information
 For a quick view of the most essential information of each drone there is an **information center** that brings the data of each drone in addition to the existence of a **land all button** for emergency cases so that all drones land.
 
