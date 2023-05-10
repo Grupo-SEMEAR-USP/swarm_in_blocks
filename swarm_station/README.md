@@ -29,12 +29,11 @@ Swarm Station is a package that encompasses all the content responsible for crea
 
 | Package | Description |
 | ------- | -------- |
-| `assets`  |  Contains the messages that will be sent, basically the user's request and the id relative to the request |
-| `font_awesome`  | Saves the pre-ready examples for programming in blocks, already adding the complete branch of blocks to fulfill a certain specific task. They are available through the front-end |
-| `launch`  | The heart of the backend, in short, launches all the connections the package needs concentrated in a 'clover_blocks.py' file  |
-| `meshes`  | Specifies the messages the services will use (Load, Run and Store) |
-| `msg`  |  Heart of the front-end, it contains the pure blockly and our adaptation of the ide, as well as several files of communication with the backend in javascript  |
-| `src`  |  Heart of the front-end, it contains the pure blockly and our adaptation of the ide, as well as several files of communication with the backend in javascript  |
+| `assets`  |  Space reserved for all media used in our swarm station, including some images and icons used |
+| `launch`  | In this folder, nodes, services, and parameters and their interconnections are defined and initialized to start the application, in addition to other specific configurations for the package |
+| `meshes`  | Definitions of the physical and dynamic characteristics of the Clover's 3D model for simulation |
+| `msg`  |  Is used to define the type, structure, and format of messages used in communication between nodes of the package, enabling communication between them  |
+| `src`  |  It is the root of the package development, in 'src' the source codes are stored and compiled, which means the definitions responsible for creating nodes, services, and other functions related to the frontend of the Swarm Station  |
 
 ## Main information
 For a quick view of the most essential information of each drone there is an **information center** that brings the data of each drone in addition to the existence of a **land all button** for emergency cases so that all drones land.
