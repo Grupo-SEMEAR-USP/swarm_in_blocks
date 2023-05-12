@@ -183,7 +183,10 @@ This package is a reformulation of one of the CopterHack 2022 implementations, t
 <p align="center"> 
     <img width="600" src="assets/fpv_2023.gif"/>
 </p>
+To access the FPV web, you must execute the command "roslaunch swarm_in_blocks simulation.launch num:=2 camera:=true", in addition, run the 'fpv.html' file. With this, the clover command is established with the visualization of the image of its camera.
 
+
+For more detailed instructions on how to use the FPV web, check our documentation in https://swarm-in-blocks.gitbook.io/swarm-in-blocks/background-theory/systems/first-person-view-new.
 
 ### Real Swarm
 
