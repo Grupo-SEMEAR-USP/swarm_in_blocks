@@ -4,7 +4,7 @@ This package contains all the necessary files that need to go into the raspberry
 It contains two important parts:
 
 ## Raspberry Resources Publisher Node 
-It's a python node that keeps collecting information about the Raspberry Pi resources such as **processing states, memory usage, temperature and more**. It publishes this information on the `/cloverID/cpu_usage` topic, so the `swarm_station` backend is able to retrieve all this data with the `raspData.sg` custom ROS message.
+It's a python node that keeps collecting information about the Raspberry Pi resources such as **processing states, memory usage, temperature and more**. It publishes this information on the `/cloverID/cpu_usage` topic, so the `swarm_station` backend is able to retrieve all this data with the `raspData.msg` custom ROS message.
 
 ## Real Swarm Launch 
 That's the ROS launch file that initializes each drone on its own namespace. It's important to note that it's built from the **0.23v clovers image version**, and **it has not been implemented yet to the new 0.24v.**
