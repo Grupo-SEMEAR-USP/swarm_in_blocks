@@ -1,6 +1,26 @@
 # Raspberry package
 This package contains all the necessary files that need to go into the raspberry pi of each drone in order to accomplish all the features mentioned. For more detailed instructions, check out our [Gitbook](https://swarm-in-blocks.gitbook.io/).
 
+## Usability
+
+To use this package, you must first transfer it to the Raspberry Pi, which can be done by cloning the package:
+ ```bash
+  git clone --depth 1 https://github.com/Grupo-SEMEAR-USP/swarm_in_blocks.git swarm_in_blocks/rasp_pkg
+
+```         
+If there is no internet connection on the Raspberry Pi, you can transfer the package using the established SSH connection:            
+```bash
+  scp /path/to/local/folder/my-package pi@<RaspberryPi_IP>:~/my-package
+```
+
+
+The only requirement for this package is that you have installed the psutil library in order to collect information from the Raspberry Pi:
+```bash
+  pip install psutil
+```
+
+## How it works
+
 It contains two important parts:
 
 ## Raspberry Resources Publisher Node 
