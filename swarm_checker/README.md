@@ -7,7 +7,6 @@ Implementation of a ROS node that monitors the state of the entire clovers swarm
 ## Usability
 
 This package does not have an interface for user interaction. It's just a packet that runs when the swarm is started that captures all the information from the clover and publishes it to a ROS Topic for other algorithms to make use of that data.
----
 
 ## How it works
 
