@@ -9,6 +9,9 @@ Internal package documentation is given below.
 | Package | Description |
 | ------- | -------- |
 | `src` |  The launch algorithm is concentrated in a single file encoded in Python:  launch.py |
+| `worlds` |  The worlds that can be used by the user |
+| `msg` |  Message type used by the package |
+
 
 
 ---
@@ -35,7 +38,7 @@ formation:=(line, empty_square, full_square, circle) - Initial formation of the 
 `rangefinder`:=(true, false) - Launch clovers with rangefinder.
 flashlight
 
-#####Example:
+##### Example:
 ``````
 roslauch swarm_in_blocks simulation.launch num:=2 led:=true camera:=true
 ``````
