@@ -32,7 +32,7 @@ Overall it's a simple package that it's organized like following:
 
 ## How it works
 
-This package has two essential parts: the realClover.launch, responsible for implementing the swarm in blocks functionalities for real life and the rasp_resouce_publisher node, responsible for extracting and publishing the data collected from the Rasperry Pi.
+This package has two essential parts: the realClover.launch, responsible for implementing the swarm in blocks functionalities for real life, and the rasp_resouce_publisher node, responsible for extracting and publishing the data collected from the Rasperry Pi.
 
 ## Raspberry Resources Publisher Node 
 It's a python node that keeps collecting information about the Raspberry Pi resources such as **processing states, memory usage, temperature and more**. It publishes this information on the `/cloverID/cpu_usage` topic, so the `swarm_station` backend is able to retrieve all this data with the `raspData.msg` custom ROS message.
