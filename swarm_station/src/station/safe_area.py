@@ -131,7 +131,7 @@ class SafeZone:
         # Initial formation
         self.init_formation_coords = []
 
-        self.available_commands = "rectangle;circle;square"
+        self.available_commands = "rectangle;circle"
 
         # message template
         self.safe_zone_data = {
@@ -144,7 +144,6 @@ class SafeZone:
         self.safeTypes = {
             "rectangle" : self.rectangle_check,
             "circle" : self.circle_check,
-            "square" : self.square_check,
             "null" : print('empty')
         }
 
@@ -177,15 +176,10 @@ class SafeZone:
     def circle_check(self):
         pass
 
-    def square_check(self):
-        pass
-
     def setSubscribers(self):
         rospy.Subscriber("/marker_state", SwarmStationCommands, callback=self.setSafeZoneModeCallback)
 
     def setSafeZoneModeCallback(self, data):
-
-
         if data.command in self.available_commands: # to do -  add more cases
             self.isSafeZoneActive = True
 

@@ -12,7 +12,6 @@
   font-weight: 100;
   max-width: fit-content;
 
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #1E1E1E;
@@ -29,6 +28,7 @@ body {
   margin: 0;
   place-items: center;
   background-color: #1a1a1a;
+  overflow-x: hidden;
 }
 
 h1 {
