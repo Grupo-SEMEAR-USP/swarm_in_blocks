@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "node-pty": "^0.10.1",
-    "rosnodejs": "^3.1.0",
+    "rosnodejs": "^1.0.0",
     "websocket": "^1.0.34",
     "ws": "^8.12.0",
     "xterm": "^5.1.0",

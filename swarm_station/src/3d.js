@@ -125,23 +125,28 @@ function pubMarkerState(command='reload', points=point_template, length=0, radiu
 
 // defining ros3d  
 
-var largura = window.innerWidth;
-var altura = window.innerHeight;
 
 var viewer, tfClient;
 
-setInterval(function() {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
-}, 1000);
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+window.addEventListener('resize', function() {
+	console.log("resize")
+	width = window.innerWidth;
+	height = window.innerHeight;
+	setScene()
+});
+
 
 function setScene(fixedFrame) {
 	viewer = new ROS3D.Viewer({
 		divID: 'viz',
-		width: largura,
-		height: altura,
+		width: width,
+		height: height,
 		antialias: true
 	});
+
 
 	tfClient = new ROSLIB.TFClient({
 		ros: ros,
