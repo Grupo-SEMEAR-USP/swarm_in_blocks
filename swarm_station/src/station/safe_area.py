@@ -174,7 +174,15 @@ class SafeZone:
                 self.handleOutOfBoundaryDrone(clover)
 
     def circle_check(self):
-        pass
+        for clover in self.swarm:
+            # print(clover.pose, self.safe_zone_data['points'][0])
+            # rospy.loginfo(f"{self.safe_zone_data['points'][1].x} ")
+            if clover.pose[0] < self.safe_zone_data['points'][0].x or clover.pose[0] > self.safe_zone_data['points'][1].x:
+                self.handleOutOfBoundaryDrone(clover)
+            if clover.pose[1] < self.safe_zone_data['points'][0].y or clover.pose[1] > self.safe_zone_data['points'][1].y:
+                self.handleOutOfBoundaryDrone(clover)
+            if clover.pose[2] > self.safe_zone_data['points'][0].z:
+                self.handleOutOfBoundaryDrone(clover)
 
     def setSubscribers(self):
         rospy.Subscriber("/marker_state", SwarmStationCommands, callback=self.setSafeZoneModeCallback)

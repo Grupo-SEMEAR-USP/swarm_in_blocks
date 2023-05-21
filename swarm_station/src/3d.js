@@ -132,10 +132,12 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 window.addEventListener('resize', function() {
-	console.log("resize")
 	width = window.innerWidth;
 	height = window.innerHeight;
+	document.getElementById('viz').innerHTML = "";
 	setScene()
+	window.location.reload(true);
+	pubMarkerState('reload')
 });
 
 
