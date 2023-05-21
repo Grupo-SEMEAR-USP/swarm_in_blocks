@@ -5,6 +5,7 @@ The user should call a CloverInstance for each clover, then be able to give form
 
 import rospy
 import socket
+from std_msgs.msg import String
 
 
 class SwarmClient:
@@ -39,21 +40,22 @@ class CloverInstance:
     def __init__(self, id):
         self.id = id
         # self.client = SwarmClient()
+        self.swarm_publisher = rospy.Publisher("swarm_control", String, queue_size=10)
 
     def __send_message(self, message):
-        CloverInstance.client.send_message(message=message)
-        
+        # CloverInstance.client.send_message(message=message)
+        self.swarm_publisher.publish(message)
 
     def led_effect(self, effect, r=0, g=0, b=0):
         try:
-            message = f'{id} led_effect {effect} {r} {g} {b}'
+            message = f'{self.id} led_effect {effect} {r} {g} {b}'
             self.__send_message(message=message)
         except Exception as err:
             rospy.logerr(f"Could not send led_effect for clover {id}, {err}")
 
     def navigate(self, x, y, z, vel = 0.5, frame_id = 'body', auto_arm = True):
         try:
-            message = f'{id} navigate {x} {y} {z} {vel} {frame_id} {auto_arm}'
+            message = f'{self.id} navigate {x} {y} {z} {vel} {frame_id} {auto_arm}'
             self.__send_message(message=message)
         
         except Exception as err:
@@ -61,7 +63,7 @@ class CloverInstance:
 
     def land(self):
         try:
-            message = f'{id} land'
+            message = f'{self.id} land'
             self.__send_message(message=message)
         except Exception as err:
             rospy.logerr(f"Could not send land for clover {id}, {err}")
