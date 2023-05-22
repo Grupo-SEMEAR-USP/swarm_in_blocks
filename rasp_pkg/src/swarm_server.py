@@ -62,7 +62,7 @@ class SwarmServer:
             for conn  in self.conn:
                 conn.send(message.data.encode())
         except Exception as err:
-            rospy.logerr(f"Could not send ROS message: {err}")
+            rospy.logerr(f"Could not send socket message: {err}")
 
     def server_program(self):
         rospy.loginfo("Type exit to close server: ")

@@ -90,7 +90,7 @@ def fly_both_drones():
 
     rospy.sleep(4)
     cont = 0
-    while cont <6:
+    while cont < 6:
         for clover in clovers:
             clover.navigate(0,0,0, frame_id='body')
         cont += 1
