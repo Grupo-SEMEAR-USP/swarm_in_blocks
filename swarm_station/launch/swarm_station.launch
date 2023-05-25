@@ -17,6 +17,9 @@
     <node pkg="swarm_station" type="swarm_station.py" name="swarm_station" />
 
     <param name="numberClovers" value="$(arg numberClovers)"/>
+    
+    <!-- Terminal Web node    -->
+    <include file="$(find swarm_station)/src/web_terminal/launch/terminal.launch"> </include>
 
 
 </launch>
