@@ -55,6 +55,7 @@ class CloverInstance:
 
     def navigate(self, x, y, z, vel = 0.5, frame_id = 'body', auto_arm = True):
         try:
+            print("sending navigate message")
             message = f'{self.id} navigate {x} {y} {z} {vel} {frame_id} {auto_arm}'
             self.__send_message(message=message)
         
