@@ -20,25 +20,15 @@ class RaspResourcePublisher:
                 # CPU
                 cpu_usage_percent = psutil.cpu_percent(interval=0.5)
                 cpu_freq = psutil.cpu_freq()
-                # cpu_freq_dict =  self.convertDataToDict(cpu_freq)
 
                 # Memory
                 virtual_memory = psutil.virtual_memory()
-                # virtual_memory_dict = self.convertDataToDict(virtual_memory)
                 virtual_memory_percent = virtual_memory.percent
-                # swap_memory = psutil.swap_memory()
-                # swap_memory_dict = self.convertDataToDict(swap_memory)
 
-                # Sensors data -> Testar dados na rasp antes de definir como passar na msg
-                # sensors_battery = psutil.sensors_battery() 
+                # Sensors data  -> Receive data from the raspberry pi available sensors
                 sensors_temperature_total = psutil.sensors_temperatures()
 
                 sensors_temperature_current = psutil.sensors_temperatures()['cpu_thermal'][0]           
-                # sensors_temperature = self.convertDataToDict(sensors_temperature)
-
-                # Disk data
-                # disk_usage = psutil.disk_usage('/')
-                # disk_usage = self.convertDataToDict(disk_usage)
 
                 # Network data:
 
@@ -65,7 +55,6 @@ class RaspResourcePublisher:
                 # net_flag = net_status.flags # up, running, broadcasting ...
 
                 # Process information
-                # Da pra pegar dados individualizados de uso de cpu, memória etc que cada processo está consumindo
                 # Get the 3 process that are responsible for the most cpu usage:
                 process_list = []
                 for process in psutil.process_iter():
@@ -73,17 +62,6 @@ class RaspResourcePublisher:
                     if process_info['cpu_percent'] != 0:
                         process_list.append(process_info)
                 process_list = sorted(process_list, key = lambda p: p['cpu_percent'], reverse = True)[:3]
-
-
-                # Test the collected data
-                # print(f"\n\n Virtual memory: {virtual_memory}")
-                # print(f"\n\n Uso da cpu: {cpu_usage_percent}, Freq: {cpu_freq}")
-                # print(f"\n\n temperatura todos sensores: {sensors_temperature_total}")
-                # print(f"\n\n bateria sensores: {sensors_battery}")
-                # print(f"\n\n Uso do disco: {disk_usage}")
-                # print(f"\n\n Processos que mais demandam cpu: {process_list} \n\n ")
-                # print(f"\n\n Dados de rede: {net_v4}\n\n Conexão: {net_io_counters} \n\n Status: {net_status}")
-
 
                 # Defining the message to be sent
                 rasp_data = raspData()
@@ -106,38 +84,29 @@ class RaspResourcePublisher:
                     rasp_data.process_usage_list.append(process['cpu_percent'])
                     rasp_data.process_name_list.append(process['name'])
 
-
-
-
-                # cpu_msg = Float32()
-                # cpu_msg.data = cpu_usage_percent
-
-                # mem_msg = Float32()
-                # mem_msg.data = virtual_mem_percent
-
-                # self.cpu_pub.publish(cpu_msg)
-                # self.mem_per_pub.publish(mem_msg)
+                # Publishes the msg
                 self.raspData_pub.publish(rasp_data)
+
                 self.rate.sleep()
 
             except rospy.ServiceException as e:
                 print(f"Publish rasp data from clover{self.clover_id} failed %s", e)
 
 
-    def convertDataToDict(self, data):
-        data_dict = data._asdict()
-        data_1024 = {}
-        for key, value in data_dict.items():
-            data_1024[key] = value
-        return data_1024             
+    # def convertDataToDict(self, data):
+    #     data_dict = data._asdict()
+    #     data_1024 = {}
+    #     for key, value in data_dict.items():
+    #         data_1024[key] = value
+    #     return data_1024             
 
-    def convertDataToDictGB(self, data):
-        data_dict = data._asdict()
-        data_1024 = {}
-        for key, value in data_dict.items():
-            converted_value = self.convertBytesToGigaB(value)
-            data_1024[key] = converted_value
-        return data_1024         
+    # def convertDataToDictGB(self, data):
+    #     data_dict = data._asdict()
+    #     data_1024 = {}
+    #     for key, value in data_dict.items():
+    #         converted_value = self.convertBytesToGigaB(value)
+    #         data_1024[key] = converted_value
+    #     return data_1024         
 
 
     def convertBytesToGigaB(self,data):
@@ -146,12 +115,15 @@ class RaspResourcePublisher:
 if __name__ == '__main__':
     rospy.init_node('rasp_resource_publisher')
     print("Publishing rasp data")
-    drone1 = RaspResourcePublisher(id='1')
+    ID = rospy.get_param('clover_id')
+    drone1 = RaspResourcePublisher(id=ID)
 
     try:
         drone1.publish_data()
 
     except rospy.ROSInterruptException:
         pass
+
+
 
 
