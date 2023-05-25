@@ -2,6 +2,7 @@
 
 <launch>
     <arg name="sep" default="false"/>
+    <arg name="numberClovers" default = 2 />
     
     <node pkg="swarm_station" type="frames_transform.py" name="transform_frames" />
     <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
@@ -14,5 +15,8 @@
     </group>
 
     <node pkg="swarm_station" type="swarm_station.py" name="swarm_station" />
+
+    <param name="numberClovers" value="$(arg numberClovers)"/>
+
 
 </launch>
