@@ -365,6 +365,9 @@
         <!-- <node pkg="roswww_static" name="roswww_static" type="main.py" clear_params="true"> -->
             <!-- <param name="default_package" value="clover"/> -->
         <!-- </node> -->
+        
+        <!-- Rasp data launch -->
+        <include file="$(find rasp_pkg)/launch/rasp_publisher.launch"> </include>
 
     </group>
 
