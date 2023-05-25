@@ -43,9 +43,9 @@ class webTerminal {
         this.currentDirectory = [];
         this.auxCurDir=false;
         this.aux1 = 0;
-        this.newLine = false;
-        this.numberLine = 0;
         this.terminalDiv_id = terminalDiv_id;
+        // this.newLine = false;
+        // this.numberLine = 0;
 
         this.update()
     }
