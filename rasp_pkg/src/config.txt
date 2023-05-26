@@ -1,0 +1,6 @@
+192.168.0.207 <- Master Server IP Address
+5000 <- Port
+0 <- cloverID
+
+
+
