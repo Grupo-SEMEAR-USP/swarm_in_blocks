@@ -170,18 +170,25 @@ class SafeZone:
                 self.handleOutOfBoundaryDrone(clover)
             if clover.pose[1] < self.safe_zone_data['points'][0].y or clover.pose[1] > self.safe_zone_data['points'][1].y:
                 self.handleOutOfBoundaryDrone(clover)
-            if clover.pose[2] > self.safe_zone_data['points'][0].z:
+            if clover.pose[2] > self.safe_zone_data['length']:
                 self.handleOutOfBoundaryDrone(clover)
 
+    # TODO make circle verification with geometry
     def circle_check(self):
+        center_x = self.safe_zone_data['points'][0].x
+        center_y = self.safe_zone_data['points'][0].y
+        center_z = self.safe_zone_data['points'][0].z
+
+        radius = self.safe_zone_data['radius']
+
         for clover in self.swarm:
+            clover_x = clover.pose[0]
+            clover_y = clover.pose[1]
+            clover_z = clover.pose[2]
+
             # print(clover.pose, self.safe_zone_data['points'][0])
             # rospy.loginfo(f"{self.safe_zone_data['points'][1].x} ")
-            if clover.pose[0] < self.safe_zone_data['points'][0].x or clover.pose[0] > self.safe_zone_data['points'][1].x:
-                self.handleOutOfBoundaryDrone(clover)
-            if clover.pose[1] < self.safe_zone_data['points'][0].y or clover.pose[1] > self.safe_zone_data['points'][1].y:
-                self.handleOutOfBoundaryDrone(clover)
-            if clover.pose[2] > self.safe_zone_data['points'][0].z:
+            if (clover_x - center_x)*(clover_x - center_x) + (clover_y - center_y)*(clover_y - center_y) >= radius*radius:
                 self.handleOutOfBoundaryDrone(clover)
 
     def setSubscribers(self):

@@ -14,5 +14,6 @@
     </group>
 
     <node pkg="swarm_station" type="swarm_station.py" name="swarm_station" />
+    <!-- <node pkg="swarm_station" type="safe_area.py" name="safe_area" /> -->
 
 </launch>
