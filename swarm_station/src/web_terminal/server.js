@@ -68,11 +68,6 @@ class Server{
                     ptyProcess.write(clientInput);
                 }
                 
-                // if(convMsg === "Create new terminal"){
-                //     console.log("Criar novo server");
-                // }else{
-                //     ptyProcess.write(clientInput);
-                // }
 
             });
         

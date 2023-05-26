@@ -183,22 +183,33 @@ class SwarmStation:
             
             point_list = []
             i=0
+            ant = Point()
             while i <= height:
-                ang = 0
+                ant.x = pointA.x + radius * math.cos(math.radians(0))
+                ant.y = pointA.y + radius * math.sin(math.radians(0))
+                ang = 1
                 while ang <= 360:
                     a = Point()
+                    b = Point()
 
                     x = pointA.x + radius * math.cos(math.radians(ang))
                     y = pointA.y + radius * math.sin(math.radians(ang))
                     z = i
 
-                    a.x = x
-                    a.y = y
+                    a.x = ant.x
+                    a.y = ant.y
                     a.z = z
-                    point_list.append(a)
 
-                    ang += 5
-                i += 0.8
+                    b.x = x
+                    b.y = y
+                    b.z = z
+
+                    ant = b
+                    point_list.append(a)
+                    point_list.append(b)
+                    ang += 1
+
+                i += 0.5
 
             color = [255, 0, 255]
             

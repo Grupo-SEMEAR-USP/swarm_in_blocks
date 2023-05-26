@@ -2,8 +2,9 @@
 
 Expansion of the adaptation of Blockly (Google's block programming language) made by the Clover platform, now with support for swarms of drones.
 
-<img src="demo.gif" width=700>
-
+<p align="center">
+    <img src="demo.gif" width=700>
+</p>
 
 See user documentation of the clover_blocks at the [main Clover documentation site](https://clover.coex.tech/en/blocks.html).
 For more info about swarm_clover_blocks, see the [offical documentation swarm in blocks](https://swarm-in-blocks.gitbook.io/swarm-in-blocks/introduction/swarm-in-blocks)
