@@ -60,6 +60,7 @@ class SwarmServer:
     def __send_ros_message(self, message):
         try:
             for conn  in self.conn:
+                rospy.sleep(0.1)
                 conn.send(message.data.encode())
         except Exception as err:
             rospy.logerr(f"Could not send socket message: {err}")

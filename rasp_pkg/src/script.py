@@ -83,18 +83,23 @@ def fly_both_drones():
     for clover in clovers:
         rospy.loginfo('Take off initialized')
         clover.navigate(0,0, height, frame_id='body', auto_arm=True)
+    
+    rospy.sleep(8)
 
     for clover in clovers:
         rospy.loginfo('Sending blink command')
         clover.led_effect('blink', 0, 0, 255)
 
-    rospy.sleep(4)
+    rospy.sleep(6)
     cont = 0
-    while cont < 6:
-        for clover in clovers:
-            clover.navigate(0,0,0, frame_id='body')
-        cont += 1
-        rospy.sleep(1)
+
+    for clover in clovers:
+        clover.land()
+    # while cont < 6:
+    #     for clover in clovers:
+    #         clover.navigate(0,0,0, frame_id='body')
+    #     cont += 1
+    #     rospy.sleep(1)
 
     for clover in clovers:
         rospy.loginfo('Landing all drones')

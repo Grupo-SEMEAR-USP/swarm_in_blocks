@@ -2,6 +2,7 @@
 
 <launch>
     <arg name="sep" default="false"/>
+    <arg name="numberClovers" default = 2 />
     
     <node pkg="swarm_station" type="frames_transform.py" name="transform_frames" />
     <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
@@ -15,5 +16,11 @@
 
     <node pkg="swarm_station" type="swarm_station.py" name="swarm_station" />
     <!-- <node pkg="swarm_station" type="safe_area.py" name="safe_area" /> -->
+
+    <param name="numberClovers" value="$(arg numberClovers)"/>
+    
+    <!-- Terminal Web node    -->
+    <include file="$(find swarm_station)/src/web_terminal/launch/terminal.launch"> </include>
+
 
 </launch>

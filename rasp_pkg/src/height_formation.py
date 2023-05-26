@@ -23,11 +23,11 @@ def return_clovers(id_list):
 
 
 
-def square3d(id_list, height = 1, L = 1.5):
+def height_formation(id_list, height = 1, L = 1.5):
         
     clovers = return_clovers(id_list)
 
-    waitTime = 5
+    waitTime = 9
 
     rospy.loginfo('Square 3d program starting')
     
@@ -40,58 +40,70 @@ def square3d(id_list, height = 1, L = 1.5):
 
     rospy.loginfo('Takeoff initialized')
 
-    for clover in clovers:
-        clover.navigate(0,0,height, frame_id='body')
+    # for clover in clovers:
+    #     clover.navigate(0,0,height, frame_id='body')
 
-    rospy.sleep(waitTime+2)
+    clovers[0].navigate(0,0, height+1, frame_id='body')
+    clovers[1].navigate(0,0, height, frame_id='body')
+
+    rospy.sleep(waitTime-3)
+
+    clovers[0].navigate(0,0, -1, frame_id='body')
+    clovers[1].navigate(0,0, 1, frame_id='body')
+
+    rospy.sleep(waitTime-3)
+
+    clovers[0].navigate(0,0, 1, frame_id='body')
+    clovers[1].navigate(0,0, -1, frame_id='body')
+
+
+    rospy.sleep(waitTime-3)
+
+    clovers[0].navigate(0,0, -1, frame_id='body')
+    clovers[1].navigate(0,0, 1, frame_id='body')
+
+    
 
     for clover in clovers:
         clover.led_effect('rainbow', 0, 0, 0)
 
-    rospy.sleep(1)
+    # rospy.sleep(1)
 
-    for clover in clovers:
-        rospy.loginfo('Starting moviment')
-        clover.navigate(0,0,1, frame_id='body')
+    # clovers[0].navigate(-3,0, 0, frame_id='body')
+    # clovers[1].navigate(3,0, 0, frame_id='body')
 
-    rospy.sleep(waitTime)
+    rospy.sleep(waitTime-6)
 
-    clovers[0].led_effect('wipe', 255, 0, 0)
-    clovers[1].led_effect('wipe', 0, 255, 0)
+    # clovers[0].led_effect('wipe', 255, 0, 0)
+    # clovers[1].led_effect('wipe', 0, 255, 0)
 
-    rospy.sleep(1)
+    # rospy.sleep(1)
 
-    for clover in clovers:
-        clover.navigate(3,0,0, frame_id='body')
 
-    rospy.sleep(waitTime+5)
+    # rospy.sleep(waitTime+5)
 
-    clovers[0].led_effect('wipe', 0, 255, 0)
-    clovers[1].led_effect('wipe', 255, 0, 0)
+    # clovers[0].led_effect('wipe', 0, 255, 0)
+    # clovers[1].led_effect('wipe', 255, 0, 0)
     
-    rospy.sleep(1)
+    # rospy.sleep(1)
 
 
-    for clover in clovers:
-        clover.navigate(0,0,-1, frame_id='body')    
 
-    rospy.sleep(waitTime)
+    # rospy.sleep(waitTime)
 
     clovers[0].led_effect('wipe', 255, 255, 0)
     clovers[1].led_effect('wipe', 255, 255, 0)
 
-    rospy.sleep(1)
+    # rospy.sleep(1)
 
 
-    for clover in clovers:
-        clover.navigate(-2,0,0, frame_id='body')    
-
-    rospy.sleep(waitTime+3)
+    rospy.sleep(waitTime-6)
 
     for clover in clovers:
         clover.led_effect('rainbow')
 
-    rospy.sleep(waitTime)
+    # rospy.sleep(waitTime)
+    rospy.sleep(1)
 
     for clover in clovers:
         clover.land()
@@ -116,6 +128,7 @@ def square3d(id_list, height = 1, L = 1.5):
 #     return coord
 
 
+    
 
 if __name__ == '__main__':
     rospy.init_node('formations')
@@ -125,4 +138,6 @@ if __name__ == '__main__':
     #for i in range(N):
         #id_list.append(i-1)
 
-    square3d(id_list)
+    height_formation(id_list)
+
+    # height_formation(id_list)
